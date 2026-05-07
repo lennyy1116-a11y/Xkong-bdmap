@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-<title>BD地图 - 机构拓展追踪</title>
+<title>BD地图 v2 - 头像/用户差异化</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -291,9 +291,13 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 }
 .online-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
 .user-badge {
-  display: inline-block; padding: 1px 8px; border-radius: 10px;
+  display: inline-flex; align-items:center; gap:4px; padding: 1px 8px; border-radius: 10px;
   background: var(--card2); font-size: 11px; color: var(--text); margin-left: 4px;
 }
+.avatar-grid { display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
+.avatar-btn { width:38px; height:38px; border-radius:12px; border:1px solid #444; background:var(--bg); color:var(--text); font-size:20px; cursor:pointer; }
+.avatar-btn.active { background:var(--primary); border-color:#8ec5ff; box-shadow:0 0 0 2px rgba(74,144,217,.25); }
+.profile-hint { margin-top:8px; font-size:12px; color:var(--text2); line-height:1.45; }
 .sync-status { margin-left: auto; font-size: 11px; }
 </style>
 </head>
@@ -301,7 +305,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 
 <!-- Top bar -->
 <div class="top-bar">
-  <h1>📍 BD地图</h1>
+  <h1>📍 BD地图 v2</h1>
   <span class="stats" id="statsText">0 机构</span>
   <button class="top-btn" id="btnList" title="列表">☰</button>
   <button class="top-btn" id="btnSettings" title="设置">⚙</button>
@@ -467,12 +471,18 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
   </div>
   <div class="settings-body">
     <div class="settings-section">
-      <h3>用户名称</h3>
-      <p>团队协同时显示的名字，其他人能看到谁添加/修改了机构。</p>
+      <h3>用户资料</h3>
+      <p>用户名用于区分团队成员；头像用于地图标注显示。同一个用户名在不同设备上会默认合并为同一个人。</p>
       <div class="form-group">
-        <input type="text" id="usernameInput" placeholder="你的名字">
+        <label>用户名 / 登录名</label>
+        <input type="text" id="usernameInput" placeholder="例如：汗青">
       </div>
-      <button class="btn btn-primary" onclick="saveUsername()" style="width:100%">保存名称</button>
+      <div class="form-group">
+        <label>头像</label>
+        <div class="avatar-grid" id="avatarGrid"></div>
+      </div>
+      <button class="btn btn-primary" onclick="saveUsername()" style="width:100%">保存用户资料</button>
+      <div class="profile-hint">⚠️ 当前轻量版没有真正账号密码系统，所以“同名=同一个人”。正式版建议接 Firebase Auth，用不可修改的 uid 做 ownerId，用户名只当显示名。</div>
     </div>
 
     <div class="settings-section">
@@ -568,6 +578,8 @@ let tapMode = false;
 let selectedDistrict = 'current';
 let _pagination = null;
 let currentUsername = localStorage.getItem(USERNAME_KEY) || '';
+let currentAvatar = localStorage.getItem(USER_AVATAR_KEY) || '👤';
+let userProfiles = {};
 
 const DISTRICTS = {
   current: { name: '当前位置', lat: null, lng: null },
@@ -647,13 +659,23 @@ function init() {
       if (name && name.trim()) {
         currentUsername = name.trim();
         localStorage.setItem(USERNAME_KEY, currentUsername);
-        document.getElementById('currentUser').innerHTML = '<span class="user-badge">' + esc(currentUsername) + '</span>';
+        saveUserProfile();
+        updateCurrentUserBadge();
         toast('👋 你好 ' + currentUsername);
       }
     }, 500);
   } else {
-    document.getElementById('currentUser').innerHTML = '<span class="user-badge">' + esc(currentUsername) + '</span>';
+    updateCurrentUserBadge();
   }
+
+  // User profiles listener
+  usersCollection.onSnapshot(snapshot => {
+    userProfiles = {};
+    snapshot.forEach(doc => { userProfiles[doc.id] = doc.data(); });
+    renderMarkers();
+    renderList();
+    updateCurrentUserBadge();
+  }, err => console.warn('User profile listener error:', err));
 
   // Firestore real-time listener
   placesCollection.onSnapshot(snapshot => {
@@ -677,11 +699,17 @@ function init() {
 }
 
 // ============ MARKERS ============
-function createIcon(status) {
+function createIcon(status, place) {
   const color = STATUS_COLORS[status] || '#7f8c8d';
+  const ownerKey = getUserKey(place?.ownerId || place?.createdBy || place?.updatedBy || '匿名');
+  const profile = userProfiles[ownerKey] || {};
+  const avatar = place?.ownerAvatar || profile.avatar || '👤';
+  const mine = ownerKey === getCurrentUserKey();
+  const border = mine ? '#fff' : (place?.visibility === 'team' ? '#f1c40f' : '#9aa4b2');
+  const opacity = mine || place?.visibility === 'team' ? 1 : 0.58;
   return L.divIcon({
     className: '',
-    html: `<div class="custom-marker" style="background:${color}"></div>`,
+    html: `<div class="custom-marker" style="background:${color};border-color:${border};opacity:${opacity};font-size:15px">${esc(avatar)}</div>`,
     iconSize: [28, 28],
     iconAnchor: [14, 14],
     popupAnchor: [0, -16]
@@ -691,7 +719,7 @@ function createIcon(status) {
 function renderMarkers() {
   markersLayer.clearLayers();
   places.forEach(p => {
-    const marker = L.marker([p.lat, p.lng], { icon: createIcon(p.status) });
+    const marker = L.marker([p.lat, p.lng], { icon: createIcon(p.status, p) });
     const statusColor = STATUS_COLORS[p.status] || '#7f8c8d';
     const visitCount = (p.visits || []).length;
     const lastVisit = visitCount > 0 ? p.visits[visitCount-1] : null;
@@ -709,7 +737,7 @@ function renderMarkers() {
       if (lastVisit) popupHtml += ` · 最近: ${lastVisit.date}`;
       popupHtml += `</div>`;
     }
-    if (p.updatedBy) popupHtml += `<div class="popup-detail" style="color:var(--primary)">✍️ ${esc(p.updatedBy)}${p.updatedAt ? ' · ' + p.updatedAt.slice(0,10) : ''}</div>`;
+    if (p.updatedBy) popupHtml += `<div class="popup-detail" style="color:var(--primary)">✍️ ${esc(getDisplayUser(p.updatedBy))}${p.updatedAt ? ' · ' + p.updatedAt.slice(0,10) : ''}</div>`;
     popupHtml += `<span class="popup-edit" onclick="openEditSheet('${p.id}')">✏️ 编辑</span>`;
 
     marker.bindPopup(popupHtml, { maxWidth: 260 });
@@ -841,7 +869,7 @@ function addVisitEntry() {
   if (!note) { toast('请输入交流备注'); return; }
   const now = new Date();
   const date = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0') + ' ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
-  editVisits.push({ date, note, by: currentUsername || '匿名' });
+  editVisits.push({ date, note, by: getCurrentUserKey(), byName: currentUsername || '匿名', byAvatar: currentAvatar });
   noteInput.value = '';
   renderVisits();
 }
@@ -875,18 +903,28 @@ function savePlace() {
     status,
     lat, lng,
     visits: editVisits,
+    visibility: 'private',
+    ownerId: document.getElementById('editId').value ? (places.find(p => p.id === document.getElementById('editId').value)?.ownerId || getCurrentUserKey()) : getCurrentUserKey(),
+    ownerName: document.getElementById('editId').value ? (places.find(p => p.id === document.getElementById('editId').value)?.ownerName || currentUsername || '匿名') : (currentUsername || '匿名'),
+    ownerAvatar: document.getElementById('editId').value ? (places.find(p => p.id === document.getElementById('editId').value)?.ownerAvatar || currentAvatar) : currentAvatar,
     updatedAt: new Date().toISOString(),
-    updatedBy: currentUsername || '匿名'
+    updatedBy: getCurrentUserKey(),
+    updatedByName: currentUsername || '匿名',
+    updatedByAvatar: currentAvatar
   };
 
   const existIdx = places.findIndex(p => p.id === data.id);
   if (existIdx >= 0) {
     data.createdAt = places[existIdx].createdAt;
-    data.createdBy = places[existIdx].createdBy || currentUsername;
+    data.createdBy = places[existIdx].createdBy || getCurrentUserKey();
+    data.createdByName = places[existIdx].createdByName || currentUsername;
+    data.createdByAvatar = places[existIdx].createdByAvatar || currentAvatar;
     places[existIdx] = data;
   } else {
     data.createdAt = new Date().toISOString();
-    data.createdBy = currentUsername || '匿名';
+    data.createdBy = getCurrentUserKey();
+    data.createdByName = currentUsername || '匿名';
+    data.createdByAvatar = currentAvatar;
     places.push(data);
   }
 
@@ -1209,18 +1247,33 @@ function calcDistNum(lat1, lng1, lat2, lng2) {
 function openSettings() {
   document.getElementById('apiKeyInput').value = localStorage.getItem(APIKEY_KEY) || '';
   document.getElementById('usernameInput').value = currentUsername || '';
+  renderAvatarGrid();
   document.getElementById('settingsPanel').classList.add('active');
 }
 function closeSettings() {
   document.getElementById('settingsPanel').classList.remove('active');
+}
+function renderAvatarGrid() {
+  const box = document.getElementById('avatarGrid');
+  if (!box) return;
+  box.innerHTML = AVATAR_POOL.map(a => `<button type="button" class="avatar-btn ${a===currentAvatar?'active':''}" onclick="selectAvatar('${a}')">${a}</button>`).join('');
+}
+function selectAvatar(a) {
+  currentAvatar = a;
+  localStorage.setItem(USER_AVATAR_KEY, a);
+  renderAvatarGrid();
+  updateCurrentUserBadge();
 }
 function saveUsername() {
   const name = document.getElementById('usernameInput').value.trim();
   if (name) {
     currentUsername = name;
     localStorage.setItem(USERNAME_KEY, name);
-    document.getElementById('currentUser').innerHTML = '<span class="user-badge">' + esc(name) + '</span>';
-    toast('✅ 名称已保存: ' + name);
+    localStorage.setItem(USER_AVATAR_KEY, currentAvatar);
+    saveUserProfile();
+    updateCurrentUserBadge();
+    renderMarkers();
+    toast('✅ 用户资料已保存: ' + currentAvatar + ' ' + name);
   } else {
     toast('请输入名称');
   }
@@ -1293,6 +1346,28 @@ function clearAllData() {
 }
 
 // ============ UTILS ============
+function getUserKey(name) {
+  return String(name || 'anonymous').trim().toLowerCase().replace(/[^a-z0-9一-龥_-]+/g, '_') || 'anonymous';
+}
+function getCurrentUserKey() { return getUserKey(currentUsername || '匿名'); }
+function getDisplayUser(keyOrName) {
+  const key = getUserKey(keyOrName);
+  const p = userProfiles[key] || {};
+  return (p.avatar ? p.avatar + ' ' : '') + (p.displayName || keyOrName || '匿名');
+}
+function updateCurrentUserBadge() {
+  document.getElementById('currentUser').innerHTML = '<span class="user-badge">' + esc(currentAvatar) + ' ' + esc(currentUsername || '未命名') + '</span>';
+}
+function saveUserProfile() {
+  if (!currentUsername) return;
+  const key = getCurrentUserKey();
+  usersCollection.doc(key).set({
+    id: key,
+    displayName: currentUsername,
+    avatar: currentAvatar,
+    updatedAt: new Date().toISOString()
+  }, { merge: true }).catch(err => console.warn('User profile save error:', err));
+}
 function savePlaces() {
   // Also save to localStorage as offline backup
   localStorage.setItem(STORAGE_KEY, JSON.stringify(places));
@@ -1312,7 +1387,7 @@ function deleteFromFirestore(id) {
   });
 }
 function genId() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
-function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+function esc(s) { return String(s ?? '').replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c])); }
 function updateStats() {
   const el = document.getElementById('statsText');
   el.textContent = places.length + ' 机构';
