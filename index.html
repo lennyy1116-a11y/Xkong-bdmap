@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-<title>BD地图 v2 - Owner筛选版</title>
+<title>BD地图 v2.2 - 头像增强版</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -281,8 +281,11 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
   font-size: 15px; color: #fff; font-weight: 700;
 }
 .avatar-grid { display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
-.avatar-btn { width:38px; height:38px; border-radius:12px; border:1px solid #444; background:var(--bg); color:var(--text); font-size:20px; cursor:pointer; }
+.avatar-btn { width:38px; height:38px; border-radius:12px; border:1px solid #444; background:var(--bg); color:var(--text); font-size:20px; cursor:pointer; display:flex; align-items:center; justify-content:center; overflow:hidden; }
 .avatar-btn.active { background:var(--primary); border-color:#8ec5ff; box-shadow:0 0 0 2px rgba(74,144,217,.25); }
+.avatar-img { width:100%; height:100%; object-fit:cover; border-radius:inherit; display:block; }
+.avatar-inline { width:18px; height:18px; object-fit:cover; border-radius:50%; vertical-align:-4px; margin-right:4px; }
+.avatar-upload-row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:8px; }
 .profile-hint { margin-top:8px; font-size:12px; color:var(--text2); line-height:1.45; }
 
 /* Leaflet overrides */
@@ -308,7 +311,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 
 <!-- Top bar -->
 <div class="top-bar">
-  <h1>📍 BD地图 v2</h1>
+  <h1>📍 BD地图 v2.2</h1>
   <span class="stats" id="statsText">0 机构</span>
   <button class="top-btn" id="btnList" title="列表">☰</button>
   <button class="top-btn" id="btnSettings" title="设置">⚙</button>
@@ -486,9 +489,14 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
       <div class="form-group">
         <label>头像</label>
         <div class="avatar-grid" id="avatarGrid"></div>
+        <div class="avatar-upload-row">
+          <button class="btn btn-ghost" type="button" onclick="document.getElementById('avatarFileInput').click()">上传自定义头像</button>
+          <input type="file" id="avatarFileInput" accept="image/*" style="display:none" onchange="handleAvatarUpload(event)">
+          <button class="btn btn-ghost" type="button" onclick="resetAvatarToEmoji()">恢复默认头像</button>
+        </div>
       </div>
       <button class="btn btn-primary" onclick="saveUsername()" style="width:100%">保存用户资料</button>
-      <div class="profile-hint">轻量版规则：同一个用户名会视为同一个 owner；emoji 用来显示和筛选，不作为真正身份 ID。</div>
+      <div class="profile-hint">轻量版规则：emoji/图片头像用于显示和筛选；同一个用户名会视为同一个 owner。上传头像会压缩成小图存本地，新增点位会带上该头像。</div>
     </div>
 
     <div class="settings-section">
@@ -575,7 +583,7 @@ const STORAGE_KEY = 'bd_map_places';
 const APIKEY_KEY = 'bd_map_google_key';
 const USERNAME_KEY = 'bd_map_username';
 const USER_AVATAR_KEY = 'bd_map_user_avatar';
-const AVATAR_POOL = ['🦅','🏃','🌿','🧭','🐯','🦊','🐼','🔥','⭐','💊','🏥','📍','🌊','🍀','⚡','🧩'];
+const AVATAR_POOL = ['🦅','🏃','🌿','🧭','🐯','🦊','🐼','🐧','🐶','🐱','🐰','🦁','🐺','🐻','🐨','🐵','🦉','🦋','🐉','🔥','⭐','🌙','☀️','⚡','🌊','🍀','🌿','🌸','🌻','🍄','💊','🏥','🩺','🧬','🧪','📍','🗺️','🎯','🚀','💼','📊','🧩','💎','👑','🎧','🎮','🍵','☕','🥐','🍜'];
 let places = [];
 let map, markersLayer, myLocMarker;
 let currentPos = { lat: 22.3193, lng: 114.1694 }; // default: HK
@@ -707,7 +715,7 @@ function createIcon(status, p) {
   const opacity = mine ? 1 : 0.72;
   return L.divIcon({
     className: '',
-    html: `<div class="custom-marker" style="background:${color};opacity:${opacity}">${esc(avatar)}</div>`,
+    html: `<div class="custom-marker" style="background:${color};opacity:${opacity}">${avatarHtml(avatar)}</div>`,
     iconSize: [30, 30],
     iconAnchor: [15, 15],
     popupAnchor: [0, -16]
@@ -980,14 +988,15 @@ function renderList() {
     const color = STATUS_COLORS[p.status] || '#7f8c8d';
     const visitCount = (p.visits||[]).length;
     const ownerLabel = getOwnerLabel(p);
+    const ownerBadgeHtml = ownerLabelHtml(p);
     return `
       <div class="list-item" onclick="goToPlace('${p.id}')">
         <div class="list-dot" style="background:${color}"></div>
         <div class="list-info">
-          <div class="list-name"><span>${esc(p.name)}</span><span class="owner-badge">${esc(ownerLabel)}</span></div>
+          <div class="list-name"><span>${esc(p.name)}</span><span class="owner-badge">${ownerBadgeHtml}</span></div>
           <div class="list-addr">${esc(p.address || p.type || '')}</div>
           <div class="list-meta">
-            ${esc(ownerLabel)}${p.type ? ' · ' + esc(p.type) : ''} · ${visitCount}次交流
+            ${ownerBadgeHtml}${p.type ? ' · ' + esc(p.type) : ''} · ${visitCount}次交流
             ${p.contact ? ' · ' + esc(p.contact) : ''}
           </div>
         </div>
@@ -1265,13 +1274,49 @@ function closeSettings() {
 function renderAvatarGrid() {
   const box = document.getElementById('avatarGrid');
   if (!box) return;
-  box.innerHTML = AVATAR_POOL.map(a => `<button type="button" class="avatar-btn ${a===currentAvatar?'active':''}" onclick="selectAvatar('${a}')">${a}</button>`).join('');
+  const custom = isImageAvatar(currentAvatar) ? `<button type="button" class="avatar-btn active" title="当前自定义头像">${avatarHtml(currentAvatar)}</button>` : '';
+  box.innerHTML = custom + AVATAR_POOL.map(a => `<button type="button" class="avatar-btn ${a===currentAvatar?'active':''}" onclick="selectAvatar('${a}')">${avatarHtml(a)}</button>`).join('');
 }
 function selectAvatar(a) {
   currentAvatar = a;
   localStorage.setItem(USER_AVATAR_KEY, a);
   renderAvatarGrid();
   updateCurrentUserBadge();
+}
+function resetAvatarToEmoji() {
+  currentAvatar = '👤';
+  localStorage.setItem(USER_AVATAR_KEY, currentAvatar);
+  renderAvatarGrid();
+  updateCurrentUserBadge();
+  toast('已恢复默认头像');
+}
+function handleAvatarUpload(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+  if (!file.type || !file.type.startsWith('image/')) { toast('请选择图片文件'); return; }
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const img = new Image();
+    img.onload = function() {
+      const canvas = document.createElement('canvas');
+      const size = 96;
+      canvas.width = size; canvas.height = size;
+      const ctx = canvas.getContext('2d');
+      const minSide = Math.min(img.width, img.height);
+      const sx = (img.width - minSide) / 2;
+      const sy = (img.height - minSide) / 2;
+      ctx.drawImage(img, sx, sy, minSide, minSide, 0, 0, size, size);
+      currentAvatar = canvas.toDataURL('image/jpeg', 0.78);
+      localStorage.setItem(USER_AVATAR_KEY, currentAvatar);
+      renderAvatarGrid();
+      updateCurrentUserBadge();
+      toast('✅ 自定义头像已载入，记得保存用户资料');
+    };
+    img.onerror = function(){ toast('头像读取失败'); };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+  event.target.value = '';
 }
 function saveUsername() {
   const name = document.getElementById('usernameInput').value.trim();
@@ -1365,9 +1410,19 @@ function getCurrentOwnerId() { return normalizeOwnerId(currentUsername || '匿�
 function getOwnerId(p) { return p.ownerId || normalizeOwnerId(p.ownerName || p.createdBy || p.updatedBy || '匿名'); }
 function getOwnerName(p) { return p.ownerName || p.createdBy || p.updatedBy || '匿名'; }
 function getOwnerAvatar(p) { return p.ownerAvatar || p.createdByAvatar || p.updatedByAvatar || '👤'; }
-function getOwnerLabel(p) { return getOwnerAvatar(p) + ' ' + getOwnerName(p); }
+function getOwnerLabel(p) { return (isImageAvatar(getOwnerAvatar(p)) ? '头像' : getOwnerAvatar(p)) + ' ' + getOwnerName(p); }
+function isImageAvatar(v) { return typeof v === 'string' && (v.indexOf('data:image/') === 0 || v.indexOf('http://') === 0 || v.indexOf('https://') === 0); }
+function avatarHtml(v) {
+  if (isImageAvatar(v)) return '<img class="avatar-img" src="' + esc(v) + '" alt="头像">';
+  return esc(v || '👤');
+}
+function avatarInlineHtml(v) {
+  if (isImageAvatar(v)) return '<img class="avatar-inline" src="' + esc(v) + '" alt="头像">';
+  return esc(v || '👤') + ' ';
+}
+function ownerLabelHtml(p) { return avatarInlineHtml(getOwnerAvatar(p)) + esc(getOwnerName(p)); }
 function updateCurrentUserBadge() {
-  document.getElementById('currentUser').innerHTML = '<span class="user-badge">' + esc(currentAvatar) + ' ' + esc(currentUsername || '未命名') + '</span>';
+  document.getElementById('currentUser').innerHTML = '<span class="user-badge">' + avatarInlineHtml(currentAvatar) + esc(currentUsername || '未命名') + '</span>';
 }
 function getOwners() {
   const map = {};
@@ -1387,7 +1442,7 @@ function renderOwnerFilters() {
   if (!box) return;
   const owners = getOwners();
   box.innerHTML = '<span class="filter-chip owner-chip ' + (ownerFilter === '全部' ? 'active' : '') + '" data-owner="全部">👥 全部人员</span>' + owners.map(o =>
-    '<span class="filter-chip owner-chip ' + (ownerFilter === o.id ? 'active' : '') + '" data-owner="' + esc(o.id) + '">' + esc(o.avatar + ' ' + o.name) + '</span>'
+    '<span class="filter-chip owner-chip ' + (ownerFilter === o.id ? 'active' : '') + '" data-owner="' + esc(o.id) + '">' + avatarInlineHtml(o.avatar) + esc(o.name) + '</span>'
   ).join('');
   box.querySelectorAll('.filter-chip').forEach(chip => {
     chip.onclick = () => {
