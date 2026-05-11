@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-<title>BD地图 v2.2 - 头像增强版</title>
+<title>BD地图 v2.4 - 云端导入版</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -319,7 +319,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 
 <!-- Map -->
 <div id="map"></div>
-<button onclick="downloadTcmLeads()" style="position:fixed;right:14px;bottom:76px;z-index:9999;background:#2ecc71;color:#071b10;border:0;border-radius:999px;padding:10px 14px;font-weight:700;box-shadow:0 4px 18px rgba(0,0,0,.35);">🩺 中醫名錄JSON</button>
 
 
 <!-- FAB buttons -->
@@ -1368,29 +1367,54 @@ function importData(event) {
   const file = event.target.files[0];
   if (!file) return;
   const reader = new FileReader();
-  reader.onload = function(e) {
+  reader.onload = async function(e) {
     try {
       const data = JSON.parse(e.target.result);
       if (!Array.isArray(data)) throw new Error('格式错误');
       let added = 0;
+      let updated = 0;
+      const validItems = [];
       data.forEach(item => {
-        if (!item.id || !item.name || !item.lat || !item.lng) return;
-        if (!places.some(p => p.id === item.id)) {
+        if (!item.id || !item.name || item.lat === undefined || item.lng === undefined) return;
+        item.lat = Number(item.lat);
+        item.lng = Number(item.lng);
+        if (!Number.isFinite(item.lat) || !Number.isFinite(item.lng)) return;
+        const idx = places.findIndex(p => p.id === item.id);
+        if (idx >= 0) {
+          places[idx] = { ...places[idx], ...item };
+          updated++;
+        } else {
           places.push(item);
           added++;
         }
+        validItems.push(item);
       });
       savePlaces();
       renderOwnerFilters();
       renderMarkers();
       updateStats();
-      toast(`📥 导入完成，新增 ${added} 条`);
+      toast(`📥 本地导入完成：新增 ${added}，更新 ${updated}，正在同步云端...`);
+      await syncImportedToFirestore(validItems);
+      toast(`✅ 云端同步完成：${validItems.length} 条`);
     } catch(err) {
+      console.error(err);
       toast('❌ 导入失败：文件格式不正确');
     }
   };
   reader.readAsText(file);
   event.target.value = '';
+}
+
+async function syncImportedToFirestore(items) {
+  if (!items || items.length === 0) return;
+  const chunkSize = 100;
+  for (let i = 0; i < items.length; i += chunkSize) {
+    const chunk = items.slice(i, i + chunkSize);
+    await Promise.all(chunk.map(item => placesCollection.doc(item.id).set(item)));
+    const done = Math.min(i + chunk.length, items.length);
+    document.getElementById('syncStatus').textContent = `☁️ 正在同步 ${done}/${items.length}`;
+  }
+  document.getElementById('syncStatus').textContent = '✅ 已同步';
 }
 
 function clearAllData() {
@@ -1544,14 +1568,6 @@ document.querySelectorAll('.district-chip').forEach(chip => {
 // Init
 renderOwnerFilters();
 init();
-</script>
-
-<!-- TCM leads dataset added 2026-05-11 -->
-<script>
-window.TCM_LEADS_SOURCE = 'tcm-leads.json';
-async function downloadTcmLeads(){
-  const a=document.createElement('a'); a.href='tcm-leads.json'; a.download='tcm-leads.json'; a.click();
-}
 </script>
 </body>
 </html>
