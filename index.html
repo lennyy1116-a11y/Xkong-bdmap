@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-<title>BD地图 v2.6.5 - 1km覆盖版</title>
+<title>BD地图 v2.6.6 - 1km诊所页版</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -329,7 +329,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .list-check { width:18px; height:18px; margin-top:2px; accent-color:var(--primary); flex-shrink:0; }
 
 
-.coverage-exit { position: fixed; top: auto; bottom: max(112px, calc(env(safe-area-inset-bottom) + 112px)); left: 50%; transform: translateX(-50%); z-index: 5000; border:0; border-radius:999px; padding:12px 18px; background:var(--red); color:#fff; font-weight:800; box-shadow:0 4px 16px rgba(0,0,0,.45); }
+.coverage-exit { display:none !important; position: fixed; top: auto; bottom: max(112px, calc(env(safe-area-inset-bottom) + 112px)); left: 50%; transform: translateX(-50%); z-index: 5000; border:0; border-radius:999px; padding:12px 18px; background:var(--red); color:#fff; font-weight:800; box-shadow:0 4px 16px rgba(0,0,0,.45); }
 .coverage-clinic-list { margin:10px 0 14px; }
 .coverage-clinic-item { background:var(--card); border:1px solid rgba(230,126,34,.55); border-radius:12px; padding:11px; margin-bottom:8px; cursor:pointer; }
 .coverage-clinic-item .rank { display:inline-flex; min-width:24px; height:24px; border-radius:50%; background:var(--orange); color:#fff; align-items:center; justify-content:center; font-size:12px; font-weight:800; margin-right:6px; }
@@ -341,7 +341,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 
 <!-- Top bar -->
 <div class="top-bar">
-  <h1>📍 BD地图 v2.6.5</h1>
+  <h1>📍 BD地图 v2.6.6</h1>
   <span class="stats" id="statsText">0 机构</span>
   <button class="coverage-exit" id="btnExitCoverage" title="退出1km覆盖" style="display:none">↩ 退出1km</button>
   <button class="top-btn" id="btnMall" title="商场覆盖">🏬</button>
@@ -615,8 +615,21 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
       </div>
     </div>
     <div id="mallSummary" class="mall-meta" style="padding:4px 4px 10px">已内置116个重点商场；选择商场后，会高亮1公里内诊所。</div>
-    <div id="coverageClinicList" class="coverage-clinic-list"></div>
     <div id="mallList"></div>
+  </div>
+</div>
+
+
+<!-- Coverage clinic panel -->
+<div class="mall-panel" id="coveragePanel">
+  <div class="list-header">
+    <button class="top-btn" onclick="closeCoveragePanel()">←</button>
+    <h2 id="coverageTitle">1公里未接触诊所</h2>
+    <button class="top-btn" onclick="exitCoverageMode(); closeCoveragePanel();" title="退出覆盖">↩</button>
+  </div>
+  <div class="mall-body">
+    <div id="coverageSummary" class="mall-meta" style="padding:4px 4px 10px"></div>
+    <div id="coverageClinicList" class="coverage-clinic-list"></div>
   </div>
 </div>
 
@@ -1118,6 +1131,7 @@ function goToPlace(id) {
   const p = places.find(x => x.id === id);
   if (!p) return;
   closeList();
+  if (document.getElementById('coveragePanel')) closeCoveragePanel();
   map.setView([p.lat, p.lng], 17);
   // Open popup
   markersLayer.eachLayer(layer => {
@@ -1181,6 +1195,8 @@ function exitCoverageMode() {
   renderMarkers();
   renderMallList();
   updateCoverageUi();
+  const panel = document.getElementById('coveragePanel');
+  if (panel) panel.classList.remove('active');
   toast('已退出1km覆盖模式');
 }
 function loadMalls() {
@@ -1259,48 +1275,61 @@ function renderMalls() {
 function renderMallList() {
   const box = document.getElementById('mallList');
   const summary = document.getElementById('mallSummary');
-  const clinicBox = document.getElementById('coverageClinicList');
   if (!box) return;
   if (!malls.length) {
     box.innerHTML = '<div class="list-empty">暂无商场数据异常。请刷新页面；也可以点右上角📍新增自定义商场。</div>';
-    if (clinicBox) clinicBox.innerHTML = '';
-    summary.textContent='已内置116个重点商场；选择商场后，会高亮1公里内诊所。';
+    summary.textContent='已内置116个重点商场；选择商场后，可查看1公里内未接触诊所。';
     return;
   }
   const selected = malls.find(m => m.id === selectedMallId);
-  if (selected) {
-    const hits = getMallClinics(selected);
-    summary.textContent = `当前：${selected.name} · 1公里内未交流诊所 ${hits.length} 家（已按距离由近到远排序）`;
-    if (clinicBox) {
-      clinicBox.innerHTML = hits.length ? hits.map((p,i) => {
-        const d = distanceKm(selected.lat, selected.lng, p.lat, p.lng);
-        return `<div class="coverage-clinic-item" onclick="goToPlace('${p.id}')">
-          <div><span class="rank">${i+1}</span><strong>${esc(p.name)}</strong> <span class="distance">${d.toFixed(2)} km</span></div>
-          <div class="meta">${esc(p.address || '')}<br>${esc(p.contact || '')}${p.phone ? ' · ' + esc(p.phone) : ''}</div>
-        </div>`;
-      }).join('') : '<div class="list-empty">这个商场1公里内暂未命中未交流诊所</div>';
-    }
-  } else {
-    summary.textContent = '已内置116个重点商场；选择商场后，会高亮1公里内诊所。';
-    if (clinicBox) clinicBox.innerHTML = '';
-  }
+  summary.textContent = selected
+    ? `当前覆盖：${selected.name}。再点同一商场「查看1km诊所」即可退出。`
+    : '已内置116个重点商场；选择商场后，可查看1公里内未接触诊所。';
   box.innerHTML = malls.map(m => {
     const hits = getMallClinics(m).length;
-    return `<div class="mall-item ${m.id===selectedMallId?'active':''}" onclick="selectMall('${m.id}')">
+    const active = m.id === selectedMallId;
+    return `<div class="mall-item ${active?'active':''}" onclick="selectMall('${m.id}')">
       <div class="mall-name">🏬 ${esc(m.name)}</div>
-      <div class="mall-meta">${m.no ? m.no + '. ' : ''}${esc(m.area || '')} · ${esc(m.developer || '')}<br>1公里未交流诊所：${hits} 家 · 客流：${esc(m.traffic || '-')} ${esc(m.trafficNote || '')}<br>${esc(m.address || '')}</div>
-      <div class="mall-actions"><button class="primary" onclick="event.stopPropagation(); selectMall('${m.id}')">高亮覆盖</button><button onclick="event.stopPropagation(); editMall('${m.id}')">编辑客流</button><button onclick="event.stopPropagation(); deleteMall('${m.id}')">删除</button></div>
+      <div class="mall-meta">${m.no ? m.no + '. ' : ''}${esc(m.area || '')} · ${esc(m.developer || '')}<br>1公里未接触诊所：${hits} 家 · 客流：${esc(m.traffic || '-')} ${esc(m.trafficNote || '')}<br>${esc(m.address || '')}</div>
+      <div class="mall-actions"><button class="primary" onclick="event.stopPropagation(); selectMall('${m.id}')">${active ? '退出1km覆盖' : '查看1km诊所'}</button><button onclick="event.stopPropagation(); editMall('${m.id}')">编辑客流</button><button onclick="event.stopPropagation(); deleteMall('${m.id}')">删除</button></div>
     </div>`;
   }).join('');
 }
 function selectMall(id) {
-  selectedMallId = id;
   const m = malls.find(x => x.id === id);
   if (!m) return;
-  map.setView([m.lat, m.lng], 14);
-  renderMalls(); renderMarkers(); renderMallList();
+  // 再次点击同一个商场 = 退出覆盖模式
+  if (selectedMallId === id) {
+    exitCoverageMode();
+    renderMallList();
+    closeCoveragePanel();
+    return;
+  }
+  selectedMallId = id;
+  map.setView([m.lat, m.lng], 15);
+  renderMalls(); renderMarkers(); renderMallList(); updateCoverageUi();
+  openCoveragePanel();
   const hits = getMallClinics(m).length;
-  toast(`🏬 ${m.name}：1公里内 ${hits} 家未交流诊所已高亮`);
+  toast(`🏬 ${m.name}：1公里内 ${hits} 家未接触诊所`);
+}
+function openCoveragePanel() { renderCoverageClinicPage(); document.getElementById('coveragePanel').classList.add('active'); }
+function closeCoveragePanel() { document.getElementById('coveragePanel').classList.remove('active'); }
+function renderCoverageClinicPage() {
+  const selected = malls.find(m => m.id === selectedMallId);
+  const title = document.getElementById('coverageTitle');
+  const summary = document.getElementById('coverageSummary');
+  const box = document.getElementById('coverageClinicList');
+  if (!selected || !box) return;
+  const hits = getMallClinics(selected);
+  title.textContent = `${selected.name} · 1公里诊所`;
+  summary.textContent = `1公里内未接触诊所 ${hits.length} 家，已按距离由近到远排序。再点商场页同一商场可退出覆盖。`;
+  box.innerHTML = hits.length ? hits.map((p,i) => {
+    const d = distanceKm(selected.lat, selected.lng, p.lat, p.lng);
+    return `<div class="coverage-clinic-item" onclick="goToPlace('${p.id}')">
+      <div><span class="rank">${i+1}</span><strong>${esc(p.name)}</strong> <span class="distance">${d.toFixed(2)} km</span></div>
+      <div class="meta">${esc(p.address || '')}<br>${esc(p.contact || '')}${p.phone ? ' · ' + esc(p.phone) : ''}</div>
+    </div>`;
+  }).join('') : '<div class="list-empty">这个商场1公里内暂未命中未接触诊所</div>';
 }
 function deleteMall(id) {
   if (!confirm('删除这个商场标注？')) return;
