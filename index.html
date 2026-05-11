@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-<title>BD地图 v2.6.6 - 1km诊所页版</title>
+<title>BD地图 v2.6.7 - 半屏诊所清单版</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -335,13 +335,26 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .coverage-clinic-item .rank { display:inline-flex; min-width:24px; height:24px; border-radius:50%; background:var(--orange); color:#fff; align-items:center; justify-content:center; font-size:12px; font-weight:800; margin-right:6px; }
 .coverage-clinic-item .distance { color:#ffb65c; font-weight:700; }
 .coverage-clinic-item .meta { color:var(--text2); font-size:12px; margin-top:4px; line-height:1.45; }
+
+#coveragePanel {
+  inset: auto 0 0 0;
+  height: 52vh;
+  max-height: 58vh;
+  border-radius: 18px 18px 0 0;
+  transform: translateY(100%);
+  box-shadow: 0 -8px 30px rgba(0,0,0,.5);
+}
+#coveragePanel.active { transform: translateY(0); }
+#coveragePanel .list-header { border-radius: 18px 18px 0 0; padding-top: 12px; }
+#coveragePanel .mall-body { padding-bottom: max(16px, env(safe-area-inset-bottom)); }
+.coverage-handle { width:42px; height:4px; border-radius:999px; background:#596070; margin:8px auto 0; }
 </style>
 </head>
 <body>
 
 <!-- Top bar -->
 <div class="top-bar">
-  <h1>📍 BD地图 v2.6.6</h1>
+  <h1>📍 BD地图 v2.6.7</h1>
   <span class="stats" id="statsText">0 机构</span>
   <button class="coverage-exit" id="btnExitCoverage" title="退出1km覆盖" style="display:none">↩ 退出1km</button>
   <button class="top-btn" id="btnMall" title="商场覆盖">🏬</button>
@@ -622,6 +635,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 
 <!-- Coverage clinic panel -->
 <div class="mall-panel" id="coveragePanel">
+  <div class="coverage-handle"></div>
   <div class="list-header">
     <button class="top-btn" onclick="closeCoveragePanel()">←</button>
     <h2 id="coverageTitle">1公里未接触诊所</h2>
@@ -1131,7 +1145,6 @@ function goToPlace(id) {
   const p = places.find(x => x.id === id);
   if (!p) return;
   closeList();
-  if (document.getElementById('coveragePanel')) closeCoveragePanel();
   map.setView([p.lat, p.lng], 17);
   // Open popup
   markersLayer.eachLayer(layer => {
