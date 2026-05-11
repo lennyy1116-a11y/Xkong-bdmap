@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-<title>BD地图 v2.5 - 商场覆盖版</title>
+<title>BD地图 v2.6 - 116商场覆盖版</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -334,7 +334,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 
 <!-- Top bar -->
 <div class="top-bar">
-  <h1>📍 BD地图 v2.5</h1>
+  <h1>📍 BD地图 v2.6</h1>
   <span class="stats" id="statsText">0 机构</span>
   <button class="top-btn" id="btnMall" title="商场覆盖">🏬</button>
   <button class="top-btn" id="btnList" title="列表">☰</button>
@@ -606,7 +606,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
         <button class="btn btn-primary" onclick="saveMall()">保存商场</button>
       </div>
     </div>
-    <div id="mallSummary" class="mall-meta" style="padding:4px 4px 10px">选择商场后，会高亮3公里内诊所。</div>
+    <div id="mallSummary" class="mall-meta" style="padding:4px 4px 10px">已内置116个重点商场；选择商场后，会高亮3公里内诊所。</div>
     <div id="mallList"></div>
   </div>
 </div>
@@ -1143,7 +1143,23 @@ async function bulkDeleteIds(ids) {
 }
 
 // ============ MALL COVERAGE ============
-function loadMalls() { malls = JSON.parse(localStorage.getItem(MALLS_KEY) || '[]'); }
+async function loadMalls() {
+  const local = JSON.parse(localStorage.getItem(MALLS_KEY) || '[]');
+  try {
+    const res = await fetch('malls-116.json');
+    const builtin = await res.json();
+    const map = {};
+    builtin.forEach(m => map[m.id] = m);
+    local.forEach(m => map[m.id] = { ...map[m.id], ...m });
+    malls = Object.values(map).sort((a,b) => (a.no||9999) - (b.no||9999));
+    localStorage.setItem(MALLS_KEY, JSON.stringify(malls));
+    renderMalls();
+    renderMallList();
+  } catch(e) {
+    malls = local;
+    renderMalls();
+  }
+}
 function saveMallsLocal() { localStorage.setItem(MALLS_KEY, JSON.stringify(malls)); }
 function openMallPanel() { renderMallList(); document.getElementById('mallPanel').classList.add('active'); }
 function closeMallPanel() { document.getElementById('mallPanel').classList.remove('active'); }
@@ -1164,7 +1180,7 @@ function renderMalls() {
   mallLayer.clearLayers(); coverageLayer.clearLayers();
   malls.forEach(m => {
     const marker = L.marker([m.lat,m.lng], { icon: L.divIcon({ className:'', html:'<div class="mall-marker">🏬</div>', iconSize:[34,34], iconAnchor:[17,17] }) });
-    marker.bindPopup(`<div class="popup-name">${esc(m.name)}</div><div class="popup-detail">客流：${esc(m.traffic || '-')} ${esc(m.trafficNote || '')}</div><span class="popup-edit" onclick="selectMall('${m.id}')">查看3km诊所</span>`);
+    marker.bindPopup(`<div class="popup-name">🏬 ${esc(m.name)}</div><div class="popup-detail">${m.no ? m.no + '. ' : ''}${esc(m.area || '')} · ${esc(m.developer || '')}</div><div class="popup-detail">客流：${esc(m.traffic || '-')} ${esc(m.trafficNote || '')}</div><span class="popup-edit" onclick="selectMall('${m.id}')">查看3km诊所</span>`);
     mallLayer.addLayer(marker);
   });
   const selected = malls.find(m => m.id === selectedMallId);
@@ -1174,17 +1190,17 @@ function renderMallList() {
   const box = document.getElementById('mallList');
   const summary = document.getElementById('mallSummary');
   if (!box) return;
-  if (!malls.length) { box.innerHTML = '<div class="list-empty">暂无商场。点右上角📍去地图选商场位置。</div>'; summary.textContent='选择商场后，会高亮3公里内诊所。'; return; }
+  if (!malls.length) { box.innerHTML = '<div class="list-empty">正在加载116个内置商场；也可以点右上角📍新增自定义商场。</div>'; summary.textContent='已内置116个重点商场；选择商场后，会高亮3公里内诊所。'; return; }
   const selected = malls.find(m => m.id === selectedMallId);
   if (selected) {
     const hits = getMallClinics(selected);
     summary.textContent = `当前：${selected.name} · 3公里内诊所 ${hits.length} 家`;
-  } else summary.textContent = '选择商场后，会高亮3公里内诊所。';
+  } else summary.textContent = '已内置116个重点商场；选择商场后，会高亮3公里内诊所。';
   box.innerHTML = malls.map(m => {
     const hits = getMallClinics(m).length;
     return `<div class="mall-item ${m.id===selectedMallId?'active':''}" onclick="selectMall('${m.id}')">
       <div class="mall-name">🏬 ${esc(m.name)}</div>
-      <div class="mall-meta">3公里诊所：${hits} 家 · 客流：${esc(m.traffic || '-')} ${esc(m.trafficNote || '')}<br>${esc(m.address || '')}</div>
+      <div class="mall-meta">${m.no ? m.no + '. ' : ''}${esc(m.area || '')} · ${esc(m.developer || '')}<br>3公里诊所：${hits} 家 · 客流：${esc(m.traffic || '-')} ${esc(m.trafficNote || '')}<br>${esc(m.address || '')}</div>
       <div class="mall-actions"><button class="primary" onclick="event.stopPropagation(); selectMall('${m.id}')">高亮覆盖</button><button onclick="event.stopPropagation(); deleteMall('${m.id}')">删除</button></div>
     </div>`;
   }).join('');
