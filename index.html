@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-<title>BD地图 v2.6.3 - 覆盖退出修正版</title>
+<title>BD地图 v2.6.4 - 覆盖清单修正版</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -328,15 +328,22 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .bulk-tools button.danger { background:var(--red); border-color:var(--red); color:#fff; }
 .list-check { width:18px; height:18px; margin-top:2px; accent-color:var(--primary); flex-shrink:0; }
 
+
+.coverage-exit { position: fixed; top: max(54px, calc(env(safe-area-inset-top) + 54px)); right: 12px; z-index: 1500; border:0; border-radius:999px; padding:9px 13px; background:var(--red); color:#fff; font-weight:800; box-shadow:0 4px 16px rgba(0,0,0,.45); }
+.coverage-clinic-list { margin:10px 0 14px; }
+.coverage-clinic-item { background:var(--card); border:1px solid rgba(230,126,34,.55); border-radius:12px; padding:11px; margin-bottom:8px; cursor:pointer; }
+.coverage-clinic-item .rank { display:inline-flex; min-width:24px; height:24px; border-radius:50%; background:var(--orange); color:#fff; align-items:center; justify-content:center; font-size:12px; font-weight:800; margin-right:6px; }
+.coverage-clinic-item .distance { color:#ffb65c; font-weight:700; }
+.coverage-clinic-item .meta { color:var(--text2); font-size:12px; margin-top:4px; line-height:1.45; }
 </style>
 </head>
 <body>
 
 <!-- Top bar -->
 <div class="top-bar">
-  <h1>📍 BD地图 v2.6.3</h1>
+  <h1>📍 BD地图 v2.6.4</h1>
   <span class="stats" id="statsText">0 机构</span>
-  <button class="top-btn" id="btnExitCoverage" title="退出3km覆盖" style="display:none;background:var(--red)">↩</button>
+  <button class="coverage-exit" id="btnExitCoverage" title="退出3km覆盖" style="display:none">↩ 退出3km</button>
   <button class="top-btn" id="btnMall" title="商场覆盖">🏬</button>
   <button class="top-btn" id="btnList" title="列表">☰</button>
   <button class="top-btn" id="btnSettings" title="设置">⚙</button>
@@ -608,6 +615,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
       </div>
     </div>
     <div id="mallSummary" class="mall-meta" style="padding:4px 4px 10px">已内置116个重点商场；选择商场后，会高亮3公里内诊所。</div>
+    <div id="coverageClinicList" class="coverage-clinic-list"></div>
     <div id="mallList"></div>
   </div>
 </div>
@@ -810,14 +818,14 @@ function createIcon(status, p, highlighted) {
 function getFilteredPlaces() {
   const selectedMall = malls.find(m => m.id === selectedMallId);
   return places.filter(p => {
-    const status = p.status || '未接触';
+    const status = normalizeStatus(p.status);
     const isUncontacted = isUncontactedPlace(p);
-    const matchStatus = currentFilter === '全部' || status === currentFilter;
+    const matchStatus = currentFilter === '全部' || status === normalizeStatus(currentFilter);
     const matchOwner = ownerFilter === '全部' || getOwnerId(p) === ownerFilter;
     if (!matchStatus || !matchOwner) return false;
-    // 常规首页：隐藏未交流/待跟进海量线索，但保留所有已交流、有意向、已合作等机构
+    // 首页强制隐藏所有未接触/待跟进/未交流导入线索；只展示已经被人处理过的机构
     if (!selectedMall) return !isUncontacted;
-    // 3km覆盖模式：已交流机构仍然保留；额外显示当前商场3km内未交流诊所
+    // 3km覆盖模式：保留已处理机构，同时额外展示当前商场3km内未交流诊所
     if (!isUncontacted) return true;
     return isClinicLike(p) && distanceKm(selectedMall.lat, selectedMall.lng, p.lat, p.lng) <= 3;
   });
@@ -1070,7 +1078,12 @@ function closeList() {
 function renderList() {
   const body = document.getElementById('listBody');
   let filtered = getFilteredPlaces();
-  filtered.sort((a,b) => (b.updatedAt||'').localeCompare(a.updatedAt||''));
+  const selectedMallForSort = malls.find(m => m.id === selectedMallId);
+  if (selectedMallForSort) {
+    filtered.sort((a,b) => distanceKm(selectedMallForSort.lat, selectedMallForSort.lng, a.lat, a.lng) - distanceKm(selectedMallForSort.lat, selectedMallForSort.lng, b.lat, b.lng));
+  } else {
+    filtered.sort((a,b) => (b.updatedAt||'').localeCompare(a.updatedAt||''));
+  }
 
   if (filtered.length === 0) {
     body.innerHTML = `<div class="list-empty">没有符合当前筛选的机构</div>`;
@@ -1241,13 +1254,31 @@ function renderMalls() {
 function renderMallList() {
   const box = document.getElementById('mallList');
   const summary = document.getElementById('mallSummary');
+  const clinicBox = document.getElementById('coverageClinicList');
   if (!box) return;
-  if (!malls.length) { box.innerHTML = '<div class="list-empty">暂无商场数据异常。请刷新页面；也可以点右上角📍新增自定义商场。</div>'; summary.textContent='已内置116个重点商场；选择商场后，会高亮3公里内诊所。'; return; }
+  if (!malls.length) {
+    box.innerHTML = '<div class="list-empty">暂无商场数据异常。请刷新页面；也可以点右上角📍新增自定义商场。</div>';
+    if (clinicBox) clinicBox.innerHTML = '';
+    summary.textContent='已内置116个重点商场；选择商场后，会高亮3公里内诊所。';
+    return;
+  }
   const selected = malls.find(m => m.id === selectedMallId);
   if (selected) {
     const hits = getMallClinics(selected);
-    summary.textContent = `当前：${selected.name} · 3公里内未交流诊所 ${hits.length} 家`;
-  } else summary.textContent = '已内置116个重点商场；选择商场后，会高亮3公里内诊所。';
+    summary.textContent = `当前：${selected.name} · 3公里内未交流诊所 ${hits.length} 家（已按距离由近到远排序）`;
+    if (clinicBox) {
+      clinicBox.innerHTML = hits.length ? hits.map((p,i) => {
+        const d = distanceKm(selected.lat, selected.lng, p.lat, p.lng);
+        return `<div class="coverage-clinic-item" onclick="goToPlace('${p.id}')">
+          <div><span class="rank">${i+1}</span><strong>${esc(p.name)}</strong> <span class="distance">${d.toFixed(2)} km</span></div>
+          <div class="meta">${esc(p.address || '')}<br>${esc(p.contact || '')}${p.phone ? ' · ' + esc(p.phone) : ''}</div>
+        </div>`;
+      }).join('') : '<div class="list-empty">这个商场3公里内暂未命中未交流诊所</div>';
+    }
+  } else {
+    summary.textContent = '已内置116个重点商场；选择商场后，会高亮3公里内诊所。';
+    if (clinicBox) clinicBox.innerHTML = '';
+  }
   box.innerHTML = malls.map(m => {
     const hits = getMallClinics(m).length;
     return `<div class="mall-item ${m.id===selectedMallId?'active':''}" onclick="selectMall('${m.id}')">
@@ -1272,7 +1303,8 @@ function deleteMall(id) {
   saveMallsLocal(); renderMalls(); renderMarkers(); renderMallList(); updateCoverageUi();
 }
 function getMallClinics(mall) { return places.filter(p => isClinicLike(p) && isUncontactedPlace(p) && distanceKm(mall.lat, mall.lng, p.lat, p.lng) <= 3); }
-function isUncontactedPlace(p) { const s = p.status || '未接触'; return s === '未接触' || s === '待跟进' || s === '未交流'; }
+function normalizeStatus(s) { return String(s || '未接触').trim().replace('待跟進','待跟进'); }
+function isUncontactedPlace(p) { const s = normalizeStatus(p.status); return s === '未接触' || s === '待跟进' || s === '未交流' || s === '待跟進' || s === '待聯絡' || s === '待联系'; }
 function isClinicLike(p) { const s = ((p.type||'')+' '+(p.name||'')).toLowerCase(); return s.includes('中醫') || s.includes('中医') || s.includes('clinic') || s.includes('診所') || s.includes('诊所'); }
 function distanceKm(lat1,lng1,lat2,lng2) {
   const R=6371, dLat=(lat2-lat1)*Math.PI/180, dLng=(lng2-lng1)*Math.PI/180;
