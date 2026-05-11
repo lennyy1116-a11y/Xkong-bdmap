@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-<title>BD地图 v2.4 - 云端导入版</title>
+<title>BD地图 v2.5 - 商场覆盖版</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -305,14 +305,38 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
   background: var(--card2); font-size: 11px; color: var(--text); margin-left: 4px;
 }
 .sync-status { margin-left: auto; font-size: 11px; }
+
+.mall-panel {
+  position: fixed; inset: 0; z-index: 2000; background: var(--bg);
+  transform: translateX(100%); transition: transform 0.3s ease;
+  display:flex; flex-direction:column;
+}
+.mall-panel.active { transform: translateX(0); }
+.mall-body { flex:1; overflow-y:auto; padding:10px 12px; }
+.mall-form-card, .bulk-card { background:var(--card); border-radius:12px; padding:12px; margin-bottom:10px; }
+.mall-item { background:var(--card); border-radius:12px; padding:12px; margin-bottom:8px; cursor:pointer; border:1px solid transparent; }
+.mall-item.active { border-color:var(--orange); box-shadow:0 0 0 1px rgba(230,126,34,.35); }
+.mall-name { font-weight:700; font-size:15px; margin-bottom:4px; }
+.mall-meta { color:var(--text2); font-size:12px; line-height:1.45; }
+.mall-actions { display:flex; gap:8px; margin-top:10px; }
+.mall-actions button { flex:1; padding:8px; border-radius:8px; border:1px solid #444; background:var(--bg); color:var(--text); }
+.mall-actions .primary { background:var(--orange); border-color:var(--orange); color:#fff; }
+.mall-marker { width:34px; height:34px; border-radius:50%; background:#e67e22; color:#fff; display:flex; align-items:center; justify-content:center; border:3px solid #fff; box-shadow:0 2px 10px rgba(0,0,0,.45); font-size:18px; }
+.custom-marker.highlighted-clinic { outline:3px solid #ff9f1a; box-shadow:0 0 0 5px rgba(255,159,26,.35), 0 4px 12px rgba(0,0,0,.55); transform:scale(1.15); }
+.bulk-tools { padding:8px 16px; background:var(--card); border-bottom:1px solid #333; display:flex; gap:8px; overflow-x:auto; }
+.bulk-tools button { flex-shrink:0; border:1px solid #444; background:var(--bg); color:var(--text); border-radius:16px; padding:6px 10px; font-size:12px; }
+.bulk-tools button.danger { background:var(--red); border-color:var(--red); color:#fff; }
+.list-check { width:18px; height:18px; margin-top:2px; accent-color:var(--primary); flex-shrink:0; }
+
 </style>
 </head>
 <body>
 
 <!-- Top bar -->
 <div class="top-bar">
-  <h1>📍 BD地图 v2.2</h1>
+  <h1>📍 BD地图 v2.5</h1>
   <span class="stats" id="statsText">0 机构</span>
+  <button class="top-btn" id="btnMall" title="商场覆盖">🏬</button>
   <button class="top-btn" id="btnList" title="列表">☰</button>
   <button class="top-btn" id="btnSettings" title="设置">⚙</button>
 </div>
@@ -433,6 +457,13 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
   <div class="list-filters owner-filters" id="ownerFilters">
     <span class="filter-chip owner-chip active" data-owner="全部">👥 全部人员</span>
   </div>
+  <div class="bulk-tools">
+    <button onclick="toggleBulkMode()">☑️ 批量选择</button>
+    <button onclick="selectAllVisible()">全选当前</button>
+    <button onclick="clearSelection()">取消选择</button>
+    <button class="danger" onclick="deleteSelectedPlaces()">🗑 删除所选</button>
+    <button class="danger" onclick="deleteCurrentFilteredPlaces()">🧹 删除当前筛选</button>
+  </div>
   <div class="list-body" id="listBody"></div>
 </div>
 
@@ -550,6 +581,36 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
   </div>
 </div>
 
+
+<!-- Mall coverage panel -->
+<div class="mall-panel" id="mallPanel">
+  <div class="list-header">
+    <button class="top-btn" onclick="closeMallPanel()">←</button>
+    <h2>商场3公里覆盖</h2>
+    <button class="top-btn" onclick="startMallPick()" title="地图选点">📍</button>
+  </div>
+  <div class="mall-body">
+    <div class="mall-form-card">
+      <div class="form-group"><label>商场名称</label><input type="text" id="mallName" placeholder="例如：朗豪坊"></div>
+      <div class="form-row">
+        <div class="form-group"><label>客流量</label><input type="number" id="mallTraffic" placeholder="手动输入"></div>
+        <div class="form-group"><label>客流单位/备注</label><input type="text" id="mallTrafficNote" placeholder="人/日、周末高峰等"></div>
+      </div>
+      <div class="form-group"><label>地址/备注</label><input type="text" id="mallAddress" placeholder="可选"></div>
+      <div class="form-row">
+        <div class="form-group"><label>纬度</label><input type="number" id="mallLat" step="any" placeholder="地图点选自动填入"></div>
+        <div class="form-group"><label>经度</label><input type="number" id="mallLng" step="any" placeholder="地图点选自动填入"></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-ghost" onclick="resetMallForm()">清空</button>
+        <button class="btn btn-primary" onclick="saveMall()">保存商场</button>
+      </div>
+    </div>
+    <div id="mallSummary" class="mall-meta" style="padding:4px 4px 10px">选择商场后，会高亮3公里内诊所。</div>
+    <div id="mallList"></div>
+  </div>
+</div>
+
 <!-- Loading overlay -->
 <div class="loading-overlay" id="loading"><div class="loading-spinner"></div></div>
 
@@ -597,6 +658,12 @@ let selectedDistrict = 'current';
 let _pagination = null;
 let currentUsername = localStorage.getItem(USERNAME_KEY) || '';
 let currentAvatar = localStorage.getItem(USER_AVATAR_KEY) || '👤';
+const MALLS_KEY = 'bd_map_malls';
+let malls = [];
+let selectedMallId = null;
+let mallPickMode = false;
+let bulkMode = false;
+let selectedPlaceIds = new Set();
 
 const DISTRICTS = {
   current: { name: '当前位置', lat: null, lng: null },
@@ -644,9 +711,20 @@ function init() {
   L.control.zoom({ position: 'topleft' }).addTo(map);
 
   markersLayer = L.layerGroup().addTo(map);
+  coverageLayer = L.layerGroup().addTo(map);
+  mallLayer = L.layerGroup().addTo(map);
+  loadMalls();
 
   // Map click to add marker
   map.on('click', function(e) {
+    if (mallPickMode) {
+      mallPickMode = false;
+      document.getElementById('mallLat').value = e.latlng.lat;
+      document.getElementById('mallLng').value = e.latlng.lng;
+      toast('🏬 商场位置已选定');
+      openMallPanel();
+      return;
+    }
     if (tapMode) {
       tapMode = false;
       document.getElementById('editLat').value = e.latlng.lat;
@@ -667,6 +745,7 @@ function init() {
 
   renderOwnerFilters();
   renderMarkers();
+  renderMalls();
   updateStats();
   locateMe(true);
 
@@ -695,6 +774,7 @@ function init() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(places));
     renderOwnerFilters();
     renderMarkers();
+    renderMalls();
     updateStats();
     document.getElementById('syncStatus').textContent = '✅ 实时同步中 · ' + places.length + ' 条数据';
   }, err => {
@@ -709,14 +789,14 @@ function init() {
 }
 
 // ============ MARKERS ============
-function createIcon(status, p) {
+function createIcon(status, p, highlighted) {
   const color = STATUS_COLORS[status] || '#7f8c8d';
   const avatar = getOwnerAvatar(p);
   const mine = getOwnerId(p) === getCurrentOwnerId();
   const opacity = mine ? 1 : 0.72;
   return L.divIcon({
     className: '',
-    html: `<div class="custom-marker" style="background:${color};opacity:${opacity}">${avatarHtml(avatar)}</div>`,
+    html: `<div class="custom-marker ${highlighted ? 'highlighted-clinic' : ''}" style="background:${color};opacity:${opacity}">${avatarHtml(avatar)}</div>`,
     iconSize: [30, 30],
     iconAnchor: [15, 15],
     popupAnchor: [0, -16]
@@ -733,17 +813,19 @@ function getFilteredPlaces() {
 
 function renderMarkers() {
   markersLayer.clearLayers();
+  const selectedMall = malls.find(m => m.id === selectedMallId);
   getFilteredPlaces().forEach(p => {
-    const marker = L.marker([p.lat, p.lng], { icon: createIcon(p.status, p) });
+    const isHighlighted = selectedMall && isClinicLike(p) && distanceKm(selectedMall.lat, selectedMall.lng, p.lat, p.lng) <= 3;
+    const marker = L.marker([p.lat, p.lng], { icon: createIcon(p.status, p, isHighlighted) });
     const statusColor = STATUS_COLORS[p.status] || '#7f8c8d';
     const visitCount = (p.visits || []).length;
     const lastVisit = visitCount > 0 ? p.visits[visitCount-1] : null;
-
     let popupHtml = `
       <div class="popup-name">${esc(p.name)}</div>
       <div class="popup-type">${esc(p.type || '')}</div>
       <div class="popup-status" style="background:${statusColor};color:#fff">${p.status}</div>
     `;
+    if (selectedMall) popupHtml += `<div class="popup-detail" style="color:#ff9f1a">🏬 距 ${esc(selectedMall.name)} ${distanceKm(selectedMall.lat, selectedMall.lng, p.lat, p.lng).toFixed(2)} km</div>`;
     if (p.contact) popupHtml += `<div class="popup-detail">👤 ${esc(p.contact)}${p.phone ? ' · ' + esc(p.phone) : ''}</div>`;
     if (p.scale) popupHtml += `<div class="popup-detail">📏 ${esc(p.scale)}</div>`;
     if (p.staff) popupHtml += `<div class="popup-detail">👨‍⚕️ ${p.staff}人</div>`;
@@ -755,7 +837,6 @@ function renderMarkers() {
     popupHtml += `<div class="popup-detail" style="color:var(--primary)">归属：${esc(getOwnerLabel(p))}</div>`;
     if (p.updatedBy) popupHtml += `<div class="popup-detail" style="color:var(--primary)">✍️ ${esc(p.updatedByName || p.updatedBy)}${p.updatedAt ? ' · ' + p.updatedAt.slice(0,10) : ''}</div>`;
     popupHtml += `<span class="popup-edit" onclick="openEditSheet('${p.id}')">✏️ 编辑</span>`;
-
     marker.bindPopup(popupHtml, { maxWidth: 260 });
     markersLayer.addLayer(marker);
   });
@@ -978,6 +1059,8 @@ function closeList() {
 function renderList() {
   const body = document.getElementById('listBody');
   let filtered = getFilteredPlaces();
+  const selectedMall = malls.find(m => m.id === selectedMallId);
+  if (selectedMall) filtered = filtered.filter(p => isClinicLike(p) && distanceKm(selectedMall.lat, selectedMall.lng, p.lat, p.lng) <= 3);
   filtered.sort((a,b) => (b.updatedAt||'').localeCompare(a.updatedAt||''));
 
   if (filtered.length === 0) {
@@ -992,6 +1075,7 @@ function renderList() {
     const ownerBadgeHtml = ownerLabelHtml(p);
     return `
       <div class="list-item" onclick="goToPlace('${p.id}')">
+        ${bulkMode ? `<input class="list-check" type="checkbox" ${selectedPlaceIds.has(p.id) ? 'checked' : ''} onclick="event.stopPropagation(); toggleSelectPlace('${p.id}', this.checked)">` : ''}
         <div class="list-dot" style="background:${color}"></div>
         <div class="list-info">
           <div class="list-name"><span>${esc(p.name)}</span><span class="owner-badge">${ownerBadgeHtml}</span></div>
@@ -1017,6 +1101,114 @@ function goToPlace(id) {
       layer.openPopup();
     }
   });
+}
+
+
+// ============ BULK DELETE ============
+function toggleBulkMode() {
+  bulkMode = !bulkMode;
+  if (!bulkMode) selectedPlaceIds.clear();
+  renderList();
+  toast(bulkMode ? '☑️ 批量选择已开启' : '已退出批量选择');
+}
+function toggleSelectPlace(id, checked) {
+  if (checked) selectedPlaceIds.add(id); else selectedPlaceIds.delete(id);
+}
+function selectAllVisible() {
+  getFilteredPlaces().forEach(p => selectedPlaceIds.add(p.id));
+  bulkMode = true; renderList(); toast('已选择当前筛选结果');
+}
+function clearSelection() { selectedPlaceIds.clear(); renderList(); toast('已取消选择'); }
+async function deleteSelectedPlaces() {
+  const ids = Array.from(selectedPlaceIds);
+  if (!ids.length) { toast('还没选择机构'); return; }
+  if (!confirm(`确定删除所选 ${ids.length} 个机构？会同步删除云端。`)) return;
+  await bulkDeleteIds(ids);
+}
+async function deleteCurrentFilteredPlaces() {
+  const ids = getFilteredPlaces().map(p => p.id);
+  if (!ids.length) { toast('当前筛选没有机构'); return; }
+  if (!confirm(`确定删除当前筛选下的 ${ids.length} 个机构？会同步删除云端。`)) return;
+  await bulkDeleteIds(ids);
+}
+async function bulkDeleteIds(ids) {
+  places = places.filter(p => !ids.includes(p.id));
+  selectedPlaceIds.clear(); savePlaces(); renderOwnerFilters(); renderMarkers(); renderList(); updateStats();
+  for (let i=0; i<ids.length; i+=100) {
+    await Promise.all(ids.slice(i,i+100).map(id => placesCollection.doc(id).delete()));
+    document.getElementById('syncStatus').textContent = `🗑 正在删除 ${Math.min(i+100, ids.length)}/${ids.length}`;
+  }
+  document.getElementById('syncStatus').textContent = '✅ 已同步';
+  toast(`🗑 已删除 ${ids.length} 个机构`);
+}
+
+// ============ MALL COVERAGE ============
+function loadMalls() { malls = JSON.parse(localStorage.getItem(MALLS_KEY) || '[]'); }
+function saveMallsLocal() { localStorage.setItem(MALLS_KEY, JSON.stringify(malls)); }
+function openMallPanel() { renderMallList(); document.getElementById('mallPanel').classList.add('active'); }
+function closeMallPanel() { document.getElementById('mallPanel').classList.remove('active'); }
+function startMallPick() { mallPickMode = true; closeMallPanel(); toast('在地图上点击商场位置'); }
+function resetMallForm() { ['mallName','mallTraffic','mallTrafficNote','mallAddress','mallLat','mallLng'].forEach(id=>document.getElementById(id).value=''); }
+function saveMall() {
+  const name = document.getElementById('mallName').value.trim();
+  const lat = Number(document.getElementById('mallLat').value), lng = Number(document.getElementById('mallLng').value);
+  if (!name || !Number.isFinite(lat) || !Number.isFinite(lng)) { toast('请填写商场名称并点选位置'); return; }
+  const mall = { id: 'mall_' + Date.now().toString(36), name, lat, lng,
+    traffic: document.getElementById('mallTraffic').value.trim(),
+    trafficNote: document.getElementById('mallTrafficNote').value.trim(),
+    address: document.getElementById('mallAddress').value.trim(), updatedAt: new Date().toISOString() };
+  malls.push(mall); saveMallsLocal(); resetMallForm(); renderMalls(); renderMallList(); selectMall(mall.id); toast('🏬 已保存商场');
+}
+function renderMalls() {
+  if (!mallLayer || !coverageLayer) return;
+  mallLayer.clearLayers(); coverageLayer.clearLayers();
+  malls.forEach(m => {
+    const marker = L.marker([m.lat,m.lng], { icon: L.divIcon({ className:'', html:'<div class="mall-marker">🏬</div>', iconSize:[34,34], iconAnchor:[17,17] }) });
+    marker.bindPopup(`<div class="popup-name">${esc(m.name)}</div><div class="popup-detail">客流：${esc(m.traffic || '-')} ${esc(m.trafficNote || '')}</div><span class="popup-edit" onclick="selectMall('${m.id}')">查看3km诊所</span>`);
+    mallLayer.addLayer(marker);
+  });
+  const selected = malls.find(m => m.id === selectedMallId);
+  if (selected) L.circle([selected.lat, selected.lng], { radius:3000, color:'#e67e22', weight:2, fillColor:'#e67e22', fillOpacity:.08 }).addTo(coverageLayer);
+}
+function renderMallList() {
+  const box = document.getElementById('mallList');
+  const summary = document.getElementById('mallSummary');
+  if (!box) return;
+  if (!malls.length) { box.innerHTML = '<div class="list-empty">暂无商场。点右上角📍去地图选商场位置。</div>'; summary.textContent='选择商场后，会高亮3公里内诊所。'; return; }
+  const selected = malls.find(m => m.id === selectedMallId);
+  if (selected) {
+    const hits = getMallClinics(selected);
+    summary.textContent = `当前：${selected.name} · 3公里内诊所 ${hits.length} 家`;
+  } else summary.textContent = '选择商场后，会高亮3公里内诊所。';
+  box.innerHTML = malls.map(m => {
+    const hits = getMallClinics(m).length;
+    return `<div class="mall-item ${m.id===selectedMallId?'active':''}" onclick="selectMall('${m.id}')">
+      <div class="mall-name">🏬 ${esc(m.name)}</div>
+      <div class="mall-meta">3公里诊所：${hits} 家 · 客流：${esc(m.traffic || '-')} ${esc(m.trafficNote || '')}<br>${esc(m.address || '')}</div>
+      <div class="mall-actions"><button class="primary" onclick="event.stopPropagation(); selectMall('${m.id}')">高亮覆盖</button><button onclick="event.stopPropagation(); deleteMall('${m.id}')">删除</button></div>
+    </div>`;
+  }).join('');
+}
+function selectMall(id) {
+  selectedMallId = id;
+  const m = malls.find(x => x.id === id);
+  if (!m) return;
+  map.setView([m.lat, m.lng], 14);
+  renderMalls(); renderMarkers(); renderMallList();
+  const hits = getMallClinics(m).length;
+  toast(`🏬 ${m.name}：3公里内 ${hits} 家诊所已高亮`);
+}
+function deleteMall(id) {
+  if (!confirm('删除这个商场标注？')) return;
+  malls = malls.filter(m => m.id !== id); if (selectedMallId === id) selectedMallId = null;
+  saveMallsLocal(); renderMalls(); renderMarkers(); renderMallList();
+}
+function getMallClinics(mall) { return places.filter(p => isClinicLike(p) && distanceKm(mall.lat, mall.lng, p.lat, p.lng) <= 3); }
+function isClinicLike(p) { const s = ((p.type||'')+' '+(p.name||'')).toLowerCase(); return s.includes('中醫') || s.includes('中医') || s.includes('clinic') || s.includes('診所') || s.includes('诊所'); }
+function distanceKm(lat1,lng1,lat2,lng2) {
+  const R=6371, dLat=(lat2-lat1)*Math.PI/180, dLng=(lng2-lng1)*Math.PI/180;
+  const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)**2;
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
 }
 
 // ============ SEARCH (Google Places) ============
@@ -1528,6 +1720,7 @@ document.getElementById('btnAdd').onclick = () => {
 };
 
 document.getElementById('btnGps').onclick = () => locateMe(false);
+document.getElementById('btnMall').onclick = openMallPanel;
 document.getElementById('btnList').onclick = openList;
 document.getElementById('btnSettings').onclick = openSettings;
 document.getElementById('btnSearch').onclick = openSearch;
