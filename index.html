@@ -319,6 +319,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 
 <!-- Map -->
 <div id="map"></div>
+<button onclick="downloadTcmLeads()" style="position:fixed;right:14px;bottom:76px;z-index:9999;background:#2ecc71;color:#071b10;border:0;border-radius:999px;padding:10px 14px;font-weight:700;box-shadow:0 4px 18px rgba(0,0,0,.35);">🩺 中醫名錄JSON</button>
+
 
 <!-- FAB buttons -->
 <div class="fab-group">
@@ -1542,6 +1544,14 @@ document.querySelectorAll('.district-chip').forEach(chip => {
 // Init
 renderOwnerFilters();
 init();
+</script>
+
+<!-- TCM leads dataset added 2026-05-11 -->
+<script>
+window.TCM_LEADS_SOURCE = 'tcm-leads.json';
+async function downloadTcmLeads(){
+  const a=document.createElement('a'); a.href='tcm-leads.json'; a.download='tcm-leads.json'; a.click();
+}
 </script>
 </body>
 </html>
