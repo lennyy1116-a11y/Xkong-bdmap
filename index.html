@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-<title>BD地图 v2.7.0 - 搜索校准版</title>
+<title>BD地图 v2.7.1 - 距离排序修正版</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -362,7 +362,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 
 <!-- Top bar -->
 <div class="top-bar">
-  <h1>📍 BD地图 v2.7.0</h1>
+  <h1>📍 BD地图 v2.7.1</h1>
   <span class="stats" id="statsText">0 机构</span>
   <button class="coverage-exit" id="btnExitCoverage" title="退出1km覆盖" style="display:none">↩ 退出1km</button>
   <button class="top-btn" id="btnMall" title="商场覆盖">🏬</button>
@@ -1377,7 +1377,7 @@ function renderCoverageClinicPage() {
   title.textContent = `${selected.name} · 1公里诊所`;
   summary.textContent = `1公里内未接触诊所 ${hits.length} 家，已按距离由近到远排序。再点商场页同一商场可退出覆盖。`;
   box.innerHTML = hits.length ? hits.map((p,i) => {
-    const d = distanceKm(selected.lat, selected.lng, p.lat, p.lng);
+    const d = p._distanceKm !== undefined ? p._distanceKm : distanceKm(selected.lat, selected.lng, p.lat, p.lng);
     return `<div class="coverage-clinic-item" onclick="goToPlace('${p.id}')">
       <div><span class="rank">${i+1}</span><strong>${esc(p.name)}</strong> <span class="distance">${d.toFixed(2)} km</span></div>
       <div class="meta">${esc(p.address || '')}<br>${esc(p.contact || '')}${p.phone ? ' · ' + esc(p.phone) : ''}</div>
@@ -1412,7 +1412,12 @@ function deleteMall(id) {
   malls = malls.filter(m => m.id !== id); if (selectedMallId === id) selectedMallId = null;
   saveMallsLocal(); renderMalls(); renderMarkers(); renderMallList(); updateCoverageUi();
 }
-function getMallClinics(mall) { return places.filter(p => isClinicLike(p) && isUncontactedPlace(p) && distanceKm(mall.lat, mall.lng, p.lat, p.lng) <= COVERAGE_KM); }
+function getMallClinics(mall) {
+  return places
+    .filter(p => isClinicLike(p) && isUncontactedPlace(p) && distanceKm(mall.lat, mall.lng, p.lat, p.lng) <= COVERAGE_KM)
+    .map(p => ({ ...p, _distanceKm: distanceKm(mall.lat, mall.lng, p.lat, p.lng) }))
+    .sort((a,b) => a._distanceKm - b._distanceKm);
+}
 
 function resetMallCache() {
   localStorage.removeItem(MALLS_KEY);
