@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-<title>BD地图 v3.0.2 - 评分明细优化版</title>
+<title>BD地图 v3.0.4 - BD行动评分模型</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -425,13 +425,17 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .score-line b { color:var(--text); }
 .score-line .pts { color:#ffd49a; font-weight:800; }
 .score-total-line { margin-top:6px; padding-top:7px; border-top:1px solid rgba(255,255,255,.08); display:flex; justify-content:space-between; font-size:13px; font-weight:900; }
+
+.priority-badge.clickable { cursor:pointer; box-shadow:0 0 0 1px rgba(255,255,255,.16) inset; }
+.priority-badge.clickable:after { content:' ⓘ'; font-weight:700; opacity:.85; }
+.score-breakdown-wrap { display:none; }
 </style>
 </head>
 <body>
 
 <!-- Top bar -->
 <div class="top-bar">
-  <h1>📍 BD地图 v3.0.2</h1>
+  <h1>📍 BD地图 v3.0.4</h1>
   <span class="stats" id="statsText">0 机构</span>
   <button class="coverage-exit" id="btnExitCoverage" title="退出1km覆盖" style="display:none">↩ 退出1km</button>
   <button class="top-btn" id="btnDashboard" title="数据看板">📊</button>
@@ -702,7 +706,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 <div class="dashboard-panel" id="dashboardPanel">
   <div class="list-header">
     <button class="top-btn" onclick="closeDashboard()">←</button>
-    <h2>v3.0.2 数据看板</h2>
+    <h2>v3.0.4 数据看板</h2>
     <button class="top-btn" onclick="exportPriorityCsv()" title="导出优先线索">📤</button>
   </div>
   <div class="dashboard-body">
@@ -711,13 +715,13 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
     
     <details class="score-doc">
       <summary>📌 优先级评分说明</summary>
-      <p>评分用于回答一个问题：BD今天应该先打谁、为什么。满分100分，80分以上为高优先级，60-79分为中优先级，60分以下为低优先级。已合作和暂不合作不会进入优先榜。</p>
-      <div class="score-part"><div class="score-part-title"><span>① 覆盖价值</span><span>约30分</span></div><ul><li>重点商场1km内：优先，因为可结合商场/社区场景推进。</li><li>重点商场2km内：中高优先，可作为周边扫街补点。</li><li>不在现有覆盖圈：作为空白区域补点，适合找新阵地。</li></ul></div>
-      <div class="score-part"><div class="score-part-title"><span>② 渠道价值</span><span>约25分</span></div><ul><li>NGO、社区中心、老人服务、机构入口：加分。</li><li>连锁/多分店/可复制渠道：加分。</li><li>靠近高客流商场：加分，客流越明确越有利。</li></ul></div>
-      <div class="score-part"><div class="score-part-title"><span>③ 人群匹配</span><span>约20分</span></div><ul><li>中医诊所：最高匹配，直接对应XKONG中医AI场景。</li><li>养生、理疗、康复、美容等健康相关业态：中高匹配。</li><li>其他普通商户：只保留基础分。</li></ul></div>
-      <div class="score-part"><div class="score-part-title"><span>④ 推进状态</span><span>约15分</span></div><ul><li>有意向：最高，应该优先跟进推进转化。</li><li>已交流：中高，适合二次触达。</li><li>未接触/待跟进：保留基础分，适合纳入扫街清单。</li><li>已合作/暂不合作：不进入优先榜，避免干扰BD行动。</li></ul></div>
-      <div class="score-part"><div class="score-part-title"><span>⑤ 数据完整度</span><span>约10分</span></div><ul><li>有电话、联系人、地址、经纬度：越完整分越高。</li><li>资料完整代表可以马上行动，不需要先补信息。</li></ul></div>
-      <div class="score-note">点击具体诊所后，可在弹窗里查看该诊所的详细加分项。</div>
+      <p>v3.0.4 的分数不再是“离商场近不近”，而是“今天BD应该优先推进谁”。满分100分，80分以上为高优先级，60-79分为中优先级，60分以下为低优先级。已合作和暂不合作不进入优先榜。</p>
+      <div class="score-part"><div class="score-part-title"><span>① 业务价值</span><span>30分</span></div><ul><li>判断这个点本身值不值得做。</li><li>中医诊所、社区/NGO/老人服务、连锁/多点机构、健康相关业态都会加分。</li><li>社区/NGO不低于普通诊所，因为它可能撬动义诊、议员、老人客群等场景。</li></ul></div>
+      <div class="score-part"><div class="score-part-title"><span>② 成交可能</span><span>30分</span></div><ul><li>判断这条线索现在有没有可能转化。</li><li>试用中、有意向、已交流会明显高于未接触。</li><li>有电话、有联系人、备注里出现“有意向/试用/感兴趣”等正向信号会加分。</li></ul></div>
+      <div class="score-part"><div class="score-part-title"><span>③ 覆盖战略</span><span>20分</span></div><ul><li>判断这个点对地图布局有没有战略价值。</li><li>重点商场1km/2km内会加分，但权重降低，不再主导总分。</li><li>离已合作商场近可用于联动；不在现有覆盖圈也可能作为空白补点。</li></ul></div>
+      <div class="score-part"><div class="score-part-title"><span>④ 推进紧迫</span><span>10分</span></div><ul><li>判断今天是不是该动它。</li><li>试用中、有意向、已交流但一段时间没跟进，会提高紧迫度。</li><li>刚刚联系过的线索也会保留热度。</li></ul></div>
+      <div class="score-part"><div class="score-part-title"><span>⑤ 数据可执行性</span><span>10分</span></div><ul><li>判断能不能马上行动。</li><li>电话、联系人、地址、坐标越完整，越适合直接电话/上门。</li><li>它是行动条件，不再被当成核心业务价值。</li></ul></div>
+      <div class="score-note">地图点选具体诊所后，点击弹窗里的分数，可展开详细加分项和建议动作。</div>
     </details>
     <div class="dash-section-title">🎯 高优先级线索 Top 30 <span id="priorityUpdated" class="mall-meta"></span></div>
     <div id="priorityList"></div>
@@ -1046,7 +1050,7 @@ function renderMarkers() {
       <div class="popup-status" style="background:${statusColor};color:#fff">${p.status}</div>
     `;
     const pr = calcPriority(p);
-    popupHtml += `<div class="popup-detail"><span class="priority-badge ${pr.level}">${pr.score} ${priorityLabel(pr.level)}</span></div>${scoreBreakdownHtml(pr)}`;
+    popupHtml += scoreBadgeWithDetailHtml(p.id, pr);
     if (selectedMall) popupHtml += `<div class="popup-detail" style="color:#ff9f1a">🏬 距 ${esc(selectedMall.name)} ${distanceKm(selectedMall.lat, selectedMall.lng, p.lat, p.lng).toFixed(2)} km</div>`;
     if (p.contact) popupHtml += `<div class="popup-detail">👤 ${esc(p.contact)}${p.phone ? ' · ' + esc(p.phone) : ''}</div>`;
     if (p.scale) popupHtml += `<div class="popup-detail">📏 ${esc(p.scale)}</div>`;
@@ -1347,7 +1351,7 @@ function goToPlace(id) {
     const pr = calcPriority(p);
     L.popup({ maxWidth: 280 })
       .setLatLng([p.lat, p.lng])
-      .setContent(`<div class="popup-name">${esc(p.name)}</div><div class="popup-type">${esc(p.type || '')}</div><div class="popup-detail"><span class="priority-badge ${pr.level}">${pr.score} ${priorityLabel(pr.level)}</span></div>${scoreBreakdownHtml(pr)}<div class="popup-detail">${esc(p.address || '')}</div>${p.isBaseClinic ? `<span class="popup-edit" onclick="promoteBaseClinic('${jsStr(p.id)}')">➕ 加入机构并跟进</span>` : ''}`)
+      .setContent(`<div class="popup-name">${esc(p.name)}</div><div class="popup-type">${esc(p.type || '')}</div>${scoreBadgeWithDetailHtml(p.id, pr)}<div class="popup-detail">${esc(p.address || '')}</div>${p.isBaseClinic ? `<span class="popup-edit" onclick="promoteBaseClinic('${jsStr(p.id)}')">➕ 加入机构并跟进</span>` : ''}`)
       .openOn(map);
   }
 }
@@ -2314,20 +2318,26 @@ function jsStr(s) { return String(s || '').replace(/\\/g, '\\\\').replace(/'/g, 
 
 function mallTrafficScore(m) {
   const n = parseFloat(m.traffic || 0);
-  if (!n) return 6;
-  if (n >= 80000) return 18;
-  if (n >= 40000) return 14;
-  if (n >= 15000) return 10;
-  return 7;
+  if (!n) return 2;
+  if (n >= 80000) return 6;
+  if (n >= 40000) return 4;
+  if (n >= 15000) return 3;
+  return 2;
 }
-function statusScore(status) {
-  const s = normalizeStatus(status);
-  if (s === '有意向') return 15;
-  if (s === '已交流') return 11;
-  if (s === '未接触' || s === '待跟进') return 7;
-  if (s === '已合作') return 0;
-  if (s === '暂不合作') return -8;
-  return 6;
+function normalizeText(p) { return [p.type,p.name,p.address,p.scale,p.note,(p.visits||[]).map(v=>v.note||'').join(' ')].join(' ').toLowerCase(); }
+function hasTrialSignal(p) { const t = normalizeText(p); return t.includes('试用') || t.includes('試用') || t.includes('trial'); }
+function hasPositiveSignal(p) { const t = normalizeText(p); return t.includes('有意向') || t.includes('感兴趣') || t.includes('感興趣') || t.includes('想试') || t.includes('想試') || t.includes('愿意') || t.includes('願意') || t.includes('可约') || t.includes('可約'); }
+function hasNegativeSignal(p) { const t = normalizeText(p); return t.includes('拒绝') || t.includes('拒絕') || t.includes('不需要') || t.includes('暂不') || t.includes('暫不') || t.includes('没兴趣') || t.includes('無興趣'); }
+function parseVisitDate(v) {
+  if (!v || !v.date) return null;
+  const s = String(v.date).replace(' ', 'T');
+  const d = new Date(s);
+  return isNaN(d.getTime()) ? null : d;
+}
+function daysSinceLastVisit(p) {
+  const dates = (p.visits||[]).map(parseVisitDate).filter(Boolean).sort((a,b)=>b-a);
+  if (!dates.length) return null;
+  return Math.max(0, Math.floor((Date.now() - dates[0].getTime()) / 86400000));
 }
 function inferArea(p) {
   const text = [p.area,p.district,p.address,p.name].join(' ');
@@ -2345,44 +2355,122 @@ function nearestMallInfo(p) {
   });
   return best;
 }
-function calcPriority(p) {
-  const reasons = [];
-  const near = nearestMallInfo(p);
-  let coverage = 10;
+function calcBusinessValue(p, text) {
+  let score = 4, notes = [];
+  if (isClinicLike(p)) { score += 16; notes.push('中医诊所，核心匹配'); }
+  if (text.includes('ngo') || text.includes('社區') || text.includes('社区') || text.includes('老人') || text.includes('長者') || text.includes('长者') || text.includes('中心')) { score += 14; notes.push('社区/NGO/老人服务入口'); }
+  if (text.includes('連鎖') || text.includes('连锁') || p.scale === '连锁') { score += 8; notes.push('连锁/多点复制潜力'); }
+  if (p.scale === '大型') { score += 6; notes.push('大型机构'); }
+  else if (p.scale === '中型') { score += 4; notes.push('中型机构'); }
+  else if (p.scale === '小型') { score += 2; notes.push('小型机构'); }
+  if (text.includes('養生') || text.includes('养生') || text.includes('理疗') || text.includes('理療') || text.includes('康復') || text.includes('康复') || text.includes('美容')) { score += 6; notes.push('健康相关业态'); }
+  score = Math.min(30, score);
+  return { score, note: notes.length ? notes.join('；') : '普通商户基础价值' };
+}
+function calcDealChance(p, text) {
+  const s = normalizeStatus(p.status);
+  let score = 3, notes = [];
+  if (hasTrialSignal(p)) { score += 18; notes.push('出现试用信号'); }
+  if (s === '有意向') { score += 18; notes.push('状态为有意向'); }
+  else if (s === '已交流') { score += 10; notes.push('已交流，可二次推进'); }
+  else if (s === '未接触' || s === '待跟进') { score += 3; notes.push('冷线索，待首触'); }
+  if (p.phone) { score += 4; notes.push('有电话'); }
+  if (p.contact) { score += 3; notes.push('有联系人'); }
+  if (hasPositiveSignal(p)) { score += 5; notes.push('备注含正向意向'); }
+  if (hasNegativeSignal(p)) { score -= 12; notes.push('备注含拒绝/暂不信号'); }
+  score = Math.max(0, Math.min(30, score));
+  return { score, note: notes.join('；') || '成交信号较弱' };
+}
+function calcCoverageStrategy(p, near) {
+  let score = 6, notes = [];
   if (near && near.distanceKm <= 1) {
     const st = near.mall.coopStatus || '待评估';
-    coverage = st === '已合作' ? 18 : 27;
-    reasons.push(`距${near.mall.name}${near.distanceKm.toFixed(1)}km，商场状态${st}`);
-  } else if (near && near.distanceKm <= 2) { coverage = 20; reasons.push(`距重点商场${near.mall.name}${near.distanceKm.toFixed(1)}km`); }
-  else reasons.push('不在现有1km覆盖圈，适合补空白');
-  let channel = 8;
-  const text = [p.type,p.name,p.address,p.scale].join(' ').toLowerCase();
-  if (text.includes('ngo') || text.includes('社區') || text.includes('社区') || text.includes('中心')) { channel += 10; reasons.push('社区/机构入口'); }
-  if (text.includes('連鎖') || text.includes('连锁') || p.scale === '连锁') { channel += 8; reasons.push('连锁/可复制渠道'); }
-  if (near && near.distanceKm <= 1) channel += mallTrafficScore(near.mall) * 0.35;
-  channel = Math.min(25, Math.round(channel));
-  let fit = 6;
-  if (isClinicLike(p)) { fit = 20; reasons.push('中医诊所目标高度匹配'); }
-  else if (text.includes('養生') || text.includes('养生') || text.includes('理疗') || text.includes('康復') || text.includes('美容')) { fit = 14; reasons.push('健康/养生相关业态'); }
-  const progress = Math.max(0, statusScore(p.status));
-  if (normalizeStatus(p.status) === '有意向') reasons.push('已有意向，应优先推进');
-  const completeness = Math.min(10, (p.phone?4:0)+(p.contact?2:0)+(p.address?2:0)+(p.lat&&p.lng?2:0));
-  if (completeness >= 8) reasons.push('资料完整，可立即行动');
-  const rawTotal = coverage + channel + fit + progress + completeness;
+    const add = st === '已合作' ? 10 : 8;
+    score += add + mallTrafficScore(near.mall);
+    notes.push(`距${near.mall.name}${near.distanceKm.toFixed(1)}km，可做商场/周边联动`);
+  } else if (near && near.distanceKm <= 2) {
+    score += 7;
+    notes.push(`距重点商场${near.mall.name}${near.distanceKm.toFixed(1)}km，可纳入周边扫街`);
+  } else {
+    score += 8;
+    notes.push('不在重点商场近圈，适合作为空白区域补点');
+  }
+  score = Math.min(20, score);
+  return { score, note: notes.join('；') };
+}
+function calcUrgency(p) {
+  const s = normalizeStatus(p.status);
+  const days = daysSinceLastVisit(p);
+  let score = 2, notes = [];
+  if (hasTrialSignal(p)) { score += 4; notes.push('试用相关线索，需要防止冷掉'); }
+  if (s === '有意向') { score += 4; notes.push('有意向，应优先推进'); }
+  else if (s === '已交流') { score += 2; notes.push('已交流，适合二次触达'); }
+  if (days !== null) {
+    if (hasTrialSignal(p) && days >= 3) { score += 3; notes.push(`${days}天未跟进试用反馈`); }
+    else if (s === '有意向' && days >= 5) { score += 3; notes.push(`${days}天未推进有意向线索`); }
+    else if (s === '已交流' && days >= 7) { score += 3; notes.push(`${days}天未二次跟进`); }
+    else if (days <= 3) { score += 2; notes.push('最近3天内有动作，热度仍在'); }
+  } else {
+    notes.push('暂无交流时间记录');
+  }
+  score = Math.min(10, score);
+  return { score, note: notes.join('；') };
+}
+function calcExecutability(p) {
+  let score = 0, notes = [];
+  if (p.phone) { score += 4; notes.push('有电话'); } else notes.push('缺电话');
+  if (p.contact) { score += 2; notes.push('有联系人'); } else notes.push('缺联系人');
+  if (p.address) { score += 2; notes.push('有地址'); } else notes.push('缺地址');
+  if (p.lat && p.lng) { score += 2; notes.push('有坐标'); } else notes.push('缺坐标');
+  return { score: Math.min(10, score), note: notes.join(' / ') };
+}
+function recommendAction(p, parts) {
+  const s = normalizeStatus(p.status);
+  if (normalizeStatus(p.status) === '已合作') return '转运营维护，不参与BD优先排序';
+  if (hasNegativeSignal(p) || s === '暂不合作') return '暂缓，后续有新活动/新权益再重新激活';
+  if (hasTrialSignal(p)) return '今日跟进试用反馈，确认是否推进合作/设备留存';
+  if (s === '有意向') return p.phone ? '今日电话跟进，争取约试用或面谈' : '先补电话/联系人，再推进意向转化';
+  if (s === '已交流') return '二次触达，补充案例/方案，确认下一步动作';
+  if (!p.phone && parts.business.score >= 22) return '高价值冷线索，先补电话或安排扫街拜访';
+  if (p.phone) return '今日首轮电话联系，验证合作兴趣';
+  return '纳入扫街清单，先补联系方式';
+}
+function calcPriority(p) {
+  const text = normalizeText(p);
+  const near = nearestMallInfo(p);
+  const business = calcBusinessValue(p, text);
+  const deal = calcDealChance(p, text);
+  const coverage = calcCoverageStrategy(p, near);
+  const urgency = calcUrgency(p);
+  const executable = calcExecutability(p);
+  const parts = { business, deal, coverage, urgency, executable };
+  const rawTotal = business.score + deal.score + coverage.score + urgency.score + executable.score;
   const score = Math.max(0, Math.min(100, Math.round(rawTotal)));
   const level = score >= 80 ? 'high' : score >= 60 ? 'mid' : 'low';
+  const action = recommendAction(p, parts);
   const breakdown = [
-    { name:'覆盖价值', points:Math.round(coverage), note: near ? `最近商场：${near.mall.name}，距离${near.distanceKm.toFixed(1)}km` : '未匹配到重点商场，作为覆盖空白补点' },
-    { name:'渠道价值', points:Math.round(channel), note: text.includes('ngo') || text.includes('社區') || text.includes('社区') || text.includes('中心') ? '具备社区/机构入口属性' : (text.includes('連鎖') || text.includes('连锁') || p.scale === '连锁' ? '具备连锁/复制潜力' : '普通渠道基础分') },
-    { name:'人群匹配', points:Math.round(fit), note: isClinicLike(p) ? '中医诊所，高度匹配XKONG中医AI场景' : (fit >= 14 ? '健康/养生相关业态，中高匹配' : '普通业态基础匹配') },
-    { name:'推进状态', points:Math.round(progress), note: `当前状态：${normalizeStatus(p.status) || '未接触'}` },
-    { name:'数据完整度', points:Math.round(completeness), note: `${p.phone?'有电话':'缺电话'} / ${p.contact?'有联系人':'缺联系人'} / ${p.address?'有地址':'缺地址'} / ${p.lat&&p.lng?'有坐标':'缺坐标'}` }
+    { name:'业务价值', points:Math.round(business.score), max:30, note:business.note },
+    { name:'成交可能', points:Math.round(deal.score), max:30, note:deal.note },
+    { name:'覆盖战略', points:Math.round(coverage.score), max:20, note:coverage.note },
+    { name:'推进紧迫', points:Math.round(urgency.score), max:10, note:urgency.note },
+    { name:'数据可执行性', points:Math.round(executable.score), max:10, note:executable.note }
   ];
-  return { score, level, reasons: reasons.slice(0,3), breakdown, nearestMall: near && near.mall ? near.mall.name : '', distanceKm: near ? near.distanceKm : null, area: inferArea(p) };
+  const reasons = [business.note, deal.note, coverage.note].filter(Boolean).slice(0,3);
+  return { score, level, action, reasons, breakdown, nearestMall: near && near.mall ? near.mall.name : '', distanceKm: near ? near.distanceKm : null, area: inferArea(p) };
 }
 function priorityLabel(level) { return level === 'high' ? '高' : level === 'mid' ? '中' : '低'; }
 function scoreBreakdownHtml(pr) {
-  return `<div class="score-breakdown">${pr.breakdown.map(x => `<div class="score-line"><span><b>${esc(x.name)}</b><br>${esc(x.note)}</span><span class="pts">+${x.points}</span></div>`).join('')}<div class="score-total-line"><span>总分</span><span>${pr.score}｜${priorityLabel(pr.level)}优先级</span></div></div>`;
+  return `<div class="score-breakdown">${pr.breakdown.map(x => `<div class="score-line"><span><b>${esc(x.name)}</b><br>${esc(x.note)}</span><span class="pts">${x.points}/${x.max}</span></div>`).join('')}<div class="score-total-line"><span>总分</span><span>${pr.score}｜${priorityLabel(pr.level)}优先级</span></div><div class="score-note">建议动作：${esc(pr.action || '')}</div></div>`;
+}
+function safeDomId(s) { return String(s || '').replace(/[^a-zA-Z0-9_-]/g, '_'); }
+function toggleScoreDetail(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.style.display = el.style.display === 'block' ? 'none' : 'block';
+}
+function scoreBadgeWithDetailHtml(id, pr) {
+  const domId = 'score_detail_' + safeDomId(id);
+  return `<div class="popup-detail"><span class="priority-badge clickable ${pr.level}" onclick="event.stopPropagation(); toggleScoreDetail('${jsStr(domId)}')">${pr.score} ${priorityLabel(pr.level)}</span></div><div class="score-breakdown-wrap" id="${esc(domId)}">${scoreBreakdownHtml(pr)}</div>`;
 }
 function enrichPriority(list) { return list.map(p => ({...p, _priority: calcPriority(p)})); }
 function openDashboard() { closeList(); closeMallPanel(); closeCoveragePanel(); renderDashboard(); document.getElementById('dashboardPanel').classList.add('active'); }
@@ -2407,7 +2495,7 @@ function renderDashboard() {
   document.getElementById('priorityUpdated').textContent = new Date().toLocaleString('zh-HK',{hour12:false}).slice(0,16);
   document.getElementById('priorityList').innerHTML = pool.slice(0,30).map((p,i) => {
     const pr=p._priority;
-    return `<div class="dash-row" onclick="goToPlace('${jsStr(p.id)}')"><div class="dash-row-title"><span>${i+1}. ${esc(p.name)}</span><span class="priority-badge ${pr.level}">${pr.score} ${priorityLabel(pr.level)}</span></div><div class="dash-meta">${esc(p.type||'')}｜${esc(pr.area)}｜${pr.distanceKm!==null?'近 '+esc(pr.nearestMall)+' '+pr.distanceKm.toFixed(1)+'km':''}｜点击看加分项</div></div>`;
+    return `<div class="dash-row" onclick="goToPlace('${jsStr(p.id)}')"><div class="dash-row-title"><span>${i+1}. ${esc(p.name)}</span><span class="priority-badge ${pr.level}">${pr.score} ${priorityLabel(pr.level)}</span></div><div class="dash-meta">${esc(p.type||'')}｜${esc(pr.area)}｜${pr.distanceKm!==null?'近 '+esc(pr.nearestMall)+' '+pr.distanceKm.toFixed(1)+'km':''}｜${esc(pr.action || '点击看加分项')}</div></div>`;
   }).join('') || '<div class="list-empty">暂无优先级线索</div>';
   const mallGaps = malls.map(m => ({...m, hits:getMallClinics(m).length})).filter(m => (m.coopStatus||'待评估') !== '已合作').sort((a,b)=>b.hits-a.hits).slice(0,15);
   document.getElementById('mallGapList').innerHTML = mallGaps.map((m,i)=>`<div class="dash-row" onclick="selectMall('${jsStr(m.id)}')"><div class="dash-row-title"><span>${i+1}. ${esc(m.name)}</span><span>${m.hits}家</span></div><div class="dash-meta">${esc(m.area||'')}｜${esc(m.developer||'')}｜状态：${esc(m.coopStatus||'待评估')}</div></div>`).join('');
@@ -2422,16 +2510,16 @@ function renderDashboard() {
 }
 function exportPriorityCsv() {
   const rows = getPriorityPool().slice(0,200);
-  const headers=['rank','score','level','name','type','status','area','nearestMall','distanceKm','address','contact','phone','reasons'];
+  const headers=['rank','score','level','action','name','type','status','area','nearestMall','distanceKm','address','contact','phone','reasons'];
   const csv=[headers.join(',')].concat(rows.map((p,i)=>headers.map(h=>{
-    const v = h==='rank'?i+1:h==='score'?p._priority.score:h==='level'?priorityLabel(p._priority.level):h==='area'?p._priority.area:h==='nearestMall'?p._priority.nearestMall:h==='distanceKm'?(p._priority.distanceKm||''):h==='reasons'?p._priority.reasons.join(' + '):(p[h]||'');
+    const v = h==='rank'?i+1:h==='score'?p._priority.score:h==='level'?priorityLabel(p._priority.level):h==='action'?p._priority.action:h==='area'?p._priority.area:h==='nearestMall'?p._priority.nearestMall:h==='distanceKm'?(p._priority.distanceKm||''):h==='reasons'?p._priority.reasons.join(' + '):(p[h]||'');
     return '"'+String(v).replace(/"/g,'""')+'"';
   }).join(','))).join('\n');
   const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='BDmap_v3_priority_top200.csv'; a.click(); URL.revokeObjectURL(url); toast('已导出优先线索CSV');
 }
 async function copyDashboardSummary() {
   const pool=getPriorityPool();
-  const text=`BDmap v3.0.2 今日BD汇报摘要\n总线索：${pool.length}\n高优先级：${pool.filter(p=>p._priority.score>=80).length}\n已推进机构：${places.filter(p=>!isUncontactedPlace(p)).length}\n有意向：${places.filter(p=>normalizeStatus(p.status)==='有意向').length}\nTop5：\n`+pool.slice(0,5).map((p,i)=>`${i+1}. ${p.name} ${p._priority.score}分｜${p._priority.reasons.join(' + ')}`).join('\n');
+  const text=`BDmap v3.0.4 今日BD汇报摘要\n总线索：${pool.length}\n高优先级：${pool.filter(p=>p._priority.score>=80).length}\n已推进机构：${places.filter(p=>!isUncontactedPlace(p)).length}\n有意向：${places.filter(p=>normalizeStatus(p.status)==='有意向').length}\nTop5：\n`+pool.slice(0,5).map((p,i)=>`${i+1}. ${p.name} ${p._priority.score}分｜${p._priority.action}`).join('\n');
   await navigator.clipboard.writeText(text); toast('汇报摘要已复制，可直接发老板/群里');
 }
 function openTopPriorityOnMap() {
