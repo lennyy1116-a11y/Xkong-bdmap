@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-<title>BD地图 v3.0.7 - 机构点位区分版</title>
+<title>BD地图 v3.0.9 - 手动记录兼容版</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -453,7 +453,7 @@ body.entry-point-mode .point-only-hint { display:block; }
 
 <!-- Top bar -->
 <div class="top-bar">
-  <h1>📍 BD地图 v3.0.7</h1>
+  <h1>📍 BD地图 v3.0.9</h1>
   <span class="stats" id="statsText">0 机构</span>
   <button class="coverage-exit" id="btnExitCoverage" title="退出1km覆盖" style="display:none">↩ 退出1km</button>
   <button class="top-btn" id="btnDashboard" title="数据看板">📊</button>
@@ -559,11 +559,11 @@ body.entry-point-mode .point-only-hint { display:block; }
     </div>
   </div>
 
-  <div class="form-group institution-only">
-    <label>交流记录</label>
+  <div class="form-group">
+    <label id="visitLabel">交流记录</label>
     <div class="visit-log" id="visitLog"></div>
     <div class="add-visit-row">
-      <input type="text" id="newVisitNote" placeholder="添加本次交流备注...">
+      <input type="text" id="newVisitNote" placeholder="添加本次交流/点位记录...">
       <button onclick="addVisitEntry()">+ 记录</button>
     </div>
   </div>
@@ -738,7 +738,7 @@ body.entry-point-mode .point-only-hint { display:block; }
 <div class="dashboard-panel" id="dashboardPanel">
   <div class="list-header">
     <button class="top-btn" onclick="closeDashboard()">←</button>
-    <h2>v3.0.7 数据看板</h2>
+    <h2>v3.0.9 数据看板</h2>
     <button class="top-btn" onclick="exportPriorityCsv()" title="导出优先线索">📤</button>
   </div>
   <div class="dashboard-body compact">
@@ -875,6 +875,7 @@ let selectedDistrict = 'current';
 let _pagination = null;
 let currentUsername = localStorage.getItem(USERNAME_KEY) || '';
 let currentAvatar = localStorage.getItem(USER_AVATAR_KEY) || '👤';
+let lastInstitutionStatus = '已交流';
 const COVERAGE_KM = 1;
 const COVERAGE_LABEL = '1公里';
 const MALLS_KEY = 'bd_map_malls';
@@ -1056,10 +1057,10 @@ function getFilteredPlaces() {
       const hay = [p.name,p.address,p.contact,p.phone,p.type,p.ownerName].join(' ').toLowerCase();
       if (!hay.includes(placeSearchTerm)) return false;
     }
-    // 首页强制隐藏所有未接触/待跟进/未交流导入线索；只展示已经被人处理过的机构
-    if (!selectedMall) return !isUncontacted;
-    // 1km覆盖模式：保留已处理机构，同时额外展示当前商场1km内未交流诊所
-    if (!isUncontacted) return true;
+    // 首页只隐藏批量导入的冷线索；手动录入/有记录/点位即使未接触也显示，避免手动数据“消失”
+    if (!selectedMall) return !isHiddenColdImport(p);
+    // 1km覆盖模式：保留已处理机构、手动录入和点位，同时额外展示当前商场1km内未交流诊所
+    if (!isHiddenColdImport(p)) return true;
     return isClinicLike(p) && distanceKm(selectedMall.lat, selectedMall.lng, p.lat, p.lng) <= COVERAGE_KM;
   });
 }
@@ -1090,7 +1091,7 @@ function renderMarkers() {
     if (p.scale) popupHtml += `<div class="popup-detail">📏 ${esc(p.scale)}</div>`;
     if (p.staff) popupHtml += `<div class="popup-detail">👨‍⚕️ ${p.staff}人</div>`;
     if (visitCount > 0) {
-      popupHtml += `<div class="popup-detail">📋 ${visitCount}次交流`;
+      popupHtml += `<div class="popup-detail">📋 ${visitCount}次${isPointEntry(p) ? '记录' : '交流'}`;
       if (lastVisit) popupHtml += ` · 最近: ${lastVisit.date}`;
       popupHtml += `</div>`;
     }
@@ -1135,7 +1136,23 @@ function reverseGeocode(lat, lng) {
     }).catch(() => {});
 }
 
+function getActiveStatusValue() {
+  const active = document.querySelector('.status-chip.active');
+  return active ? active.dataset.status : '';
+}
+function setStatusChip(status) {
+  let matched = false;
+  document.querySelectorAll('.status-chip').forEach(c => {
+    const on = c.dataset.status === status;
+    c.classList.toggle('active', on);
+    if (on) matched = true;
+  });
+  if (!matched) document.querySelectorAll('.status-chip').forEach((c,i) => c.classList.toggle('active', i===1)); // 默认“已交流”，避免首页隐藏
+}
 function setEntryKind(kind) {
+  const currentKind = document.getElementById('entryKind').value || 'institution';
+  const activeStatus = getActiveStatusValue();
+  if (currentKind === 'institution' && activeStatus && activeStatus !== '点位') lastInstitutionStatus = activeStatus;
   const k = kind === 'point' ? 'point' : 'institution';
   document.getElementById('entryKind').value = k;
   document.getElementById('kindInstitution').classList.toggle('active', k === 'institution');
@@ -1143,11 +1160,30 @@ function setEntryKind(kind) {
   document.body.classList.toggle('entry-point-mode', k === 'point');
   document.getElementById('sheetTitle').textContent = k === 'point' ? '新增点位' : '新增机构';
   document.getElementById('nameLabel').textContent = k === 'point' ? '点位名称 *' : '机构名称 *';
+  document.getElementById('visitLabel').textContent = k === 'point' ? '点位记录' : '交流记录';
+  document.getElementById('newVisitNote').placeholder = k === 'point' ? '添加点位备注、巡场记录、合作进展...' : '添加本次交流备注...';
   document.getElementById('fName').placeholder = k === 'point' ? '例如：朗豪坊 / 乐富广场活动点' : '例如：仁心堂中医诊所';
-  if (k === 'point' && ['中医诊所','美容院','艾灸馆','养生馆','NGO'].includes(document.getElementById('fType').value)) document.getElementById('fType').value = '商场';
-  if (k === 'institution' && ['商场','社区场地','活动地点','议员办事处'].includes(document.getElementById('fType').value)) document.getElementById('fType').value = '中医诊所';
+  if (k === 'point') {
+    if (activeStatus && activeStatus !== '点位') lastInstitutionStatus = activeStatus;
+    if (['中医诊所','美容院','艾灸馆','养生馆','NGO'].includes(document.getElementById('fType').value)) document.getElementById('fType').value = '商场';
+  } else {
+    if (['商场','社区场地','活动地点','议员办事处'].includes(document.getElementById('fType').value)) document.getElementById('fType').value = '中医诊所';
+    setStatusChip(lastInstitutionStatus || '已交流');
+  }
 }
+
 function isPointEntry(p) { return (p.entryKind || p.kind) === 'point' || ['商场','社区场地','活动地点','议员办事处'].includes(p.type); }
+function isManualEntry(p) {
+  if (!p) return false;
+  if (isPointEntry(p)) return true;
+  if (p.entryKind === 'institution') return true;
+  if ((p.createdBy && p.createdBy !== 'TCM导入' && p.createdBy !== '系统导入') || (p.updatedBy && p.updatedBy !== 'TCM导入' && p.updatedBy !== '系统导入')) return true;
+  if ((p.visits || []).length > 0) return true;
+  return false;
+}
+function isHiddenColdImport(p) {
+  return isUncontactedPlace(p) && !isManualEntry(p);
+}
 // ============ SHEET ============
 function openAddSheet(lat, lng) {
   resetForm();
@@ -1171,6 +1207,7 @@ function openEditSheet(id) {
   const p = places.find(x => x.id === id);
   if (!p) return;
 
+  lastInstitutionStatus = (p.lastInstitutionStatus && p.lastInstitutionStatus !== '点位') ? p.lastInstitutionStatus : (p.status && p.status !== '点位' ? p.status : '已交流');
   setEntryKind(isPointEntry(p) ? 'point' : 'institution');
   document.getElementById('sheetTitle').textContent = isPointEntry(p) ? '编辑点位' : '编辑机构';
   document.getElementById('editId').value = p.id;
@@ -1185,9 +1222,11 @@ function openEditSheet(id) {
   document.getElementById('fStaff').value = p.staff || '';
 
   // Set status chip
-  document.querySelectorAll('.status-chip').forEach(c => {
-    c.classList.toggle('active', c.dataset.status === p.status);
-  });
+  if (isPointEntry(p)) {
+    setStatusChip(lastInstitutionStatus || '已交流');
+  } else {
+    setStatusChip(p.status || '已交流');
+  }
 
   editVisits = JSON.parse(JSON.stringify(p.visits || []));
   renderVisits();
@@ -1216,7 +1255,7 @@ function resetForm() {
   document.getElementById('fPhone').value = '';
   document.getElementById('fScale').value = '';
   document.getElementById('fStaff').value = '';
-  document.querySelectorAll('.status-chip').forEach((c,i) => c.classList.toggle('active', i===0));
+  setStatusChip('已交流');
   document.getElementById('newVisitNote').value = '';
 }
 
@@ -1224,7 +1263,7 @@ function resetForm() {
 function renderVisits() {
   const container = document.getElementById('visitLog');
   if (editVisits.length === 0) {
-    container.innerHTML = '<div style="font-size:13px;color:var(--text2);padding:4px 0">暂无交流记录</div>';
+    container.innerHTML = '<div style="font-size:13px;color:var(--text2);padding:4px 0">暂无记录</div>';
     return;
   }
   container.innerHTML = editVisits.map((v, i) => `
@@ -1268,13 +1307,16 @@ async function savePlace() {
   const lng = parseFloat(document.getElementById('editLng').value);
   if (isNaN(lat) || isNaN(lng)) { feedback('err','请先在地图上点选位置'); toast('请先在地图上点选位置'); return; }
   const activeChip = document.querySelector('.status-chip.active');
-  const status = entryKind === 'point' ? '点位' : (activeChip ? activeChip.dataset.status : '未接触');
+  const selectedInstitutionStatus = activeChip ? activeChip.dataset.status : (lastInstitutionStatus || '已交流');
+  if (entryKind === 'institution') lastInstitutionStatus = selectedInstitutionStatus;
+  const status = entryKind === 'point' ? '点位' : selectedInstitutionStatus;
   const editId = document.getElementById('editId').value;
   const oldPlace = editId ? places.find(p => p.id === editId) : null;
   const data = {
     id: editId || genId(),
     name,
     entryKind,
+    lastInstitutionStatus: entryKind === 'point' ? (lastInstitutionStatus || selectedInstitutionStatus || '已交流') : selectedInstitutionStatus,
     type: document.getElementById('fType').value,
     address: document.getElementById('fAddr').value.trim(),
     contact: document.getElementById('fContact').value.trim(),
@@ -1363,7 +1405,8 @@ function renderList() {
   }
 
   body.innerHTML = filtered.map(p => {
-    const color = STATUS_COLORS[p.status] || '#7f8c8d';
+    const displayStatus = p.status || (isPointEntry(p) ? '点位' : '未接触');
+    const color = STATUS_COLORS[displayStatus] || '#7f8c8d';
     const visitCount = (p.visits||[]).length;
     const ownerLabel = getOwnerLabel(p);
     const ownerBadgeHtml = ownerLabelHtml(p);
@@ -1376,11 +1419,11 @@ function renderList() {
           <div class="list-name"><span>${esc(p.name)}</span><span class="priority-badge ${pr.level}">${pr.score} ${priorityLabel(pr.level)}</span><span class="owner-badge">${ownerBadgeHtml}</span></div>
           <div class="list-addr">${esc(p.address || p.type || '')}</div>
           <div class="list-meta">
-            ${ownerBadgeHtml}${p.type ? ' · ' + esc(p.type) : ''} · ${visitCount}次交流
+            ${ownerBadgeHtml}${p.type ? ' · ' + esc(p.type) : ''} · ${visitCount}次${isPointEntry(p) ? '记录' : '交流'}
             ${p.contact ? ' · ' + esc(p.contact) : ''}
           </div>
         </div>
-        <span class="list-status" style="background:${color};color:#fff">${p.status}</span>
+        <span class="list-status" style="background:${color};color:#fff">${displayStatus}</span>
       </div>`;
   }).join('');
 }
@@ -2598,7 +2641,7 @@ function exportPriorityCsv() {
 }
 async function copyDashboardSummary() {
   const pool=getPriorityPool();
-  const text=`BDmap v3.0.7 今日BD汇报摘要\n总线索：${pool.length}\n高优先级：${pool.filter(p=>p._priority.score>=80).length}\n已推进机构：${places.filter(p=>!isUncontactedPlace(p)).length}\n有意向：${places.filter(p=>normalizeStatus(p.status)==='有意向').length}\n待电话/补资料：${pool.filter(p=>['电话联系','补资料'].includes(actionCategory(p._priority.action))).length}\nTop5：\n`+pool.slice(0,5).map((p,i)=>`${i+1}. ${p.name} ${p._priority.score}分｜${p._priority.action}`).join('\n');
+  const text=`BDmap v3.0.9 今日BD汇报摘要\n总线索：${pool.length}\n高优先级：${pool.filter(p=>p._priority.score>=80).length}\n已推进机构：${places.filter(p=>!isUncontactedPlace(p)).length}\n有意向：${places.filter(p=>normalizeStatus(p.status)==='有意向').length}\n待电话/补资料：${pool.filter(p=>['电话联系','补资料'].includes(actionCategory(p._priority.action))).length}\nTop5：\n`+pool.slice(0,5).map((p,i)=>`${i+1}. ${p.name} ${p._priority.score}分｜${p._priority.action}`).join('\n');
   await navigator.clipboard.writeText(text); toast('汇报摘要已复制，可直接发老板/群里');
 }
 function openTopPriorityOnMap() {
