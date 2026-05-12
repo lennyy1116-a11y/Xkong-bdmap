@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-<title>BD地图 v3.1.2 - 逻辑校验修正版</title>
+<title>BD地图 v3.2.0 - 覆盖组合分析</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -459,13 +459,31 @@ body.entry-point-mode .point-only-hint { display:block; }
 .coverage-action-btn { background:var(--orange) !important; border-color:var(--orange) !important; color:#fff !important; font-weight:800; }
 
 .point-marker { width:34px; height:34px; border-radius:50%; background:#e67e22; color:#fff; display:flex; align-items:center; justify-content:center; border:3px solid #fff; box-shadow:0 2px 10px rgba(0,0,0,.45); font-size:18px; }
+
+.combo-panel { position:fixed; inset:0; z-index:1750; background:var(--bg); transform:translateX(100%); transition:.25s ease; display:flex; flex-direction:column; }
+.combo-panel.active { transform:translateX(0); }
+.combo-body { flex:1; overflow-y:auto; padding:10px 12px max(18px, env(safe-area-inset-bottom)); }
+.combo-pick-list { max-height:260px; overflow-y:auto; border-radius:12px; background:rgba(255,255,255,.035); padding:6px; }
+.combo-pick-item { display:flex; gap:8px; align-items:flex-start; padding:9px; border-radius:10px; margin-bottom:6px; background:var(--card); }
+.combo-pick-item input { margin-top:3px; }
+.combo-tabs { display:flex; gap:6px; margin:10px 0; overflow-x:auto; }
+.combo-tab { flex-shrink:0; border:1px solid #444; background:var(--card); color:var(--text2); border-radius:999px; padding:7px 11px; font-size:12px; font-weight:800; }
+.combo-tab.active { background:var(--orange); border-color:var(--orange); color:#fff; }
+.combo-stat-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin:10px 0; }
+.combo-stat { background:var(--card); border-radius:12px; padding:10px; border:1px solid rgba(255,255,255,.06); }
+.combo-stat .num { font-size:22px; font-weight:900; }
+.combo-stat .label { font-size:12px; color:var(--text2); margin-top:2px; }
+.combo-row { background:var(--card); border-radius:12px; padding:10px; margin-bottom:8px; border:1px solid rgba(255,255,255,.06); }
+.combo-row-title { display:flex; justify-content:space-between; gap:8px; font-weight:800; }
+.combo-row-meta { color:var(--text2); font-size:12px; line-height:1.45; margin-top:4px; }
+.combo-badge { display:inline-block; padding:2px 7px; border-radius:999px; background:rgba(230,126,34,.18); color:#ffc078; font-size:11px; font-weight:800; }
 </style>
 </head>
 <body>
 
 <!-- Top bar -->
 <div class="top-bar">
-  <h1>📍 BD地图 v3.1.2</h1>
+  <h1>📍 BD地图 v3.2.0</h1>
   <span class="stats" id="statsText">0 机构</span>
   <button class="coverage-exit" id="btnExitCoverage" title="退出1km覆盖" style="display:none">↩ 退出1km</button>
   <button class="top-btn" id="btnDashboard" title="数据看板">📊</button>
@@ -751,7 +769,7 @@ body.entry-point-mode .point-only-hint { display:block; }
 <div class="dashboard-panel" id="dashboardPanel">
   <div class="list-header">
     <button class="top-btn" onclick="closeDashboard()">←</button>
-    <h2>v3.1.2 数据看板</h2>
+    <h2>v3.2.0 数据看板</h2>
     <button class="top-btn" onclick="exportPriorityCsv()" title="导出优先线索">📤</button>
   </div>
   <div class="dashboard-body compact">
@@ -785,7 +803,8 @@ body.entry-point-mode .point-only-hint { display:block; }
 <div class="mall-panel" id="mallPanel">
   <div class="list-header">
     <button class="top-btn" onclick="closeMallPanel()">←</button>
-    <h2>商场1公里覆盖</h2>
+    <h2>商场/点位覆盖</h2>
+    <button class="top-btn" onclick="openComboPanel()" title="组合分析">🧮</button>
     <button class="top-btn" onclick="startMallPick()" title="地图选点">📍</button>
   </div>
   <div class="mall-body">
@@ -823,6 +842,30 @@ body.entry-point-mode .point-only-hint { display:block; }
   </div>
 </div>
 
+
+
+<!-- Coverage combo panel -->
+<div class="combo-panel" id="comboPanel">
+  <div class="list-header">
+    <button class="top-btn" onclick="closeComboPanel()">←</button>
+    <h2>覆盖组合分析</h2>
+    <button class="top-btn" onclick="copyComboSummary()" title="复制摘要">📋</button>
+    <button class="top-btn" onclick="exportComboCsv()" title="导出CSV">📤</button>
+  </div>
+  <div class="combo-body">
+    <div class="inline-search" style="padding-left:0;padding-right:0"><input type="text" id="comboSearchInput" placeholder="搜索商场/点位，勾选2-5个" oninput="comboSearchTerm=this.value.trim().toLowerCase(); renderComboPicker();"></div>
+    <div id="comboSelectedHint" class="mall-meta" style="padding:2px 2px 8px">请选择2-5个覆盖中心。</div>
+    <div class="combo-pick-list" id="comboPickList"></div>
+    <div class="combo-stat-grid" id="comboStats"></div>
+    <div id="comboExclusiveStats"></div>
+    <div class="combo-tabs" id="comboTabs">
+      <button class="combo-tab active" data-tab="union" onclick="setComboTab('union')">并集</button>
+      <button class="combo-tab" data-tab="intersection" onclick="setComboTab('intersection')">共同交集</button>
+      <button class="combo-tab" data-tab="exclusive" onclick="setComboTab('exclusive')">独占</button>
+    </div>
+    <div id="comboResultList"></div>
+  </div>
+</div>
 
 <!-- Coverage clinic panel -->
 <div class="mall-panel" id="coveragePanel">
@@ -1792,6 +1835,121 @@ function renderCoverageClinicPage() {
   }).join('') : '<div class="list-empty">这个商场1公里内暂未命中未接触诊所</div>';
 }
 
+
+let comboSelectedIds = new Set();
+let comboSearchTerm = '';
+let comboTab = 'union';
+let lastComboAnalysis = null;
+function getAllCoverageCenters() {
+  const pointCenters = places.filter(p => isPointEntry(p)).map(pointToCoverageTarget);
+  return [...malls, ...pointCenters].filter(c => c && c.lat && c.lng);
+}
+function clinicKey(p) {
+  return String(p.id || ((p.name||'').trim().toLowerCase() + '|' + (p.address||'').trim().toLowerCase()));
+}
+function analyzeCoverageCombo() {
+  const centers = getAllCoverageCenters().filter(c => comboSelectedIds.has(c.id));
+  if (centers.length < 2) return null;
+  const centerSets = centers.map(c => {
+    const clinics = getMallClinics(c);
+    const map = new Map();
+    clinics.forEach(p => map.set(clinicKey(p), { ...p, _centerId:c.id, _centerName:c.name, _distanceKm:p._distanceKm !== undefined ? p._distanceKm : distanceKm(c.lat,c.lng,p.lat,p.lng) }));
+    return { center:c, clinics, map };
+  });
+  const unionMap = new Map();
+  const coverageMap = new Map();
+  centerSets.forEach(cs => {
+    cs.map.forEach((p,k) => {
+      if (!unionMap.has(k) || p._distanceKm < unionMap.get(k)._nearestDistance) unionMap.set(k, { ...p, _nearestCenter:cs.center.name, _nearestDistance:p._distanceKm });
+      if (!coverageMap.has(k)) coverageMap.set(k, []);
+      coverageMap.get(k).push({ center:cs.center, clinic:p, distanceKm:p._distanceKm });
+    });
+  });
+  const union = [...unionMap.entries()].map(([k,p]) => ({ ...p, _key:k, _coveredBy:coverageMap.get(k) })).sort((a,b) => b._coveredBy.length - a._coveredBy.length || a._nearestDistance - b._nearestDistance);
+  const intersection = union.filter(p => p._coveredBy.length === centers.length);
+  const exclusiveByCenter = centerSets.map(cs => {
+    const rows = [];
+    cs.map.forEach((p,k) => { if ((coverageMap.get(k)||[]).length === 1) rows.push({ ...p, _key:k, _exclusiveCenter:cs.center.name, _coveredBy:coverageMap.get(k) }); });
+    rows.sort((a,b) => a._distanceKm - b._distanceKm);
+    return { center:cs.center, rows };
+  });
+  const sumCount = centerSets.reduce((s,cs)=>s+cs.clinics.length,0);
+  const unionCount = union.length;
+  const duplicateCount = Math.max(0, sumCount - unionCount);
+  const overlapRate = sumCount ? duplicateCount / sumCount : 0;
+  return { centers, centerSets, union, intersection, exclusiveByCenter, sumCount, unionCount, duplicateCount, overlapRate };
+}
+function openComboPanel() { closeMallPanel(); renderComboPicker(); renderComboAnalysis(); document.getElementById('comboPanel').classList.add('active'); }
+function closeComboPanel() { document.getElementById('comboPanel').classList.remove('active'); }
+function toggleComboCenter(id, checked) {
+  if (checked && comboSelectedIds.size >= 5) { toast('最多选择5个覆盖中心'); renderComboPicker(); return; }
+  if (checked) comboSelectedIds.add(id); else comboSelectedIds.delete(id);
+  renderComboPicker(); renderComboAnalysis();
+}
+function renderComboPicker() {
+  const box = document.getElementById('comboPickList');
+  const hint = document.getElementById('comboSelectedHint');
+  if (!box) return;
+  const centers = getAllCoverageCenters().map(c => ({...c, hitCount:getMallClinics(c).length})).filter(c => {
+    if (!comboSearchTerm) return true;
+    return [c.name,c.area,c.developer,c.address,c.note,c.coopStatus].join(' ').toLowerCase().includes(comboSearchTerm);
+  }).sort((a,b) => (comboSelectedIds.has(b.id)-comboSelectedIds.has(a.id)) || b.hitCount-a.hitCount).slice(0,80);
+  hint.textContent = `已选 ${comboSelectedIds.size} 个覆盖中心；请选择2-5个。`;
+  box.innerHTML = centers.map(c => `<label class="combo-pick-item"><input type="checkbox" ${comboSelectedIds.has(c.id)?'checked':''} onchange="toggleComboCenter('${jsStr(c.id)}', this.checked)"><div><strong>${c.isPointCoverage?'📍':'🏬'} ${esc(c.name)}</strong><div class="combo-row-meta">${esc(c.area||'')}｜${esc(c.developer||'')}｜单点覆盖 ${c.hitCount} 家</div></div></label>`).join('') || '<div class="list-empty">没有匹配的覆盖中心</div>';
+}
+function setComboTab(tab) {
+  comboTab = tab;
+  document.querySelectorAll('.combo-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  renderComboAnalysis();
+}
+function overlapLabel(rate) {
+  if (rate < .2) return '互补性强';
+  if (rate < .45) return '正常重叠';
+  if (rate < .65) return '高度重叠';
+  return '覆盖过密';
+}
+function renderComboAnalysis() {
+  const stats = document.getElementById('comboStats'), ex = document.getElementById('comboExclusiveStats'), list = document.getElementById('comboResultList');
+  if (!stats || !list) return;
+  const a = analyzeCoverageCombo();
+  lastComboAnalysis = a;
+  if (!a) {
+    stats.innerHTML = '';
+    ex.innerHTML = '';
+    list.innerHTML = '<div class="list-empty">请先选择至少2个覆盖中心。</div>';
+    return;
+  }
+  stats.innerHTML = [
+    ['单点合计', a.sumCount], ['并集去重', a.unionCount], ['重复覆盖', a.duplicateCount], ['重叠率', Math.round(a.overlapRate*100)+'%'], ['共同交集', a.intersection.length], ['判断', overlapLabel(a.overlapRate)]
+  ].map(([label,num]) => `<div class="combo-stat"><div class="num">${esc(num)}</div><div class="label">${label}</div></div>`).join('');
+  ex.innerHTML = '<div class="dash-section-title">独占覆盖</div>' + a.exclusiveByCenter.map(x => `<div class="combo-row"><div class="combo-row-title"><span>${esc(x.center.name)}</span><span>${x.rows.length} 家</span></div></div>`).join('');
+  let rows = [];
+  if (comboTab === 'union') rows = a.union;
+  else if (comboTab === 'intersection') rows = a.intersection;
+  else rows = a.exclusiveByCenter.flatMap(x => x.rows.map(r => ({...r, _exclusiveCenter:x.center.name})));
+  list.innerHTML = rows.length ? rows.slice(0,120).map((p,i) => {
+    const coveredNames = (p._coveredBy||[]).map(x=>x.center.name).join(' / ');
+    const meta = comboTab === 'exclusive' ? `独占：${esc(p._exclusiveCenter || '')}` : `被 ${p._coveredBy.length} 个中心覆盖：${esc(coveredNames)}`;
+    return `<div class="coverage-clinic-item" onclick="goToPlace('${jsStr(p.id)}')"><div><span class="rank">${i+1}</span><strong>${esc(p.name)}</strong> <span class="combo-badge">${comboTab==='union'?'并集':comboTab==='intersection'?'交集':'独占'}</span></div><div class="meta">${meta}<br>最近：${esc(p._nearestCenter || p._centerName || '')} ${((p._nearestDistance!==undefined?p._nearestDistance:p._distanceKm)||0).toFixed(2)}km<br>${esc(p.address || '')}</div><div class="copy-row" onclick="event.stopPropagation()"><button class="copy-btn" onclick="copyText('${jsStr(p.id)}','address')">复制地址</button><button class="copy-btn" onclick="copyText('${jsStr(p.id)}','phone')">复制电话</button></div></div>`;
+  }).join('') : '<div class="list-empty">当前分类没有诊所</div>';
+}
+async function copyComboSummary() {
+  const a = lastComboAnalysis || analyzeCoverageCombo();
+  if (!a) { toast('请先选择至少2个覆盖中心'); return; }
+  const text = `覆盖组合分析\n覆盖中心：${a.centers.map(c=>c.name).join(' + ')}\n单点合计：${a.sumCount}\n并集去重：${a.unionCount}\n重复覆盖：${a.duplicateCount}\n重叠率：${Math.round(a.overlapRate*100)}%（${overlapLabel(a.overlapRate)}）\n共同交集：${a.intersection.length}\n独占覆盖：\n` + a.exclusiveByCenter.map(x=>`- ${x.center.name}: ${x.rows.length}家`).join('\n');
+  await navigator.clipboard.writeText(text); toast('组合摘要已复制');
+}
+function exportComboCsv() {
+  const a = lastComboAnalysis || analyzeCoverageCombo();
+  if (!a) { toast('请先选择至少2个覆盖中心'); return; }
+  const headers = ['mode','name','address','phone','coveredBy','nearestCenter','nearestDistanceKm'];
+  const rows = [];
+  a.union.forEach(p => rows.push({mode:'union', name:p.name, address:p.address, phone:p.phone||p.contact||'', coveredBy:(p._coveredBy||[]).map(x=>x.center.name).join('/'), nearestCenter:p._nearestCenter||'', nearestDistanceKm:(p._nearestDistance||0).toFixed(3)}));
+  a.intersection.forEach(p => rows.push({mode:'intersection', name:p.name, address:p.address, phone:p.phone||p.contact||'', coveredBy:(p._coveredBy||[]).map(x=>x.center.name).join('/'), nearestCenter:p._nearestCenter||'', nearestDistanceKm:(p._nearestDistance||0).toFixed(3)}));
+  a.exclusiveByCenter.forEach(x => x.rows.forEach(p => rows.push({mode:'exclusive:'+x.center.name, name:p.name, address:p.address, phone:p.phone||p.contact||'', coveredBy:x.center.name, nearestCenter:x.center.name, nearestDistanceKm:(p._distanceKm||0).toFixed(3)})));
+  const csv = [headers.join(',')].concat(rows.map(r => headers.map(h => '"'+String(r[h]||'').replace(/"/g,'""')+'"').join(','))).join('\n');
+  const blob = new Blob(['\ufeff'+csv], {type:'text/csv;charset=utf-8'}); const url=URL.createObjectURL(blob); const link=document.createElement('a'); link.href=url; link.download='覆盖组合分析.csv'; link.click(); URL.revokeObjectURL(url); toast('已导出组合CSV');
+}
 function getCurrentCoverageRows() {
   const selected = getCoverageTargetById(selectedMallId);
   if (!selected) return [];
@@ -2716,7 +2874,7 @@ function exportPriorityCsv() {
 }
 async function copyDashboardSummary() {
   const pool=getPriorityPool();
-  const text=`BDmap v3.1.2 今日BD汇报摘要\n总线索：${pool.length}\n高优先级：${pool.filter(p=>p._priority.score>=80).length}\n已推进机构：${places.filter(p=>!isUncontactedPlace(p)).length}\n有意向：${places.filter(p=>normalizeStatus(p.status)==='有意向').length}\n待电话/补资料：${pool.filter(p=>['电话联系','补资料'].includes(actionCategory(p._priority.action))).length}\nTop5：\n`+pool.slice(0,5).map((p,i)=>`${i+1}. ${p.name} ${p._priority.score}分｜${p._priority.action}`).join('\n');
+  const text=`BDmap v3.2.0 今日BD汇报摘要\n总线索：${pool.length}\n高优先级：${pool.filter(p=>p._priority.score>=80).length}\n已推进机构：${places.filter(p=>!isUncontactedPlace(p)).length}\n有意向：${places.filter(p=>normalizeStatus(p.status)==='有意向').length}\n待电话/补资料：${pool.filter(p=>['电话联系','补资料'].includes(actionCategory(p._priority.action))).length}\nTop5：\n`+pool.slice(0,5).map((p,i)=>`${i+1}. ${p.name} ${p._priority.score}分｜${p._priority.action}`).join('\n');
   await navigator.clipboard.writeText(text); toast('汇报摘要已复制，可直接发老板/群里');
 }
 function openTopPriorityOnMap() {
