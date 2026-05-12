@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-<title>BD地图 v3.0.1 - 评分说明增强版</title>
+<title>BD地图 v3.0.2 - 评分明细优化版</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -415,13 +415,23 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .score-part-title { display:flex; justify-content:space-between; gap:8px; font-weight:800; font-size:13px; }
 .score-part ul { margin:6px 0 0 18px; padding:0; color:var(--text2); font-size:12px; line-height:1.5; }
 .score-note { margin-top:10px; color:#ffd49a; font-size:12px; line-height:1.5; }
+
+.score-doc summary { cursor:pointer; font-weight:900; list-style:none; display:flex; justify-content:space-between; align-items:center; }
+.score-doc summary::-webkit-details-marker { display:none; }
+.score-doc summary:after { content:'展开'; font-size:12px; color:var(--text2); font-weight:700; }
+.score-doc[open] summary:after { content:'收起'; }
+.score-breakdown { margin-top:8px; border-top:1px solid rgba(255,255,255,.08); padding-top:8px; }
+.score-line { display:flex; justify-content:space-between; gap:10px; font-size:12px; padding:4px 0; color:var(--text2); }
+.score-line b { color:var(--text); }
+.score-line .pts { color:#ffd49a; font-weight:800; }
+.score-total-line { margin-top:6px; padding-top:7px; border-top:1px solid rgba(255,255,255,.08); display:flex; justify-content:space-between; font-size:13px; font-weight:900; }
 </style>
 </head>
 <body>
 
 <!-- Top bar -->
 <div class="top-bar">
-  <h1>📍 BD地图 v3.0.1</h1>
+  <h1>📍 BD地图 v3.0.2</h1>
   <span class="stats" id="statsText">0 机构</span>
   <button class="coverage-exit" id="btnExitCoverage" title="退出1km覆盖" style="display:none">↩ 退出1km</button>
   <button class="top-btn" id="btnDashboard" title="数据看板">📊</button>
@@ -692,23 +702,23 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 <div class="dashboard-panel" id="dashboardPanel">
   <div class="list-header">
     <button class="top-btn" onclick="closeDashboard()">←</button>
-    <h2>v3.0.1 数据看板</h2>
+    <h2>v3.0.2 数据看板</h2>
     <button class="top-btn" onclick="exportPriorityCsv()" title="导出优先线索">📤</button>
   </div>
   <div class="dashboard-body">
     <div class="dash-grid" id="dashboardCards"></div>
     <div class="dash-tools"><button onclick="copyDashboardSummary()">复制汇报摘要</button><button onclick="openTopPriorityOnMap()">地图查看Top线索</button></div>
     
-    <div class="score-doc">
-      <h3>📌 优先级评分说明</h3>
+    <details class="score-doc">
+      <summary>📌 优先级评分说明</summary>
       <p>评分用于回答一个问题：BD今天应该先打谁、为什么。满分100分，80分以上为高优先级，60-79分为中优先级，60分以下为低优先级。已合作和暂不合作不会进入优先榜。</p>
       <div class="score-part"><div class="score-part-title"><span>① 覆盖价值</span><span>约30分</span></div><ul><li>重点商场1km内：优先，因为可结合商场/社区场景推进。</li><li>重点商场2km内：中高优先，可作为周边扫街补点。</li><li>不在现有覆盖圈：作为空白区域补点，适合找新阵地。</li></ul></div>
       <div class="score-part"><div class="score-part-title"><span>② 渠道价值</span><span>约25分</span></div><ul><li>NGO、社区中心、老人服务、机构入口：加分。</li><li>连锁/多分店/可复制渠道：加分。</li><li>靠近高客流商场：加分，客流越明确越有利。</li></ul></div>
       <div class="score-part"><div class="score-part-title"><span>③ 人群匹配</span><span>约20分</span></div><ul><li>中医诊所：最高匹配，直接对应XKONG中医AI场景。</li><li>养生、理疗、康复、美容等健康相关业态：中高匹配。</li><li>其他普通商户：只保留基础分。</li></ul></div>
       <div class="score-part"><div class="score-part-title"><span>④ 推进状态</span><span>约15分</span></div><ul><li>有意向：最高，应该优先跟进推进转化。</li><li>已交流：中高，适合二次触达。</li><li>未接触/待跟进：保留基础分，适合纳入扫街清单。</li><li>已合作/暂不合作：不进入优先榜，避免干扰BD行动。</li></ul></div>
       <div class="score-part"><div class="score-part-title"><span>⑤ 数据完整度</span><span>约10分</span></div><ul><li>有电话、联系人、地址、经纬度：越完整分越高。</li><li>资料完整代表可以马上行动，不需要先补信息。</li></ul></div>
-      <div class="score-note">每条线索下方的黄色“推荐原因”，就是系统把上述5部分里最关键的判断翻译成人话，方便向老板解释。</div>
-    </div>
+      <div class="score-note">点击具体诊所后，可在弹窗里查看该诊所的详细加分项。</div>
+    </details>
     <div class="dash-section-title">🎯 高优先级线索 Top 30 <span id="priorityUpdated" class="mall-meta"></span></div>
     <div id="priorityList"></div>
     <div class="dash-section-title">🏬 商场覆盖缺口</div>
@@ -1036,7 +1046,7 @@ function renderMarkers() {
       <div class="popup-status" style="background:${statusColor};color:#fff">${p.status}</div>
     `;
     const pr = calcPriority(p);
-    popupHtml += `<div class="popup-detail"><span class="priority-badge ${pr.level}">${pr.score} ${priorityLabel(pr.level)}</span></div><div class="priority-reason">${pr.reasons.map(esc).join(' + ')}</div>`;
+    popupHtml += `<div class="popup-detail"><span class="priority-badge ${pr.level}">${pr.score} ${priorityLabel(pr.level)}</span></div>${scoreBreakdownHtml(pr)}`;
     if (selectedMall) popupHtml += `<div class="popup-detail" style="color:#ff9f1a">🏬 距 ${esc(selectedMall.name)} ${distanceKm(selectedMall.lat, selectedMall.lng, p.lat, p.lng).toFixed(2)} km</div>`;
     if (p.contact) popupHtml += `<div class="popup-detail">👤 ${esc(p.contact)}${p.phone ? ' · ' + esc(p.phone) : ''}</div>`;
     if (p.scale) popupHtml += `<div class="popup-detail">📏 ${esc(p.scale)}</div>`;
@@ -1314,7 +1324,6 @@ function renderList() {
             ${ownerBadgeHtml}${p.type ? ' · ' + esc(p.type) : ''} · ${visitCount}次交流
             ${p.contact ? ' · ' + esc(p.contact) : ''}
           </div>
-          <div class="priority-reason">${pr.reasons.map(esc).join(' + ')}</div>
         </div>
         <span class="list-status" style="background:${color};color:#fff">${p.status}</span>
       </div>`;
@@ -1335,9 +1344,10 @@ function goToPlace(id) {
     }
   });
   if (!opened) {
-    L.popup({ maxWidth: 260 })
+    const pr = calcPriority(p);
+    L.popup({ maxWidth: 280 })
       .setLatLng([p.lat, p.lng])
-      .setContent(`<div class="popup-name">${esc(p.name)}</div><div class="popup-type">${esc(p.type || '')}</div><div class="popup-detail">${esc(p.address || '')}</div>${p.isBaseClinic ? `<span class="popup-edit" onclick="promoteBaseClinic('${jsStr(p.id)}')">➕ 加入机构并跟进</span>` : ''}`)
+      .setContent(`<div class="popup-name">${esc(p.name)}</div><div class="popup-type">${esc(p.type || '')}</div><div class="popup-detail"><span class="priority-badge ${pr.level}">${pr.score} ${priorityLabel(pr.level)}</span></div>${scoreBreakdownHtml(pr)}<div class="popup-detail">${esc(p.address || '')}</div>${p.isBaseClinic ? `<span class="popup-edit" onclick="promoteBaseClinic('${jsStr(p.id)}')">➕ 加入机构并跟进</span>` : ''}`)
       .openOn(map);
   }
 }
@@ -2358,11 +2368,22 @@ function calcPriority(p) {
   if (normalizeStatus(p.status) === '有意向') reasons.push('已有意向，应优先推进');
   const completeness = Math.min(10, (p.phone?4:0)+(p.contact?2:0)+(p.address?2:0)+(p.lat&&p.lng?2:0));
   if (completeness >= 8) reasons.push('资料完整，可立即行动');
-  const score = Math.max(0, Math.min(100, Math.round(coverage + channel + fit + progress + completeness)));
+  const rawTotal = coverage + channel + fit + progress + completeness;
+  const score = Math.max(0, Math.min(100, Math.round(rawTotal)));
   const level = score >= 80 ? 'high' : score >= 60 ? 'mid' : 'low';
-  return { score, level, reasons: reasons.slice(0,3), nearestMall: near && near.mall ? near.mall.name : '', distanceKm: near ? near.distanceKm : null, area: inferArea(p) };
+  const breakdown = [
+    { name:'覆盖价值', points:Math.round(coverage), note: near ? `最近商场：${near.mall.name}，距离${near.distanceKm.toFixed(1)}km` : '未匹配到重点商场，作为覆盖空白补点' },
+    { name:'渠道价值', points:Math.round(channel), note: text.includes('ngo') || text.includes('社區') || text.includes('社区') || text.includes('中心') ? '具备社区/机构入口属性' : (text.includes('連鎖') || text.includes('连锁') || p.scale === '连锁' ? '具备连锁/复制潜力' : '普通渠道基础分') },
+    { name:'人群匹配', points:Math.round(fit), note: isClinicLike(p) ? '中医诊所，高度匹配XKONG中医AI场景' : (fit >= 14 ? '健康/养生相关业态，中高匹配' : '普通业态基础匹配') },
+    { name:'推进状态', points:Math.round(progress), note: `当前状态：${normalizeStatus(p.status) || '未接触'}` },
+    { name:'数据完整度', points:Math.round(completeness), note: `${p.phone?'有电话':'缺电话'} / ${p.contact?'有联系人':'缺联系人'} / ${p.address?'有地址':'缺地址'} / ${p.lat&&p.lng?'有坐标':'缺坐标'}` }
+  ];
+  return { score, level, reasons: reasons.slice(0,3), breakdown, nearestMall: near && near.mall ? near.mall.name : '', distanceKm: near ? near.distanceKm : null, area: inferArea(p) };
 }
 function priorityLabel(level) { return level === 'high' ? '高' : level === 'mid' ? '中' : '低'; }
+function scoreBreakdownHtml(pr) {
+  return `<div class="score-breakdown">${pr.breakdown.map(x => `<div class="score-line"><span><b>${esc(x.name)}</b><br>${esc(x.note)}</span><span class="pts">+${x.points}</span></div>`).join('')}<div class="score-total-line"><span>总分</span><span>${pr.score}｜${priorityLabel(pr.level)}优先级</span></div></div>`;
+}
 function enrichPriority(list) { return list.map(p => ({...p, _priority: calcPriority(p)})); }
 function openDashboard() { closeList(); closeMallPanel(); closeCoveragePanel(); renderDashboard(); document.getElementById('dashboardPanel').classList.add('active'); }
 function closeDashboard() { document.getElementById('dashboardPanel').classList.remove('active'); }
@@ -2386,7 +2407,7 @@ function renderDashboard() {
   document.getElementById('priorityUpdated').textContent = new Date().toLocaleString('zh-HK',{hour12:false}).slice(0,16);
   document.getElementById('priorityList').innerHTML = pool.slice(0,30).map((p,i) => {
     const pr=p._priority;
-    return `<div class="dash-row" onclick="goToPlace('${jsStr(p.id)}')"><div class="dash-row-title"><span>${i+1}. ${esc(p.name)}</span><span class="priority-badge ${pr.level}">${pr.score} ${priorityLabel(pr.level)}</span></div><div class="dash-meta">${esc(p.type||'')}｜${esc(pr.area)}｜${pr.distanceKm!==null?'近 '+esc(pr.nearestMall)+' '+pr.distanceKm.toFixed(1)+'km':''}</div><div class="priority-reason">${pr.reasons.map(esc).join(' + ')}</div></div>`;
+    return `<div class="dash-row" onclick="goToPlace('${jsStr(p.id)}')"><div class="dash-row-title"><span>${i+1}. ${esc(p.name)}</span><span class="priority-badge ${pr.level}">${pr.score} ${priorityLabel(pr.level)}</span></div><div class="dash-meta">${esc(p.type||'')}｜${esc(pr.area)}｜${pr.distanceKm!==null?'近 '+esc(pr.nearestMall)+' '+pr.distanceKm.toFixed(1)+'km':''}｜点击看加分项</div></div>`;
   }).join('') || '<div class="list-empty">暂无优先级线索</div>';
   const mallGaps = malls.map(m => ({...m, hits:getMallClinics(m).length})).filter(m => (m.coopStatus||'待评估') !== '已合作').sort((a,b)=>b.hits-a.hits).slice(0,15);
   document.getElementById('mallGapList').innerHTML = mallGaps.map((m,i)=>`<div class="dash-row" onclick="selectMall('${jsStr(m.id)}')"><div class="dash-row-title"><span>${i+1}. ${esc(m.name)}</span><span>${m.hits}家</span></div><div class="dash-meta">${esc(m.area||'')}｜${esc(m.developer||'')}｜状态：${esc(m.coopStatus||'待评估')}</div></div>`).join('');
@@ -2410,7 +2431,7 @@ function exportPriorityCsv() {
 }
 async function copyDashboardSummary() {
   const pool=getPriorityPool();
-  const text=`BDmap v3.0.1 今日BD汇报摘要\n总线索：${pool.length}\n高优先级：${pool.filter(p=>p._priority.score>=80).length}\n已推进机构：${places.filter(p=>!isUncontactedPlace(p)).length}\n有意向：${places.filter(p=>normalizeStatus(p.status)==='有意向').length}\nTop5：\n`+pool.slice(0,5).map((p,i)=>`${i+1}. ${p.name} ${p._priority.score}分｜${p._priority.reasons.join(' + ')}`).join('\n');
+  const text=`BDmap v3.0.2 今日BD汇报摘要\n总线索：${pool.length}\n高优先级：${pool.filter(p=>p._priority.score>=80).length}\n已推进机构：${places.filter(p=>!isUncontactedPlace(p)).length}\n有意向：${places.filter(p=>normalizeStatus(p.status)==='有意向').length}\nTop5：\n`+pool.slice(0,5).map((p,i)=>`${i+1}. ${p.name} ${p._priority.score}分｜${p._priority.reasons.join(' + ')}`).join('\n');
   await navigator.clipboard.writeText(text); toast('汇报摘要已复制，可直接发老板/群里');
 }
 function openTopPriorityOnMap() {
