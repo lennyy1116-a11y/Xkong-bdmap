@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-<title>BD地图 v3.2.1 - 地图组合覆盖</title>
+<title>BD地图 v3.2.2 - 组合点位可视优化</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -486,13 +486,22 @@ body.entry-point-mode .point-only-hint { display:block; }
 .map-combo-actions button { flex-shrink:0; border:1px solid #444; background:var(--card); color:var(--text); border-radius:999px; padding:7px 10px; font-size:12px; font-weight:800; }
 .map-combo-actions button.primary { background:var(--orange); border-color:var(--orange); color:#fff; }
 .map-combo-chip { display:inline-block; max-width:112px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; vertical-align:bottom; margin-right:4px; padding:2px 7px; border-radius:999px; background:rgba(230,126,34,.18); color:#ffc078; font-size:11px; }
+
+.point-marker-wrap { position:relative; width:112px; height:42px; pointer-events:none; }
+.point-marker-wrap .point-marker { position:absolute; left:0; top:3px; width:34px; height:34px; border-radius:50%; background:#e67e22; color:#fff; display:flex; align-items:center; justify-content:center; border:3px solid #fff; box-shadow:0 2px 10px rgba(0,0,0,.45); font-size:18px; }
+.point-marker-wrap .point-label { position:absolute; left:34px; top:7px; max-width:76px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; background:rgba(15,20,35,.92); border:1px solid rgba(255,255,255,.16); color:#fff; border-radius:999px; padding:4px 7px; font-size:11px; font-weight:800; box-shadow:0 2px 8px rgba(0,0,0,.35); }
+.combo-centers { display:flex; gap:6px; overflow-x:auto; margin-top:7px; padding-bottom:2px; }
+.combo-center-chip { flex-shrink:0; display:inline-flex; align-items:center; gap:4px; max-width:150px; border:1px solid rgba(230,126,34,.45); background:rgba(230,126,34,.15); color:#ffd3a4; border-radius:999px; padding:5px 8px; font-size:12px; font-weight:800; }
+.combo-center-chip .name { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.combo-center-chip button { border:0; background:transparent; color:#ffd3a4; font-weight:900; padding:0; }
+.combo-map-hint { color:#aeb6c8; font-size:11px; margin-top:5px; }
 </style>
 </head>
 <body>
 
 <!-- Top bar -->
 <div class="top-bar">
-  <h1>📍 BD地图 v3.2.1</h1>
+  <h1>📍 BD地图 v3.2.2</h1>
   <span class="stats" id="statsText">0 机构</span>
   <button class="coverage-exit" id="btnExitCoverage" title="退出1km覆盖" style="display:none">↩ 退出1km</button>
   <button class="top-btn" id="btnDashboard" title="数据看板">📊</button>
@@ -509,7 +518,9 @@ body.entry-point-mode .point-only-hint { display:block; }
 <button class="coverage-reopen" id="btnReopenCoverage" style="display:none" onclick="openCoveragePanel()">📋 1km清单</button>
 <div class="map-combo-bar" id="mapComboBar">
   <div class="map-combo-top"><span id="mapComboTitle">组合覆盖</span><button onclick="clearMapCombo()" style="border:0;background:transparent;color:var(--text2);font-weight:900">×</button></div>
+  <div class="combo-centers" id="mapComboCenters"></div>
   <div class="map-combo-stats" id="mapComboStats">从商场/点位弹窗加入组合</div>
+  <div class="combo-map-hint">地图上黄色虚线圈 = 已加入组合的覆盖中心；橙色📍 = 手动点位。</div>
   <div class="map-combo-actions">
     <button class="primary" onclick="openComboResultOnMap('union')">看并集</button>
     <button onclick="openComboResultOnMap('intersection')">看交集</button>
@@ -788,7 +799,7 @@ body.entry-point-mode .point-only-hint { display:block; }
 <div class="dashboard-panel" id="dashboardPanel">
   <div class="list-header">
     <button class="top-btn" onclick="closeDashboard()">←</button>
-    <h2>v3.2.1 数据看板</h2>
+    <h2>v3.2.2 数据看板</h2>
     <button class="top-btn" onclick="exportPriorityCsv()" title="导出优先线索">📤</button>
   </div>
   <div class="dashboard-body compact">
@@ -1774,13 +1785,13 @@ function renderMalls() {
     mallLayer.addLayer(marker);
   });
   places.filter(p => isPointEntry(p)).forEach(p => {
-    const marker = L.marker([p.lat,p.lng], { icon: L.divIcon({ className:'', html:'<div class="point-marker">📍</div>', iconSize:[34,34], iconAnchor:[17,17] }) });
+    const marker = L.marker([p.lat,p.lng], { icon: L.divIcon({ className:'', html:`<div class="point-marker-wrap"><div class="point-marker">📍</div><div class="point-label">${esc(p.name || '点位')}</div></div>`, iconSize:[112,42], iconAnchor:[17,21] }) });
     marker.bindPopup(`<div class="popup-name">📍 ${esc(p.name)}</div><div class="popup-detail">${esc(p.type || '点位')}</div><div class="popup-detail">${esc(p.address || '')}</div><div class="point-actions"><button class="coverage-action-btn" onclick="selectPointCoverage('${jsStr(p.id)}')">查看1公里诊所</button><button onclick="addComboCenter('${jsStr(p.id)}')">加入组合</button><button onclick="openEditSheet('${jsStr(p.id)}')">编辑点位</button></div>`);
     mallLayer.addLayer(marker);
   });
   comboSelectedIds.forEach(id => {
     const c = getCoverageTargetById(id);
-    if (c) L.circle([c.lat,c.lng], { radius:COVERAGE_KM*1000, color:'#f1c40f', weight:2, fillColor:'#f1c40f', fillOpacity:.045, dashArray:'5,5' }).addTo(coverageLayer);
+    if (c) L.circle([c.lat,c.lng], { radius:COVERAGE_KM*1000, color:'#f1c40f', weight:3, fillColor:'#f1c40f', fillOpacity:.065, dashArray:'5,5' }).addTo(coverageLayer);
   });
   const selected = getCoverageTargetById(selectedMallId);
   if (selected) L.circle([selected.lat, selected.lng], { radius:COVERAGE_KM*1000, color:'#e67e22', weight:2, fillColor:'#e67e22', fillOpacity:.08 }).addTo(coverageLayer);
@@ -1917,6 +1928,12 @@ function addComboCenter(id) {
   const c = getCoverageTargetById(id);
   toast(`已加入组合：${c ? c.name : ''}`);
 }
+function removeComboCenter(id) {
+  comboSelectedIds.delete(id);
+  lastComboAnalysis = null;
+  renderMalls(); renderMapComboBar();
+  if (comboSelectedIds.size < 2) closeCoveragePanel();
+}
 function clearMapCombo() {
   comboSelectedIds.clear();
   lastComboAnalysis = null;
@@ -1929,14 +1946,17 @@ function renderMapComboBar() {
   const bar = document.getElementById('mapComboBar');
   const title = document.getElementById('mapComboTitle');
   const stats = document.getElementById('mapComboStats');
-  if (!bar || !title || !stats) return;
+  const centersBox = document.getElementById('mapComboCenters');
+  if (!bar || !title || !stats || !centersBox) return;
   const centers = getAllCoverageCenters().filter(c => comboSelectedIds.has(c.id));
   if (!centers.length) {
     title.textContent = '组合覆盖';
+    centersBox.innerHTML = '';
     stats.textContent = '从商场/点位弹窗加入组合；选2-5个后可看并集/交集/独占。';
     return;
   }
-  title.innerHTML = `已选 ${centers.length} 个：` + centers.slice(0,3).map(c=>`<span class="map-combo-chip">${esc(c.name)}</span>`).join('') + (centers.length>3?'…':'');
+  title.textContent = `已选 ${centers.length} 个覆盖中心`;
+  centersBox.innerHTML = centers.map(c => `<span class="combo-center-chip"><span>${c.isPointCoverage?'📍':'🏬'}</span><span class="name">${esc(c.name)}</span><button onclick="removeComboCenter('${jsStr(c.id)}')">×</button></span>`).join('');
   const a = analyzeCoverageCombo();
   if (!a) { stats.textContent = '再加入至少1个覆盖中心即可分析。'; return; }
   lastComboAnalysis = a;
@@ -2962,7 +2982,7 @@ function exportPriorityCsv() {
 }
 async function copyDashboardSummary() {
   const pool=getPriorityPool();
-  const text=`BDmap v3.2.1 今日BD汇报摘要\n总线索：${pool.length}\n高优先级：${pool.filter(p=>p._priority.score>=80).length}\n已推进机构：${places.filter(p=>!isUncontactedPlace(p)).length}\n有意向：${places.filter(p=>normalizeStatus(p.status)==='有意向').length}\n待电话/补资料：${pool.filter(p=>['电话联系','补资料'].includes(actionCategory(p._priority.action))).length}\nTop5：\n`+pool.slice(0,5).map((p,i)=>`${i+1}. ${p.name} ${p._priority.score}分｜${p._priority.action}`).join('\n');
+  const text=`BDmap v3.2.2 今日BD汇报摘要\n总线索：${pool.length}\n高优先级：${pool.filter(p=>p._priority.score>=80).length}\n已推进机构：${places.filter(p=>!isUncontactedPlace(p)).length}\n有意向：${places.filter(p=>normalizeStatus(p.status)==='有意向').length}\n待电话/补资料：${pool.filter(p=>['电话联系','补资料'].includes(actionCategory(p._priority.action))).length}\nTop5：\n`+pool.slice(0,5).map((p,i)=>`${i+1}. ${p.name} ${p._priority.score}分｜${p._priority.action}`).join('\n');
   await navigator.clipboard.writeText(text); toast('汇报摘要已复制，可直接发老板/群里');
 }
 function openTopPriorityOnMap() {
