@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-<title>BD地图 v3.1.0 - 点位覆盖与选点优化</title>
+<title>BD地图 v3.1.2 - 逻辑校验修正版</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -455,13 +455,17 @@ body.entry-point-mode .point-only-hint { display:block; }
 .pick-location-bar .cancel { background:var(--red); color:#fff; }
 .point-actions { display:flex; gap:8px; margin-top:8px; }
 .point-actions button { flex:1; border:1px solid #444; background:var(--bg); color:var(--text); border-radius:8px; padding:7px; font-size:12px; }
+
+.coverage-action-btn { background:var(--orange) !important; border-color:var(--orange) !important; color:#fff !important; font-weight:800; }
+
+.point-marker { width:34px; height:34px; border-radius:50%; background:#e67e22; color:#fff; display:flex; align-items:center; justify-content:center; border:3px solid #fff; box-shadow:0 2px 10px rgba(0,0,0,.45); font-size:18px; }
 </style>
 </head>
 <body>
 
 <!-- Top bar -->
 <div class="top-bar">
-  <h1>📍 BD地图 v3.1.0</h1>
+  <h1>📍 BD地图 v3.1.2</h1>
   <span class="stats" id="statsText">0 机构</span>
   <button class="coverage-exit" id="btnExitCoverage" title="退出1km覆盖" style="display:none">↩ 退出1km</button>
   <button class="top-btn" id="btnDashboard" title="数据看板">📊</button>
@@ -747,7 +751,7 @@ body.entry-point-mode .point-only-hint { display:block; }
 <div class="dashboard-panel" id="dashboardPanel">
   <div class="list-header">
     <button class="top-btn" onclick="closeDashboard()">←</button>
-    <h2>v3.1.0 数据看板</h2>
+    <h2>v3.1.2 数据看板</h2>
     <button class="top-btn" onclick="exportPriorityCsv()" title="导出优先线索">📤</button>
   </div>
   <div class="dashboard-body compact">
@@ -1088,7 +1092,7 @@ function getFilteredPlaces() {
 function renderMarkers() {
   markersLayer.clearLayers();
   const selectedMall = getCoverageTargetById(selectedMallId);
-  let renderPool = getFilteredPlaces();
+  let renderPool = getFilteredPlaces().filter(p => !isPointEntry(p));
   if (selectedMall && baseClinics.length) {
     const existingIds = new Set(renderPool.map(p => p.id));
     getBaseMallClinics(selectedMall).forEach(p => { if (!existingIds.has(p.id)) renderPool.push(p); });
@@ -1121,7 +1125,7 @@ function renderMarkers() {
     if (p.isBaseClinic) popupHtml += `<span class="popup-edit" onclick="promoteBaseClinic('${jsStr(p.id)}')">➕ 加入机构并跟进</span>`;
     else {
       popupHtml += `<span class="popup-edit" onclick="openEditSheet('${jsStr(p.id)}')">✏️ ${isPointEntry(p) ? '编辑点位' : '编辑'}</span>`;
-      if (isPointEntry(p)) popupHtml += `<div class="point-actions"><button onclick="selectPointCoverage('${jsStr(p.id)}')">查看1公里诊所</button></div>`;
+      if (isPointEntry(p)) popupHtml += `<div class="point-actions"><button class="coverage-action-btn" onclick="selectPointCoverage('${jsStr(p.id)}')">查看1公里诊所</button></div>`;
     }
     marker.bindPopup(popupHtml, { maxWidth: 260 });
     markersLayer.addLayer(marker);
@@ -1296,6 +1300,7 @@ function pointToCoverageTarget(p) {
   };
 }
 function selectPointCoverage(id) {
+  closeDashboard();
   const p = places.find(x => x.id === id);
   if (!p || !isPointEntry(p)) return;
   selectedMallId = id;
@@ -1305,7 +1310,10 @@ function selectPointCoverage(id) {
   toast(`📍 ${p.name}：1公里内 ${hits} 家未接触诊所`);
 }
 function getCoverageTargetById(id) {
-  return malls.find(m => m.id === id) || (places.find(p => p.id === id && isPointEntry(p)) ? pointToCoverageTarget(places.find(p => p.id === id && isPointEntry(p))) : null);
+  const mall = malls.find(m => m.id === id);
+  if (mall) return mall;
+  const point = places.find(p => p.id === id && isPointEntry(p));
+  return point ? pointToCoverageTarget(point) : null;
 }
 function resetForm() {
   document.getElementById('editId').value = '';
@@ -1454,7 +1462,7 @@ function closeList() {
 function renderList() {
   const body = document.getElementById('listBody');
   let filtered = getFilteredPlaces();
-  const selectedMallForSort = malls.find(m => m.id === selectedMallId);
+  const selectedMallForSort = getCoverageTargetById(selectedMallId);
   if (selectedMallForSort) {
     filtered.sort((a,b) => distanceKm(selectedMallForSort.lat, selectedMallForSort.lng, a.lat, a.lng) - distanceKm(selectedMallForSort.lat, selectedMallForSort.lng, b.lat, b.lng));
   } else {
@@ -1700,7 +1708,12 @@ function renderMalls() {
   mallLayer.clearLayers(); coverageLayer.clearLayers();
   malls.forEach(m => {
     const marker = L.marker([m.lat,m.lng], { icon: L.divIcon({ className:'', html:'<div class="mall-marker">🏬</div>', iconSize:[34,34], iconAnchor:[17,17] }) });
-    marker.bindPopup(`<div class="popup-name">🏬 ${esc(m.name)}</div><div class="popup-detail">${m.no ? m.no + '. ' : ''}${esc(m.area || '')} · ${esc(m.developer || '')}</div><div class="popup-detail">状态：${esc(m.coopStatus || '待评估')}</div><div class="popup-detail">客流：${esc(m.traffic || '-')} ${esc(m.trafficNote || '')}</div>${m.note ? '<div class="popup-detail">📝 ' + esc(m.note) + '</div>' : ''}<span class="popup-edit" onclick="selectMall('${jsStr(m.id)}')">查看1km诊所</span>`);
+    marker.bindPopup(`<div class="popup-name">🏬 ${esc(m.name)}</div><div class="popup-detail">${m.no ? m.no + '. ' : ''}${esc(m.area || '')} · ${esc(m.developer || '')}</div><div class="popup-detail">状态：${esc(m.coopStatus || '待评估')}</div><div class="popup-detail">客流：${esc(m.traffic || '-')} ${esc(m.trafficNote || '')}</div>${m.note ? '<div class="popup-detail">📝 ' + esc(m.note) + '</div>' : ''}<div class="point-actions"><button class="coverage-action-btn" onclick="selectMall('${jsStr(m.id)}')">查看1公里诊所</button></div>`);
+    mallLayer.addLayer(marker);
+  });
+  places.filter(p => isPointEntry(p)).forEach(p => {
+    const marker = L.marker([p.lat,p.lng], { icon: L.divIcon({ className:'', html:'<div class="point-marker">📍</div>', iconSize:[34,34], iconAnchor:[17,17] }) });
+    marker.bindPopup(`<div class="popup-name">📍 ${esc(p.name)}</div><div class="popup-detail">${esc(p.type || '点位')}</div><div class="popup-detail">${esc(p.address || '')}</div><div class="point-actions"><button class="coverage-action-btn" onclick="selectPointCoverage('${jsStr(p.id)}')">查看1公里诊所</button><button onclick="openEditSheet('${jsStr(p.id)}')">编辑点位</button></div>`);
     mallLayer.addLayer(marker);
   });
   const selected = getCoverageTargetById(selectedMallId);
@@ -1717,7 +1730,7 @@ function renderMallList() {
   }
   const selected = getCoverageTargetById(selectedMallId);
   summary.textContent = selected
-    ? `当前覆盖：${selected.name}。再点同一商场「查看1km诊所」即可退出。`
+    ? `当前覆盖：${selected.name}。可点“退出1km”退出覆盖。`
     : '已内置116个重点商场；选择商场后，可查看1公里内未接触诊所。';
   const shownMalls = malls.filter(m => {
     if (mallStatusFilter !== '全部' && (m.coopStatus || '待评估') !== mallStatusFilter) return false;
@@ -1764,7 +1777,7 @@ function renderCoverageClinicPage() {
   if (!selected || !box) return;
   const hits = getMallClinics(selected);
   title.textContent = `${selected.name} · 1公里诊所`;
-  summary.textContent = `1公里内未接触诊所 ${hits.length} 家，已按距离由近到远排序。再点商场页同一商场可退出覆盖。`;
+  summary.textContent = `1公里内未接触诊所 ${hits.length} 家，已按距离由近到远排序。可点“退出1km”或再次选择同一覆盖中心退出。`;
   box.innerHTML = hits.length ? hits.map((p,i) => {
     const d = p._distanceKm !== undefined ? p._distanceKm : distanceKm(selected.lat, selected.lng, p.lat, p.lng);
     return `<div class="coverage-clinic-item" onclick="goToPlace('${jsStr(p.id)}')">
@@ -2703,7 +2716,7 @@ function exportPriorityCsv() {
 }
 async function copyDashboardSummary() {
   const pool=getPriorityPool();
-  const text=`BDmap v3.1.0 今日BD汇报摘要\n总线索：${pool.length}\n高优先级：${pool.filter(p=>p._priority.score>=80).length}\n已推进机构：${places.filter(p=>!isUncontactedPlace(p)).length}\n有意向：${places.filter(p=>normalizeStatus(p.status)==='有意向').length}\n待电话/补资料：${pool.filter(p=>['电话联系','补资料'].includes(actionCategory(p._priority.action))).length}\nTop5：\n`+pool.slice(0,5).map((p,i)=>`${i+1}. ${p.name} ${p._priority.score}分｜${p._priority.action}`).join('\n');
+  const text=`BDmap v3.1.2 今日BD汇报摘要\n总线索：${pool.length}\n高优先级：${pool.filter(p=>p._priority.score>=80).length}\n已推进机构：${places.filter(p=>!isUncontactedPlace(p)).length}\n有意向：${places.filter(p=>normalizeStatus(p.status)==='有意向').length}\n待电话/补资料：${pool.filter(p=>['电话联系','补资料'].includes(actionCategory(p._priority.action))).length}\nTop5：\n`+pool.slice(0,5).map((p,i)=>`${i+1}. ${p.name} ${p._priority.score}分｜${p._priority.action}`).join('\n');
   await navigator.clipboard.writeText(text); toast('汇报摘要已复制，可直接发老板/群里');
 }
 function openTopPriorityOnMap() {
