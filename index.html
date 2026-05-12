@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-<title>BD地图 v3.3.0 - 稳定性能整理版</title>
+<title>BD地图 v3.3.2 - 电话来源筛选版</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -545,13 +545,19 @@ body.entry-point-mode .point-only-hint { display:block; }
 #coveragePanel.combo-mode .mall-body { padding-top:4px; }
 #coveragePanel.combo-mode .coverage-clinic-item { padding:6px 8px; }
 #coveragePanel.combo-mode .coverage-clinic-item .meta { -webkit-line-clamp:1; }
+
+.coverage-source-filters { display:flex; gap:6px; overflow-x:auto; padding:0 0 7px; }
+.coverage-filter-chip { flex-shrink:0; border:1px solid #444; background:var(--card); color:var(--text2); border-radius:999px; padding:6px 10px; font-size:12px; font-weight:800; }
+.coverage-filter-chip.active { background:var(--orange); border-color:var(--orange); color:#fff; }
+.phone-badge { display:inline-block; margin-left:5px; padding:1px 6px; border-radius:999px; background:rgba(46,204,113,.16); color:#96f0ba; font-size:10px; font-weight:800; }
+.source-badge { display:inline-block; margin-left:4px; padding:1px 6px; border-radius:999px; background:rgba(52,152,219,.16); color:#9ed0ff; font-size:10px; font-weight:800; }
 </style>
 </head>
 <body>
 
 <!-- Top bar -->
 <div class="top-bar">
-  <h1>📍 BD地图 v3.3.0</h1>
+  <h1>📍 BD地图 v3.3.2</h1>
   <span class="stats" id="statsText">0 机构</span>
   <button class="coverage-exit" id="btnExitCoverage" title="退出1km覆盖" style="display:none">↩ 退出1km</button>
   <button class="top-btn" id="btnDashboard" title="数据看板">📊</button>
@@ -849,7 +855,7 @@ body.entry-point-mode .point-only-hint { display:block; }
 <div class="dashboard-panel" id="dashboardPanel">
   <div class="list-header">
     <button class="top-btn" onclick="closeDashboard()">←</button>
-    <h2>v3.3.0 数据看板</h2>
+    <h2>v3.3.2 数据看板</h2>
     <button class="top-btn" onclick="exportPriorityCsv()" title="导出优先线索">📤</button>
   </div>
   <div class="dashboard-body compact">
@@ -957,6 +963,12 @@ body.entry-point-mode .point-only-hint { display:block; }
   </div>
   <div class="mall-body">
     <div id="coverageSummary" class="mall-meta" style="padding:4px 4px 10px"></div>
+    <div class="coverage-source-filters" id="coverageSourceFilters">
+      <button class="coverage-filter-chip active" data-filter="all" onclick="setCoverageFilter('all')">全部</button>
+      <button class="coverage-filter-chip" data-filter="phone" onclick="setCoverageFilter('phone')">有电话</button>
+      <button class="coverage-filter-chip" data-filter="finddoc" onclick="setCoverageFilter('finddoc')">FindDoc</button>
+      <button class="coverage-filter-chip" data-filter="ehealth" onclick="setCoverageFilter('ehealth')">eHealth</button>
+    </div>
     <div class="export-row"><button onclick="exportCurrentCoverageCsv()">导出当前清单 CSV</button><button onclick="copyCurrentCoverageSummary()">复制摘要</button></div>
     <div id="coverageClinicList" class="coverage-clinic-list"></div>
   </div>
@@ -1921,19 +1933,48 @@ function selectMall(id) {
 }
 function openCoveragePanel() { const p=document.getElementById('coveragePanel'); p.classList.remove('combo-mode'); renderCoverageClinicPage(); p.classList.add('active'); updateCoverageUi(); }
 function closeCoveragePanel() { const p=document.getElementById('coveragePanel'); p.classList.remove('active'); p.classList.remove('combo-mode'); updateCoverageUi(); }
+function getClinicSourceLabel(p) {
+  const src = String(p.source || (p.finddocUrl ? 'finddoc' : '') || ((p.visits||[]).map(v=>v.note||'').join(' '))).toLowerCase();
+  if (src.includes('finddoc')) return 'FindDoc';
+  if (src.includes('ehealth') || src.includes('hcp')) return 'eHealth';
+  if (src.includes('中醫藥管理') || src.includes('cmchk')) return 'CMCHK';
+  return '';
+}
+function passCoverageFilter(p) {
+  const f = coverageFilter || 'all';
+  if (f === 'all') return true;
+  if (f === 'phone') return !!(p.phone || p.contactPhone);
+  const label = getClinicSourceLabel(p).toLowerCase();
+  if (f === 'finddoc') return label === 'finddoc';
+  if (f === 'ehealth') return label === 'ehealth';
+  return true;
+}
+function setCoverageFilter(f) {
+  coverageFilter = f || 'all';
+  document.querySelectorAll('.coverage-filter-chip').forEach(b => b.classList.toggle('active', b.dataset.filter === coverageFilter));
+  if (document.getElementById('coveragePanel').classList.contains('combo-mode') && activeComboResultTab) renderComboCoveragePage(activeComboResultTab);
+  else renderCoverageClinicPage();
+}
+function clinicBadges(p) {
+  const phone = p.phone ? '<span class="phone-badge">电话</span>' : '';
+  const src = getClinicSourceLabel(p);
+  const source = src ? `<span class="source-badge">${esc(src)}</span>` : '';
+  return phone + source;
+}
 function renderCoverageClinicPage() {
   const selected = getCoverageTargetById(selectedMallId);
   const title = document.getElementById('coverageTitle');
   const summary = document.getElementById('coverageSummary');
   const box = document.getElementById('coverageClinicList');
   if (!selected || !box) return;
-  const hits = getMallClinics(selected);
+  const allHits = getMallClinics(selected);
+  const hits = allHits.filter(passCoverageFilter);
   title.textContent = `${selected.name} · 1公里诊所`;
-  summary.textContent = `1公里内未接触诊所 ${hits.length} 家，已按距离由近到远排序。可点“退出1km”或再次选择同一覆盖中心退出。`;
+  summary.textContent = `当前 ${hits.length}/${allHits.length} 家｜有电话 ${allHits.filter(x=>x.phone).length} 家｜按距离排序`;
   box.innerHTML = hits.length ? hits.map((p,i) => {
     const d = p._distanceKm !== undefined ? p._distanceKm : distanceKm(selected.lat, selected.lng, p.lat, p.lng);
     return `<div class="coverage-clinic-item" onclick="goToPlace('${jsStr(p.id)}')">
-      <div><span class="rank">${i+1}</span><strong>${esc(p.name)}</strong> <span class="distance">${d.toFixed(2)} km</span></div>
+      <div><span class="rank">${i+1}</span><strong>${esc(p.name)}</strong>${clinicBadges(p)} <span class="distance">${d.toFixed(2)} km</span></div>
       <div class="meta">${esc(p.address || '')}<br>${esc(p.contact || '')}${p.phone ? ' · ' + esc(p.phone) : ''}</div>
       <div class="copy-row" onclick="event.stopPropagation()">
         <button class="copy-btn" onclick="copyText('${jsStr(p.id)}','address')">复制地址</button>
@@ -1949,6 +1990,7 @@ let comboSelectedIds = new Set();
 let comboSearchTerm = '';
 let comboTab = 'union';
 let activeComboResultTab = null;
+let coverageFilter = 'all';
 let lastComboAnalysis = null;
 function getAllCoverageCenters() {
   const pointCenters = places.filter(p => isPointEntry(p)).map(pointToCoverageTarget);
@@ -2113,7 +2155,7 @@ function renderComboCoveragePage(tab) {
   title.textContent = `组合${label}`;
   const strictUnion = getStrictComboRows('union', a);
   const strictIntersection = getStrictComboRows('intersection', a);
-  let rows = getStrictComboRows(tab, a);
+  let rows = getStrictComboRows(tab, a).filter(passCoverageFilter);
   const strictDuplicate = Math.max(0, a.sumCount - strictUnion.length);
   const strictRate = a.sumCount ? strictDuplicate / a.sumCount : 0;
   summary.textContent = `${a.centers.length}个中心｜并集${strictUnion.length}｜交集${strictIntersection.length}｜重叠${Math.round(strictRate*100)}%｜已严格限制1km内`;
@@ -2122,7 +2164,7 @@ function renderComboCoveragePage(tab) {
     const covered = (p._coveredBy||[]).map(x=>x.center.name).join(' / ');
     const meta = tab === 'exclusive' ? `独占：${esc(p._exclusiveCenter || '')}` : `${p._coveredBy.length}点覆盖：${esc(covered)}`;
     const dist = ((p._nearestDistance!==undefined?p._nearestDistance:p._distanceKm)||0).toFixed(2);
-    return `<div class="coverage-clinic-item" onclick="goToPlace('${jsStr(p.id)}')"><div><span class="rank">${i+1}</span><strong>${esc(p.name)}</strong> <span class="combo-badge">${label}</span></div><div class="meta">${meta}｜近${esc(p._nearestCenter || p._centerName || '')} ${dist}km<br>${esc(p.address || '')}</div><div class="copy-row" onclick="event.stopPropagation()"><button class="copy-btn" onclick="copyText('${jsStr(p.id)}','address')">复制地址</button><button class="copy-btn" onclick="copyText('${jsStr(p.id)}','phone')">复制电话</button></div></div>`;
+    return `<div class="coverage-clinic-item" onclick="goToPlace('${jsStr(p.id)}')"><div><span class="rank">${i+1}</span><strong>${esc(p.name)}</strong>${clinicBadges(p)} <span class="combo-badge">${label}</span></div><div class="meta">${meta}｜近${esc(p._nearestCenter || p._centerName || '')} ${dist}km<br>${esc(p.address || '')}</div><div class="copy-row" onclick="event.stopPropagation()"><button class="copy-btn" onclick="copyText('${jsStr(p.id)}','address')">复制地址</button><button class="copy-btn" onclick="copyText('${jsStr(p.id)}','phone')">复制电话</button></div></div>`;
   }).join('') : '<div class="list-empty">当前分类没有诊所</div>';
 }
 function openComboPanel() { closeMallPanel(); renderComboPicker(); renderComboAnalysis(); renderMapComboBar(); renderMalls(); document.getElementById('comboPanel').classList.add('active'); }
@@ -2199,7 +2241,7 @@ function exportComboCsv() {
 function getCurrentCoverageRows() {
   const selected = getCoverageTargetById(selectedMallId);
   if (!selected) return [];
-  return getMallClinics(selected).map((p,i) => ({
+  return getMallClinics(selected).filter(passCoverageFilter).map((p,i) => ({
     rank: i+1,
     mall: selected.name,
     mallStatus: selected.coopStatus || '待评估',
@@ -3129,7 +3171,7 @@ function exportPriorityCsv() {
 }
 async function copyDashboardSummary() {
   const pool=getPriorityPool();
-  const text=`BDmap v3.3.0 今日BD汇报摘要\n总线索：${pool.length}\n高优先级：${pool.filter(p=>p._priority.score>=80).length}\n已推进机构：${places.filter(p=>!isUncontactedPlace(p)).length}\n有意向：${places.filter(p=>normalizeStatus(p.status)==='有意向').length}\n待电话/补资料：${pool.filter(p=>['电话联系','补资料'].includes(actionCategory(p._priority.action))).length}\nTop5：\n`+pool.slice(0,5).map((p,i)=>`${i+1}. ${p.name} ${p._priority.score}分｜${p._priority.action}`).join('\n');
+  const text=`BDmap v3.3.2 今日BD汇报摘要\n总线索：${pool.length}\n高优先级：${pool.filter(p=>p._priority.score>=80).length}\n已推进机构：${places.filter(p=>!isUncontactedPlace(p)).length}\n有意向：${places.filter(p=>normalizeStatus(p.status)==='有意向').length}\n待电话/补资料：${pool.filter(p=>['电话联系','补资料'].includes(actionCategory(p._priority.action))).length}\nTop5：\n`+pool.slice(0,5).map((p,i)=>`${i+1}. ${p.name} ${p._priority.score}分｜${p._priority.action}`).join('\n');
   await navigator.clipboard.writeText(text); toast('汇报摘要已复制，可直接发老板/群里');
 }
 function openTopPriorityOnMap() {
