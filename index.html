@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-<title>BDmap-v3.4.6</title>
+<title>BDmap-v3.4.7</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -629,7 +629,7 @@ body.home-mode .map-home-return { display:none !important; }
 <div class="lead-home" id="leadHome">
   <div class="lead-home-header">
     <div class="lead-home-top">
-      <h1>📍 BDmap-v3.4.6</h1>
+      <h1>📍 BDmap-v3.4.7</h1>
       <button class="lead-tab-btn primary" onclick="showLeadHome()">线索</button>
       <button class="lead-tab-btn" onclick="showMapHome()">地图</button>
       <button class="lead-tab-btn" onclick="openDashboardFromHome()">看板</button>
@@ -652,7 +652,7 @@ body.home-mode .map-home-return { display:none !important; }
 
 <!-- Top bar -->
 <div class="top-bar">
-  <h1>📍 BDmap-v3.4.6</h1>
+  <h1>📍 BDmap-v3.4.7</h1>
   <span class="stats" id="statsText">0 机构</span>
   <button class="coverage-exit" id="btnExitCoverage" title="退出1km覆盖" style="display:none">↩ 退出1km</button>
   <button class="top-btn" id="btnDashboard" title="数据看板">📊</button>
@@ -1066,7 +1066,7 @@ body.home-mode .map-home-return { display:none !important; }
       <button class="coverage-filter-chip" data-filter="finddoc" onclick="setCoverageFilter('finddoc')">FindDoc</button>
       <button class="coverage-filter-chip" data-filter="ehealth" onclick="setCoverageFilter('ehealth')">eHealth</button>
     </div>
-    <div class="export-row"><button onclick="exportCurrentCoverageCsv()">导出统一字段CSV</button><button onclick="exportCurrentCoverageErrorTemplate()">报错上传模板</button><button onclick="copyCurrentCoverageSummary()">复制摘要</button></div>
+    <div class="export-row"><button onclick="exportCurrentCoverageCsv()">导出统一字段CSV</button><button onclick="exportCurrentCoverageErrorTemplate()">报错上传Excel模板</button><button onclick="copyCurrentCoverageSummary()">复制摘要</button></div>
     <div id="coverageClinicList" class="coverage-clinic-list"></div>
   </div>
 </div>
@@ -1086,6 +1086,7 @@ body.home-mode .map-home-return { display:none !important; }
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
 <script>
 // ============ FIREBASE ============
 const firebaseConfig = {
@@ -2685,10 +2686,50 @@ function clinicExportRow(p, extra={}) {
     error_upload_action: ''
   };
 }
-function exportErrorUploadTemplate(rows, filename) {
+async function exportErrorUploadTemplate(rows, filename) {
   const out = rows.map(r => ({...r, error_upload_action:'', error_type:'', error_note:''}));
-  downloadCsv(filename, CLINIC_EXPORT_HEADERS, out);
-  toast('已导出报错上传模板：error_upload_action只能填：' + ERROR_UPLOAD_ACTIONS.filter(Boolean).join('/'));
+  const xlsxName = filename.replace(/\.csv$/i, '.xlsx');
+  if (!window.ExcelJS) {
+    downloadCsv(filename, CLINIC_EXPORT_HEADERS, out);
+    toast('Excel组件未加载，已先导出CSV；CSV无法限制下拉');
+    return;
+  }
+  const wb = new ExcelJS.Workbook();
+  const ws = wb.addWorksheet('报错上传');
+  ws.addRow(CLINIC_EXPORT_HEADERS);
+  out.forEach(r => ws.addRow(CLINIC_EXPORT_HEADERS.map(h => r[h] || '')));
+  ws.views = [{ state:'frozen', ySplit:1 }];
+  ws.getRow(1).font = { bold:true, color:{argb:'FFFFFFFF'} };
+  ws.getRow(1).fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FF1F4E78'} };
+  ws.getRow(1).alignment = { vertical:'middle', horizontal:'center' };
+  CLINIC_EXPORT_HEADERS.forEach((h,i) => { ws.getColumn(i+1).width = Math.min(Math.max(String(h).length + 4, 14), 36); });
+  const actionCol = CLINIC_EXPORT_HEADERS.indexOf('error_upload_action') + 1;
+  const noteCol = CLINIC_EXPORT_HEADERS.indexOf('error_note') + 1;
+  const errorTypeCol = CLINIC_EXPORT_HEADERS.indexOf('error_type') + 1;
+  ws.getColumn(actionCol).width = 18;
+  ws.getColumn(noteCol).width = 34;
+  ws.getColumn(errorTypeCol).width = 18;
+  const allowed = ERROR_UPLOAD_ACTIONS.filter(Boolean).join(',');
+  for (let r=2; r<=Math.max(out.length + 1, 300); r++) {
+    const cell = ws.getCell(r, actionCol);
+    cell.dataValidation = {
+      type:'list',
+      allowBlank:true,
+      formulae:[`"${allowed}"`],
+      showErrorMessage:true,
+      errorTitle:'只能选择固定报错类型',
+      error:'请选择：' + allowed,
+      promptTitle:'报错动作',
+      prompt:'只能从下拉中选择；不处理请留空。'
+    };
+  }
+  ws.getCell(1, actionCol).note = '只能选择：' + allowed + '；空白=不处理';
+  ws.getCell(1, noteCol).note = '自由填写说明，例如：正确地址、空号、与哪条重复等';
+  const buf = await wb.xlsx.writeBuffer();
+  const blob = new Blob([buf], {type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = xlsxName; a.click(); URL.revokeObjectURL(url);
+  toast('已导出Excel报错上传模板，下拉列已锁定选项');
 }
 
 function exportComboCsv() {
@@ -3757,7 +3798,7 @@ async function copyDashboardSummary() {
     return `【${label}】${stats}\n${top}`;
   }).join('\n\n');
   const unclaimedPool = pool.filter(p => groupOwnerKey(p) === 'unclaimed');
-  const text = `BDmap v3.4.6 今日BD汇报摘要\n总优先池：${pool.length}\n高优先级：${totalHigh}\n已推进机构：${pushed.filter(p=>!isUncontactedPlace(p)).length}\n有意向：${totalInterested}\n已合作：${totalCoop}\n待核实：${totalError}\n未认领优先线索：${unclaimedPool.length}\n\n按用户拆分：\n${ownerBlocks}`;
+  const text = `BDmap v3.4.7 今日BD汇报摘要\n总优先池：${pool.length}\n高优先级：${totalHigh}\n已推进机构：${pushed.filter(p=>!isUncontactedPlace(p)).length}\n有意向：${totalInterested}\n已合作：${totalCoop}\n待核实：${totalError}\n未认领优先线索：${unclaimedPool.length}\n\n按用户拆分：\n${ownerBlocks}`;
   await navigator.clipboard.writeText(text); toast('已复制按用户拆分的汇报摘要');
 }
 function openTopPriorityOnMap() {
