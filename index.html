@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-<title>BD地图 v3.3.2 - 电话来源筛选版</title>
+<title>BDmap-v3.3.6</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -571,7 +571,7 @@ body.entry-point-mode .point-only-hint { display:block; }
 
 <!-- Top bar -->
 <div class="top-bar">
-  <h1>📍 BD地图 v3.3.2</h1>
+  <h1>📍 BDmap-v3.3.6</h1>
   <span class="stats" id="statsText">0 机构</span>
   <button class="coverage-exit" id="btnExitCoverage" title="退出1km覆盖" style="display:none">↩ 退出1km</button>
   <button class="top-btn" id="btnDashboard" title="数据看板">📊</button>
@@ -1504,10 +1504,24 @@ function pointToCoverageTarget(p) {
     isPointCoverage: true
   };
 }
+function clearComboModeSilent() {
+  comboSelectedIds.clear();
+  lastComboAnalysis = null;
+  activeComboResultTab = null;
+  if (comboResultLayer) comboResultLayer.clearLayers();
+  const bar = document.getElementById('mapComboBar');
+  if (bar) bar.classList.remove('active');
+}
+function clearSingleCoverageSilent() {
+  selectedMallId = null;
+  const panel = document.getElementById('coveragePanel');
+  if (panel && !panel.classList.contains('combo-mode')) closeCoveragePanel();
+}
 function selectPointCoverage(id) {
   closeDashboard();
   const p = places.find(x => x.id === id);
   if (!p || !isPointEntry(p)) return;
+  clearComboModeSilent();
   selectedMallId = id;
   map.setView([p.lat,p.lng],15);
   renderMalls(); renderMarkers(); renderMallList(); updateCoverageUi(); openCoveragePanel();
@@ -1994,6 +2008,7 @@ function selectMall(id) {
     closeCoveragePanel();
     return;
   }
+  clearComboModeSilent();
   selectedMallId = id;
   map.setView([m.lat, m.lng], 15);
   renderMalls(); renderMarkers(); renderMallList(); updateCoverageUi();
@@ -2121,16 +2136,18 @@ function analyzeCoverageCombo() {
 }
 
 function showMapComboHint() {
+  clearSingleCoverageSilent();
   document.getElementById('mapComboBar').classList.add('active');
-  renderMapComboBar();
+  renderMalls(); renderMarkers(); renderMapComboBar(); updateCoverageUi();
   toast('点地图上的商场/点位，再点“加入组合”');
 }
 function addComboCenter(id) {
+  clearSingleCoverageSilent();
   if (comboSelectedIds.has(id)) { toast('已在组合中'); renderMapComboBar(); return; }
   if (comboSelectedIds.size >= 5) { toast('最多选择5个覆盖中心'); return; }
   comboSelectedIds.add(id);
   document.getElementById('mapComboBar').classList.add('active');
-  renderMalls(); renderMapComboBar();
+  renderMalls(); renderMarkers(); renderMapComboBar(); updateCoverageUi();
   const c = getCoverageTargetById(id);
   toast(`已加入组合：${c ? c.name : ''}`);
 }
@@ -2173,6 +2190,7 @@ function renderMapComboBar() {
   stats.textContent = `并集 ${a.unionCount} 家｜交集 ${a.intersection.length} 家｜重复 ${a.duplicateCount}｜重叠率 ${Math.round(a.overlapRate*100)}%（${overlapLabel(a.overlapRate)}）`;
 }
 function openComboResultOnMap(tab) {
+  clearSingleCoverageSilent();
   comboTab = tab;
   activeComboResultTab = tab;
   const a = analyzeCoverageCombo();
@@ -2258,7 +2276,7 @@ function renderComboCoveragePage(tab) {
     return `<div class="coverage-clinic-item ${rowClass}" onclick="goToPlace('${jsStr(p.id)}')"><div><span class="rank">${i+1}</span><strong>${esc(p.name)}</strong>${getCoverageStatusBadge(p)}${clinicBadges(p)} <span class="combo-badge">${label}</span></div><div class="meta">${meta}｜近${esc(p._nearestCenter || p._centerName || '')} ${dist}km<br>${esc(p.address || '')}</div><div class="copy-row" onclick="event.stopPropagation()"><button class="copy-btn" onclick="copyText('${jsStr(p.id)}','address')">复制地址</button><button class="copy-btn" onclick="copyText('${jsStr(p.id)}','phone')">复制电话</button></div></div>`;
   }).join('') : '<div class="list-empty">当前分类没有诊所</div>';
 }
-function openComboPanel() { closeMallPanel(); renderComboPicker(); renderComboAnalysis(); renderMapComboBar(); renderMalls(); document.getElementById('comboPanel').classList.add('active'); }
+function openComboPanel() { clearSingleCoverageSilent(); closeMallPanel(); renderComboPicker(); renderComboAnalysis(); renderMapComboBar(); renderMalls(); renderMarkers(); document.getElementById('comboPanel').classList.add('active'); }
 function closeComboPanel() { document.getElementById('comboPanel').classList.remove('active'); }
 function toggleComboCenter(id, checked) {
   if (checked && comboSelectedIds.size >= 5) { toast('最多选择5个覆盖中心'); renderComboPicker(); return; }
