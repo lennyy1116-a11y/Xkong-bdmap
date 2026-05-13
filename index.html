@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-<title>BDmap-v3.4.8</title>
+<title>BDmap-v3.5.0</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -338,7 +338,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .list-check { width:18px; height:18px; margin-top:2px; accent-color:var(--primary); flex-shrink:0; }
 
 
-.coverage-exit { display:none !important; position: fixed; top: auto; bottom: max(112px, calc(env(safe-area-inset-bottom) + 112px)); left: 50%; transform: translateX(-50%); z-index: 5000; border:0; border-radius:999px; padding:12px 18px; background:var(--red); color:#fff; font-weight:800; box-shadow:0 4px 16px rgba(0,0,0,.45); }
 .coverage-clinic-list { margin:10px 0 14px; }
 .coverage-clinic-item { background:var(--card); border:1px solid rgba(230,126,34,.55); border-radius:12px; padding:11px; margin-bottom:8px; cursor:pointer; }
 .coverage-clinic-item .rank { display:inline-flex; min-width:24px; height:24px; border-radius:50%; background:var(--orange); color:#fff; align-items:center; justify-content:center; font-size:12px; font-weight:800; margin-right:6px; }
@@ -608,9 +607,7 @@ body.home-mode .lead-home { display:flex; }
 .lead-empty { text-align:center; color:var(--text2); padding:36px 12px; font-size:14px; }
 
 
-.map-home-return { position:fixed; left:12px; top:max(58px, calc(env(safe-area-inset-top) + 58px)); z-index:1300; border:0; border-radius:999px; padding:9px 13px; background:rgba(22,33,62,.94); color:#fff; font-size:12px; font-weight:900; box-shadow:0 4px 18px rgba(0,0,0,.38); backdrop-filter:blur(8px); }
-body.home-mode .map-home-return { display:none !important; }
-.lead-distance { color:#ffb65c; font-weight:900; }
+body.home-mode .lead-distance { color:#ffb65c; font-weight:900; }
 
 
 .lead-distance-field { margin-top:6px; display:inline-flex; align-items:center; gap:4px; border-radius:999px; padding:3px 8px; background:rgba(230,126,34,.14); color:#ffc078; font-size:12px; font-weight:900; }
@@ -624,23 +621,27 @@ body.home-mode .map-home-return { display:none !important; }
 
 .nav-pill-btn { border:1px solid #444; background:var(--bg); color:var(--text); border-radius:999px; padding:7px 11px; font-size:12px; font-weight:900; min-width:auto; width:auto; height:auto; }
 .nav-pill-btn.primary { background:var(--primary); border-color:var(--primary); color:#fff; }
-.map-quick-nav { position:fixed; right:10px; top:max(54px, calc(env(safe-area-inset-top) + 54px)); z-index:1300; display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end; max-width:76vw; }
-body.home-mode .map-quick-nav { display:none !important; }
-.map-home-return { top:max(104px, calc(env(safe-area-inset-top) + 104px)); }
-.batch-import-note { margin-top:6px; color:var(--text2); font-size:11px; line-height:1.35; }
+body.home-mode .batch-import-note { margin-top:6px; color:var(--text2); font-size:11px; line-height:1.35; }
+
+
+.app-nav { position:fixed; right:10px; top:max(10px, env(safe-area-inset-top)); z-index:2900; display:flex; gap:6px; background:rgba(15,20,35,.78); border:1px solid rgba(255,255,255,.1); border-radius:999px; padding:5px; backdrop-filter:blur(10px); box-shadow:0 4px 18px rgba(0,0,0,.28); }
+.app-nav button { border:0; background:transparent; color:var(--text2); border-radius:999px; padding:7px 10px; font-size:12px; font-weight:900; }
+.app-nav button.active { background:var(--primary); color:#fff; }
+body.home-mode .top-bar { display:none !important; }
+body.home-mode .app-nav { display:flex !important; }
+.lead-home-header { padding-top: max(52px, calc(env(safe-area-inset-top) + 52px)) !important; }
+.dashboard-panel .list-header { padding-top:max(52px, calc(env(safe-area-inset-top) + 52px)); }
 
 </style>
 </head>
 <body class="home-mode">
+<div class="app-nav" id="appNav"><button data-tab="leads" onclick="showLeadHome()">线索</button><button data-tab="map" onclick="showMapHome()">地图</button><button data-tab="dashboard" onclick="openDashboardFromHome()">看板</button></div>
 
 <!-- Lead list home -->
 <div class="lead-home" id="leadHome">
   <div class="lead-home-header">
     <div class="lead-home-top">
-      <h1>📍 BDmap-v3.4.8</h1>
-      <button class="lead-tab-btn primary" onclick="showLeadHome()">线索</button>
-      <button class="lead-tab-btn" onclick="showMapHome()">地图</button>
-      <button class="lead-tab-btn" onclick="openDashboardFromHome()">看板</button>
+      <h1>📍 BDmap-v3.5.0</h1>
       <button class="lead-tab-btn" onclick="triggerBatchErrorImport()">上传报错</button>
       <input type="file" id="batchErrorFile" accept=".xlsx,.xls" style="display:none" onchange="handleBatchErrorImport(event)">
     </div>
@@ -662,19 +663,12 @@ body.home-mode .map-quick-nav { display:none !important; }
 
 <!-- Top bar -->
 <div class="top-bar">
-  <h1>📍 BDmap-v3.4.8</h1>
-  <span class="stats" id="statsText">0 机构</span>
-  <button class="coverage-exit" id="btnExitCoverage" title="退出1km覆盖" style="display:none">↩ 退出1km</button>
-  <button class="nav-pill-btn" id="btnDashboard" title="数据看板">📊 看板</button>
-  <button class="nav-pill-btn" id="btnMall" title="商场覆盖">🏬 商场</button>
-  <button class="nav-pill-btn" id="btnList" title="列表">☰ 机构</button>
+  <h1>📍 BDmap-v3.5.0</h1>
+  <span class="stats" id="statsText">0 机构</span>  <button class="nav-pill-btn" id="btnMall" title="商场覆盖">🏬 商场</button>
   <button class="nav-pill-btn" id="btnSettings" title="设置">⚙ 设置</button>
 </div>
 
-<!-- Map -->
-<button class="map-home-return" id="btnLeadHomeReturn" onclick="showLeadHome()">← 线索列表</button>
-<div class="map-quick-nav"><button class="nav-pill-btn primary" onclick="showLeadHome()">线索</button><button class="nav-pill-btn" onclick="openDashboard()">看板</button><button class="nav-pill-btn" onclick="openMallPanel()">商场</button></div>
-<div id="map"></div>
+<!-- Map --><div id="map"></div>
 <div class="home-hint" id="homeHint"><button class="home-hint-close" onclick="hideHomeHint()">×</button>首页仅显示团队已跟进机构；官方中医名录是底层基础诊所池，只在商场1公里覆盖分析中显示。</div>
 
 
@@ -1043,7 +1037,7 @@ body.home-mode .map-quick-nav { display:none !important; }
     <button class="top-btn" onclick="closeComboPanel()">←</button>
     <h2>覆盖组合分析</h2>
     <button class="top-btn" onclick="copyComboSummary()" title="复制摘要">📋</button>
-    <button class="top-btn" onclick="exportComboCsv()" title="导出CSV">📤</button>
+    <button class="top-btn" onclick="exportComboCsv()" title="导出表格">📤</button>
   </div>
   <div class="combo-body">
     <div class="inline-search" style="padding-left:0;padding-right:0"><input type="text" id="comboSearchInput" placeholder="搜索商场/点位，勾选2-5个" oninput="comboSearchTerm=this.value.trim().toLowerCase(); renderComboPicker();"></div>
@@ -1077,7 +1071,7 @@ body.home-mode .map-quick-nav { display:none !important; }
       <button class="coverage-filter-chip" data-filter="finddoc" onclick="setCoverageFilter('finddoc')">FindDoc</button>
       <button class="coverage-filter-chip" data-filter="ehealth" onclick="setCoverageFilter('ehealth')">eHealth</button>
     </div>
-    <div class="export-row"><button onclick="exportCurrentCoverageCsv()">导出统一字段CSV</button><button onclick="exportCurrentCoverageErrorTemplate()">报错上传Excel模板</button><button onclick="copyCurrentCoverageSummary()">复制摘要</button></div>
+    <div class="export-row"><button onclick="exportCurrentCoverageCsv()">导出表格</button><button onclick="exportCurrentCoverageErrorTemplate()">报错上传Excel模板</button><button onclick="copyCurrentCoverageSummary()">复制摘要</button></div>
     <div id="coverageClinicList" class="coverage-clinic-list"></div>
   </div>
 </div>
@@ -1237,6 +1231,7 @@ function init() {
   loadMalls();
   loadBaseClinics();
   restoreHomeHintState();
+  setAppTab('leads');
   renderLeadHomeList();
 
   // Map click to add marker
@@ -1914,18 +1909,23 @@ function initCoveragePanelDrag() {
 
 
 // ============ LEAD HOME ============
+function setAppTab(tab) { document.querySelectorAll('#appNav button').forEach(b => b.classList.toggle('active', b.dataset.tab === tab)); }
 function showLeadHome() {
+  setAppTab('leads');
   document.body.classList.add('home-mode');
   closeList(); closeMallPanel(); closeCoveragePanel(); closeDashboard(); closeComboPanel();
   renderLeadHomeList();
   if (navigator.geolocation && !window._leadHomeLocatedOnce) { window._leadHomeLocatedOnce = true; locateMe(true); }
 }
 function showMapHome() {
+  setAppTab('map');
+  closeDashboard();
   document.body.classList.remove('home-mode');
   setTimeout(() => { if (map) map.invalidateSize(); }, 80);
 }
 function openDashboardFromHome() {
-  showMapHome();
+  setAppTab('dashboard');
+  document.body.classList.remove('home-mode');
   setTimeout(() => openDashboard(), 90);
 }
 function setLeadFilter(f) {
@@ -2132,8 +2132,6 @@ function locateLeadOnMap(id) {
 
 // ============ MALL COVERAGE ============
 function updateCoverageUi() {
-  const btn = document.getElementById('btnExitCoverage');
-  if (btn) btn.style.display = 'none';
   const reopen = document.getElementById('btnReopenCoverage');
   const panel = document.getElementById('coveragePanel');
   if (reopen) {
@@ -2674,7 +2672,7 @@ function downloadCsv(filename, headers, rows) {
   const a = document.createElement('a'); a.href = url; a.download = filename; a.click(); URL.revokeObjectURL(url);
 }
 async function downloadXlsx(filename, headers, rows, options={}) {
-  if (!window.ExcelJS) { downloadCsv(filename.replace(/\.xlsx$/i,'.csv'), headers, rows); toast('Excel组件未加载，已导出CSV'); return; }
+  if (!window.ExcelJS) { downloadCsv(filename.replace(/\.xlsx$/i,'.csv'), headers, rows); toast('Excel组件未加载，已导出兼容表格'); return; }
   const wb = new ExcelJS.Workbook();
   const ws = wb.addWorksheet(options.sheetName || '数据');
   ws.addRow(headers);
@@ -2735,16 +2733,25 @@ async function exportErrorUploadTemplate(rows, filename) {
   await downloadXlsx(xlsxName, CLINIC_EXPORT_HEADERS, out, { sheetName:'报错上传', errorValidation:true });
   toast('已导出Excel报错上传模板，下拉列已锁定选项');
 }
-function exportComboCsv() {
+async function exportComboCsv() {
   const a = lastComboAnalysis || analyzeCoverageCombo();
   if (!a) { toast('请先选择至少2个覆盖中心'); return; }
-  const headers = ['mode','name','address','phone','coveredBy','nearestCenter','nearestDistanceKm'];
+  const headers = [...CLINIC_EXPORT_HEADERS, 'combo_mode','covered_by','nearest_center','nearest_distance_km'];
   const rows = [];
-  a.union.forEach(p => rows.push({mode:'union', name:p.name, address:p.address, phone:p.phone||p.contact||'', coveredBy:(p._coveredBy||[]).map(x=>x.center.name).join('/'), nearestCenter:p._nearestCenter||'', nearestDistanceKm:(p._nearestDistance||0).toFixed(3)}));
-  a.intersection.forEach(p => rows.push({mode:'intersection', name:p.name, address:p.address, phone:p.phone||p.contact||'', coveredBy:(p._coveredBy||[]).map(x=>x.center.name).join('/'), nearestCenter:p._nearestCenter||'', nearestDistanceKm:(p._nearestDistance||0).toFixed(3)}));
-  a.exclusiveByCenter.forEach(x => x.rows.forEach(p => rows.push({mode:'exclusive:'+x.center.name, name:p.name, address:p.address, phone:p.phone||p.contact||'', coveredBy:x.center.name, nearestCenter:x.center.name, nearestDistanceKm:(p._distanceKm||0).toFixed(3)})));
-  const csv = [headers.join(',')].concat(rows.map(r => headers.map(h => '"'+String(r[h]||'').replace(/"/g,'""')+'"').join(','))).join('\n');
-  const blob = new Blob(['\ufeff'+csv], {type:'text/csv;charset=utf-8'}); const url=URL.createObjectURL(blob); const link=document.createElement('a'); link.href=url; link.download='覆盖组合分析.csv'; link.click(); URL.revokeObjectURL(url); toast('已导出组合CSV');
+  a.union.forEach(p => rows.push({
+    ...clinicExportRow(p, { coverage_mode:'combo_union', coverage_center:a.centers.map(c=>c.name).join(' + '), distance_km:(p._nearestDistance||0).toFixed(3) }),
+    combo_mode:'union', covered_by:(p._coveredBy||[]).map(x=>x.center.name).join('/'), nearest_center:p._nearestCenter||'', nearest_distance_km:(p._nearestDistance||0).toFixed(3)
+  }));
+  a.intersection.forEach(p => rows.push({
+    ...clinicExportRow(p, { coverage_mode:'combo_intersection', coverage_center:a.centers.map(c=>c.name).join(' + '), distance_km:(p._nearestDistance||0).toFixed(3) }),
+    combo_mode:'intersection', covered_by:(p._coveredBy||[]).map(x=>x.center.name).join('/'), nearest_center:p._nearestCenter||'', nearest_distance_km:(p._nearestDistance||0).toFixed(3)
+  }));
+  a.exclusiveByCenter.forEach(x => x.rows.forEach(p => rows.push({
+    ...clinicExportRow(p, { coverage_mode:'combo_exclusive', coverage_center:x.center.name, distance_km:(p._distanceKm||0).toFixed(3) }),
+    combo_mode:'exclusive:' + x.center.name, covered_by:x.center.name, nearest_center:x.center.name, nearest_distance_km:(p._distanceKm||0).toFixed(3)
+  })));
+  await downloadXlsx('覆盖组合分析_统一字段.xlsx', headers, rows, { sheetName:'覆盖组合分析', errorValidation:true });
+  toast('已导出组合分析表格');
 }
 function getCurrentCoverageRows() {
   const selected = getCoverageTargetById(selectedMallId);
@@ -2758,8 +2765,8 @@ function getCurrentCoverageRows() {
 async function exportCurrentCoverageCsv() {
   const rows = getCurrentCoverageRows();
   if (!rows.length) { toast('当前没有可导出的诊所'); return; }
-  await downloadXlsx(`${rows[0].coverage_center}_1km诊所清单_统一字段.xlsx`, CLINIC_EXPORT_HEADERS, rows, { sheetName:'1km诊所清单' });
-  toast('已按统一字段导出Excel');
+  await downloadXlsx(`${rows[0].coverage_center}_1km诊所清单_统一字段.xlsx`, CLINIC_EXPORT_HEADERS, rows, { sheetName:'1km诊所清单', errorValidation:true });
+  toast('已按统一字段导出Excel，error_upload_action已加下拉');
 }
 function exportCurrentCoverageErrorTemplate() {
   const rows = getCurrentCoverageRows();
@@ -3713,7 +3720,7 @@ function scoreBadgeWithDetailHtml(id, pr) {
   return `<div class="popup-detail"><span class="priority-badge clickable ${pr.level}" onclick="event.stopPropagation(); toggleScoreDetail('${jsStr(domId)}')">${pr.score} ${priorityLabel(pr.level)}</span></div><div class="score-breakdown-wrap" id="${esc(domId)}">${scoreBreakdownHtml(pr)}</div>`;
 }
 function enrichPriority(list) { return list.map(p => ({...p, _priority: calcPriority(p)})); }
-function openDashboard() { closeList(); closeMallPanel(); closeCoveragePanel(); renderDashboard(); document.getElementById('dashboardPanel').classList.add('active'); }
+function openDashboard() { setAppTab('dashboard'); closeList(); closeMallPanel(); closeCoveragePanel(); renderDashboard(); document.getElementById('dashboardPanel').classList.add('active'); }
 function closeDashboard() { document.getElementById('dashboardPanel').classList.remove('active'); }
 function getPriorityPool() {
   return enrichPriority([...places, ...baseClinics.filter(p => !places.some(x => x.id === 'place_'+p.id || (x.name===p.name && x.address===p.address)))])
@@ -3801,7 +3808,7 @@ async function copyDashboardSummary() {
     return `【${label}】${stats}\n${top}`;
   }).join('\n\n');
   const unclaimedPool = pool.filter(p => groupOwnerKey(p) === 'unclaimed');
-  const text = `BDmap v3.4.8 今日BD汇报摘要\n总优先池：${pool.length}\n高优先级：${totalHigh}\n已推进机构：${pushed.filter(p=>!isUncontactedPlace(p)).length}\n有意向：${totalInterested}\n已合作：${totalCoop}\n待核实：${totalError}\n未认领优先线索：${unclaimedPool.length}\n\n按用户拆分：\n${ownerBlocks}`;
+  const text = `BDmap v3.5.0 今日BD汇报摘要\n总优先池：${pool.length}\n高优先级：${totalHigh}\n已推进机构：${pushed.filter(p=>!isUncontactedPlace(p)).length}\n有意向：${totalInterested}\n已合作：${totalCoop}\n待核实：${totalError}\n未认领优先线索：${unclaimedPool.length}\n\n按用户拆分：\n${ownerBlocks}`;
   await navigator.clipboard.writeText(text); toast('已复制按用户拆分的汇报摘要');
 }
 
@@ -3927,10 +3934,7 @@ document.getElementById('btnAdd').onclick = () => {
 };
 
 document.getElementById('btnGps').onclick = () => locateMe(false);
-document.getElementById('btnExitCoverage').onclick = exitCoverageMode;
-document.getElementById('btnDashboard').onclick = openDashboard;
 document.getElementById('btnMall').onclick = openMallPanel;
-document.getElementById('btnList').onclick = openList;
 document.getElementById('btnSettings').onclick = openSettings;
 document.getElementById('btnSearch').onclick = openSearch;
 document.getElementById('sheetOverlay').onclick = closeSheet;
