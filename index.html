@@ -322,7 +322,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .mall-actions button { flex:1; padding:8px; border-radius:8px; border:1px solid #444; background:var(--bg); color:var(--text); }
 .mall-actions .primary { background:var(--orange); border-color:var(--orange); color:#fff; }
 .mall-marker { width:34px; height:34px; border-radius:50%; background:#e67e22; color:#fff; display:flex; align-items:center; justify-content:center; border:3px solid #fff; box-shadow:0 2px 10px rgba(0,0,0,.45); font-size:18px; }
-.custom-marker.highlighted-clinic { outline:3px solid #ff9f1a; box-shadow:0 0 0 5px rgba(255,159,26,.35), 0 4px 12px rgba(0,0,0,.55); transform:scale(1.15); }
+.custom-marker.highlighted-clinic { position:relative; box-shadow:0 2px 6px rgba(0,0,0,0.4), 0 0 0 4px rgba(255,159,26,.30); }
+.custom-marker.highlighted-clinic::after { content:'1km'; position:absolute; right:-13px; top:-10px; min-width:24px; height:15px; padding:0 4px; border-radius:999px; background:#ff9f1a; color:#1b1200; border:1px solid #fff; font-size:9px; font-weight:900; line-height:15px; box-shadow:0 2px 7px rgba(0,0,0,.42); }
+.custom-marker.highlighted-clinic.status-active { box-shadow:0 2px 6px rgba(0,0,0,0.4), 0 0 0 3px rgba(255,159,26,.34), 0 0 0 7px rgba(46,204,113,.22); }
+.custom-marker.highlighted-clinic.status-active::after { content:'已跟'; background:#2ecc71; color:#062b16; }
+.custom-marker.highlighted-clinic.status-intent { box-shadow:0 2px 6px rgba(0,0,0,0.4), 0 0 0 3px rgba(255,159,26,.34), 0 0 0 7px rgba(52,152,219,.24); }
+.custom-marker.highlighted-clinic.status-intent::after { content:'意向'; background:#3498db; color:#fff; }
 .bulk-tools { padding:8px 16px; background:var(--card); border-bottom:1px solid #333; display:flex; gap:8px; overflow-x:auto; }
 .bulk-tools button { flex-shrink:0; border:1px solid #444; background:var(--bg); color:var(--text); border-radius:16px; padding:6px 10px; font-size:12px; }
 .bulk-tools button.danger { background:var(--red); border-color:var(--red); color:#fff; }
@@ -338,16 +343,20 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 
 #coveragePanel {
   inset: auto 0 0 0;
-  height: 52vh;
-  max-height: 58vh;
+  height: 34vh;
+  max-height: 92vh;
   border-radius: 18px 18px 0 0;
   transform: translateY(100%);
   box-shadow: 0 -8px 30px rgba(0,0,0,.5);
+  transition: transform .25s ease, height .22s ease, max-height .22s ease;
 }
+#coveragePanel.expanded { height: 92vh; max-height: 92vh; }
 #coveragePanel.active { transform: translateY(0); }
 #coveragePanel .list-header { border-radius: 18px 18px 0 0; padding-top: 12px; }
 #coveragePanel .mall-body { padding-bottom: max(16px, env(safe-area-inset-bottom)); }
-.coverage-handle { width:42px; height:4px; border-radius:999px; background:#596070; margin:8px auto 0; }
+.coverage-handle { width:48px; height:5px; border-radius:999px; background:#596070; margin:8px auto 0; cursor:grab; touch-action:none; }
+.coverage-handle:active { cursor:grabbing; }
+.coverage-drag-hint { text-align:center; color:var(--text2); font-size:10px; margin-top:3px; user-select:none; }
 
 .coverage-reopen { position:fixed; left:50%; bottom:max(44px, calc(env(safe-area-inset-bottom) + 44px)); transform:translateX(-50%); z-index:1600; border:0; border-radius:999px; padding:10px 16px; background:var(--orange); color:#fff; font-weight:800; box-shadow:0 4px 18px rgba(0,0,0,.45); }
 .copy-row { display:flex; gap:8px; margin-top:8px; flex-wrap:wrap; }
@@ -496,7 +505,7 @@ body.entry-point-mode .point-only-hint { display:block; }
 .combo-center-chip button { border:0; background:transparent; color:#ffd3a4; font-weight:900; padding:0; }
 .combo-map-hint { color:#aeb6c8; font-size:11px; margin-top:5px; }
 
-#coveragePanel.combo-mode { height: 34vh; max-height: 38vh; }
+#coveragePanel.combo-mode { height: 34vh; max-height: 92vh; }
 #coveragePanel.combo-mode .coverage-handle { margin-top:6px; }
 #coveragePanel.combo-mode .list-header { padding:8px 10px 6px; min-height:auto; }
 #coveragePanel.combo-mode .list-header h2 { font-size:15px; }
@@ -540,7 +549,8 @@ body.entry-point-mode .point-only-hint { display:block; }
 }
 
 #coveragePanel.combo-mode .export-row { display:none; }
-#coveragePanel.combo-mode { height: 31vh; max-height: 35vh; }
+#coveragePanel.combo-mode:not(.expanded) { height: 34vh; max-height: 38vh; }
+#coveragePanel.combo-mode.expanded { height: 92vh; max-height: 92vh; }
 #coveragePanel.combo-mode .list-header { padding:6px 10px 4px; }
 #coveragePanel.combo-mode .mall-body { padding-top:4px; }
 #coveragePanel.combo-mode .coverage-clinic-item { padding:6px 8px; }
@@ -955,7 +965,8 @@ body.entry-point-mode .point-only-hint { display:block; }
 
 <!-- Coverage clinic panel -->
 <div class="mall-panel" id="coveragePanel">
-  <div class="coverage-handle"></div>
+  <div class="coverage-handle" id="coverageHandle" onclick="toggleCoveragePanelSize()"></div>
+  <div class="coverage-drag-hint" id="coverageDragHint">上拉全屏 / 下拉收起</div>
   <div class="list-header">
     <button class="top-btn" onclick="closeCoveragePanel()">←</button>
     <h2 id="coverageTitle">1公里未接触诊所</h2>
@@ -1168,6 +1179,8 @@ function init() {
   });
   map.on('mouseup mousemove', () => clearTimeout(pressTimer));
 
+  initCoveragePanelDrag();
+
   renderOwnerFilters();
   renderMarkers();
   renderMalls();
@@ -1220,9 +1233,13 @@ function createIcon(status, p, highlighted) {
   const avatar = isPointEntry(p) ? '📍' : getOwnerAvatar(p);
   const mine = getOwnerId(p) === getCurrentOwnerId();
   const opacity = mine ? 1 : 0.72;
+  const normalized = normalizeStatus(status);
+  const activeStatus = highlighted && ['已交流','已合作'].includes(normalized) ? ' status-active' : '';
+  const intentStatus = highlighted && normalized === '有意向' ? ' status-intent' : '';
+  const highlightClass = highlighted ? `highlighted-clinic${activeStatus}${intentStatus}` : '';
   return L.divIcon({
     className: '',
-    html: `<div class="custom-marker ${highlighted ? 'highlighted-clinic' : ''}" style="background:${color};opacity:${opacity}">${avatarHtml(avatar)}</div>`,
+    html: `<div class="custom-marker ${highlightClass}" style="background:${color};opacity:${opacity}">${avatarHtml(avatar)}</div>`,
     iconSize: [30, 30],
     iconAnchor: [15, 15],
     popupAnchor: [0, -16]
@@ -1719,6 +1736,30 @@ async function bulkDeleteIds(ids) {
   toast(`🗑 已删除 ${ids.length} 个机构`);
 }
 
+function initCoveragePanelDrag() {
+  const handle = document.getElementById('coverageHandle');
+  if (!handle || handle.dataset.bound === '1') return;
+  handle.dataset.bound = '1';
+  let startY = 0;
+  let tracking = false;
+  const start = e => {
+    tracking = true;
+    startY = (e.touches && e.touches[0] ? e.touches[0].clientY : e.clientY) || 0;
+  };
+  const end = e => {
+    if (!tracking) return;
+    tracking = false;
+    const endY = (e.changedTouches && e.changedTouches[0] ? e.changedTouches[0].clientY : e.clientY) || startY;
+    const dy = endY - startY;
+    if (dy < -35) setCoveragePanelExpanded(true);
+    else if (dy > 35) setCoveragePanelExpanded(false);
+  };
+  handle.addEventListener('touchstart', start, { passive:true });
+  handle.addEventListener('touchend', end, { passive:true });
+  handle.addEventListener('mousedown', start);
+  window.addEventListener('mouseup', end);
+}
+
 // ============ MALL COVERAGE ============
 function updateCoverageUi() {
   const btn = document.getElementById('btnExitCoverage');
@@ -1931,8 +1972,20 @@ function selectMall(id) {
   const hits = getMallClinics(m).length;
   toast(`🏬 ${m.name}：1公里内 ${hits} 家未接触诊所`);
 }
-function openCoveragePanel() { const p=document.getElementById('coveragePanel'); p.classList.remove('combo-mode'); renderCoverageClinicPage(); p.classList.add('active'); updateCoverageUi(); }
-function closeCoveragePanel() { const p=document.getElementById('coveragePanel'); p.classList.remove('active'); p.classList.remove('combo-mode'); updateCoverageUi(); }
+function setCoveragePanelExpanded(expanded) {
+  const p = document.getElementById('coveragePanel');
+  const hint = document.getElementById('coverageDragHint');
+  if (!p) return;
+  p.classList.toggle('expanded', !!expanded);
+  if (hint) hint.textContent = expanded ? '下拉回到 1/3 屏' : '上拉全屏 / 下拉收起';
+}
+function toggleCoveragePanelSize() {
+  const p = document.getElementById('coveragePanel');
+  if (!p) return;
+  setCoveragePanelExpanded(!p.classList.contains('expanded'));
+}
+function openCoveragePanel() { const p=document.getElementById('coveragePanel'); p.classList.remove('combo-mode'); setCoveragePanelExpanded(false); renderCoverageClinicPage(); p.classList.add('active'); updateCoverageUi(); }
+function closeCoveragePanel() { const p=document.getElementById('coveragePanel'); p.classList.remove('active'); p.classList.remove('combo-mode'); setCoveragePanelExpanded(false); updateCoverageUi(); }
 function getClinicSourceLabel(p) {
   const src = String(p.source || (p.finddocUrl ? 'finddoc' : '') || ((p.visits||[]).map(v=>v.note||'').join(' '))).toLowerCase();
   if (src.includes('finddoc')) return 'FindDoc';
@@ -2092,6 +2145,7 @@ function openComboResultOnMap(tab) {
   if (!a) { toast('请先加入至少2个覆盖中心'); return; }
   renderComboCoveragePage(tab);
   document.getElementById('coveragePanel').classList.add('combo-mode');
+  setCoveragePanelExpanded(false);
   document.getElementById('coveragePanel').classList.add('active');
   updateCoverageUi();
 }
