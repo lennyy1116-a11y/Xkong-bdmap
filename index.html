@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-<title>BDmap-v3.5.1</title>
+<title>BDmap-v3.5.2</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -496,7 +496,7 @@ body.entry-point-mode .point-only-hint { display:block; }
 .map-combo-stats { color:var(--text2); font-size:12px; margin-top:5px; line-height:1.45; }
 .map-combo-actions { display:flex; gap:6px; margin-top:8px; overflow-x:auto; }
 .map-combo-actions button { flex-shrink:0; border:1px solid #444; background:var(--card); color:var(--text); border-radius:999px; padding:7px 10px; font-size:12px; font-weight:800; }
-.map-combo-actions button.primary { background:var(--orange); border-color:var(--orange); color:#fff; }
+.map-combo-actions button.primary, .map-combo-actions button.active { background:var(--orange); border-color:var(--orange); color:#fff; }
 .map-combo-chip { display:inline-block; max-width:112px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; vertical-align:bottom; margin-right:4px; padding:2px 7px; border-radius:999px; background:rgba(230,126,34,.18); color:#ffc078; font-size:11px; }
 
 .point-marker-wrap { position:relative; width:112px; height:42px; pointer-events:none; }
@@ -645,7 +645,7 @@ body.home-mode .app-nav { display:flex !important; }
 <div class="lead-home" id="leadHome">
   <div class="lead-home-header">
     <div class="lead-home-top">
-      <h1>📍 BDmap-v3.5.1</h1>
+      <h1>📍 BDmap-v3.5.2</h1>
       <button class="lead-tab-btn" onclick="triggerBatchErrorImport()">上传报错</button>
       <input type="file" id="batchErrorFile" accept=".xlsx,.xls" style="display:none" onchange="handleBatchErrorImport(event)">
     </div>
@@ -667,7 +667,7 @@ body.home-mode .app-nav { display:flex !important; }
 
 <!-- Top bar -->
 <div class="top-bar">
-  <h1>📍 BDmap-v3.5.1</h1>
+  <h1>📍 BDmap-v3.5.2</h1>
   <span class="stats" id="statsText">0 机构</span>
   <button class="nav-pill-btn" id="btnMall" title="商场覆盖">🏬 商场</button>
   <button class="nav-pill-btn" id="btnSettings" title="设置">⚙ 设置</button>
@@ -684,9 +684,9 @@ body.home-mode .app-nav { display:flex !important; }
   <div class="map-combo-stats" id="mapComboStats">从商场/点位弹窗加入组合</div>
   <div class="combo-map-hint">地图上黄色虚线圈 = 已加入组合的覆盖中心；橙色📍 = 手动点位。</div>
   <div class="map-combo-actions">
-    <button class="primary" onclick="openComboResultOnMap('union')">并集</button>
-    <button onclick="openComboResultOnMap('intersection')">交集</button>
-    <button onclick="openComboResultOnMap('exclusive')">独占</button>
+    <button data-tab="union" onclick="openComboResultOnMap('union')">并集</button>
+    <button data-tab="intersection" onclick="openComboResultOnMap('intersection')">交集</button>
+    <button data-tab="exclusive" onclick="openComboResultOnMap('exclusive')">独占</button>
     <button onclick="copyComboSummary()">复制</button>
   </div>
 </div>
@@ -2194,7 +2194,7 @@ async function loadMallMetaFromCloud() {
   }
 }
 function saveMallsLocal() { localStorage.setItem(MALLS_KEY, JSON.stringify(malls)); }
-function openMallPanel() { renderMallList(); document.getElementById('mallPanel').classList.add('active'); }
+function openMallPanel() { setAppTab('map'); closeDashboard(); renderMallList(); document.getElementById('mallPanel').classList.add('active'); }
 function closeMallPanel() { document.getElementById('mallPanel').classList.remove('active'); }
 function startMallPick() { mallPickMode = true; closeMallPanel(); toast('在地图上点击商场位置'); }
 function resetMallForm() {
@@ -2495,6 +2495,7 @@ function clearMapCombo() {
   if (comboResultLayer) comboResultLayer.clearLayers();
   activeComboResultTab = null;
   document.getElementById('mapComboBar').classList.remove('active');
+  document.querySelectorAll('.map-combo-actions button[data-tab]').forEach(b => b.classList.remove('active'));
   closeCoveragePanel();
   renderMalls(); updateCoverageUi();
   toast('已清空组合');
@@ -2518,6 +2519,11 @@ function renderMapComboBar() {
   if (!a) { stats.textContent = '再加入至少1个覆盖中心即可分析。'; return; }
   lastComboAnalysis = a;
   stats.textContent = `并集 ${a.unionCount} 家｜交集 ${a.intersection.length} 家｜重复 ${a.duplicateCount}｜重叠率 ${Math.round(a.overlapRate*100)}%（${overlapLabel(a.overlapRate)}）`;
+}
+function syncComboResultMode(tab) {
+  syncComboResultMode(tab);
+  document.querySelectorAll('.combo-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  document.querySelectorAll('.map-combo-actions button[data-tab]').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
 }
 function openComboResultOnMap(tab) {
   clearSingleCoverageSilent();
@@ -2625,8 +2631,7 @@ function renderComboPicker() {
   box.innerHTML = centers.map(c => `<label class="combo-pick-item"><input type="checkbox" ${comboSelectedIds.has(c.id)?'checked':''} onchange="toggleComboCenter('${jsStr(c.id)}', this.checked)"><div><strong>${c.isPointCoverage?'📍':'🏬'} ${esc(c.name)}</strong><div class="combo-row-meta">${esc(c.area||'')}｜${esc(c.developer||'')}｜单点覆盖 ${c.hitCount} 家</div></div></label>`).join('') || '<div class="list-empty">没有匹配的覆盖中心</div>';
 }
 function setComboTab(tab) {
-  comboTab = tab;
-  document.querySelectorAll('.combo-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  syncComboResultMode(tab);
   renderComboAnalysis();
 }
 function overlapLabel(rate) {
@@ -3726,7 +3731,7 @@ function scoreBadgeWithDetailHtml(id, pr) {
 }
 function enrichPriority(list) { return list.map(p => ({...p, _priority: calcPriority(p)})); }
 function openDashboard() { setAppTab('dashboard'); closeList(); closeMallPanel(); closeCoveragePanel(); renderDashboard(); document.getElementById('dashboardPanel').classList.add('active'); }
-function closeDashboard() { document.getElementById('dashboardPanel').classList.remove('active'); }
+function closeDashboard() { document.getElementById('dashboardPanel').classList.remove('active'); if (!document.body.classList.contains('home-mode')) setAppTab('map'); }
 function getPriorityPool() {
   return enrichPriority([...places, ...baseClinics.filter(p => !places.some(x => x.id === 'place_'+p.id || (x.name===p.name && x.address===p.address)))])
     .filter(p => !isPointEntry(p) && normalizeStatus(p.status) !== '已合作' && normalizeStatus(p.status) !== '暂不合作')
@@ -3813,7 +3818,7 @@ async function copyDashboardSummary() {
     return `【${label}】${stats}\n${top}`;
   }).join('\n\n');
   const unclaimedPool = pool.filter(p => groupOwnerKey(p) === 'unclaimed');
-  const text = `BDmap v3.5.1 今日BD汇报摘要\n总优先池：${pool.length}\n高优先级：${totalHigh}\n已推进机构：${pushed.filter(p=>!isUncontactedPlace(p)).length}\n有意向：${totalInterested}\n已合作：${totalCoop}\n待核实：${totalError}\n未认领优先线索：${unclaimedPool.length}\n\n按用户拆分：\n${ownerBlocks}`;
+  const text = `BDmap v3.5.2 今日BD汇报摘要\n总优先池：${pool.length}\n高优先级：${totalHigh}\n已推进机构：${pushed.filter(p=>!isUncontactedPlace(p)).length}\n有意向：${totalInterested}\n已合作：${totalCoop}\n待核实：${totalError}\n未认领优先线索：${unclaimedPool.length}\n\n按用户拆分：\n${ownerBlocks}`;
   await navigator.clipboard.writeText(text); toast('已复制按用户拆分的汇报摘要');
 }
 
