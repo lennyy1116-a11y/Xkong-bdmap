@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-<title>BDmap-v3.5.0</title>
+<title>BDmap-v3.5.1</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -624,13 +624,17 @@ body.home-mode .lead-distance { color:#ffb65c; font-weight:900; }
 body.home-mode .batch-import-note { margin-top:6px; color:var(--text2); font-size:11px; line-height:1.35; }
 
 
-.app-nav { position:fixed; right:10px; top:max(10px, env(safe-area-inset-top)); z-index:2900; display:flex; gap:6px; background:rgba(15,20,35,.78); border:1px solid rgba(255,255,255,.1); border-radius:999px; padding:5px; backdrop-filter:blur(10px); box-shadow:0 4px 18px rgba(0,0,0,.28); }
-.app-nav button { border:0; background:transparent; color:var(--text2); border-radius:999px; padding:7px 10px; font-size:12px; font-weight:900; }
+.app-nav { position:fixed; left:50%; bottom:max(10px, calc(env(safe-area-inset-bottom) + 10px)); transform:translateX(-50%); z-index:2900; display:flex; gap:6px; background:rgba(15,20,35,.86); border:1px solid rgba(255,255,255,.12); border-radius:999px; padding:5px; backdrop-filter:blur(10px); box-shadow:0 4px 18px rgba(0,0,0,.34); }
+.app-nav button { border:0; background:transparent; color:var(--text2); border-radius:999px; padding:8px 14px; font-size:13px; font-weight:900; }
 .app-nav button.active { background:var(--primary); color:#fff; }
 body.home-mode .top-bar { display:none !important; }
 body.home-mode .app-nav { display:flex !important; }
-.lead-home-header { padding-top: max(52px, calc(env(safe-area-inset-top) + 52px)) !important; }
-.dashboard-panel .list-header { padding-top:max(52px, calc(env(safe-area-inset-top) + 52px)); }
+.lead-home-header { padding-top: max(12px, env(safe-area-inset-top)) !important; }
+.lead-list-body { padding-bottom:max(82px, calc(env(safe-area-inset-bottom) + 82px)) !important; }
+.dashboard-panel .list-header { padding-top:max(8px, env(safe-area-inset-top)); }
+.dashboard-body { padding-bottom:max(92px, calc(env(safe-area-inset-bottom) + 92px)) !important; }
+.mall-body, .combo-body, .list-body, .search-body { padding-bottom:max(92px, calc(env(safe-area-inset-bottom) + 92px)) !important; }
+.fab-group { bottom:max(92px, calc(env(safe-area-inset-bottom) + 92px)) !important; }
 
 </style>
 </head>
@@ -641,7 +645,7 @@ body.home-mode .app-nav { display:flex !important; }
 <div class="lead-home" id="leadHome">
   <div class="lead-home-header">
     <div class="lead-home-top">
-      <h1>📍 BDmap-v3.5.0</h1>
+      <h1>📍 BDmap-v3.5.1</h1>
       <button class="lead-tab-btn" onclick="triggerBatchErrorImport()">上传报错</button>
       <input type="file" id="batchErrorFile" accept=".xlsx,.xls" style="display:none" onchange="handleBatchErrorImport(event)">
     </div>
@@ -663,8 +667,9 @@ body.home-mode .app-nav { display:flex !important; }
 
 <!-- Top bar -->
 <div class="top-bar">
-  <h1>📍 BDmap-v3.5.0</h1>
-  <span class="stats" id="statsText">0 机构</span>  <button class="nav-pill-btn" id="btnMall" title="商场覆盖">🏬 商场</button>
+  <h1>📍 BDmap-v3.5.1</h1>
+  <span class="stats" id="statsText">0 机构</span>
+  <button class="nav-pill-btn" id="btnMall" title="商场覆盖">🏬 商场</button>
   <button class="nav-pill-btn" id="btnSettings" title="设置">⚙ 设置</button>
 </div>
 
@@ -3808,7 +3813,7 @@ async function copyDashboardSummary() {
     return `【${label}】${stats}\n${top}`;
   }).join('\n\n');
   const unclaimedPool = pool.filter(p => groupOwnerKey(p) === 'unclaimed');
-  const text = `BDmap v3.5.0 今日BD汇报摘要\n总优先池：${pool.length}\n高优先级：${totalHigh}\n已推进机构：${pushed.filter(p=>!isUncontactedPlace(p)).length}\n有意向：${totalInterested}\n已合作：${totalCoop}\n待核实：${totalError}\n未认领优先线索：${unclaimedPool.length}\n\n按用户拆分：\n${ownerBlocks}`;
+  const text = `BDmap v3.5.1 今日BD汇报摘要\n总优先池：${pool.length}\n高优先级：${totalHigh}\n已推进机构：${pushed.filter(p=>!isUncontactedPlace(p)).length}\n有意向：${totalInterested}\n已合作：${totalCoop}\n待核实：${totalError}\n未认领优先线索：${unclaimedPool.length}\n\n按用户拆分：\n${ownerBlocks}`;
   await navigator.clipboard.writeText(text); toast('已复制按用户拆分的汇报摘要');
 }
 
