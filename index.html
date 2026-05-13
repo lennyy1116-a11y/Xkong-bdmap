@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-<title>BDmap-v3.3.6</title>
+<title>BDmap-v3.3.7</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -571,7 +571,7 @@ body.entry-point-mode .point-only-hint { display:block; }
 
 <!-- Top bar -->
 <div class="top-bar">
-  <h1>📍 BDmap-v3.3.6</h1>
+  <h1>📍 BDmap-v3.3.7</h1>
   <span class="stats" id="statsText">0 机构</span>
   <button class="coverage-exit" id="btnExitCoverage" title="退出1km覆盖" style="display:none">↩ 退出1km</button>
   <button class="top-btn" id="btnDashboard" title="数据看板">📊</button>
@@ -1102,12 +1102,16 @@ function restoreHomeHintState() {
     if (el) el.style.display = 'none';
   }
 }
+function getDataVersionKey() {
+  const placesSig = places.map(p => [p.id, p.updatedAt, p.status, (p.visits||[]).length, p.ownerId, p.ownerAvatar].join(':')).join('|');
+  return [places.length, baseClinics.length, coverageCacheVersion, placesSig.length].join('|');
+}
 function clearCoverageCache() {
   coverageCache = new Map();
   coverageCacheVersion++;
 }
 function coverageCacheKey(center) {
-  return [center && center.id || 'unknown', Number(center && center.lat || 0).toFixed(6), Number(center && center.lng || 0).toFixed(6), places.length, baseClinics.length, coverageCacheVersion].join('|');
+  return [center && center.id || 'unknown', Number(center && center.lat || 0).toFixed(6), Number(center && center.lng || 0).toFixed(6), getDataVersionKey()].join('|');
 }
 function shouldShowOnHome(p) {
   if (isPointEntry(p)) return true;
@@ -1299,8 +1303,7 @@ function renderMarkers() {
   const selectedMall = getCoverageTargetById(selectedMallId);
   let renderPool = getFilteredPlaces().filter(p => !isPointEntry(p));
   if (selectedMall && baseClinics.length) {
-    const existingIds = new Set(renderPool.map(p => p.id));
-    getBaseMallClinics(selectedMall).forEach(p => { if (!existingIds.has(p.id)) renderPool.push(p); });
+    renderPool = mergeCoverageRenderPool(renderPool, getBaseMallClinics(selectedMall));
   }
   renderPool.forEach(p => {
     const isHighlighted = selectedMall && isClinicLike(p) && distanceKm(selectedMall.lat, selectedMall.lng, p.lat, p.lng) <= COVERAGE_KM;
@@ -2414,13 +2417,59 @@ async function deleteMall(id) {
     toast('商场本地已删除，云端记录删除失败：请检查 mallMeta 权限');
   }
 }
+function normalizeClinicText(s) {
+  return String(s || '').trim().toLowerCase().replace(/\s+/g,'').replace(/[，,。．.\-–—_()（）\[\]【】]/g,'');
+}
 function clinicMatchKey(p) {
-  return String((p.name || '').trim().toLowerCase() + '|' + (p.address || '').trim().toLowerCase());
+  const name = normalizeClinicText(p && p.name);
+  const addr = normalizeClinicText(p && p.address);
+  if (!name && !addr) return String((p && p.id) || '');
+  return name + '|' + addr;
+}
+function clinicIdentityKeys(p) {
+  const keys = new Set();
+  if (!p) return keys;
+  if (p.id) {
+    keys.add(String(p.id));
+    if (String(p.id).startsWith('place_')) keys.add(String(p.id).slice(6));
+    else keys.add('place_' + String(p.id));
+  }
+  const match = clinicMatchKey(p);
+  if (match && match !== '|') keys.add(match);
+  return keys;
+}
+function hasClinicIdentity(seen, p) {
+  for (const k of clinicIdentityKeys(p)) if (seen.has(k)) return true;
+  return false;
+}
+function addClinicIdentity(seen, p) {
+  clinicIdentityKeys(p).forEach(k => seen.add(k));
+}
+function isWarmCoverageClinic(p) { return getCoverageSortRank(p) < 3; }
+function preferCoverageRecord(a, b) {
+  if (!a) return b;
+  if (!b) return a;
+  const warmA = isWarmCoverageClinic(a), warmB = isWarmCoverageClinic(b);
+  if (warmA !== warmB) return warmB ? b : a;
+  const placeA = !a.isBaseClinic || !!a._promotedPlaceId;
+  const placeB = !b.isBaseClinic || !!b._promotedPlaceId;
+  if (placeA !== placeB) return placeB ? b : a;
+  const va = (a.visits||[]).length, vb = (b.visits||[]).length;
+  if (va !== vb) return vb > va ? b : a;
+  return a;
+}
+function mergeCoverageRenderPool(primaryRows, baseRows) {
+  const rows = [];
+  const seen = new Set();
+  primaryRows.forEach(p => { rows.push(p); addClinicIdentity(seen, p); });
+  baseRows.forEach(p => { if (!hasClinicIdentity(seen, p)) { rows.push(p); addClinicIdentity(seen, p); } });
+  return rows;
 }
 function getPromotedPlaceForBaseClinic(base) {
   if (!base) return null;
   const directId = 'place_' + base.id;
-  return places.find(x => x.id === directId) || places.find(x => clinicMatchKey(x) === clinicMatchKey(base));
+  const baseKey = clinicMatchKey(base);
+  return places.find(x => x.id === directId) || places.find(x => clinicMatchKey(x) === baseKey);
 }
 function mergeBaseClinicOwner(base) {
   const promoted = getPromotedPlaceForBaseClinic(base);
@@ -2451,17 +2500,29 @@ function getBaseMallClinics(mall) {
     .sort((a,b) => a._distanceKm - b._distanceKm);
 }
 function computeMallClinics(mall) {
-  const pool = [];
-  const seen = new Set();
-  const inRangePlaces = places.filter(p => isClinicLike(p) && distanceKm(mall.lat, mall.lng, p.lat, p.lng) <= COVERAGE_KM);
-  [...inRangePlaces, ...getBaseMallClinics(mall)]
-    .forEach(p => {
-      const key = clinicMatchKey(p) || ((p.id || '') + '|' + (p.address || ''));
-      if (seen.has(key)) return;
-      seen.add(key);
-      pool.push({ ...p, _distanceKm: p._distanceKm !== undefined ? p._distanceKm : distanceKm(mall.lat, mall.lng, p.lat, p.lng) });
-    });
-  return pool.sort((a,b) => a._distanceKm - b._distanceKm);
+  const byKey = new Map();
+  function upsert(raw) {
+    const row = { ...raw, _distanceKm: raw._distanceKm !== undefined ? raw._distanceKm : distanceKm(mall.lat, mall.lng, raw.lat, raw.lng) };
+    const keys = [...clinicIdentityKeys(row)];
+    const existingKey = keys.find(k => byKey.has(k));
+    if (existingKey) {
+      const preferred = preferCoverageRecord(byKey.get(existingKey), row);
+      keys.forEach(k => byKey.set(k, preferred));
+    } else {
+      keys.forEach(k => byKey.set(k, row));
+    }
+  }
+  places.filter(p => isClinicLike(p) && distanceKm(mall.lat, mall.lng, p.lat, p.lng) <= COVERAGE_KM).forEach(upsert);
+  getBaseMallClinics(mall).forEach(upsert);
+  const unique = [];
+  const outSeen = new Set();
+  byKey.forEach(row => {
+    const key = clinicMatchKey(row) || row.id;
+    if (outSeen.has(key)) return;
+    outSeen.add(key);
+    unique.push(row);
+  });
+  return unique.sort((a,b) => getCoverageSortRank(a) - getCoverageSortRank(b) || a._distanceKm - b._distanceKm);
 }
 function getMallClinics(mall) {
   if (!mall || !mall.lat || !mall.lng) return [];
@@ -3311,7 +3372,7 @@ function exportPriorityCsv() {
 }
 async function copyDashboardSummary() {
   const pool=getPriorityPool();
-  const text=`BDmap v3.3.2 今日BD汇报摘要\n总线索：${pool.length}\n高优先级：${pool.filter(p=>p._priority.score>=80).length}\n已推进机构：${places.filter(p=>!isUncontactedPlace(p)).length}\n有意向：${places.filter(p=>normalizeStatus(p.status)==='有意向').length}\n待电话/补资料：${pool.filter(p=>['电话联系','补资料'].includes(actionCategory(p._priority.action))).length}\nTop5：\n`+pool.slice(0,5).map((p,i)=>`${i+1}. ${p.name} ${p._priority.score}分｜${p._priority.action}`).join('\n');
+  const text=`BDmap v3.3.7 今日BD汇报摘要\n总线索：${pool.length}\n高优先级：${pool.filter(p=>p._priority.score>=80).length}\n已推进机构：${places.filter(p=>!isUncontactedPlace(p)).length}\n有意向：${places.filter(p=>normalizeStatus(p.status)==='有意向').length}\n待电话/补资料：${pool.filter(p=>['电话联系','补资料'].includes(actionCategory(p._priority.action))).length}\nTop5：\n`+pool.slice(0,5).map((p,i)=>`${i+1}. ${p.name} ${p._priority.score}分｜${p._priority.action}`).join('\n');
   await navigator.clipboard.writeText(text); toast('汇报摘要已复制，可直接发老板/群里');
 }
 function openTopPriorityOnMap() {
