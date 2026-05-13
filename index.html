@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-<title>BDmap-v3.5.4</title>
+<title>BDmap-v3.5.5</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -652,7 +652,7 @@ body.home-mode .map-filter-bar { display:none !important; }
 <div class="lead-home" id="leadHome">
   <div class="lead-home-header">
     <div class="lead-home-top">
-      <h1>📍 BDmap-v3.5.4</h1>
+      <h1>📍 BDmap-v3.5.5</h1>
       <button class="lead-tab-btn" onclick="triggerBatchErrorImport()">上传报错</button>
       <input type="file" id="batchErrorFile" accept=".xlsx,.xls" style="display:none" onchange="handleBatchErrorImport(event)">
     </div>
@@ -674,7 +674,7 @@ body.home-mode .map-filter-bar { display:none !important; }
 
 <!-- Top bar -->
 <div class="top-bar">
-  <h1>📍 BDmap-v3.5.4</h1>
+  <h1>📍 BDmap-v3.5.5</h1>
   <span class="stats" id="statsText">0 机构</span>
   <button class="nav-pill-btn" id="btnMall" title="商场覆盖">🏬 商场</button>
   <button class="nav-pill-btn" id="btnSettings" title="设置">⚙ 设置</button>
@@ -2029,8 +2029,14 @@ function getLeadRows(force) {
   leadRowsCacheKey = cacheKey;
   return out;
 }
-function hasLeadError(p) { return !!(p.dataQualityStatus || p.dataQualityIssueType || (p.errorReports||[]).length); }
-function getLeadErrorLabel(p) { return p.dataQualityIssueType || p.dataQualityStatus || (((p.errorReports||[]).slice(-1)[0]||{}).type) || '待核实'; }
+function hasLeadError(p) {
+  const status = String(p.dataQualityStatus || '').trim();
+  const issue = String(p.dataQualityIssueType || '').trim();
+  return !!(status || issue);
+}
+function getLeadErrorLabel(p) {
+  return p.dataQualityIssueType || p.dataQualityStatus || '待核实';
+}
 function passLeadFilter(p) {
   if (leadFilter === 'unclaimed') return !p._leadClaimed;
   if (leadFilter === 'mine') return p._leadMine;
@@ -3861,7 +3867,7 @@ async function copyDashboardSummary() {
     return `【${label}】${stats}\n${top}`;
   }).join('\n\n');
   const unclaimedPool = pool.filter(p => groupOwnerKey(p) === 'unclaimed');
-  const text = `BDmap v3.5.4 今日BD汇报摘要\n总优先池：${pool.length}\n高优先级：${totalHigh}\n已推进机构：${pushed.filter(p=>!isUncontactedPlace(p)).length}\n有意向：${totalInterested}\n已合作：${totalCoop}\n待核实：${totalError}\n未认领优先线索：${unclaimedPool.length}\n\n按用户拆分：\n${ownerBlocks}`;
+  const text = `BDmap v3.5.5 今日BD汇报摘要\n总优先池：${pool.length}\n高优先级：${totalHigh}\n已推进机构：${pushed.filter(p=>!isUncontactedPlace(p)).length}\n有意向：${totalInterested}\n已合作：${totalCoop}\n待核实：${totalError}\n未认领优先线索：${unclaimedPool.length}\n\n按用户拆分：\n${ownerBlocks}`;
   await navigator.clipboard.writeText(text); toast('已复制按用户拆分的汇报摘要');
 }
 
