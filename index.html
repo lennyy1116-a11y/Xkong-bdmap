@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-<title>BDmap-v3.5.2</title>
+<title>BDmap-v3.5.3</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -636,6 +636,13 @@ body.home-mode .app-nav { display:flex !important; }
 .mall-body, .combo-body, .list-body, .search-body { padding-bottom:max(92px, calc(env(safe-area-inset-bottom) + 92px)) !important; }
 .fab-group { bottom:max(92px, calc(env(safe-area-inset-bottom) + 92px)) !important; }
 
+
+.map-filter-bar { position:fixed; left:10px; right:10px; top:max(54px, calc(env(safe-area-inset-top) + 54px)); z-index:1200; display:flex; gap:6px; overflow-x:auto; padding:6px; background:rgba(15,20,35,.78); border:1px solid rgba(255,255,255,.1); border-radius:14px; backdrop-filter:blur(10px); box-shadow:0 4px 16px rgba(0,0,0,.25); }
+body.home-mode .map-filter-bar { display:none !important; }
+.map-filter-chip { flex-shrink:0; border:1px solid #444; background:var(--card); color:var(--text2); border-radius:999px; padding:6px 10px; font-size:12px; font-weight:900; display:inline-flex; align-items:center; gap:4px; }
+.map-filter-chip.active { background:var(--orange); border-color:var(--orange); color:#fff; }
+.home-hint { top:max(104px, calc(env(safe-area-inset-top) + 104px)); }
+
 </style>
 </head>
 <body class="home-mode">
@@ -645,7 +652,7 @@ body.home-mode .app-nav { display:flex !important; }
 <div class="lead-home" id="leadHome">
   <div class="lead-home-header">
     <div class="lead-home-top">
-      <h1>📍 BDmap-v3.5.2</h1>
+      <h1>📍 BDmap-v3.5.3</h1>
       <button class="lead-tab-btn" onclick="triggerBatchErrorImport()">上传报错</button>
       <input type="file" id="batchErrorFile" accept=".xlsx,.xls" style="display:none" onchange="handleBatchErrorImport(event)">
     </div>
@@ -667,13 +674,21 @@ body.home-mode .app-nav { display:flex !important; }
 
 <!-- Top bar -->
 <div class="top-bar">
-  <h1>📍 BDmap-v3.5.2</h1>
+  <h1>📍 BDmap-v3.5.3</h1>
   <span class="stats" id="statsText">0 机构</span>
   <button class="nav-pill-btn" id="btnMall" title="商场覆盖">🏬 商场</button>
   <button class="nav-pill-btn" id="btnSettings" title="设置">⚙ 设置</button>
 </div>
 
-<!-- Map --><div id="map"></div>
+<!-- Map -->
+<div class="map-filter-bar" id="mapFilterBar">
+  <button class="map-filter-chip active" data-kind="status" data-value="全部" onclick="setMapStatusFilter('全部')">全部状态</button>
+  <button class="map-filter-chip" data-kind="status" data-value="已交流" onclick="setMapStatusFilter('已交流')">🟡 已交流</button>
+  <button class="map-filter-chip" data-kind="status" data-value="有意向" onclick="setMapStatusFilter('有意向')">🟢 有意向</button>
+  <button class="map-filter-chip" data-kind="status" data-value="已合作" onclick="setMapStatusFilter('已合作')">🔵 已合作</button>
+  <span id="mapOwnerFilterChips" style="display:flex;gap:6px"></span>
+</div>
+<div id="map"></div>
 <div class="home-hint" id="homeHint"><button class="home-hint-close" onclick="hideHomeHint()">×</button>首页仅显示团队已跟进机构；官方中医名录是底层基础诊所池，只在商场1公里覆盖分析中显示。</div>
 
 
@@ -1317,6 +1332,7 @@ function init() {
     // Also backup to localStorage
     localStorage.setItem(STORAGE_KEY, JSON.stringify(places));
     renderOwnerFilters();
+    updateMapFilterBar();
     renderMarkers();
     renderMalls();
     scheduleLeadHomeRender();
@@ -1328,6 +1344,7 @@ function init() {
     // Fallback to localStorage
     places = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
     renderOwnerFilters();
+    updateMapFilterBar();
     renderMarkers();
     scheduleLeadHomeRender();
     updateStats();
@@ -1383,6 +1400,25 @@ function createIcon(status, p, highlighted) {
   });
 }
 
+function setMapStatusFilter(status) {
+  currentFilter = status || '全部';
+  updateMapFilterBar();
+  renderMarkers();
+  updateStats();
+}
+function setMapOwnerFilter(ownerId) {
+  ownerFilter = ownerId || '全部';
+  updateMapFilterBar();
+  renderMarkers();
+  updateStats();
+}
+function updateMapFilterBar() {
+  document.querySelectorAll('.map-filter-chip[data-kind="status"]').forEach(b => b.classList.toggle('active', normalizeStatus(b.dataset.value) === normalizeStatus(currentFilter)));
+  const box = document.getElementById('mapOwnerFilterChips');
+  if (!box) return;
+  const owners = getOwners().filter(o => o.id !== '全部');
+  box.innerHTML = '<button class="map-filter-chip ' + (ownerFilter === '全部' ? 'active' : '') + '" onclick="setMapOwnerFilter('全部')">👥 全部人员</button>' + owners.map(o => '<button class="map-filter-chip ' + (ownerFilter === o.id ? 'active' : '') + '" onclick="setMapOwnerFilter('' + jsStr(o.id) + '')">' + avatarInlineHtml(o.avatar) + esc(o.name) + '</button>').join('');
+}
 function getFilteredPlaces() {
   const selectedMall = getCoverageTargetById(selectedMallId);
   return places.filter(p => {
@@ -3374,6 +3410,7 @@ function importData(event) {
       });
       savePlaces();
       renderOwnerFilters();
+      updateMapFilterBar();
       renderMarkers();
       updateStats();
       toast(`📥 本地导入完成：新增 ${added}，更新 ${updated}，正在同步云端...`);
@@ -3818,7 +3855,7 @@ async function copyDashboardSummary() {
     return `【${label}】${stats}\n${top}`;
   }).join('\n\n');
   const unclaimedPool = pool.filter(p => groupOwnerKey(p) === 'unclaimed');
-  const text = `BDmap v3.5.2 今日BD汇报摘要\n总优先池：${pool.length}\n高优先级：${totalHigh}\n已推进机构：${pushed.filter(p=>!isUncontactedPlace(p)).length}\n有意向：${totalInterested}\n已合作：${totalCoop}\n待核实：${totalError}\n未认领优先线索：${unclaimedPool.length}\n\n按用户拆分：\n${ownerBlocks}`;
+  const text = `BDmap v3.5.3 今日BD汇报摘要\n总优先池：${pool.length}\n高优先级：${totalHigh}\n已推进机构：${pushed.filter(p=>!isUncontactedPlace(p)).length}\n有意向：${totalInterested}\n已合作：${totalCoop}\n待核实：${totalError}\n未认领优先线索：${unclaimedPool.length}\n\n按用户拆分：\n${ownerBlocks}`;
   await navigator.clipboard.writeText(text); toast('已复制按用户拆分的汇报摘要');
 }
 
