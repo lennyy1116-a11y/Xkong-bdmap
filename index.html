@@ -322,12 +322,16 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .mall-actions button { flex:1; padding:8px; border-radius:8px; border:1px solid #444; background:var(--bg); color:var(--text); }
 .mall-actions .primary { background:var(--orange); border-color:var(--orange); color:#fff; }
 .mall-marker { width:34px; height:34px; border-radius:50%; background:#e67e22; color:#fff; display:flex; align-items:center; justify-content:center; border:3px solid #fff; box-shadow:0 2px 10px rgba(0,0,0,.45); font-size:18px; }
-.custom-marker.highlighted-clinic { position:relative; box-shadow:0 2px 6px rgba(0,0,0,0.4), 0 0 0 4px rgba(255,159,26,.30); }
-.custom-marker.highlighted-clinic::after { content:'1km'; position:absolute; right:-13px; top:-10px; min-width:24px; height:15px; padding:0 4px; border-radius:999px; background:#ff9f1a; color:#1b1200; border:1px solid #fff; font-size:9px; font-weight:900; line-height:15px; box-shadow:0 2px 7px rgba(0,0,0,.42); }
-.custom-marker.highlighted-clinic.status-active { box-shadow:0 2px 6px rgba(0,0,0,0.4), 0 0 0 3px rgba(255,159,26,.34), 0 0 0 7px rgba(46,204,113,.22); }
-.custom-marker.highlighted-clinic.status-active::after { content:'已跟'; background:#2ecc71; color:#062b16; }
-.custom-marker.highlighted-clinic.status-intent { box-shadow:0 2px 6px rgba(0,0,0,0.4), 0 0 0 3px rgba(255,159,26,.34), 0 0 0 7px rgba(52,152,219,.24); }
-.custom-marker.highlighted-clinic.status-intent::after { content:'意向'; background:#3498db; color:#fff; }
+.custom-marker.coverage-contacted { box-shadow:0 2px 6px rgba(0,0,0,0.4), 0 0 0 5px rgba(241,196,15,.30); }
+.custom-marker.coverage-intent { box-shadow:0 2px 6px rgba(0,0,0,0.4), 0 0 0 5px rgba(46,204,113,.32); }
+.custom-marker.coverage-coop { box-shadow:0 2px 6px rgba(0,0,0,0.4), 0 0 0 5px rgba(52,152,219,.34); }
+.coverage-clinic-item.warm { border-color:rgba(241,196,15,.75); background:linear-gradient(90deg, rgba(241,196,15,.11), rgba(255,255,255,.035)); }
+.coverage-clinic-item.intent { border-color:rgba(46,204,113,.75); background:linear-gradient(90deg, rgba(46,204,113,.12), rgba(255,255,255,.035)); }
+.coverage-clinic-item.coop { border-color:rgba(52,152,219,.75); background:linear-gradient(90deg, rgba(52,152,219,.12), rgba(255,255,255,.035)); }
+.coverage-status-badge { display:inline-block; margin-left:5px; padding:2px 7px; border-radius:999px; font-size:11px; font-weight:900; vertical-align:1px; }
+.coverage-status-badge.warm { background:rgba(241,196,15,.22); color:#ffd966; }
+.coverage-status-badge.intent { background:rgba(46,204,113,.20); color:#8ff0b3; }
+.coverage-status-badge.coop { background:rgba(52,152,219,.22); color:#9dccff; }
 .bulk-tools { padding:8px 16px; background:var(--card); border-bottom:1px solid #333; display:flex; gap:8px; overflow-x:auto; }
 .bulk-tools button { flex-shrink:0; border:1px solid #444; background:var(--bg); color:var(--text); border-radius:16px; padding:6px 10px; font-size:12px; }
 .bulk-tools button.danger { background:var(--red); border-color:var(--red); color:#fff; }
@@ -1228,18 +1232,43 @@ function init() {
 }
 
 // ============ MARKERS ============
+function getCoverageContactClass(p) {
+  const s = normalizeStatus(p.status);
+  if (s === '已合作') return 'coverage-coop';
+  if (s === '有意向') return 'coverage-intent';
+  if (s === '已交流') return 'coverage-contacted';
+  return '';
+}
+function getCoverageListClass(p) {
+  const s = normalizeStatus(p.status);
+  if (s === '已合作') return 'coop';
+  if (s === '有意向') return 'intent';
+  if (s === '已交流') return 'warm';
+  return '';
+}
+function getCoverageStatusBadge(p) {
+  const s = normalizeStatus(p.status);
+  if (s === '已合作') return '<span class="coverage-status-badge coop">已合作</span>';
+  if (s === '有意向') return '<span class="coverage-status-badge intent">有意向</span>';
+  if (s === '已交流') return '<span class="coverage-status-badge warm">已交流</span>';
+  return '';
+}
+function getCoverageSortRank(p) {
+  const s = normalizeStatus(p.status);
+  if (s === '已合作') return 0;
+  if (s === '有意向') return 1;
+  if (s === '已交流') return 2;
+  return 3;
+}
 function createIcon(status, p, highlighted) {
   const color = STATUS_COLORS[status] || '#7f8c8d';
   const avatar = isPointEntry(p) ? '📍' : getOwnerAvatar(p);
   const mine = getOwnerId(p) === getCurrentOwnerId();
   const opacity = mine ? 1 : 0.72;
-  const normalized = normalizeStatus(status);
-  const activeStatus = highlighted && ['已交流','已合作'].includes(normalized) ? ' status-active' : '';
-  const intentStatus = highlighted && normalized === '有意向' ? ' status-intent' : '';
-  const highlightClass = highlighted ? `highlighted-clinic${activeStatus}${intentStatus}` : '';
+  const coverageClass = highlighted ? getCoverageContactClass({ ...p, status }) : '';
   return L.divIcon({
     className: '',
-    html: `<div class="custom-marker ${highlightClass}" style="background:${color};opacity:${opacity}">${avatarHtml(avatar)}</div>`,
+    html: `<div class="custom-marker ${coverageClass}" style="background:${color};opacity:${opacity}">${avatarHtml(avatar)}</div>`,
     iconSize: [30, 30],
     iconAnchor: [15, 15],
     popupAnchor: [0, -16]
@@ -2021,13 +2050,19 @@ function renderCoverageClinicPage() {
   const box = document.getElementById('coverageClinicList');
   if (!selected || !box) return;
   const allHits = getMallClinics(selected);
-  const hits = allHits.filter(passCoverageFilter);
+  const hits = allHits.filter(passCoverageFilter).sort((a,b) => {
+    const da = a._distanceKm !== undefined ? a._distanceKm : distanceKm(selected.lat, selected.lng, a.lat, a.lng);
+    const db = b._distanceKm !== undefined ? b._distanceKm : distanceKm(selected.lat, selected.lng, b.lat, b.lng);
+    return getCoverageSortRank(a) - getCoverageSortRank(b) || da - db;
+  });
+  const warmCount = hits.filter(p => getCoverageSortRank(p) < 3).length;
   title.textContent = `${selected.name} · 1公里诊所`;
-  summary.textContent = `当前 ${hits.length}/${allHits.length} 家｜有电话 ${allHits.filter(x=>x.phone).length} 家｜按距离排序`;
+  summary.textContent = `当前 ${hits.length}/${allHits.length} 家｜已沟通/意向/合作 ${warmCount} 家置顶｜有电话 ${allHits.filter(x=>x.phone).length} 家`;
   box.innerHTML = hits.length ? hits.map((p,i) => {
     const d = p._distanceKm !== undefined ? p._distanceKm : distanceKm(selected.lat, selected.lng, p.lat, p.lng);
-    return `<div class="coverage-clinic-item" onclick="goToPlace('${jsStr(p.id)}')">
-      <div><span class="rank">${i+1}</span><strong>${esc(p.name)}</strong>${clinicBadges(p)} <span class="distance">${d.toFixed(2)} km</span></div>
+    const rowClass = getCoverageListClass(p);
+    return `<div class="coverage-clinic-item ${rowClass}" onclick="goToPlace('${jsStr(p.id)}')">
+      <div><span class="rank">${i+1}</span><strong>${esc(p.name)}</strong>${getCoverageStatusBadge(p)}${clinicBadges(p)} <span class="distance">${d.toFixed(2)} km</span></div>
       <div class="meta">${esc(p.address || '')}<br>${esc(p.contact || '')}${p.phone ? ' · ' + esc(p.phone) : ''}</div>
       <div class="copy-row" onclick="event.stopPropagation()">
         <button class="copy-btn" onclick="copyText('${jsStr(p.id)}','address')">复制地址</button>
@@ -2209,16 +2244,18 @@ function renderComboCoveragePage(tab) {
   title.textContent = `组合${label}`;
   const strictUnion = getStrictComboRows('union', a);
   const strictIntersection = getStrictComboRows('intersection', a);
-  let rows = getStrictComboRows(tab, a).filter(passCoverageFilter);
+  let rows = getStrictComboRows(tab, a).filter(passCoverageFilter).sort((a,b) => getCoverageSortRank(a) - getCoverageSortRank(b) || ((a._nearestDistance||0) - (b._nearestDistance||0)));
+  const warmCount = rows.filter(p => getCoverageSortRank(p) < 3).length;
   const strictDuplicate = Math.max(0, a.sumCount - strictUnion.length);
   const strictRate = a.sumCount ? strictDuplicate / a.sumCount : 0;
-  summary.textContent = `${a.centers.length}个中心｜并集${strictUnion.length}｜交集${strictIntersection.length}｜重叠${Math.round(strictRate*100)}%｜已严格限制1km内`;
+  summary.textContent = `${a.centers.length}个中心｜并集${strictUnion.length}｜交集${strictIntersection.length}｜已沟通/意向/合作${warmCount}｜重叠${Math.round(strictRate*100)}%`;
   renderComboResultMarkers(rows, tab);
   box.innerHTML = rows.length ? rows.slice(0,80).map((p,i) => {
     const covered = (p._coveredBy||[]).map(x=>x.center.name).join(' / ');
     const meta = tab === 'exclusive' ? `独占：${esc(p._exclusiveCenter || '')}` : `${p._coveredBy.length}点覆盖：${esc(covered)}`;
     const dist = ((p._nearestDistance!==undefined?p._nearestDistance:p._distanceKm)||0).toFixed(2);
-    return `<div class="coverage-clinic-item" onclick="goToPlace('${jsStr(p.id)}')"><div><span class="rank">${i+1}</span><strong>${esc(p.name)}</strong>${clinicBadges(p)} <span class="combo-badge">${label}</span></div><div class="meta">${meta}｜近${esc(p._nearestCenter || p._centerName || '')} ${dist}km<br>${esc(p.address || '')}</div><div class="copy-row" onclick="event.stopPropagation()"><button class="copy-btn" onclick="copyText('${jsStr(p.id)}','address')">复制地址</button><button class="copy-btn" onclick="copyText('${jsStr(p.id)}','phone')">复制电话</button></div></div>`;
+    const rowClass = getCoverageListClass(p);
+    return `<div class="coverage-clinic-item ${rowClass}" onclick="goToPlace('${jsStr(p.id)}')"><div><span class="rank">${i+1}</span><strong>${esc(p.name)}</strong>${getCoverageStatusBadge(p)}${clinicBadges(p)} <span class="combo-badge">${label}</span></div><div class="meta">${meta}｜近${esc(p._nearestCenter || p._centerName || '')} ${dist}km<br>${esc(p.address || '')}</div><div class="copy-row" onclick="event.stopPropagation()"><button class="copy-btn" onclick="copyText('${jsStr(p.id)}','address')">复制地址</button><button class="copy-btn" onclick="copyText('${jsStr(p.id)}','phone')">复制电话</button></div></div>`;
   }).join('') : '<div class="list-empty">当前分类没有诊所</div>';
 }
 function openComboPanel() { closeMallPanel(); renderComboPicker(); renderComboAnalysis(); renderMapComboBar(); renderMalls(); document.getElementById('comboPanel').classList.add('active'); }
