@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-<title>BDmap-v3.5.5</title>
+<title>BDmap-v3.5.7</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -643,6 +643,11 @@ body.home-mode .map-filter-bar { display:none !important; }
 .map-filter-chip.active { background:var(--orange); border-color:var(--orange); color:#fff; }
 .home-hint { top:max(104px, calc(env(safe-area-inset-top) + 104px)); }
 
+
+.lead-error-export-row { display:none; gap:8px; padding-top:8px; }
+.lead-error-export-row.active { display:flex; }
+.lead-error-export-row button { flex:1; border:1px solid rgba(231,76,60,.55); background:rgba(231,76,60,.10); color:#ffaaa1; border-radius:10px; padding:8px 10px; font-size:12px; font-weight:900; }
+
 </style>
 </head>
 <body class="home-mode">
@@ -652,7 +657,7 @@ body.home-mode .map-filter-bar { display:none !important; }
 <div class="lead-home" id="leadHome">
   <div class="lead-home-header">
     <div class="lead-home-top">
-      <h1>📍 BDmap-v3.5.5</h1>
+      <h1>📍 BDmap-v3.5.7</h1>
       <button class="lead-tab-btn" onclick="triggerBatchErrorImport()">上传报错</button>
       <input type="file" id="batchErrorFile" accept=".xlsx,.xls" style="display:none" onchange="handleBatchErrorImport(event)">
     </div>
@@ -660,12 +665,12 @@ body.home-mode .map-filter-bar { display:none !important; }
     <div class="lead-filter-row" id="leadFilterRow">
       <button class="lead-filter-chip active" data-filter="all" onclick="setLeadFilter('all')">全部</button>
       <button class="lead-filter-chip" data-filter="unclaimed" onclick="setLeadFilter('unclaimed')">未认领</button>
-      <button class="lead-filter-chip" data-filter="mine" onclick="setLeadFilter('mine')">我认领</button>
+      <button class="lead-filter-chip" data-filter="claimed" onclick="setLeadFilter('claimed')">已认领</button>
+      <button class="lead-filter-chip" data-filter="mine" onclick="setLeadFilter('mine')">我的认领</button>
+      <button class="lead-filter-chip" data-filter="error" onclick="setLeadFilter('error')">报错</button>
       <button class="lead-filter-chip" data-filter="phone" onclick="setLeadFilter('phone')">有电话</button>
-      <button class="lead-filter-chip" data-filter="error" onclick="setLeadFilter('error')">地址异常</button>
-      <button class="lead-filter-chip" data-filter="finddoc" onclick="setLeadFilter('finddoc')">FindDoc</button>
-      <button class="lead-filter-chip" data-filter="ehealth" onclick="setLeadFilter('ehealth')">eHealth</button>
     </div>
+    <div class="lead-error-export-row" id="leadErrorExportRow"><button onclick="exportLeadErrorRowsXlsx()">导出报错表格</button></div>
     <div class="lead-home-summary" id="leadHomeSummary">加载中...</div>
   </div>
   <div class="lead-list-body" id="leadListBody"></div>
@@ -674,7 +679,7 @@ body.home-mode .map-filter-bar { display:none !important; }
 
 <!-- Top bar -->
 <div class="top-bar">
-  <h1>📍 BDmap-v3.5.5</h1>
+  <h1>📍 BDmap-v3.5.7</h1>
   <span class="stats" id="statsText">0 机构</span>
   <button class="nav-pill-btn" id="btnMall" title="商场覆盖">🏬 商场</button>
   <button class="nav-pill-btn" id="btnSettings" title="设置">⚙ 设置</button>
@@ -2039,6 +2044,7 @@ function getLeadErrorLabel(p) {
 }
 function passLeadFilter(p) {
   if (leadFilter === 'unclaimed') return !p._leadClaimed;
+  if (leadFilter === 'claimed') return p._leadClaimed;
   if (leadFilter === 'mine') return p._leadMine;
   if (leadFilter === 'phone') return !!p.phone;
   if (leadFilter === 'error') return p._leadError;
@@ -2079,9 +2085,19 @@ function renderLeadHomeList() {
   if (leadSearchTerm) rows = rows.filter(p => p._leadHaystack.includes(leadSearchTerm));
   rows = sortLeadRows(rows.filter(passLeadFilter));
   const claimed = allRows.filter(p => p._leadClaimed).length;
+  const errorCount = allRows.filter(p => p._leadError).length;
   const phone = allRows.filter(p => p.phone).length;
-  summary.textContent = `当前 ${rows.length}/${total} 条｜按当前位置就近排序｜已认领 ${claimed}｜有电话 ${phone}`;
+  const exportRow = document.getElementById('leadErrorExportRow');
+  if (exportRow) exportRow.classList.toggle('active', leadFilter === 'error');
+  const filterNames = { all:'全部', unclaimed:'未认领', claimed:'已认领', mine:'我的认领', error:'报错', phone:'有电话' };
+  summary.textContent = `${filterNames[leadFilter] || '线索'}：当前 ${rows.length}/${total} 条｜默认按距离近到远｜已认领 ${claimed}｜报错 ${errorCount}｜有电话 ${phone}`;
   body.innerHTML = rows.length ? rows.slice(0,180).map(leadCardHtml).join('') : '<div class="lead-empty">没有符合条件的线索</div>';
+}
+async function exportLeadErrorRowsXlsx() {
+  const rows = getLeadRows().filter(p => p._leadError).map(p => clinicExportRow(p, { coverage_mode:'lead_error_review' }));
+  if (!rows.length) { toast('当前没有报错线索'); return; }
+  await downloadXlsx('BDmap_报错线索核实表.xlsx', CLINIC_EXPORT_HEADERS, rows, { sheetName:'报错线索核实', errorValidation:true });
+  toast('已导出报错线索核实表');
 }
 function leadCardHtml(p) {
   const ownerId = p._leadOwnerId || getOwnerId(p);
@@ -3867,7 +3883,7 @@ async function copyDashboardSummary() {
     return `【${label}】${stats}\n${top}`;
   }).join('\n\n');
   const unclaimedPool = pool.filter(p => groupOwnerKey(p) === 'unclaimed');
-  const text = `BDmap v3.5.5 今日BD汇报摘要\n总优先池：${pool.length}\n高优先级：${totalHigh}\n已推进机构：${pushed.filter(p=>!isUncontactedPlace(p)).length}\n有意向：${totalInterested}\n已合作：${totalCoop}\n待核实：${totalError}\n未认领优先线索：${unclaimedPool.length}\n\n按用户拆分：\n${ownerBlocks}`;
+  const text = `BDmap v3.5.7 今日BD汇报摘要\n总优先池：${pool.length}\n高优先级：${totalHigh}\n已推进机构：${pushed.filter(p=>!isUncontactedPlace(p)).length}\n有意向：${totalInterested}\n已合作：${totalCoop}\n待核实：${totalError}\n未认领优先线索：${unclaimedPool.length}\n\n按用户拆分：\n${ownerBlocks}`;
   await navigator.clipboard.writeText(text); toast('已复制按用户拆分的汇报摘要');
 }
 
