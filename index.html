@@ -2396,18 +2396,49 @@ async function deleteMall(id) {
     toast('商场本地已删除，云端记录删除失败：请检查 mallMeta 权限');
   }
 }
+function clinicMatchKey(p) {
+  return String((p.name || '').trim().toLowerCase() + '|' + (p.address || '').trim().toLowerCase());
+}
+function getPromotedPlaceForBaseClinic(base) {
+  if (!base) return null;
+  const directId = 'place_' + base.id;
+  return places.find(x => x.id === directId) || places.find(x => clinicMatchKey(x) === clinicMatchKey(base));
+}
+function mergeBaseClinicOwner(base) {
+  const promoted = getPromotedPlaceForBaseClinic(base);
+  if (!promoted) return base;
+  return {
+    ...base,
+    ownerId: promoted.ownerId,
+    ownerName: promoted.ownerName || promoted.createdBy || promoted.updatedBy,
+    ownerAvatar: promoted.ownerAvatar || promoted.createdByAvatar || promoted.updatedByAvatar,
+    createdBy: promoted.createdBy,
+    createdByAvatar: promoted.createdByAvatar,
+    updatedBy: promoted.updatedBy,
+    updatedByAvatar: promoted.updatedByAvatar,
+    status: promoted.status || base.status || '基础池',
+    visits: promoted.visits || base.visits || [],
+    phone: promoted.phone || base.phone,
+    contact: promoted.contact || base.contact,
+    _promotedPlaceId: promoted.id
+  };
+}
 function getBaseMallClinics(mall) {
   return baseClinics
     .filter(p => isClinicLike(p) && distanceKm(mall.lat, mall.lng, p.lat, p.lng) <= COVERAGE_KM)
-    .map(p => ({ ...p, _distanceKm: distanceKm(mall.lat, mall.lng, p.lat, p.lng), status: '基础池' }))
+    .map(p => {
+      const merged = mergeBaseClinicOwner(p);
+      return { ...merged, _distanceKm: distanceKm(mall.lat, mall.lng, p.lat, p.lng), status: merged.status || '基础池' };
+    })
     .sort((a,b) => a._distanceKm - b._distanceKm);
 }
 function computeMallClinics(mall) {
   const pool = [];
   const seen = new Set();
-  [...getBaseMallClinics(mall), ...places.filter(p => isClinicLike(p) && isUncontactedPlace(p) && distanceKm(mall.lat, mall.lng, p.lat, p.lng) <= COVERAGE_KM)]
+  const inRangePlaces = places.filter(p => isClinicLike(p) && distanceKm(mall.lat, mall.lng, p.lat, p.lng) <= COVERAGE_KM);
+  [...inRangePlaces, ...getBaseMallClinics(mall)]
     .forEach(p => {
-      const key = (p.id || '') + '|' + (p.name || '') + '|' + (p.address || '');
+      const key = clinicMatchKey(p) || ((p.id || '') + '|' + (p.address || ''));
       if (seen.has(key)) return;
       seen.add(key);
       pool.push({ ...p, _distanceKm: p._distanceKm !== undefined ? p._distanceKm : distanceKm(mall.lat, mall.lng, p.lat, p.lng) });
