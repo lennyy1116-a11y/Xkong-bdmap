@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-<title>BDmap-v3.4.1</title>
+<title>BDmap-v3.4.4</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -612,6 +612,15 @@ body.home-mode .lead-home { display:flex; }
 body.home-mode .map-home-return { display:none !important; }
 .lead-distance { color:#ffb65c; font-weight:900; }
 
+
+.lead-distance-field { margin-top:6px; display:inline-flex; align-items:center; gap:4px; border-radius:999px; padding:3px 8px; background:rgba(230,126,34,.14); color:#ffc078; font-size:12px; font-weight:900; }
+.lead-distance-field.unknown { background:rgba(255,255,255,.07); color:var(--text2); }
+
+
+.custom-marker.data-error { filter:saturate(.45); opacity:.52 !important; box-shadow:0 0 0 3px rgba(231,76,60,.65), 0 2px 6px rgba(0,0,0,.4); }
+.lead-error-line { margin-top:6px; color:#ffaaa1; font-size:12px; font-weight:900; }
+.lead-actions .resolve { border-color:rgba(46,204,113,.55); color:#96f0ba; }
+
 </style>
 </head>
 <body class="home-mode">
@@ -620,7 +629,7 @@ body.home-mode .map-home-return { display:none !important; }
 <div class="lead-home" id="leadHome">
   <div class="lead-home-header">
     <div class="lead-home-top">
-      <h1>📍 BDmap-v3.4.1</h1>
+      <h1>📍 BDmap-v3.4.4</h1>
       <button class="lead-tab-btn primary" onclick="showLeadHome()">线索</button>
       <button class="lead-tab-btn" onclick="showMapHome()">地图</button>
       <button class="lead-tab-btn" onclick="openDashboardFromHome()">看板</button>
@@ -643,7 +652,7 @@ body.home-mode .map-home-return { display:none !important; }
 
 <!-- Top bar -->
 <div class="top-bar">
-  <h1>📍 BDmap-v3.4.1</h1>
+  <h1>📍 BDmap-v3.4.4</h1>
   <span class="stats" id="statsText">0 机构</span>
   <button class="coverage-exit" id="btnExitCoverage" title="退出1km覆盖" style="display:none">↩ 退出1km</button>
   <button class="top-btn" id="btnDashboard" title="数据看板">📊</button>
@@ -1298,7 +1307,7 @@ function init() {
     renderOwnerFilters();
     renderMarkers();
     renderMalls();
-    renderLeadHomeList();
+    scheduleLeadHomeRender();
     updateStats();
     document.getElementById('syncStatus').textContent = '✅ 实时同步中 · ' + places.length + ' 条数据';
   }, err => {
@@ -1308,7 +1317,7 @@ function init() {
     places = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
     renderOwnerFilters();
     renderMarkers();
-    renderLeadHomeList();
+    scheduleLeadHomeRender();
     updateStats();
   });
 }
@@ -1342,15 +1351,20 @@ function getCoverageSortRank(p) {
   if (s === '已交流') return 2;
   return 3;
 }
+function isMapWeakError(p) {
+  const t = String((p && (p.dataQualityIssueType || p.dataQualityStatus)) || '').toLowerCase();
+  return ['地址错误','重複店舖','重复店铺','已停业','已停業'].some(x => t.includes(x.toLowerCase()));
+}
 function createIcon(status, p, highlighted) {
   const color = STATUS_COLORS[status] || '#7f8c8d';
   const avatar = isPointEntry(p) ? '📍' : getOwnerAvatar(p);
   const mine = getOwnerId(p) === getCurrentOwnerId();
-  const opacity = mine ? 1 : 0.72;
+  const opacity = isMapWeakError(p) ? 0.52 : (mine ? 1 : 0.72);
   const coverageClass = highlighted ? getCoverageContactClass({ ...p, status }) : '';
+  const errorClass = isMapWeakError(p) ? ' data-error' : '';
   return L.divIcon({
     className: '',
-    html: `<div class="custom-marker ${coverageClass}" style="background:${color};opacity:${opacity}">${avatarHtml(avatar)}</div>`,
+    html: `<div class="custom-marker ${coverageClass}${errorClass}" style="background:${color};opacity:${opacity}">${avatarHtml(avatar)}</div>`,
     iconSize: [30, 30],
     iconAnchor: [15, 15],
     popupAnchor: [0, -16]
@@ -1425,7 +1439,7 @@ function locateMe(silent) {
   navigator.geolocation.getCurrentPosition(
     pos => {
       currentPos = { lat: pos.coords.latitude, lng: pos.coords.longitude };
-      renderLeadHomeList();
+      scheduleLeadHomeRender();
       map.setView([currentPos.lat, currentPos.lng], 16);
       if (myLocMarker) map.removeLayer(myLocMarker);
       myLocMarker = L.circleMarker([currentPos.lat, currentPos.lng], {
@@ -1723,7 +1737,7 @@ async function savePlace() {
     clearCoverageCache();
     savePlaces();
     await saveToFirestore(data);
-    renderMarkers(); renderLeadHomeList(); updateStats();
+    renderMarkers(); scheduleLeadHomeRender(); updateStats();
     feedback('ok', existIdx >= 0 ? '✅ 已更新并同步到云端' : '✅ 已添加并同步到云端');
     toast(existIdx >= 0 ? '✅ 已更新并同步' : '✅ 已添加并同步');
     map.setView([lat, lng], map.getZoom());
@@ -1747,7 +1761,7 @@ function deletePlace() {
   savePlaces();
   deleteFromFirestore(id);
   renderMarkers();
-  renderLeadHomeList();
+  scheduleLeadHomeRender();
   updateStats();
   closeSheet();
   toast('🗑 已删除并同步');
@@ -1907,7 +1921,32 @@ function setLeadFilter(f) {
   document.querySelectorAll('.lead-filter-chip').forEach(b => b.classList.toggle('active', b.dataset.filter === leadFilter));
   renderLeadHomeList();
 }
-function getLeadRows() {
+let leadRowsCache = null;
+let leadRowsCacheKey = '';
+function clearLeadRowsCache() { leadRowsCache = null; leadRowsCacheKey = ''; }
+function leadRowsDataKey() { return [places.length, baseClinics.length, coverageCacheVersion, currentUsername, currentAvatar].join('|'); }
+function enrichLeadRow(row) {
+  const ownerId = getOwnerId(row);
+  const source = getClinicSourceLabel(row);
+  const errorLabel = getLeadErrorLabel(row);
+  const dist = getLeadDistanceKm(row);
+  return {
+    ...row,
+    _leadOwnerId: ownerId,
+    _leadClaimed: !!(ownerId && ownerId !== 'base_tcm_pool' && ownerId !== normalizeOwnerId('匿名')),
+    _leadMine: ownerId === getCurrentOwnerId(),
+    _leadSource: source,
+    _leadSourceScore: source === 'FindDoc' ? 2 : source === 'eHealth' ? 1 : 0,
+    _leadError: hasLeadError(row),
+    _leadErrorLabel: errorLabel,
+    _leadDistanceKm: dist,
+    _leadWarm: getCoverageSortRank(row) < 3,
+    _leadHaystack: [row.name,row.address,row.type,row.contact,row.phone,source,getOwnerLabel(row)].join(' ').toLowerCase()
+  };
+}
+function getLeadRows(force) {
+  const cacheKey = leadRowsDataKey();
+  if (!force && leadRowsCache && leadRowsCacheKey === cacheKey) return leadRowsCache;
   const byKey = new Map();
   function upsertLeadRow(raw) {
     if (!raw || isPointEntry(raw) || !isClinicLike(raw)) return;
@@ -1920,25 +1959,26 @@ function getLeadRows() {
     } else keys.forEach(k => byKey.set(k, row));
   }
   places.forEach(upsertLeadRow);
-  baseClinics.map(mergeBaseClinicOwner).forEach(upsertLeadRow);
+  baseClinics.forEach(b => upsertLeadRow(mergeBaseClinicOwner(b)));
   const out = [], seen = new Set();
   byKey.forEach(row => {
     const key = clinicMatchKey(row) || row.id;
     if (seen.has(key)) return;
-    seen.add(key); out.push(row);
+    seen.add(key); out.push(enrichLeadRow(row));
   });
+  leadRowsCache = out;
+  leadRowsCacheKey = cacheKey;
   return out;
 }
-function hasLeadError(p) { return !!(p.dataQualityStatus || (p.errorReports||[]).length); }
+function hasLeadError(p) { return !!(p.dataQualityStatus || p.dataQualityIssueType || (p.errorReports||[]).length); }
+function getLeadErrorLabel(p) { return p.dataQualityIssueType || p.dataQualityStatus || (((p.errorReports||[]).slice(-1)[0]||{}).type) || '待核实'; }
 function passLeadFilter(p) {
-  const ownerId = getOwnerId(p);
-  const claimed = ownerId && ownerId !== 'base_tcm_pool' && ownerId !== normalizeOwnerId('匿名');
-  if (leadFilter === 'unclaimed') return !claimed;
-  if (leadFilter === 'mine') return ownerId === getCurrentOwnerId();
+  if (leadFilter === 'unclaimed') return !p._leadClaimed;
+  if (leadFilter === 'mine') return p._leadMine;
   if (leadFilter === 'phone') return !!p.phone;
-  if (leadFilter === 'error') return hasLeadError(p);
-  if (leadFilter === 'finddoc') return getClinicSourceLabel(p).toLowerCase() === 'finddoc';
-  if (leadFilter === 'ehealth') return getClinicSourceLabel(p).toLowerCase() === 'ehealth';
+  if (leadFilter === 'error') return p._leadError;
+  if (leadFilter === 'finddoc') return String(p._leadSource || '').toLowerCase() === 'finddoc';
+  if (leadFilter === 'ehealth') return String(p._leadSource || '').toLowerCase() === 'ehealth';
   return true;
 }
 function getLeadDistanceKm(p) {
@@ -1947,67 +1987,83 @@ function getLeadDistanceKm(p) {
 }
 function sortLeadRows(rows) {
   return rows.sort((a,b) => {
-    const da = getLeadDistanceKm(a), db = getLeadDistanceKm(b);
+    const da = a._leadDistanceKm, db = b._leadDistanceKm;
     const aNear = Number.isFinite(da), bNear = Number.isFinite(db);
     if (aNear !== bNear) return bNear - aNear;
     if (aNear && bNear && Math.abs(da - db) > 0.05) return da - db;
-    const mineA = getOwnerId(a) === getCurrentOwnerId(), mineB = getOwnerId(b) === getCurrentOwnerId();
-    if (mineA !== mineB) return mineB - mineA;
-    const errA = hasLeadError(a), errB = hasLeadError(b);
-    if (errA !== errB) return errA - errB;
-    const warmA = getCoverageSortRank(a) < 3, warmB = getCoverageSortRank(b) < 3;
-    if (warmA !== warmB) return warmB - warmA;
+    if (a._leadMine !== b._leadMine) return b._leadMine - a._leadMine;
+    if (a._leadError !== b._leadError) return a._leadError - b._leadError;
+    if (a._leadWarm !== b._leadWarm) return b._leadWarm - a._leadWarm;
     const phoneA = !!a.phone, phoneB = !!b.phone;
     if (phoneA !== phoneB) return phoneB - phoneA;
-    const srcA = getClinicSourceLabel(a), srcB = getClinicSourceLabel(b);
-    const sourceScore = s => s === 'FindDoc' ? 2 : s === 'eHealth' ? 1 : 0;
-    return sourceScore(srcB) - sourceScore(srcA) || String(a.name||'').localeCompare(String(b.name||''));
+    return b._leadSourceScore - a._leadSourceScore || String(a.name||'').localeCompare(String(b.name||''));
   });
+}
+function scheduleLeadHomeRender() {
+  clearLeadRowsCache();
+  if (window._leadRenderTimer) clearTimeout(window._leadRenderTimer);
+  window._leadRenderTimer = setTimeout(renderLeadHomeList, 40);
 }
 function renderLeadHomeList() {
   const body = document.getElementById('leadListBody');
   const summary = document.getElementById('leadHomeSummary');
   if (!body || !summary) return;
-  let rows = getLeadRows();
+  const allRows = getLeadRows();
+  let rows = allRows;
   const total = rows.length;
-  if (leadSearchTerm) {
-    rows = rows.filter(p => [p.name,p.address,p.type,p.contact,p.phone,getClinicSourceLabel(p),getOwnerLabel(p)].join(' ').toLowerCase().includes(leadSearchTerm));
-  }
+  if (leadSearchTerm) rows = rows.filter(p => p._leadHaystack.includes(leadSearchTerm));
   rows = sortLeadRows(rows.filter(passLeadFilter));
-  const claimed = getLeadRows().filter(p => { const id=getOwnerId(p); return id && id !== 'base_tcm_pool' && id !== normalizeOwnerId('匿名'); }).length;
-  const phone = getLeadRows().filter(p => p.phone).length;
+  const claimed = allRows.filter(p => p._leadClaimed).length;
+  const phone = allRows.filter(p => p.phone).length;
   summary.textContent = `当前 ${rows.length}/${total} 条｜按当前位置就近排序｜已认领 ${claimed}｜有电话 ${phone}`;
   body.innerHTML = rows.length ? rows.slice(0,180).map(leadCardHtml).join('') : '<div class="lead-empty">没有符合条件的线索</div>';
 }
 function leadCardHtml(p) {
-  const ownerId = getOwnerId(p);
-  const claimed = ownerId && ownerId !== 'base_tcm_pool' && ownerId !== normalizeOwnerId('匿名');
-  const mine = ownerId === getCurrentOwnerId();
-  const src = getClinicSourceLabel(p);
-  const err = hasLeadError(p);
-  const dist = getLeadDistanceKm(p);
-  const distHtml = Number.isFinite(dist) ? `<span class="lead-distance">${dist.toFixed(dist < 10 ? 1 : 0)}km</span> · ` : '';
+  const ownerId = p._leadOwnerId || getOwnerId(p);
+  const claimed = p._leadClaimed !== undefined ? p._leadClaimed : (ownerId && ownerId !== 'base_tcm_pool' && ownerId !== normalizeOwnerId('匿名'));
+  const mine = p._leadMine !== undefined ? p._leadMine : ownerId === getCurrentOwnerId();
+  const src = p._leadSource !== undefined ? p._leadSource : getClinicSourceLabel(p);
+  const err = p._leadError !== undefined ? p._leadError : hasLeadError(p);
+  const dist = p._leadDistanceKm !== undefined ? p._leadDistanceKm : getLeadDistanceKm(p);
+  const distText = Number.isFinite(dist) ? `${dist.toFixed(dist < 10 ? 1 : 0)} km` : '等待定位';
+  const distClass = Number.isFinite(dist) ? '' : ' unknown';
   const owner = claimed ? `<span>${avatarInlineHtml(getOwnerAvatar(p))}${esc(getOwnerLabel(p))}</span>` : '<span>未认领</span>';
   const phoneBtn = p.phone ? `<a class="phone" href="tel:${esc(p.phone)}" onclick="event.stopPropagation()">📞 联络</a>` : `<button class="phone" onclick="event.stopPropagation(); toast('暂无电话')">📞 无电话</button>`;
+  const claimBtn = mine ? `<button class="claim" onclick="editClaimedLead('${jsStr(p.id)}')">✏️ 编辑</button>` : `<button class="claim" onclick="claimLead('${jsStr(p.id)}')">${claimed ? '👤 已认领' : '👤 认领'}</button>`;
+  const resolveBtn = err ? `<button class="resolve" onclick="resolveLeadError('${jsStr(p.id)}')">✅ 已修正</button>` : `<button class="map" onclick="locateLeadOnMap('${jsStr(p.id)}')">🗺 地图</button>`;
   return `<div class="lead-card ${mine?'claimed-mine':''} ${err?'error':''}" onclick="locateLeadOnMap('${jsStr(p.id)}')">
     <div class="lead-card-top"><div class="lead-card-main">
       <div class="lead-card-name">${esc(p.name || '未命名店铺')}</div>
-      <div class="lead-card-type">${esc(p.type || '未知类型')}${src ? ' · ' + esc(src) : ''}${p.phone ? '<span class="lead-tag phone">电话</span>' : ''}${src ? '<span class="lead-tag source">'+esc(src)+'</span>' : ''}${err ? '<span class="lead-tag err">待核实</span>' : ''}</div>
-      <div class="lead-card-addr">${distHtml}${esc(p.address || '暂无地址')}</div>
+      <div class="lead-card-type">${esc(p.type || '未知类型')}${src ? ' · ' + esc(src) : ''}${p.phone ? '<span class="lead-tag phone">电话</span>' : ''}${src ? '<span class="lead-tag source">'+esc(src)+'</span>' : ''}${err ? '<span class="lead-tag err">'+esc(p._leadErrorLabel || getLeadErrorLabel(p))+'</span>' : ''}</div>
+      <div class="lead-distance-field${distClass}">📍 距离：${distText}</div>
+      <div class="lead-card-addr">${esc(p.address || '暂无地址')}</div>
+      ${err ? '<div class="lead-error-line">⚠️ ' + esc(p._leadErrorLabel || getLeadErrorLabel(p)) + ' · 待核实</div>' : ''}
     </div><div class="lead-owner-pill ${claimed?'':'unclaimed'}">${owner}</div></div>
     <div class="lead-actions" onclick="event.stopPropagation()">
-      <button class="claim" onclick="claimLead('${jsStr(p.id)}')">${claimed ? (mine ? '👤 我的' : '👤 已认领') : '👤 认领'}</button>
+      ${claimBtn}
       ${phoneBtn}
       <button class="error" onclick="reportLeadError('${jsStr(p.id)}')">⚠️ 报错</button>
-      <button class="map" onclick="locateLeadOnMap('${jsStr(p.id)}')">🗺 地图</button>
+      ${resolveBtn}
     </div>
   </div>`;
 }
 function findLeadRecord(id) { return places.find(x => x.id === id) || baseClinics.find(x => x.id === id) || getLeadRows().find(x => x.id === id); }
+function getEditableLeadPlace(id) {
+  const p = findLeadRecord(id);
+  if (!p) return null;
+  return places.find(x => x.id === id || x.id === 'place_' + id || clinicMatchKey(x) === clinicMatchKey(p)) || null;
+}
+function editClaimedLead(id) {
+  const editable = getEditableLeadPlace(id);
+  if (!editable) { toast('先认领后才能编辑'); return; }
+  showMapHome();
+  setTimeout(() => openEditSheet(editable.id), 80);
+}
 async function claimLead(id) {
   const p = findLeadRecord(id);
   if (!p) return toast('找不到线索');
   const ownerId = getOwnerId(p);
+  if (ownerId === getCurrentOwnerId()) { editClaimedLead(id); return; }
   if (ownerId && ownerId !== 'base_tcm_pool' && ownerId !== normalizeOwnerId('匿名') && ownerId !== getCurrentOwnerId()) { toast('已被别人认领'); return; }
   let data = places.find(x => x.id === id || x.id === 'place_' + id || clinicMatchKey(x) === clinicMatchKey(p));
   const now = new Date().toISOString();
@@ -2017,7 +2073,7 @@ async function claimLead(id) {
   data.updatedAt = now; data.updatedBy = currentUsername || '匿名'; data.updatedByAvatar = currentAvatar;
   const idx = places.findIndex(x => x.id === data.id);
   if (idx >= 0) places[idx] = data; else places.push(data);
-  clearCoverageCache(); savePlaces(); renderLeadHomeList(); renderMarkers(); updateStats();
+  clearCoverageCache(); savePlaces(); scheduleLeadHomeRender(); renderMarkers(); updateStats();
   try { await saveToFirestore(data); toast('👤 已认领'); } catch(e) { console.error(e); toast('⚠️ 本地已认领，云端同步失败'); }
 }
 async function reportLeadError(id) {
@@ -2029,12 +2085,32 @@ async function reportLeadError(id) {
   const now = new Date().toISOString();
   if (!data) data = { ...p, id: p.isBaseClinic ? 'place_' + p.id : (p.id || 'place_' + Date.now().toString(36)), isBaseClinic:false, sourceBaseId:p.id, createdAt:now };
   data.errorReports = [...(data.errorReports||[]), { type, note, by: currentUsername || '匿名', byAvatar: currentAvatar, at: now }];
-  data.dataQualityStatus = type;
+  data.dataQualityStatus = '待核实';
+  data.dataQualityIssueType = type;
   data.updatedAt = now; data.updatedBy = currentUsername || '匿名'; data.updatedByAvatar = currentAvatar;
   const idx = places.findIndex(x => x.id === data.id);
   if (idx >= 0) places[idx] = data; else places.push(data);
-  clearCoverageCache(); savePlaces(); renderLeadHomeList(); renderMarkers(); updateStats();
+  clearCoverageCache(); savePlaces(); scheduleLeadHomeRender(); renderMarkers(); updateStats();
   try { await saveToFirestore(data); toast('⚠️ 已提交报错'); } catch(e) { console.error(e); toast('⚠️ 本地已记录，云端同步失败'); }
+}
+
+async function resolveLeadError(id) {
+  const p = findLeadRecord(id); if (!p) return toast('找不到线索');
+  let data = places.find(x => x.id === id || x.id === 'place_' + id || clinicMatchKey(x) === clinicMatchKey(p));
+  if (!data) return toast('这条线索还没有运营记录，无法修正');
+  const note = prompt('修正说明（可空）', '已核实/已修正') || '';
+  const now = new Date().toISOString();
+  data.resolvedReports = [...(data.resolvedReports||[]), { type: data.dataQualityIssueType || data.dataQualityStatus || '报错', note, by: currentUsername || '匿名', byAvatar: currentAvatar, at: now }];
+  data.dataQualityStatus = '';
+  data.dataQualityIssueType = '';
+  data.resolvedAt = now;
+  data.resolvedBy = currentUsername || '匿名';
+  data.resolveNote = note;
+  data.updatedAt = now; data.updatedBy = currentUsername || '匿名'; data.updatedByAvatar = currentAvatar;
+  const idx = places.findIndex(x => x.id === data.id);
+  if (idx >= 0) places[idx] = data;
+  clearCoverageCache(); savePlaces(); scheduleLeadHomeRender(); renderMarkers(); updateStats();
+  try { await saveToFirestore(data); toast('✅ 已标记修正'); } catch(e) { console.error(e); toast('⚠️ 本地已修正，云端同步失败'); }
 }
 function locateLeadOnMap(id) {
   const p = findLeadRecord(id); if (!p || !p.lat || !p.lng) return toast('没有坐标');
@@ -2775,7 +2851,7 @@ async function loadBaseClinics() {
     clearCoverageCache();
     renderMarkers();
     renderMallList();
-    renderLeadHomeList();
+    scheduleLeadHomeRender();
     updateStats();
   } catch(e) {
     console.error('Base clinic pool failed', e);
@@ -3609,7 +3685,7 @@ function exportPriorityCsv() {
 }
 async function copyDashboardSummary() {
   const pool=getPriorityPool();
-  const text=`BDmap v3.4.1 今日BD汇报摘要\n总线索：${pool.length}\n高优先级：${pool.filter(p=>p._priority.score>=80).length}\n已推进机构：${places.filter(p=>!isUncontactedPlace(p)).length}\n有意向：${places.filter(p=>normalizeStatus(p.status)==='有意向').length}\n待电话/补资料：${pool.filter(p=>['电话联系','补资料'].includes(actionCategory(p._priority.action))).length}\nTop5：\n`+pool.slice(0,5).map((p,i)=>`${i+1}. ${p.name} ${p._priority.score}分｜${p._priority.action}`).join('\n');
+  const text=`BDmap v3.4.4 今日BD汇报摘要\n总线索：${pool.length}\n高优先级：${pool.filter(p=>p._priority.score>=80).length}\n已推进机构：${places.filter(p=>!isUncontactedPlace(p)).length}\n有意向：${places.filter(p=>normalizeStatus(p.status)==='有意向').length}\n待电话/补资料：${pool.filter(p=>['电话联系','补资料'].includes(actionCategory(p._priority.action))).length}\nTop5：\n`+pool.slice(0,5).map((p,i)=>`${i+1}. ${p.name} ${p._priority.score}分｜${p._priority.action}`).join('\n');
   await navigator.clipboard.writeText(text); toast('汇报摘要已复制，可直接发老板/群里');
 }
 function openTopPriorityOnMap() {
