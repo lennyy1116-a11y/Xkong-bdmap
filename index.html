@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-<title>BDmap-v3.6.0 批量导入店铺版</title>
+<title>BDmap-v3.6.1 地址自动定位版</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -649,7 +649,7 @@ body.home-mode .map-filter-bar { display:none !important; }
 .lead-error-export-row button { flex:1; border:1px solid rgba(231,76,60,.55); background:rgba(231,76,60,.10); color:#ffaaa1; border-radius:10px; padding:8px 10px; font-size:12px; font-weight:900; }
 
 
-/* v3.6.0 batch shop import */
+/* v3.6.1 relocation google */
 .batch-shop-modal { position:fixed; inset:0; z-index:5200; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.58); padding:14px; }
 .batch-shop-modal.active { display:flex; }
 .batch-shop-box { width:min(980px, 100%); max-height:88vh; overflow:auto; background:var(--card); color:var(--text); border:1px solid rgba(255,255,255,.14); border-radius:18px; box-shadow:0 18px 60px rgba(0,0,0,.45); }
@@ -682,8 +682,8 @@ body.home-mode .map-filter-bar { display:none !important; }
 <div class="lead-home" id="leadHome">
   <div class="lead-home-header">
     <div class="lead-home-top">
-      <h1>📍 BDmap-v3.6.0 批量导入店铺版</h1>
-      <div style="font-size:12px;color:#2563eb;font-weight:700;margin-top:4px;">版本标识：v3.6.0｜批量导入店铺版｜2026-05-14</div>
+      <h1>📍 BDmap-v3.6.1 地址自动定位版</h1>
+      <div style="font-size:12px;color:#2563eb;font-weight:700;margin-top:4px;">版本标识：v3.6.1｜批量导入店铺版 + Google地址自动定位｜2026-05-19</div>
       <button class="lead-tab-btn" onclick="triggerBatchErrorImport()">上传报错</button>
       <input type="file" id="batchErrorFile" accept=".xlsx,.xls" style="display:none" onchange="handleBatchErrorImport(event)">
       <button class="lead-tab-btn" onclick="openBatchShopImport()">批量导入店铺</button>
@@ -721,7 +721,7 @@ body.home-mode .map-filter-bar { display:none !important; }
       </div>
       <div class="batch-shop-summary" id="batchShopSummary">还没上传文件。建议销售至少填写：店铺名称、地址、电话。</div>
       <div class="batch-shop-table-wrap"><table class="batch-shop-table" id="batchShopTable"><thead><tr><th>行</th><th>状态</th><th>店铺</th><th>地址</th><th>电话</th><th>坐标</th><th>重复/备注</th></tr></thead><tbody><tr><td colspan="7" class="muted">等待上传Excel</td></tr></tbody></table></div>
-      <div class="batch-shop-hint">定位规则：有lat/lng直接用；无坐标则用地址走OpenStreetMap/Nominatim自动定位；定位失败或地址太粗会标为“坐标待核点”，仍可导入但会带报错标签，方便后续筛选修正。</div>
+      <div class="batch-shop-hint">定位规则：有lat/lng直接用；无坐标则优先走Google地址定位，失败再用OpenStreetMap/Nominatim兜底；定位失败或地址太粗会标为“坐标待核点”，仍可导入但会带报错标签，方便后续筛选修正。</div>
     </div>
   </div>
 </div>
@@ -729,8 +729,8 @@ body.home-mode .map-filter-bar { display:none !important; }
 
 <!-- Top bar -->
 <div class="top-bar">
-  <h1>📍 BDmap-v3.6.0 批量导入店铺版</h1>
-      <div style="font-size:12px;color:#2563eb;font-weight:700;margin-top:4px;">版本标识：v3.6.0｜批量导入店铺版｜2026-05-14</div>
+  <h1>📍 BDmap-v3.6.1 地址自动定位版</h1>
+      <div style="font-size:12px;color:#2563eb;font-weight:700;margin-top:4px;">版本标识：v3.6.1｜批量导入店铺版 + Google地址自动定位｜2026-05-19</div>
   <span class="stats" id="statsText">0 机构</span>
   <button class="nav-pill-btn" id="btnMall" title="商场覆盖">🏬 商场</button>
   <button class="nav-pill-btn" id="btnSettings" title="设置">⚙ 设置</button>
@@ -3996,7 +3996,7 @@ async function copyDashboardSummary() {
 }
 
 
-// ============ BATCH SHOP IMPORT v3.6.0 ============
+// ============ BATCH SHOP IMPORT v3.6.1 ============
 let batchShopPreviewRows = [];
 const BATCH_SHOP_HEADERS = ['店铺名称','类型','地址','区域','联系人','电话','来源','备注','认领人','状态','lat','lng'];
 function openBatchShopImport(){
