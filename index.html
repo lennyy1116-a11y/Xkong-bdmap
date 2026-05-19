@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-<title>BDmap-v3.6.5 全类型线索地图版</title>
+<title>BDmap-v3.6.6 同楼多机构显示修复版</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -649,7 +649,7 @@ body.home-mode .map-filter-bar { display:none !important; }
 .lead-error-export-row button { flex:1; border:1px solid rgba(231,76,60,.55); background:rgba(231,76,60,.10); color:#ffaaa1; border-radius:10px; padding:8px 10px; font-size:12px; font-weight:900; }
 
 
-/* v3.6.5 all types leads map */
+/* v3.6.6 same building unstack */
 .batch-shop-modal { position:fixed; inset:0; z-index:5200; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.58); padding:14px; }
 .batch-shop-modal.active { display:flex; }
 .batch-shop-box { width:min(980px, 100%); max-height:88vh; overflow:auto; background:var(--card); color:var(--text); border:1px solid rgba(255,255,255,.14); border-radius:18px; box-shadow:0 18px 60px rgba(0,0,0,.45); }
@@ -682,8 +682,8 @@ body.home-mode .map-filter-bar { display:none !important; }
 <div class="lead-home" id="leadHome">
   <div class="lead-home-header">
     <div class="lead-home-top">
-      <h1>📍 BDmap-v3.6.5 全类型线索地图版</h1>
-      <div style="font-size:12px;color:#2563eb;font-weight:700;margin-top:4px;">版本标识：v3.6.5｜批量导入店铺版 + Google地址自动定位 + 云端自定义类型 + 全类型线索/地图显示｜2026-05-19</div>
+      <h1>📍 BDmap-v3.6.6 同楼多机构显示修复版</h1>
+      <div style="font-size:12px;color:#2563eb;font-weight:700;margin-top:4px;">版本标识：v3.6.6｜同楼多机构显示修复 + 全类型线索/地图 + 云端自定义类型｜2026-05-19</div>
       <button class="lead-tab-btn" onclick="triggerBatchErrorImport()">上传报错</button>
       <input type="file" id="batchErrorFile" accept=".xlsx,.xls" style="display:none" onchange="handleBatchErrorImport(event)">
       <button class="lead-tab-btn" onclick="openBatchShopImport()">批量导入店铺</button>
@@ -729,8 +729,8 @@ body.home-mode .map-filter-bar { display:none !important; }
 
 <!-- Top bar -->
 <div class="top-bar">
-  <h1>📍 BDmap-v3.6.5 全类型线索地图版</h1>
-      <div style="font-size:12px;color:#2563eb;font-weight:700;margin-top:4px;">版本标识：v3.6.5｜批量导入店铺版 + Google地址自动定位 + 云端自定义类型 + 全类型线索/地图显示｜2026-05-19</div>
+  <h1>📍 BDmap-v3.6.6 同楼多机构显示修复版</h1>
+      <div style="font-size:12px;color:#2563eb;font-weight:700;margin-top:4px;">版本标识：v3.6.6｜同楼多机构显示修复 + 全类型线索/地图 + 云端自定义类型｜2026-05-19</div>
   <span class="stats" id="statsText">0 机构</span>
   <button class="nav-pill-btn" id="btnMall" title="商场覆盖">🏬 商场</button>
   <button class="nav-pill-btn" id="btnSettings" title="设置">⚙ 设置</button>
@@ -1585,11 +1585,22 @@ function renderMarkers() {
   if (selectedMall && baseClinics.length) {
     renderPool = mergeCoverageRenderPool(renderPool, getBaseMallClinics(selectedMall));
   }
+  const coordGroups = new Map();
   renderPool.forEach(p => {
     if (isNaN(parseFloat(p.lat)) || isNaN(parseFloat(p.lng))) return;
-    const isHighlighted = selectedMall && distanceKm(selectedMall.lat, selectedMall.lng, p.lat, p.lng) <= COVERAGE_KM;
+    const lat0 = parseFloat(p.lat), lng0 = parseFloat(p.lng);
+    const coordKey = lat0.toFixed(6) + ',' + lng0.toFixed(6);
+    const siblings = coordGroups.get(coordKey) || [];
+    coordGroups.set(coordKey, siblings.concat([p.id || siblings.length]));
+    const idx = siblings.length;
+    const total = Math.max(1, renderPool.filter(x => !isNaN(parseFloat(x.lat)) && !isNaN(parseFloat(x.lng)) && parseFloat(x.lat).toFixed(6) + ',' + parseFloat(x.lng).toFixed(6) === coordKey).length);
+    const angle = (Math.PI * 2 * idx) / total;
+    const offset = total > 1 ? 0.000045 : 0; // 约5米，解决同楼/同坐标 marker 互相盖住
+    const markerLat = lat0 + Math.sin(angle) * offset;
+    const markerLng = lng0 + Math.cos(angle) * offset;
+    const isHighlighted = selectedMall && distanceKm(selectedMall.lat, selectedMall.lng, lat0, lng0) <= COVERAGE_KM;
     const displayStatus = p.status || (p.isBaseClinic ? '基础池' : '未接触');
-    const marker = L.marker([p.lat, p.lng], { icon: createIcon(displayStatus, p, isHighlighted) });
+    const marker = L.marker([markerLat, markerLng], { icon: createIcon(displayStatus, p, isHighlighted) });
     const statusColor = STATUS_COLORS[displayStatus] || '#7f8c8d';
     const visitCount = (p.visits || []).length;
     const lastVisit = visitCount > 0 ? p.visits[visitCount-1] : null;
@@ -3084,6 +3095,10 @@ function clinicMatchKey(p) {
   if (!name && !addr) return String((p && p.id) || '');
   return name + '|' + addr;
 }
+function clinicExactAddressKey(p) {
+  const addr = normalizeClinicText(p && p.address);
+  return addr ? 'addr|' + addr : '';
+}
 function clinicIdentityKeys(p) {
   const keys = new Set();
   if (!p) return keys;
@@ -3092,8 +3107,8 @@ function clinicIdentityKeys(p) {
     if (String(p.id).startsWith('place_')) keys.add(String(p.id).slice(6));
     else keys.add('place_' + String(p.id));
   }
-  const match = clinicMatchKey(p);
-  if (match && match !== '|') keys.add(match);
+  // 不再用「名称+地址」做地图/线索去重 key。医生同楼不同室（302/309）或同地址多医生，
+  // 很容易被误判成同一家，导致其中一个 marker 消失。除非是基础池和已晋升记录的直接 id 对应，否则保留多条。
   return keys;
 }
 function hasClinicIdentity(seen, p) {
@@ -3120,14 +3135,16 @@ function mergeCoverageRenderPool(primaryRows, baseRows) {
   const rows = [];
   const seen = new Set();
   primaryRows.forEach(p => { rows.push(p); addClinicIdentity(seen, p); });
-  baseRows.forEach(p => { if (!hasClinicIdentity(seen, p)) { rows.push(p); addClinicIdentity(seen, p); } });
+  baseRows.forEach(p => {
+    if (!hasClinicIdentity(seen, p)) { rows.push(p); addClinicIdentity(seen, p); }
+  });
   return rows;
 }
 function getPromotedPlaceForBaseClinic(base) {
   if (!base) return null;
   const directId = 'place_' + base.id;
   const baseKey = clinicMatchKey(base);
-  return places.find(x => x.id === directId) || places.find(x => clinicMatchKey(x) === baseKey);
+  return places.find(x => x.id === directId || x.sourceBaseId === base.id) || places.find(x => clinicMatchKey(x) === baseKey && clinicExactAddressKey(x) === clinicExactAddressKey(base));
 }
 function mergeBaseClinicOwner(base) {
   const promoted = getPromotedPlaceForBaseClinic(base);
@@ -4082,7 +4099,7 @@ async function copyDashboardSummary() {
 }
 
 
-// ============ BATCH SHOP IMPORT v3.6.5 ============
+// ============ BATCH SHOP IMPORT v3.6.6 ============
 let batchShopPreviewRows = [];
 const BATCH_SHOP_HEADERS = ['店铺名称','类型','地址','区域','联系人','电话','来源','备注','认领人','状态','lat','lng'];
 function openBatchShopImport(){
