@@ -822,7 +822,8 @@ body.home-mode .map-filter-bar { display:none !important; }
   </div>
   <div class="form-group">
     <label>地址</label>
-    <input type="text" id="fAddr" placeholder="手动输入地址，或点击下方去地图选点">
+    <input type="text" id="fAddr" placeholder="填写地址后自动定位，例如：乐富广场" oninput="scheduleSheetAddressRelocate()" onchange="geocodeAddressForSheet(true)">
+    <button class="btn btn-ghost" type="button" onclick="geocodeAddressForSheet(true)" style="width:100%; margin-top:8px">📍 按地址自动定位</button>
     <button class="btn btn-ghost" type="button" onclick="startSheetPickLocation()" style="width:100%; margin-top:8px">🗺️ 去地图选点/修正坐标</button>
   </div>
   <div class="form-row institution-only">
@@ -1187,6 +1188,7 @@ const mallMetaCollection = db.collection('mallMeta');
 // ============ APP STATE ============
 const STORAGE_KEY = 'bd_map_places';
 const APIKEY_KEY = 'bd_map_google_key';
+const DEFAULT_GOOGLE_MAPS_KEY = 'AIzaSyAQ4mpeoPh6KU1BZC2bfN6FzM_gMW3GsZM';
 const USERNAME_KEY = 'bd_map_username';
 const USER_AVATAR_KEY = 'bd_map_user_avatar';
 const AVATAR_POOL = ['🦅','🏃','🌿','🧭','🐯','🦊','🐼','🐧','🐶','🐱','🐰','🦁','🐺','🐻','🐨','🐵','🦉','🦋','🐉','🔥','⭐','🌙','☀️','⚡','🌊','🍀','🌿','🌸','🌻','🍄','💊','🏥','🩺','🧬','🧪','📍','🗺️','🎯','🚀','💼','📊','🧩','💎','👑','🎧','🎮','🍵','☕','🥐','🍜'];
@@ -1573,6 +1575,58 @@ function reverseGeocode(lat, lng) {
         document.getElementById('fAddr').value = d.display_name;
       }
     }).catch(() => {});
+}
+
+let sheetAddressRelocateTimer = null;
+let lastRelocatedAddress = '';
+function scheduleSheetAddressRelocate() {
+  clearTimeout(sheetAddressRelocateTimer);
+  sheetAddressRelocateTimer = setTimeout(() => geocodeAddressForSheet(false), 900);
+}
+async function geocodeAddressForSheet(forceToast) {
+  const addrEl = document.getElementById('fAddr');
+  if (!addrEl) return;
+  const raw = addrEl.value.trim();
+  if (!raw || raw.length < 3) return;
+  if (!forceToast && raw === lastRelocatedAddress) return;
+  const query = /香港|Hong Kong|HK/i.test(raw) ? raw : raw + ' 香港';
+  try {
+    if (forceToast) toast('📍 正在按地址定位...');
+    const key = getGoogleMapsKey();
+    let lat, lng, formatted;
+    if (key) {
+      const res = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(query)}&key=${encodeURIComponent(key)}&region=hk&language=zh-HK`);
+      const data = await res.json();
+      if (data.status === 'OK' && data.results && data.results.length) {
+        lat = data.results[0].geometry.location.lat;
+        lng = data.results[0].geometry.location.lng;
+        formatted = data.results[0].formatted_address;
+      } else {
+        console.warn('Google geocode failed:', data.status, data.error_message || '');
+      }
+    }
+    if (lat === undefined || lng === undefined) {
+      const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&accept-language=zh&q=${encodeURIComponent(query)}`);
+      const rows = await res.json();
+      if (!rows || !rows.length) {
+        if (forceToast) toast('❌ 地址定位失败，请手动选点');
+        return;
+      }
+      lat = parseFloat(rows[0].lat);
+      lng = parseFloat(rows[0].lon);
+      formatted = rows[0].display_name;
+    }
+    lat = parseFloat(lat); lng = parseFloat(lng);
+    if (isNaN(lat) || isNaN(lng)) return;
+    document.getElementById('editLat').value = lat;
+    document.getElementById('editLng').value = lng;
+    lastRelocatedAddress = raw;
+    map.setView([lat, lng], Math.max(map.getZoom(), 17));
+    if (forceToast) toast('✅ 已按地址定位，可保存或再修正');
+  } catch (err) {
+    console.error('Address geocode failed:', err);
+    if (forceToast) toast('❌ 地址定位失败，请手动选点');
+  }
 }
 
 function getActiveStatusValue() {
@@ -3117,12 +3171,15 @@ function distanceKm(lat1,lng1,lat2,lng2) {
 }
 
 // ============ SEARCH (Google Places) ============
+function getGoogleMapsKey() {
+  return localStorage.getItem(APIKEY_KEY) || DEFAULT_GOOGLE_MAPS_KEY;
+}
 function openSearch() {
   document.getElementById('searchPanel').classList.add('active');
   document.getElementById('searchInput').focus();
-  const key = localStorage.getItem(APIKEY_KEY);
+  const key = getGoogleMapsKey();
   document.getElementById('searchHint').innerHTML = key
-    ? '<p>🔍 选区域 → 输关键词 → 搜索</p><p style="margin-top:8px;font-size:12px;color:var(--green)">✅ API Key 已配置</p>'
+    ? '<p>🔍 选区域 → 输关键词 → 搜索</p><p style="margin-top:8px;font-size:12px;color:var(--green)">✅ Google API 已可用</p>'
     : '<p>🔍 选区域 → 输关键词 → 搜索</p><p style="margin-top:12px;font-size:12px">需要Google Maps API Key<br>请在 ⚙ 设置中配置</p>';
 }
 function closeSearch() {
@@ -3154,7 +3211,7 @@ function doSearch() {
   const query = document.getElementById('searchInput').value.trim();
   if (!query) { toast('请输入搜索关键词'); return; }
 
-  const key = localStorage.getItem(APIKEY_KEY);
+  const key = getGoogleMapsKey();
   if (!key) { toast('请先在设置中配置 Google Maps API Key'); return; }
 
   showLoading();
