@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-<title>BDmap-v3.6.6 同楼多机构显示修复版</title>
+<title>BDmap-v3.6.7 导出增强版</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -649,7 +649,7 @@ body.home-mode .map-filter-bar { display:none !important; }
 .lead-error-export-row button { flex:1; border:1px solid rgba(231,76,60,.55); background:rgba(231,76,60,.10); color:#ffaaa1; border-radius:10px; padding:8px 10px; font-size:12px; font-weight:900; }
 
 
-/* v3.6.6 same building unstack */
+/* v3.6.7 export mine points */
 .batch-shop-modal { position:fixed; inset:0; z-index:5200; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.58); padding:14px; }
 .batch-shop-modal.active { display:flex; }
 .batch-shop-box { width:min(980px, 100%); max-height:88vh; overflow:auto; background:var(--card); color:var(--text); border:1px solid rgba(255,255,255,.14); border-radius:18px; box-shadow:0 18px 60px rgba(0,0,0,.45); }
@@ -682,8 +682,8 @@ body.home-mode .map-filter-bar { display:none !important; }
 <div class="lead-home" id="leadHome">
   <div class="lead-home-header">
     <div class="lead-home-top">
-      <h1>📍 BDmap-v3.6.6 同楼多机构显示修复版</h1>
-      <div style="font-size:12px;color:#2563eb;font-weight:700;margin-top:4px;">版本标识：v3.6.6｜同楼多机构显示修复 + 全类型线索/地图 + 云端自定义类型｜2026-05-19</div>
+      <h1>📍 BDmap-v3.6.7 导出增强版</h1>
+      <div style="font-size:12px;color:#2563eb;font-weight:700;margin-top:4px;">版本标识：v3.6.7｜我的认领导出 + 点位导出 + 同楼多机构显示修复｜2026-05-19</div>
       <button class="lead-tab-btn" onclick="triggerBatchErrorImport()">上传报错</button>
       <input type="file" id="batchErrorFile" accept=".xlsx,.xls" style="display:none" onchange="handleBatchErrorImport(event)">
       <button class="lead-tab-btn" onclick="openBatchShopImport()">批量导入店铺</button>
@@ -698,6 +698,7 @@ body.home-mode .map-filter-bar { display:none !important; }
       <button class="lead-filter-chip" data-filter="error" onclick="setLeadFilter('error')">报错</button>
       <button class="lead-filter-chip" data-filter="phone" onclick="setLeadFilter('phone')">有电话</button>
     </div>
+    <div class="lead-error-export-row" id="leadMineExportRow"><button onclick="exportMyClaimedLeadsXlsx()">导出我的认领</button></div>
     <div class="lead-error-export-row" id="leadErrorExportRow"><button onclick="exportLeadErrorRowsXlsx()">导出报错表格</button></div>
     <div class="lead-home-summary" id="leadHomeSummary">加载中...</div>
   </div>
@@ -729,8 +730,8 @@ body.home-mode .map-filter-bar { display:none !important; }
 
 <!-- Top bar -->
 <div class="top-bar">
-  <h1>📍 BDmap-v3.6.6 同楼多机构显示修复版</h1>
-      <div style="font-size:12px;color:#2563eb;font-weight:700;margin-top:4px;">版本标识：v3.6.6｜同楼多机构显示修复 + 全类型线索/地图 + 云端自定义类型｜2026-05-19</div>
+  <h1>📍 BDmap-v3.6.7 导出增强版</h1>
+      <div style="font-size:12px;color:#2563eb;font-weight:700;margin-top:4px;">版本标识：v3.6.7｜我的认领导出 + 点位导出 + 同楼多机构显示修复｜2026-05-19</div>
   <span class="stats" id="statsText">0 机构</span>
   <button class="nav-pill-btn" id="btnMall" title="商场覆盖">🏬 商场</button>
   <button class="nav-pill-btn" id="btnSettings" title="设置">⚙ 设置</button>
@@ -877,7 +878,8 @@ body.home-mode .map-filter-bar { display:none !important; }
   <div class="list-header">
     <button class="top-btn" onclick="closeList()">←</button>
     <h2>全部机构</h2>
-    <button class="top-btn" onclick="exportData()" title="导出">📤</button>
+    <button class="top-btn" onclick="exportData()" title="导出全部数据JSON">📤</button>
+    <button class="top-btn" onclick="exportPointsXlsx()" title="导出点位Excel">📍</button>
     <button class="top-btn" onclick="document.getElementById('importFile').click()" title="导入">📥</button>
     <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
   </div>
@@ -995,6 +997,7 @@ body.home-mode .map-filter-bar { display:none !important; }
       <p>数据保存在浏览器本地存储中。建议定期导出备份。</p>
       <div class="btn-row">
         <button class="btn btn-primary" onclick="exportData()">📤 导出数据</button>
+        <button class="btn btn-primary" onclick="exportPointsXlsx()">📍 导出点位</button>
         <button class="btn btn-ghost" onclick="document.getElementById('importFile2').click()">📥 导入数据</button>
         <input type="file" id="importFile2" accept=".json" style="display:none" onchange="importData(event)">
       </div>
@@ -2291,6 +2294,8 @@ function renderLeadHomeList() {
   const phone = allRows.filter(p => p.phone).length;
   const exportRow = document.getElementById('leadErrorExportRow');
   if (exportRow) exportRow.classList.toggle('active', leadFilter === 'error');
+  const mineExportRow = document.getElementById('leadMineExportRow');
+  if (mineExportRow) mineExportRow.classList.toggle('active', leadFilter === 'mine');
   const filterNames = { all:'全部', unclaimed:'未认领', claimed:'已认领', mine:'我的认领', error:'报错', phone:'有电话' };
   summary.textContent = `${filterNames[leadFilter] || '线索'}：当前 ${rows.length}/${total} 条｜默认按距离近到远｜已认领 ${claimed}｜报错 ${errorCount}｜有电话 ${phone}`;
   body.innerHTML = rows.length ? rows.slice(0,180).map(leadCardHtml).join('') : '<div class="lead-empty">没有符合条件的线索</div>';
@@ -2300,6 +2305,45 @@ async function exportLeadErrorRowsXlsx() {
   if (!rows.length) { toast('当前没有报错线索'); return; }
   await downloadXlsx('BDmap_报错线索核实表.xlsx', CLINIC_EXPORT_HEADERS, rows, { sheetName:'报错线索核实', errorValidation:true });
   toast('已导出报错线索核实表');
+}
+
+async function exportMyClaimedLeadsXlsx() {
+  const rows = getLeadRows(true)
+    .filter(p => p._leadMine)
+    .map(p => clinicExportRow(p, { coverage_mode:'my_claimed' }));
+  if (!rows.length) { toast('我的认领里暂无可导出线索'); return; }
+  await downloadXlsx('BDmap_我的认领线索.xlsx', CLINIC_EXPORT_HEADERS, rows, { sheetName:'我的认领', errorValidation:true });
+  toast('已导出我的认领 ' + rows.length + ' 条');
+}
+const POINT_EXPORT_HEADERS = ['point_id','name','type','address','lat','lng','owner_id','owner_name','status','contact','phone','note','visit_count','last_visit_date','last_visit_note','updated_at','updated_by'];
+function pointExportRow(p) {
+  const visits = p.visits || [];
+  const last = visits.length ? visits[visits.length - 1] : null;
+  return {
+    point_id: p.id || '',
+    name: p.name || '',
+    type: p.type || '点位',
+    address: p.address || '',
+    lat: p.lat || '',
+    lng: p.lng || '',
+    owner_id: getOwnerId(p) || '',
+    owner_name: getOwnerLabel(p) || '',
+    status: p.status || '点位',
+    contact: p.contact || '',
+    phone: p.phone || '',
+    note: p.note || '',
+    visit_count: visits.length,
+    last_visit_date: last ? (last.date || '') : '',
+    last_visit_note: last ? (last.note || '') : '',
+    updated_at: p.updatedAt || '',
+    updated_by: p.updatedByName || p.updatedBy || ''
+  };
+}
+async function exportPointsXlsx() {
+  const rows = places.filter(isPointEntry).map(pointExportRow);
+  if (!rows.length) { toast('当前没有点位可导出'); return; }
+  await downloadXlsx('BDmap_点位清单.xlsx', POINT_EXPORT_HEADERS, rows, { sheetName:'点位清单' });
+  toast('已导出点位 ' + rows.length + ' 条');
 }
 function leadCardHtml(p) {
   const ownerId = p._leadOwnerId || getOwnerId(p);
@@ -4099,7 +4143,7 @@ async function copyDashboardSummary() {
 }
 
 
-// ============ BATCH SHOP IMPORT v3.6.6 ============
+// ============ BATCH SHOP IMPORT v3.6.7 ============
 let batchShopPreviewRows = [];
 const BATCH_SHOP_HEADERS = ['店铺名称','类型','地址','区域','联系人','电话','来源','备注','认领人','状态','lat','lng'];
 function openBatchShopImport(){
