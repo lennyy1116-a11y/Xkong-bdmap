@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-<title>BDmap-v3.6.7 导出增强版</title>
+<title>BDmap-v3.6.8 头像统一版</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -649,7 +649,7 @@ body.home-mode .map-filter-bar { display:none !important; }
 .lead-error-export-row button { flex:1; border:1px solid rgba(231,76,60,.55); background:rgba(231,76,60,.10); color:#ffaaa1; border-radius:10px; padding:8px 10px; font-size:12px; font-weight:900; }
 
 
-/* v3.6.7 export mine points */
+/* v3.6.8 stable username avatar */
 .batch-shop-modal { position:fixed; inset:0; z-index:5200; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.58); padding:14px; }
 .batch-shop-modal.active { display:flex; }
 .batch-shop-box { width:min(980px, 100%); max-height:88vh; overflow:auto; background:var(--card); color:var(--text); border:1px solid rgba(255,255,255,.14); border-radius:18px; box-shadow:0 18px 60px rgba(0,0,0,.45); }
@@ -682,8 +682,8 @@ body.home-mode .map-filter-bar { display:none !important; }
 <div class="lead-home" id="leadHome">
   <div class="lead-home-header">
     <div class="lead-home-top">
-      <h1>📍 BDmap-v3.6.7 导出增强版</h1>
-      <div style="font-size:12px;color:#2563eb;font-weight:700;margin-top:4px;">版本标识：v3.6.7｜我的认领导出 + 点位导出 + 同楼多机构显示修复｜2026-05-19</div>
+      <h1>📍 BDmap-v3.6.8 头像统一版</h1>
+      <div style="font-size:12px;color:#2563eb;font-weight:700;margin-top:4px;">版本标识：v3.6.8｜同用户名头像统一 + 我的认领导出 + 点位导出 + 同楼多机构显示修复｜2026-05-27</div>
       <button class="lead-tab-btn" onclick="triggerBatchErrorImport()">上传报错</button>
       <input type="file" id="batchErrorFile" accept=".xlsx,.xls" style="display:none" onchange="handleBatchErrorImport(event)">
       <button class="lead-tab-btn" onclick="openBatchShopImport()">批量导入店铺</button>
@@ -730,8 +730,8 @@ body.home-mode .map-filter-bar { display:none !important; }
 
 <!-- Top bar -->
 <div class="top-bar">
-  <h1>📍 BDmap-v3.6.7 导出增强版</h1>
-      <div style="font-size:12px;color:#2563eb;font-weight:700;margin-top:4px;">版本标识：v3.6.7｜我的认领导出 + 点位导出 + 同楼多机构显示修复｜2026-05-19</div>
+  <h1>📍 BDmap-v3.6.8 头像统一版</h1>
+      <div style="font-size:12px;color:#2563eb;font-weight:700;margin-top:4px;">版本标识：v3.6.8｜同用户名头像统一 + 我的认领导出 + 点位导出 + 同楼多机构显示修复｜2026-05-27</div>
   <span class="stats" id="statsText">0 机构</span>
   <button class="nav-pill-btn" id="btnMall" title="商场覆盖">🏬 商场</button>
   <button class="nav-pill-btn" id="btnSettings" title="设置">⚙ 设置</button>
@@ -1210,7 +1210,7 @@ let sheetPickMode = false;
 let selectedDistrict = 'current';
 let _pagination = null;
 let currentUsername = localStorage.getItem(USERNAME_KEY) || '';
-let currentAvatar = localStorage.getItem(USER_AVATAR_KEY) || '👤';
+let currentAvatar = getAvatarForUsername(currentUsername, localStorage.getItem(USER_AVATAR_KEY) || '👤');
 let coverageCache = new Map();
 let coverageCacheVersion = 0;
 let lastInstitutionStatus = '已交流';
@@ -1922,7 +1922,7 @@ function addVisitEntry() {
   if (!note) { toast('请输入交流备注'); return; }
   const now = new Date();
   const date = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0') + ' ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
-  editVisits.push({ date, note, by: currentUsername || '匿名', byAvatar: currentAvatar });
+  editVisits.push({ date, note, by: currentUsername || '匿名', byAvatar: applyStableCurrentAvatar() });
   noteInput.value = '';
   renderVisits();
 }
@@ -1975,22 +1975,22 @@ async function savePlace() {
     visits: editVisits,
     ownerId: oldPlace ? (oldPlace.ownerId || getCurrentOwnerId()) : getCurrentOwnerId(),
     ownerName: oldPlace ? (oldPlace.ownerName || currentUsername || '匿名') : (currentUsername || '匿名'),
-    ownerAvatar: oldPlace ? (oldPlace.ownerAvatar || currentAvatar) : currentAvatar,
+    ownerAvatar: oldPlace ? (oldPlace.ownerAvatar || applyStableCurrentAvatar()) : applyStableCurrentAvatar(),
     updatedAt: new Date().toISOString(),
     updatedBy: currentUsername || '匿名',
     updatedByName: currentUsername || '匿名',
-    updatedByAvatar: currentAvatar
+    updatedByAvatar: applyStableCurrentAvatar()
   };
   const existIdx = places.findIndex(p => p.id === data.id);
   if (existIdx >= 0) {
     data.createdAt = places[existIdx].createdAt || new Date().toISOString();
     data.createdBy = places[existIdx].createdBy || currentUsername || '匿名';
-    data.createdByAvatar = places[existIdx].createdByAvatar || currentAvatar || '👤';
+    data.createdByAvatar = places[existIdx].createdByAvatar || applyStableCurrentAvatar() || '👤';
     places[existIdx] = data;
   } else {
     data.createdAt = new Date().toISOString();
     data.createdBy = currentUsername || '匿名';
-    data.createdByAvatar = currentAvatar;
+    data.createdByAvatar = applyStableCurrentAvatar();
     places.push(data);
   }
   try {
@@ -2191,7 +2191,7 @@ function setLeadFilter(f) {
 let leadRowsCache = null;
 let leadRowsCacheKey = '';
 function clearLeadRowsCache() { leadRowsCache = null; leadRowsCacheKey = ''; }
-function leadRowsDataKey() { return [places.length, baseClinics.length, coverageCacheVersion, currentUsername, currentAvatar].join('|'); }
+function leadRowsDataKey() { return [places.length, baseClinics.length, coverageCacheVersion, currentUsername, applyStableCurrentAvatar()].join('|'); }
 function enrichLeadRow(row) {
   const ownerId = getOwnerId(row);
   const source = getClinicSourceLabel(row);
@@ -2395,9 +2395,9 @@ async function claimLead(id) {
   let data = places.find(x => x.id === id || x.id === 'place_' + id || clinicMatchKey(x) === clinicMatchKey(p));
   const now = new Date().toISOString();
   if (!data) data = { ...p, id: p.isBaseClinic ? 'place_' + p.id : (p.id || 'place_' + Date.now().toString(36)), isBaseClinic:false, sourceBaseId:p.id, createdAt:now };
-  data.ownerId = getCurrentOwnerId(); data.ownerName = currentUsername || '匿名'; data.ownerAvatar = currentAvatar;
+  data.ownerId = getCurrentOwnerId(); data.ownerName = currentUsername || '匿名'; data.ownerAvatar = applyStableCurrentAvatar();
   data.claimedAt = now; data.claimedBy = currentUsername || '匿名'; data.status = data.status && data.status !== '基础池' ? data.status : '已交流';
-  data.updatedAt = now; data.updatedBy = currentUsername || '匿名'; data.updatedByAvatar = currentAvatar;
+  data.updatedAt = now; data.updatedBy = currentUsername || '匿名'; data.updatedByAvatar = applyStableCurrentAvatar();
   const idx = places.findIndex(x => x.id === data.id);
   if (idx >= 0) places[idx] = data; else places.push(data);
   clearCoverageCache(); savePlaces(); scheduleLeadHomeRender(); renderMarkers(); updateStats();
@@ -2411,10 +2411,10 @@ async function reportLeadError(id) {
   let data = places.find(x => x.id === id || x.id === 'place_' + id || clinicMatchKey(x) === clinicMatchKey(p));
   const now = new Date().toISOString();
   if (!data) data = { ...p, id: p.isBaseClinic ? 'place_' + p.id : (p.id || 'place_' + Date.now().toString(36)), isBaseClinic:false, sourceBaseId:p.id, createdAt:now };
-  data.errorReports = [...(data.errorReports||[]), { type, note, by: currentUsername || '匿名', byAvatar: currentAvatar, at: now }];
+  data.errorReports = [...(data.errorReports||[]), { type, note, by: currentUsername || '匿名', byAvatar: applyStableCurrentAvatar(), at: now }];
   data.dataQualityStatus = '待核实';
   data.dataQualityIssueType = type;
-  data.updatedAt = now; data.updatedBy = currentUsername || '匿名'; data.updatedByAvatar = currentAvatar;
+  data.updatedAt = now; data.updatedBy = currentUsername || '匿名'; data.updatedByAvatar = applyStableCurrentAvatar();
   const idx = places.findIndex(x => x.id === data.id);
   if (idx >= 0) places[idx] = data; else places.push(data);
   clearCoverageCache(); savePlaces(); scheduleLeadHomeRender(); renderMarkers(); updateStats();
@@ -2427,13 +2427,13 @@ async function resolveLeadError(id) {
   if (!data) return toast('这条线索还没有运营记录，无法修正');
   const note = prompt('修正说明（可空）', '已核实/已修正') || '';
   const now = new Date().toISOString();
-  data.resolvedReports = [...(data.resolvedReports||[]), { type: data.dataQualityIssueType || data.dataQualityStatus || '报错', note, by: currentUsername || '匿名', byAvatar: currentAvatar, at: now }];
+  data.resolvedReports = [...(data.resolvedReports||[]), { type: data.dataQualityIssueType || data.dataQualityStatus || '报错', note, by: currentUsername || '匿名', byAvatar: applyStableCurrentAvatar(), at: now }];
   data.dataQualityStatus = '';
   data.dataQualityIssueType = '';
   data.resolvedAt = now;
   data.resolvedBy = currentUsername || '匿名';
   data.resolveNote = note;
-  data.updatedAt = now; data.updatedBy = currentUsername || '匿名'; data.updatedByAvatar = currentAvatar;
+  data.updatedAt = now; data.updatedBy = currentUsername || '匿名'; data.updatedByAvatar = applyStableCurrentAvatar();
   const idx = places.findIndex(x => x.id === data.id);
   if (idx >= 0) places[idx] = data;
   clearCoverageCache(); savePlaces(); scheduleLeadHomeRender(); renderMarkers(); updateStats();
@@ -3276,15 +3276,15 @@ function promoteBaseClinic(id) {
     status: '已交流',
     ownerId: getCurrentOwnerId(),
     ownerName: currentUsername || '匿名',
-    ownerAvatar: currentAvatar,
+    ownerAvatar: applyStableCurrentAvatar(),
     isBaseClinic: false,
     createdAt: now,
     createdBy: currentUsername || '匿名',
-    createdByAvatar: currentAvatar,
+    createdByAvatar: applyStableCurrentAvatar(),
     updatedAt: now,
     updatedBy: currentUsername || '匿名',
     updatedByName: currentUsername || '匿名',
-    updatedByAvatar: currentAvatar,
+    updatedByAvatar: applyStableCurrentAvatar(),
     visits: [{ date: now.slice(0,16).replace('T',' '), by: currentUsername || '匿名', note: '从官方基础诊所池加入跟进，已标记为已交流' }]
   };
   const existIdx = places.findIndex(x => x.id === data.id);
@@ -3563,6 +3563,35 @@ function calcDistNum(lat1, lng1, lat2, lng2) {
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 }
 
+
+// ============ STABLE USERNAME AVATAR ============
+function normalizeAvatarUsername(name) {
+  return String(name || '匿名').trim().toLowerCase().normalize('NFKC') || '匿名';
+}
+function hashStringToIndex(str, modulo) {
+  let h = 2166136261;
+  for (let i = 0; i < str.length; i++) {
+    h ^= str.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return Math.abs(h >>> 0) % modulo;
+}
+function getAvatarForUsername(name, preferredAvatar) {
+  // v3.6.8: username is the single source of truth for emoji avatar.
+  // Different devices with the same username will always get the same avatar.
+  // Custom uploaded images are no longer used for owner identity display, because they are local per device.
+  const key = normalizeAvatarUsername(name);
+  return AVATAR_POOL[hashStringToIndex(key, AVATAR_POOL.length)] || '👤';
+}
+function applyStableCurrentAvatar() {
+  currentAvatar = getAvatarForUsername(currentUsername, currentAvatar);
+  if (!isImageAvatar(currentAvatar)) localStorage.setItem(USER_AVATAR_KEY, currentAvatar);
+  return currentAvatar;
+}
+function getStableOwnerAvatarByName(name, storedAvatar) {
+  return getAvatarForUsername(name, storedAvatar);
+}
+
 // ============ SETTINGS ============
 function openSettings() {
   document.getElementById('apiKeyInput').value = localStorage.getItem(APIKEY_KEY) || '';
@@ -3625,9 +3654,11 @@ function saveUsername() {
   const name = document.getElementById('usernameInput').value.trim();
   if (name) {
     currentUsername = name;
+    currentAvatar = applyStableCurrentAvatar();
     localStorage.setItem(USERNAME_KEY, name);
     localStorage.setItem(USER_AVATAR_KEY, currentAvatar);
     updateCurrentUserBadge();
+    renderAvatarGrid();
     renderOwnerFilters();
     renderMarkers();
     renderList();
@@ -3781,7 +3812,7 @@ function normalizeOwnerId(name) {
 function getCurrentOwnerId() { return normalizeOwnerId(currentUsername || '匿名'); }
 function getOwnerId(p) { return p.ownerId || normalizeOwnerId(p.ownerName || p.createdBy || p.updatedBy || '匿名'); }
 function getOwnerName(p) { return p.ownerName || p.createdBy || p.updatedBy || '匿名'; }
-function getOwnerAvatar(p) { return p.ownerAvatar || p.createdByAvatar || p.updatedByAvatar || '👤'; }
+function getOwnerAvatar(p) { return getStableOwnerAvatarByName(getOwnerName(p), p.ownerAvatar || p.createdByAvatar || p.updatedByAvatar || '👤'); }
 function getOwnerLabel(p) { return (isImageAvatar(getOwnerAvatar(p)) ? '头像' : getOwnerAvatar(p)) + ' ' + getOwnerName(p); }
 function isImageAvatar(v) { return typeof v === 'string' && (v.indexOf('data:image/') === 0 || v.indexOf('http://') === 0 || v.indexOf('https://') === 0); }
 function avatarHtml(v) {
@@ -3794,7 +3825,7 @@ function avatarInlineHtml(v) {
 }
 function ownerLabelHtml(p) { return avatarInlineHtml(getOwnerAvatar(p)) + esc(getOwnerName(p)); }
 function updateCurrentUserBadge() {
-  document.getElementById('currentUser').innerHTML = '<span class="user-badge">' + avatarInlineHtml(currentAvatar) + esc(currentUsername || '未命名') + '</span>';
+  document.getElementById('currentUser').innerHTML = '<span class="user-badge">' + avatarInlineHtml(applyStableCurrentAvatar()) + esc(currentUsername || '未命名') + '</span>';
 }
 function getOwners() {
   const map = {};
@@ -3805,7 +3836,7 @@ function getOwners() {
   });
   if (currentUsername) {
     const id = getCurrentOwnerId();
-    if (!map[id]) map[id] = { id, name: currentUsername, avatar: currentAvatar, count: 0 };
+    if (!map[id]) map[id] = { id, name: currentUsername, avatar: applyStableCurrentAvatar(), count: 0 };
   }
   return Object.values(map).sort((a,b) => b.count - a.count || a.name.localeCompare(b.name));
 }
@@ -4143,7 +4174,7 @@ async function copyDashboardSummary() {
 }
 
 
-// ============ BATCH SHOP IMPORT v3.6.7 ============
+// ============ BATCH SHOP IMPORT v3.6.8 ============
 let batchShopPreviewRows = [];
 const BATCH_SHOP_HEADERS = ['店铺名称','类型','地址','区域','联系人','电话','来源','备注','认领人','状态','lat','lng'];
 function openBatchShopImport(){
@@ -4281,8 +4312,8 @@ async function confirmBatchShopImport(){
   for(const r of rows){
     const coordPending=String(r.coordStatus).includes('待核') || String(r.coordStatus).includes('无地址');
     const ownerName=r.ownerName || currentUsername || '匿名';
-    const data={ id:makeBatchShopId(r.name,r.address), name:r.name, entryKind:'institution', type:r.type||'中医诊所', address:r.address||'', district:r.district||'', contact:r.contact||'', phone:r.phone||'', status:r.status||'待跟进', lat:r.lat||currentPos.lat, lng:r.lng||currentPos.lng, source:r.source||'批量导入', note:r.note||'', visits:[{date:now.slice(0,10), by:currentUsername||'匿名', byAvatar:currentAvatar, note:'批量导入' + (r.note ? '：'+r.note : '')}], ownerId:normalizeOwnerId(ownerName), ownerName, ownerAvatar: ownerName===(currentUsername||'匿名') ? currentAvatar : '👤', createdAt:now, createdBy:currentUsername||'匿名', createdByAvatar:currentAvatar, updatedAt:now, updatedBy:currentUsername||'匿名', updatedByAvatar:currentAvatar, importSource:'batch_shop_import', geocodeStatus:r.coordStatus, geocodeAddress:r.geocodeAddress||'' };
-    if(coordPending){ data.dataQualityStatus='待核实'; data.dataQualityIssueType='坐标待核点'; data.errorReports=[{type:'坐标待核点', note:(r.messages||[]).join('；'), by:currentUsername||'匿名', byAvatar:currentAvatar, at:now, source:'batch_shop_import'}]; }
+    const data={ id:makeBatchShopId(r.name,r.address), name:r.name, entryKind:'institution', type:r.type||'中医诊所', address:r.address||'', district:r.district||'', contact:r.contact||'', phone:r.phone||'', status:r.status||'待跟进', lat:r.lat||currentPos.lat, lng:r.lng||currentPos.lng, source:r.source||'批量导入', note:r.note||'', visits:[{date:now.slice(0,10), by:currentUsername||'匿名', byAvatar:applyStableCurrentAvatar(), note:'批量导入' + (r.note ? '：'+r.note : '')}], ownerId:normalizeOwnerId(ownerName), ownerName, ownerAvatar: ownerName===(currentUsername||'匿名') ? applyStableCurrentAvatar() : getAvatarForUsername(ownerName), createdAt:now, createdBy:currentUsername||'匿名', createdByAvatar:applyStableCurrentAvatar(), updatedAt:now, updatedBy:currentUsername||'匿名', updatedByAvatar:applyStableCurrentAvatar(), importSource:'batch_shop_import', geocodeStatus:r.coordStatus, geocodeAddress:r.geocodeAddress||'' };
+    if(coordPending){ data.dataQualityStatus='待核实'; data.dataQualityIssueType='坐标待核点'; data.errorReports=[{type:'坐标待核点', note:(r.messages||[]).join('；'), by:currentUsername||'匿名', byAvatar:applyStableCurrentAvatar(), at:now, source:'batch_shop_import'}]; }
     const idx=places.findIndex(p=>clinicMatchKey(p)===clinicMatchKey(data));
     if(idx>=0){ data.id=places[idx].id; data.createdAt=places[idx].createdAt||data.createdAt; places[idx]={...places[idx], ...data}; }
     else places.push(data);
@@ -4364,15 +4395,15 @@ async function handleBatchErrorImport(event) {
     if (!match) { stats.failed++; failures.push(`第${r}行：找不到匹配诊所 ${row.name || row.clinic_id || ''}`); continue; }
     const data = makeImportEditableRecord(match, row);
     if (action === '已修正') {
-      data.resolvedReports = [...(data.resolvedReports||[]), { type:data.dataQualityIssueType || data.dataQualityStatus || '报错', note, by:currentUsername || '匿名', byAvatar:currentAvatar, at:now, source:'batch_upload' }];
+      data.resolvedReports = [...(data.resolvedReports||[]), { type:data.dataQualityIssueType || data.dataQualityStatus || '报错', note, by:currentUsername || '匿名', byAvatar:applyStableCurrentAvatar(), at:now, source:'batch_upload' }];
       data.dataQualityStatus = ''; data.dataQualityIssueType = ''; data.resolvedAt = now; data.resolvedBy = currentUsername || '匿名'; data.resolveNote = note;
       stats.fixed++;
     } else {
-      data.errorReports = [...(data.errorReports||[]), { type:action, note, by:currentUsername || '匿名', byAvatar:currentAvatar, at:now, source:'batch_upload' }];
+      data.errorReports = [...(data.errorReports||[]), { type:action, note, by:currentUsername || '匿名', byAvatar:applyStableCurrentAvatar(), at:now, source:'batch_upload' }];
       data.dataQualityStatus = '待核实'; data.dataQualityIssueType = action;
       byType[action] = (byType[action] || 0) + 1;
     }
-    data.updatedAt = now; data.updatedBy = currentUsername || '匿名'; data.updatedByAvatar = currentAvatar;
+    data.updatedAt = now; data.updatedBy = currentUsername || '匿名'; data.updatedByAvatar = applyStableCurrentAvatar();
     const idx = places.findIndex(x => x.id === data.id);
     if (idx >= 0) places[idx] = data; else places.push(data);
     try { await saveToFirestore(data); stats.processed++; } catch(e) { console.error(e); stats.failed++; failures.push(`第${r}行：云端保存失败 ${data.name || data.id}`); }
