@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-<title>BDmap-v3.6.8 头像统一版</title>
+<title>BDmap-v3.6.9 头像管理版</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -381,6 +381,14 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .admin-user-row .name { font-weight:700; font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .admin-user-row .meta { color:var(--text2); font-size:12px; margin-top:2px; }
 .admin-user-row button { border:0; border-radius:8px; padding:7px 9px; background:var(--red); color:#fff; font-size:12px; font-weight:700; }
+.admin-avatar-actions { display:flex; gap:6px; align-items:center; flex-wrap:wrap; justify-content:flex-end; }
+.admin-avatar-actions .btn-mini { border:0; border-radius:8px; padding:7px 9px; background:var(--primary); color:#fff; font-size:12px; font-weight:700; cursor:pointer; }
+.admin-avatar-actions .btn-mini.ghost { background:var(--card); color:var(--text); border:1px solid var(--border); }
+.admin-avatar-actions .btn-mini.danger { background:var(--red); color:#fff; }
+.admin-avatar-picker { margin:6px 0 10px 0; padding:10px; border-radius:10px; background:var(--card); border:1px solid var(--border); }
+.admin-avatar-picker-title { font-size:12px; color:var(--text2); margin-bottom:8px; }
+.admin-avatar-picker-grid { display:flex; flex-wrap:wrap; gap:6px; }
+.admin-avatar-picker-grid .avatar-btn { width:34px; height:34px; border-radius:10px; font-size:18px; }
 .admin-danger-note { color:#ffb0a8; font-size:12px; line-height:1.5; margin:8px 0 10px; }
 
 .mall-status-badge { display:inline-block; padding:2px 7px; border-radius:999px; font-size:11px; font-weight:700; margin-left:6px; }
@@ -649,7 +657,7 @@ body.home-mode .map-filter-bar { display:none !important; }
 .lead-error-export-row button { flex:1; border:1px solid rgba(231,76,60,.55); background:rgba(231,76,60,.10); color:#ffaaa1; border-radius:10px; padding:8px 10px; font-size:12px; font-weight:900; }
 
 
-/* v3.6.8 stable username avatar */
+/* v3.6.9 admin avatar edit */
 .batch-shop-modal { position:fixed; inset:0; z-index:5200; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.58); padding:14px; }
 .batch-shop-modal.active { display:flex; }
 .batch-shop-box { width:min(980px, 100%); max-height:88vh; overflow:auto; background:var(--card); color:var(--text); border:1px solid rgba(255,255,255,.14); border-radius:18px; box-shadow:0 18px 60px rgba(0,0,0,.45); }
@@ -682,8 +690,8 @@ body.home-mode .map-filter-bar { display:none !important; }
 <div class="lead-home" id="leadHome">
   <div class="lead-home-header">
     <div class="lead-home-top">
-      <h1>📍 BDmap-v3.6.8 头像统一版</h1>
-      <div style="font-size:12px;color:#2563eb;font-weight:700;margin-top:4px;">版本标识：v3.6.8｜同用户名头像统一 + 我的认领导出 + 点位导出 + 同楼多机构显示修复｜2026-05-27</div>
+      <h1>📍 BDmap-v3.6.9 头像管理版</h1>
+      <div style="font-size:12px;color:#2563eb;font-weight:700;margin-top:4px;">版本标识：v3.6.9｜用户列表可修改他人头像 + 同用户名头像统一 + 我的认领导出｜2026-05-27</div>
       <button class="lead-tab-btn" onclick="triggerBatchErrorImport()">上传报错</button>
       <input type="file" id="batchErrorFile" accept=".xlsx,.xls" style="display:none" onchange="handleBatchErrorImport(event)">
       <button class="lead-tab-btn" onclick="openBatchShopImport()">批量导入店铺</button>
@@ -730,8 +738,8 @@ body.home-mode .map-filter-bar { display:none !important; }
 
 <!-- Top bar -->
 <div class="top-bar">
-  <h1>📍 BDmap-v3.6.8 头像统一版</h1>
-      <div style="font-size:12px;color:#2563eb;font-weight:700;margin-top:4px;">版本标识：v3.6.8｜同用户名头像统一 + 我的认领导出 + 点位导出 + 同楼多机构显示修复｜2026-05-27</div>
+  <h1>📍 BDmap-v3.6.9 头像管理版</h1>
+      <div style="font-size:12px;color:#2563eb;font-weight:700;margin-top:4px;">版本标识：v3.6.9｜用户列表可修改他人头像 + 同用户名头像统一 + 我的认领导出｜2026-05-27</div>
   <span class="stats" id="statsText">0 机构</span>
   <button class="nav-pill-btn" id="btnMall" title="商场覆盖">🏬 商场</button>
   <button class="nav-pill-btn" id="btnSettings" title="设置">⚙ 设置</button>
@@ -1216,6 +1224,7 @@ let coverageCacheVersion = 0;
 let lastInstitutionStatus = '已交流';
 let leadSearchTerm = '';
 let leadFilter = 'all';
+let userAvatarOverrides = {};
 const COVERAGE_KM = 1;
 const COVERAGE_LABEL = '1公里';
 const MALLS_KEY = 'bd_map_malls';
@@ -1344,6 +1353,28 @@ function initCustomTypesCloudListener() {
     syncCustomTypesFromPlaces();
   });
 }
+function initUserAvatarOverridesListener() {
+  appConfigCollection.doc('userAvatarOverrides').onSnapshot(doc => {
+    const data = doc.exists ? doc.data() : {};
+    userAvatarOverrides = data.avatars || {};
+    applyStableCurrentAvatar();
+    updateCurrentUserBadge();
+    renderOwnerFilters();
+    renderMarkers();
+    renderList();
+    renderAdminUsers();
+  }, err => {
+    console.error('User avatar overrides listener error:', err);
+  });
+}
+async function saveUserAvatarOverridesToCloud() {
+  await appConfigCollection.doc('userAvatarOverrides').set({
+    avatars: userAvatarOverrides,
+    updatedAt: new Date().toISOString(),
+    updatedBy: currentUsername || '匿名'
+  }, { merge: true });
+}
+
 function getDataVersionKey() {
   const placesSig = places.map(p => [p.id, p.updatedAt, p.status, (p.visits||[]).length, p.ownerId, p.ownerAvatar].join(':')).join('|');
   return [places.length, baseClinics.length, coverageCacheVersion, placesSig.length].join('|');
@@ -1385,6 +1416,7 @@ function init() {
   loadBaseClinics();
   restoreHomeHintState();
   initCustomTypesCloudListener();
+  initUserAvatarOverridesListener();
   setAppTab('leads');
   renderLeadHomeList();
 
@@ -3577,10 +3609,9 @@ function hashStringToIndex(str, modulo) {
   return Math.abs(h >>> 0) % modulo;
 }
 function getAvatarForUsername(name, preferredAvatar) {
-  // v3.6.8: username is the single source of truth for emoji avatar.
-  // Different devices with the same username will always get the same avatar.
-  // Custom uploaded images are no longer used for owner identity display, because they are local per device.
+  // v3.6.9: username is the default source of truth; admin overrides win.
   const key = normalizeAvatarUsername(name);
+  if (userAvatarOverrides && userAvatarOverrides[key]) return userAvatarOverrides[key];
   return AVATAR_POOL[hashStringToIndex(key, AVATAR_POOL.length)] || '👤';
 }
 function applyStableCurrentAvatar() {
@@ -3774,12 +3805,71 @@ function renderAdminUsers() {
   }
   box.innerHTML = owners.map(o => {
     const ids = places.filter(p => getOwnerId(p) === o.id).map(p => p.id);
+    const key = normalizeAvatarUsername(o.name);
+    const isOverride = !!(userAvatarOverrides && userAvatarOverrides[key]);
     return `<div class="admin-user-row">
-      <div class="info"><div class="name">${avatarInlineHtml(o.avatar)}${esc(o.name)}</div><div class="meta">ownerId: ${esc(o.id)} · ${ids.length} 个机构</div></div>
-      <button onclick="deleteOwnerData('${esc(o.id)}','${esc(o.name)}')">删除用户数据</button>
+      <div class="info"><div class="name">${avatarInlineHtml(o.avatar)}${esc(o.name)}</div><div class="meta">ownerId: ${esc(o.id)} · ${ids.length} 个机构${isOverride ? ' · 手动头像' : ' · 自动头像'}</div></div>
+      <div class="admin-avatar-actions">
+        <button class="btn-mini ghost" onclick="openAdminAvatarPicker('${escAttr(o.name)}')">改头像</button>
+        ${isOverride ? `<button class="btn-mini ghost" onclick="resetUserAvatarOverride('${escAttr(o.name)}')">恢复自动</button>` : ''}
+        <button class="btn-mini danger" onclick="deleteOwnerData('${escAttr(o.id)}','${escAttr(o.name)}')">删除数据</button>
+      </div>
     </div>`;
-  }).join('');
+  }).join('') + '<div id="adminAvatarPicker"></div>';
 }
+function openAdminAvatarPicker(ownerName) {
+  const box = document.getElementById('adminAvatarPicker');
+  if (!box) return;
+  const key = normalizeAvatarUsername(ownerName);
+  const current = getAvatarForUsername(ownerName);
+  box.innerHTML = `<div class="admin-avatar-picker">
+    <div class="admin-avatar-picker-title">修改「${esc(ownerName)}」头像：当前 ${avatarInlineHtml(current)}。选择后会同步给所有人。</div>
+    <div class="admin-avatar-picker-grid">
+      ${AVATAR_POOL.map(a => `<button type="button" class="avatar-btn ${a===current?'active':''}" onclick="setUserAvatarOverride('${escAttr(ownerName)}','${escAttr(a)}')">${avatarHtml(a)}</button>`).join('')}
+    </div>
+  </div>`;
+  box.scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+async function setUserAvatarOverride(ownerName, avatar) {
+  const key = normalizeAvatarUsername(ownerName);
+  userAvatarOverrides[key] = avatar;
+  try {
+    await saveUserAvatarOverridesToCloud();
+    rewriteOwnerAvatars(ownerName, avatar);
+    toast('✅ 已修改「' + ownerName + '」头像：' + avatar);
+  } catch(err) {
+    console.error(err);
+    toast('❌ 头像同步失败');
+  }
+  renderOwnerFilters(); renderMarkers(); renderList(); renderAdminUsers();
+}
+async function resetUserAvatarOverride(ownerName) {
+  const key = normalizeAvatarUsername(ownerName);
+  delete userAvatarOverrides[key];
+  const avatar = getAvatarForUsername(ownerName);
+  try {
+    await saveUserAvatarOverridesToCloud();
+    rewriteOwnerAvatars(ownerName, avatar);
+    toast('已恢复「' + ownerName + '」自动头像：' + avatar);
+  } catch(err) {
+    console.error(err);
+    toast('❌ 恢复失败');
+  }
+  renderOwnerFilters(); renderMarkers(); renderList(); renderAdminUsers();
+}
+function rewriteOwnerAvatars(ownerName, avatar) {
+  const ownerId = normalizeOwnerId(ownerName);
+  places.forEach(p => {
+    if (getOwnerId(p) === ownerId || normalizeOwnerId(getOwnerName(p)) === ownerId) {
+      p.ownerAvatar = avatar;
+      if (p.createdBy && normalizeAvatarUsername(p.createdBy) === normalizeAvatarUsername(ownerName)) p.createdByAvatar = avatar;
+      if (p.updatedBy && normalizeAvatarUsername(p.updatedBy) === normalizeAvatarUsername(ownerName)) p.updatedByAvatar = avatar;
+      if (Array.isArray(p.visits)) p.visits.forEach(v => { if (v.by && normalizeAvatarUsername(v.by) === normalizeAvatarUsername(ownerName)) v.byAvatar = avatar; });
+    }
+  });
+  savePlaces();
+}
+
 async function deleteOwnerData(ownerId, ownerName) {
   const ids = places.filter(p => getOwnerId(p) === ownerId).map(p => p.id);
   if (!ids.length) { toast('该用户没有机构数据'); return; }
@@ -3893,6 +3983,7 @@ function deleteFromFirestore(id) {
   });
 }
 function genId() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+function escAttr(s) { return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/'/g,'&#39;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
 function jsStr(s) { return String(s || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\n/g, '\\n').replace(/\r/g, ''); }
 
@@ -4174,7 +4265,7 @@ async function copyDashboardSummary() {
 }
 
 
-// ============ BATCH SHOP IMPORT v3.6.8 ============
+// ============ BATCH SHOP IMPORT v3.6.9 ============
 let batchShopPreviewRows = [];
 const BATCH_SHOP_HEADERS = ['店铺名称','类型','地址','区域','联系人','电话','来源','备注','认领人','状态','lat','lng'];
 function openBatchShopImport(){
