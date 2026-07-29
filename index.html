@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-<title>BDmap-v3.7.0-hardening-p8</title>
+<title>BDmap-v3.7.0-hardening-p9</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -690,8 +690,8 @@ body.home-mode .map-filter-bar { display:none !important; }
 <div class="lead-home" id="leadHome">
   <div class="lead-home-header">
     <div class="lead-home-top">
-      <h1>📍 BDmap-v3.7.0-hardening-p8</h1>
-      <div style="font-size:12px;color:#2563eb;font-weight:700;margin-top:4px;">版本：v3.7.0-hardening-p8｜安全删除、导入预审、并发保护与XSS修复</div>
+      <h1>📍 BDmap-v3.7.0-hardening-p9</h1>
+      <div style="font-size:12px;color:#2563eb;font-weight:700;margin-top:4px;">版本：v3.7.0-hardening-p9｜双文件部署、基础池与云端数据加载修复</div>
       <button class="lead-tab-btn" onclick="triggerBatchErrorImport()">上传报错</button>
       <input type="file" id="batchErrorFile" accept=".xlsx,.xls" style="display:none" onchange="handleBatchErrorImport(event)">
       <button class="lead-tab-btn" onclick="openBatchShopImport()">批量导入店铺</button>
@@ -738,8 +738,8 @@ body.home-mode .map-filter-bar { display:none !important; }
 
 <!-- Top bar -->
 <div class="top-bar">
-  <h1>📍 BDmap-v3.7.0-hardening-p8</h1>
-      <div style="font-size:12px;color:#2563eb;font-weight:700;margin-top:4px;">版本：v3.7.0-hardening-p8｜安全删除、导入预审、并发保护与XSS修复</div>
+  <h1>📍 BDmap-v3.7.0-hardening-p9</h1>
+      <div style="font-size:12px;color:#2563eb;font-weight:700;margin-top:4px;">版本：v3.7.0-hardening-p9｜双文件部署、基础池与云端数据加载修复</div>
   <span class="stats" id="statsText">0 机构</span>
   <button class="nav-pill-btn" id="btnMall" title="商场覆盖">🏬 商场</button>
   <button class="nav-pill-btn" id="btnSettings" title="设置">⚙ 设置</button>
@@ -1192,10 +1192,352 @@ body.home-mode .map-filter-bar { display:none !important; }
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
-<script type="module" src="./src/data-safety.mjs"></script>
-<script type="module" src="./src/import-safety.mjs"></script>
-<script type="module" src="./src/output-safety.mjs"></script>
-<script type="module" src="./src/runtime-safety.mjs"></script>
+<script>
+(()=>{
+const BACKUP_SCHEMA = 'bdmap-delete-backup/v1';
+
+function clone(value) {
+  if (typeof structuredClone === 'function') return structuredClone(value);
+  return JSON.parse(JSON.stringify(value));
+}
+
+function actorFields(actor = {}) {
+  const id = String(actor.id || actor.name || 'anonymous');
+  const name = String(actor.name || actor.id || '匿名');
+  return { id, name };
+}
+
+function activeRecords(records = []) {
+  return records.filter(record => record && !record.deletedAt);
+}
+
+function deletedRecords(records = []) {
+  return records.filter(record => record && !!record.deletedAt);
+}
+
+function createBackupPayload(records = [], options = {}) {
+  const actor = actorFields(options.actor);
+  return {
+    schemaVersion: BACKUP_SCHEMA,
+    createdAt: options.now || new Date().toISOString(),
+    actor: clone(options.actor || actor),
+    operation: options.operation || 'soft-delete',
+    count: records.length,
+    records: clone(records)
+  };
+}
+
+function softDeleteRecord(record, options = {}) {
+  if (!record || !record.id) throw new Error('缺少待删除记录或记录ID');
+  const actor = actorFields(options.actor);
+  const now = options.now || new Date().toISOString();
+  return {
+    ...clone(record),
+    deletedAt: now,
+    deletedBy: actor.id,
+    deletedByName: actor.name,
+    deleteReason: String(options.reason || '用户删除'),
+    revision: Number(record.revision || 0) + 1,
+    updatedAt: now,
+    updatedBy: actor.name
+  };
+}
+
+function restoreRecord(record, options = {}) {
+  if (!record || !record.id) throw new Error('缺少待恢复记录或记录ID');
+  const actor = actorFields(options.actor);
+  const now = options.now || new Date().toISOString();
+  const restored = clone(record);
+  delete restored.deletedAt;
+  delete restored.deletedBy;
+  delete restored.deletedByName;
+  delete restored.deleteReason;
+  restored.restoredAt = now;
+  restored.restoredBy = actor.id;
+  restored.restoredByName = actor.name;
+  restored.revision = Number(record.revision || 0) + 1;
+  restored.updatedAt = now;
+  restored.updatedBy = actor.name;
+  return restored;
+}
+
+async function runBulkSoftDelete(records = [], options = {}) {
+  if (typeof options.persist !== 'function') throw new Error('缺少持久化函数');
+  const succeeded = [];
+  const failed = [];
+  for (const record of records) {
+    try {
+      const deleted = softDeleteRecord(record, options);
+      const persisted = await options.persist(deleted, record);
+      succeeded.push(persisted || deleted);
+    } catch (error) {
+      failed.push({ record, error: error instanceof Error ? error : new Error(String(error)) });
+    }
+  }
+  return {
+    successCount: succeeded.length,
+    failureCount: failed.length,
+    succeeded,
+    failed
+  };
+}
+
+const api = {
+  BACKUP_SCHEMA,
+  activeRecords,
+  deletedRecords,
+  createBackupPayload,
+  softDeleteRecord,
+  restoreRecord,
+  runBulkSoftDelete
+};
+
+if (typeof window !== 'undefined') {
+  window.BDMapDataSafety = api;
+  window.dispatchEvent(new CustomEvent('bdmap-data-safety-ready'));
+}
+})();
+</script>
+<script>
+(()=>{
+const HK_BOUNDS = { minLat: 22.10, maxLat: 22.60, minLng: 113.80, maxLng: 114.55 };
+
+function text(value) { return String(value ?? '').trim(); }
+function phone(value) { return text(value).replace(/[^0-9+]/g, ''); }
+function norm(value) { return text(value).toLowerCase().replace(/[\s,，.。()（）\-_/]/g, ''); }
+function clone(value) { return typeof structuredClone === 'function' ? structuredClone(value) : JSON.parse(JSON.stringify(value)); }
+
+function isValidHongKongCoordinate(lat, lng, options = {}) {
+  const a = Number(lat), b = Number(lng);
+  if (!Number.isFinite(a) || !Number.isFinite(b)) return false;
+  if (a < HK_BOUNDS.minLat || a > HK_BOUNDS.maxLat || b < HK_BOUNDS.minLng || b > HK_BOUNDS.maxLng) return false;
+  return !(options.forbidden || []).some(point => Math.abs(a - Number(point.lat)) < 1e-7 && Math.abs(b - Number(point.lng)) < 1e-7);
+}
+
+function potentialDuplicates(draft, records = []) {
+  const nameKey = norm(draft.name), addrKey = norm(draft.address), phoneKey = phone(draft.phone);
+  if (!nameKey && !phoneKey) return [];
+  return records.filter(record => {
+    const rn = norm(record.name), ra = norm(record.address), rp = phone(record.phone || record.contact);
+    if (phoneKey.length >= 6 && rp === phoneKey) return true;
+    if (nameKey && addrKey && rn === nameKey && (ra === addrKey || ra.includes(addrKey) || addrKey.includes(ra))) return true;
+    return false;
+  }).slice(0, 5);
+}
+
+function reviewImportRow(raw = {}, existing = [], options = {}) {
+  const row = clone(raw);
+  row.messages = Array.isArray(row.messages) ? [...row.messages] : [];
+  row.name = text(row.name);
+  row.address = text(row.address);
+  if (!row.name) row.messages.push('缺店铺名称');
+  const incomingId = text(row.id);
+  if (incomingId) {
+    const idMatch = existing.find(record => text(record && record.id) === incomingId);
+    if (idMatch) row.messages.push(idMatch.deletedAt ? '记录ID命中回收站，必须通过恢复流程处理' : '记录ID已存在，普通导入禁止覆盖');
+  }
+  const validCoord = isValidHongKongCoordinate(row.lat, row.lng, { forbidden: options.forbiddenCoordinates || [] });
+  row.coordStatus = validCoord ? 'verified' : 'pending';
+  if (!validCoord) row.messages.push('坐标待核，未写入地图');
+  row.duplicateMatches = potentialDuplicates(row, existing);
+  if (row.duplicateMatches.length) row.messages.push('疑似重复，默认拦截');
+  row.importable = !!row.name && validCoord && row.duplicateMatches.length === 0 && !row.messages.some(message => message.includes('记录ID'));
+  row.reviewStatus = row.importable ? 'ready' : 'blocked';
+  return row;
+}
+
+function reviewImportRows(rawRows = [], existing = [], options = {}) {
+  const acceptedWithinFile = [];
+  const rows = rawRows.map(raw => {
+    const reviewed = reviewImportRow(raw, [...existing, ...acceptedWithinFile], options);
+    if (reviewed.importable) acceptedWithinFile.push(reviewed);
+    return reviewed;
+  });
+  return {
+    rows,
+    summary: {
+      total: rows.length,
+      ready: rows.filter(r => r.importable).length,
+      blocked: rows.filter(r => !r.importable).length,
+      duplicates: rows.filter(r => r.duplicateMatches.length).length,
+      coordinatePending: rows.filter(r => r.coordStatus === 'pending').length
+    }
+  };
+}
+
+function prepareNewImportedRecord(incoming = {}, options = {}) {
+  const record = clone(incoming);
+  for (const key of [
+    'id','revision','deletedAt','deletedBy','deletedByName','deleteReason',
+    'restoredAt','restoredBy','restoredByName','ownerId','ownerName','ownerAvatar',
+    'createdAt','createdBy','createdByAvatar','updatedAt','updatedBy','updatedByName','updatedByAvatar',
+    'messages','duplicateMatches','importable','reviewStatus','rowNumber','coordStatus'
+  ]) delete record[key];
+  record.id = text(options.id);
+  if (!record.id) throw new Error('缺少安全生成的记录ID');
+  record.revision = 0;
+  const now = options.now || new Date().toISOString();
+  const actor = options.actor || '匿名';
+  record.createdAt = now;
+  record.createdBy = actor;
+  record.updatedAt = now;
+  record.updatedBy = actor;
+  return record;
+}
+
+function mergeImportedRecord(existing, incoming, options = {}) {
+  const now = options.now || new Date().toISOString();
+  if (!existing) return { ...clone(incoming), revision: Number(incoming.revision || 0) + 1, updatedAt: now, updatedBy: options.actor || '匿名' };
+  const merged = { ...clone(existing), ...clone(incoming) };
+  for (const key of ['ownerId','ownerName','ownerAvatar','visits','createdAt','createdBy','createdByAvatar']) {
+    if (Object.hasOwn(existing, key)) merged[key] = clone(existing[key]);
+  }
+  merged.id = existing.id;
+  merged.revision = Number(existing.revision || 0) + 1;
+  merged.updatedAt = now;
+  merged.updatedBy = options.actor || '匿名';
+  return merged;
+}
+
+async function runSafeImport(rows = [], options = {}) {
+  if (typeof options.persist !== 'function') throw new Error('缺少持久化函数');
+  const ready = rows.filter(row => row && row.importable);
+  const blocked = rows.filter(row => !row || !row.importable);
+  const succeeded = [], failed = [];
+  for (const row of ready) {
+    try { await options.persist(row); succeeded.push(row); }
+    catch (error) { failed.push({ row, error: error instanceof Error ? error : new Error(String(error)) }); }
+  }
+  return { successCount:succeeded.length, failureCount:failed.length, blockedCount:blocked.length, succeeded, failed, blocked };
+}
+
+const api = { isValidHongKongCoordinate, potentialDuplicates, reviewImportRow, reviewImportRows, prepareNewImportedRecord, mergeImportedRecord, runSafeImport };
+if (typeof window !== 'undefined') window.BDMapImportSafety = api;
+})();
+</script>
+<script>
+(()=>{
+function stringValue(value) {
+  return String(value ?? '');
+}
+
+function escapeHtml(value) {
+  return stringValue(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function escapeHtmlAttribute(value) {
+  return escapeHtml(value).replace(/`/g, '&#96;');
+}
+
+function escapeInlineJsString(value) {
+  return stringValue(value)
+    .replace(/\\/g, '\\x5C')
+    .replace(/'/g, '\\x27')
+    .replace(/"/g, '\\x22')
+    .replace(/</g, '\\x3C')
+    .replace(/>/g, '\\x3E')
+    .replace(/&/g, '\\x26')
+    .replace(/\r/g, '\\r')
+    .replace(/\n/g, '\\n')
+    .replace(/\u2028/g, '\\u2028')
+    .replace(/\u2029/g, '\\u2029');
+}
+
+function safeHttpUrl(value) {
+  const raw = stringValue(value).trim();
+  if (!raw) return '';
+  try {
+    const parsed = new URL(raw, 'https://bdmap.invalid/');
+    if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return '';
+    return raw;
+  } catch {
+    return '';
+  }
+}
+
+function safeTelephone(value) {
+  const raw = stringValue(value).trim();
+  if (!raw) return '';
+  return /^[+0-9()\-\s.]{3,40}$/.test(raw) ? raw : '';
+}
+
+function safeEnum(value, allowed = [], fallback = '') {
+  const raw = stringValue(value);
+  return allowed.includes(raw) ? raw : fallback;
+}
+
+const api = { escapeHtml, escapeHtmlAttribute, escapeInlineJsString, safeHttpUrl, safeTelephone, safeEnum };
+if (typeof window !== 'undefined') window.BDMapOutputSafety = api;
+})();
+</script>
+<script>
+(()=>{
+function numericCoordinate(value) {
+  if (value === '' || value === null || value === undefined) return null;
+  const number = Number(value);
+  return Number.isFinite(number) ? number : null;
+}
+
+function coordinateKey(row) {
+  const lat = numericCoordinate(row && row.lat);
+  const lng = numericCoordinate(row && row.lng);
+  if (lat === null || lng === null) return '';
+  return `${lat.toFixed(6)},${lng.toFixed(6)}`;
+}
+
+function coordinateGroupPlan(rows = []) {
+  const groups = new Map();
+  for (const row of rows) {
+    const key = coordinateKey(row);
+    if (!key) continue;
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(row);
+  }
+  const plan = new Map();
+  for (const group of groups.values()) {
+    group.forEach((row, index) => plan.set(row.id, { index, total: group.length }));
+  }
+  return plan;
+}
+
+function nextRevision(record) {
+  const revision = Number(record && record.revision);
+  return (Number.isFinite(revision) && revision >= 0 ? revision : 0) + 1;
+}
+
+function assertExpectedRevision(current, expectedRevision) {
+  if (expectedRevision === undefined) return;
+  if (expectedRevision === null) {
+    if (current) {
+      const error = new Error('记录ID已存在，已阻止覆盖');
+      error.code = 'record-already-exists';
+      throw error;
+    }
+    return;
+  }
+  const currentRevision = Number(current && current.revision) || 0;
+  if (currentRevision !== Number(expectedRevision)) {
+    const error = new Error('记录已被其他人更新，请重新打开后再保存');
+    error.code = 'revision-conflict';
+    error.currentRevision = currentRevision;
+    error.expectedRevision = Number(expectedRevision);
+    throw error;
+  }
+}
+
+function prepareRevisionedWrite(data, current) {
+  return { ...data, revision: nextRevision(current) };
+}
+
+const api = { coordinateKey, coordinateGroupPlan, nextRevision, assertExpectedRevision, prepareRevisionedWrite };
+if (typeof window !== 'undefined') window.BDMapRuntimeSafety = api;
+})();
+</script>
 <script>
 // ============ FIREBASE ============
 const firebaseConfig = {
@@ -3443,17 +3785,26 @@ function getMallClinics(mall) {
 }
 async function loadBaseClinics() {
   try {
-    const res = await fetch('tcm-base-clinics.json', { cache: 'no-store' });
-    baseClinics = await res.json();
+    const res = await fetch('./tcm-base-clinics.json', { cache: 'no-store' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const loaded = await res.json();
+    if (!Array.isArray(loaded)) throw new Error('JSON根节点不是数组');
+    baseClinics = loaded;
+  } catch(e) {
+    console.error('Base clinic pool file failed', e);
+    baseClinics = [];
+    toast(`基础诊所池文件加载失败：${e && e.message ? e.message : '未知错误'}`);
+    return;
+  }
+  try {
     clearCoverageCache();
     renderMarkers();
     renderMallList();
     scheduleLeadHomeRender();
     updateStats();
   } catch(e) {
-    console.error('Base clinic pool failed', e);
-    baseClinics = [];
-    toast('基础诊所池加载失败，请确认 tcm-base-clinics.json 已上传');
+    console.error('Base clinic pool render failed', e);
+    toast(`基础诊所池已加载，但地图渲染失败：${e && e.message ? e.message : '未知错误'}`);
   }
 }
 async function promoteBaseClinic(id) {
