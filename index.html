@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-<title>BDmap-v3.7.0-hardening-p9</title>
+<title>BD工作台 (P10预览)</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -632,11 +632,20 @@ body.home-mode .lead-distance { color:#ffb65c; font-weight:900; }
 body.home-mode .batch-import-note { margin-top:6px; color:var(--text2); font-size:11px; line-height:1.35; }
 
 
-.app-nav { position:fixed; left:50%; bottom:max(10px, calc(env(safe-area-inset-bottom) + 10px)); transform:translateX(-50%); z-index:2900; display:flex; gap:6px; background:rgba(15,20,35,.86); border:1px solid rgba(255,255,255,.12); border-radius:999px; padding:5px; backdrop-filter:blur(10px); box-shadow:0 4px 18px rgba(0,0,0,.34); }
-.app-nav button { border:0; background:transparent; color:var(--text2); border-radius:999px; padding:8px 14px; font-size:13px; font-weight:900; }
+.app-nav { position:fixed; left:0; right:0; bottom:0; z-index:2900; display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:0; background:rgba(15,20,35,.96); border-top:1px solid rgba(255,255,255,.12); padding:6px 6px max(6px, env(safe-area-inset-bottom)); backdrop-filter:blur(12px); box-shadow:0 -4px 18px rgba(0,0,0,.34); }
+.app-nav button { border:0; background:transparent; color:var(--text2); border-radius:10px; padding:9px 4px; font-size:13px; font-weight:900; }
 .app-nav button.active { background:var(--primary); color:#fff; }
+#btnMall, #btnSettings { display:none !important; }
+.resource-tabs { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; padding:9px 12px; background:var(--card); border-bottom:1px solid #333; }
+.resource-tabs button { border:1px solid #444; background:var(--bg); color:var(--text2); border-radius:10px; padding:8px; font-weight:900; }
+.resource-tabs button.active { background:var(--primary); border-color:var(--primary); color:#fff; }
+.system-status-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin:8px 0; }
+.system-status-item { background:var(--bg); border-radius:10px; padding:9px; font-size:12px; color:var(--text2); line-height:1.45; }
+.system-status-item b { display:block; color:var(--text); margin-top:2px; overflow-wrap:anywhere; }
+#adminArea { background:rgba(231,76,60,.08); border:1px solid rgba(231,76,60,.28); border-radius:12px; padding:10px; }
+#adminArea summary { cursor:pointer; color:#ffb0a8; font-weight:900; }
 body.home-mode .top-bar { display:none !important; }
-body.home-mode .app-nav { display:flex !important; }
+body.home-mode .app-nav { display:grid !important; }
 .lead-home-header { padding-top: max(12px, env(safe-area-inset-top)) !important; }
 .lead-list-body { padding-bottom:max(82px, calc(env(safe-area-inset-bottom) + 82px)) !important; }
 .dashboard-panel .list-header { padding-top:max(8px, env(safe-area-inset-top)); }
@@ -684,14 +693,13 @@ body.home-mode .map-filter-bar { display:none !important; }
 </style>
 </head>
 <body class="home-mode">
-<div class="app-nav" id="appNav"><button data-tab="leads" onclick="showLeadHome()">线索</button><button data-tab="map" onclick="showMapHome()">地图</button><button data-tab="institutions" onclick="openList()">全部机构</button><button data-tab="dashboard" onclick="openDashboardFromHome()">看板</button></div>
+<div class="app-nav" id="appNav"><button data-tab="leads" onclick="showLeadHome()">线索</button><button data-tab="map" onclick="showMapHome()">地图</button><button data-tab="resources" onclick="openResourceCenter()">资源</button><button data-tab="dashboard" onclick="openDashboardFromHome()">看板</button><button data-tab="my" onclick="openMyFromNav()">我的</button></div>
 
 <!-- Lead list home -->
 <div class="lead-home" id="leadHome">
   <div class="lead-home-header">
     <div class="lead-home-top">
-      <h1>📍 BDmap-v3.7.0-hardening-p9</h1>
-      <div style="font-size:12px;color:#2563eb;font-weight:700;margin-top:4px;">版本：v3.7.0-hardening-p9｜双文件部署、基础池与云端数据加载修复</div>
+      <h1>BD工作台</h1>
       <button class="lead-tab-btn" onclick="triggerBatchErrorImport()">上传报错</button>
       <input type="file" id="batchErrorFile" accept=".xlsx,.xls" style="display:none" onchange="handleBatchErrorImport(event)">
       <button class="lead-tab-btn" onclick="openBatchShopImport()">批量导入店铺</button>
@@ -738,8 +746,7 @@ body.home-mode .map-filter-bar { display:none !important; }
 
 <!-- Top bar -->
 <div class="top-bar">
-  <h1>📍 BDmap-v3.7.0-hardening-p9</h1>
-      <div style="font-size:12px;color:#2563eb;font-weight:700;margin-top:4px;">版本：v3.7.0-hardening-p9｜双文件部署、基础池与云端数据加载修复</div>
+  <h1>BD工作台</h1>
   <span class="stats" id="statsText">0 机构</span>
   <button class="nav-pill-btn" id="btnMall" title="商场覆盖">🏬 商场</button>
   <button class="nav-pill-btn" id="btnSettings" title="设置">⚙ 设置</button>
@@ -885,12 +892,9 @@ body.home-mode .map-filter-bar { display:none !important; }
 <div class="list-panel" id="listPanel">
   <div class="list-header">
     <button class="top-btn" onclick="closeList()">←</button>
-    <h2>全部机构</h2>
-    <button class="top-btn" onclick="exportData()" title="导出全部数据JSON">📤</button>
-    <button class="top-btn" onclick="exportPointsXlsx()" title="导出点位Excel">📍</button>
-    <button class="top-btn" onclick="document.getElementById('importFile').click()" title="导入">📥</button>
-    <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+    <h2>资源中心</h2>
   </div>
+  <div class="resource-tabs" id="resourceTabs"><button class="active" data-resource-kind="institution" onclick="setResourceTab('institution')">机构</button><button data-resource-kind="point" onclick="setResourceTab('point')">点位</button><button data-resource-kind="mall" onclick="setResourceTab('mall')">商场</button></div>
   <div class="inline-search"><input type="text" id="placeSearchInput" placeholder="搜索机构名称、地址、联系人、电话..." oninput="placeSearchTerm=this.value.trim().toLowerCase(); renderList(); renderMarkers(); updateStats();"></div>
   <div class="list-filters" id="listFilters">
     <span class="filter-chip active" data-filter="全部">全部</span>
@@ -907,9 +911,6 @@ body.home-mode .map-filter-bar { display:none !important; }
     <button onclick="toggleBulkMode()">☑️ 批量选择</button>
     <button onclick="selectAllVisible()">全选当前</button>
     <button onclick="clearSelection()">取消选择</button>
-    <button class="danger" onclick="deleteSelectedPlaces()">🗑 删除所选</button>
-    <button class="danger" onclick="deleteCurrentFilteredPlaces()">🧹 删除当前筛选</button>
-    <button onclick="openRecycleBin()">♻️ 回收站 <span class="recycle-count" id="recycleBinCount">0</span></button>
   </div>
   <div class="list-body" id="listBody"></div>
 </div>
@@ -961,14 +962,14 @@ body.home-mode .map-filter-bar { display:none !important; }
   </div>
 </div>
 
-<!-- Settings panel -->
+<!-- My panel -->
 <div class="settings-panel" id="settingsPanel">
   <div class="settings-header">
     <button class="top-btn" onclick="closeSettings()">←</button>
-    <h2>设置</h2>
+    <h2>我的</h2>
   </div>
   <div class="settings-body">
-    <div class="settings-section">
+    <div class="settings-section" id="myProfileSection">
       <h3>用户资料</h3>
       <p>团队协同时显示的名字和头像。地图点位、全部机构列表、人员筛选都会使用这个头像。</p>
       <div class="form-group">
@@ -986,6 +987,18 @@ body.home-mode .map-filter-bar { display:none !important; }
       </div>
       <button class="btn btn-primary" onclick="saveUsername()" style="width:100%">保存用户资料</button>
       <div class="profile-hint">轻量版规则：emoji/图片头像用于显示和筛选；同一个用户名会视为同一个 owner。上传头像会压缩成小图存本地，新增点位会带上该头像。</div>
+    </div>
+
+    <div class="settings-section" id="mySystemStatusSection">
+      <h3>系统状态</h3>
+      <div class="system-status-grid">
+        <div class="system-status-item">当前用户<b id="myStatusUser">-</b></div>
+        <div class="system-status-item">同步状态<b id="myStatusSync">-</b></div>
+        <div class="system-status-item">网络<b id="myStatusNetwork">-</b></div>
+        <div class="system-status-item">业务数据<b id="myStatusCounts">-</b></div>
+      </div>
+      <button class="btn btn-ghost" onclick="refreshMySystemStatus()" style="width:100%">刷新状态</button>
+      <p style="margin-top:10px">版本：v3.7.0-hardening-p9（P10 UI预览）</p>
     </div>
 
     <div class="settings-section">
@@ -1011,27 +1024,27 @@ body.home-mode .map-filter-bar { display:none !important; }
       </div>
     </div>
 
-    <div class="settings-section">
-      <h3>数据管理</h3>
-      <p>数据保存在浏览器本地存储中。建议定期导出备份。</p>
+    <div class="settings-section" id="mySystemManagementSection">
+      <h3>系统管理</h3>
+      <p>业务数据通过 Firebase 云端同步，并使用浏览器本地缓存支持加载与离线回退。建议定期导出完整 JSON 备份。</p>
       <div class="btn-row">
-        <button class="btn btn-primary" onclick="exportData()">📤 导出数据</button>
+        <button class="btn btn-primary" onclick="exportData()">📤 导出完整JSON</button>
         <button class="btn btn-primary" onclick="exportPointsXlsx()">📍 导出点位</button>
-        <button class="btn btn-ghost" onclick="document.getElementById('importFile2').click()">📥 导入数据</button>
-        <input type="file" id="importFile2" accept=".json" style="display:none" onchange="importData(event)">
+        <button class="btn btn-ghost" onclick="document.getElementById('importFile').click()">📥 导入完整JSON</button>
+        <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
       </div>
-      <button class="btn btn-danger" onclick="clearAllData()" style="width:100%; margin-top:10px">🗑 清除所有数据</button>
-      <button class="btn btn-ghost" onclick="resetMallCache()" style="width:100%; margin-top:10px">🏬 重置商场坐标缓存</button>
-    </div>
-
-
-    <div class="settings-section">
-      <h3>后台：用户/历史数据清理</h3>
-      <p>这里不是删除登录账号，而是按“点位归属人”删除该用户名下的机构数据。删除会同步云端，谨慎操作。</p>
-      <div class="admin-danger-note">旧版 TCM/TMC 名单导入现在已经没用；新版已改为底层基础诊所池，不需要在“全部人员”里保留。</div>
-      <button class="btn btn-danger" onclick="cleanupLegacyTcmImport()" style="width:100%; margin-bottom:10px">🧹 一键清理旧 TCM/TMC 导入数据</button>
-      <button class="btn btn-ghost" onclick="renderAdminUsers()" style="width:100%; margin-bottom:10px">刷新用户列表</button>
-      <div id="adminUsers"></div>
+      <details id="adminArea">
+        <summary>管理员与危险操作</summary>
+        <div class="admin-danger-note">批量删除、回收站、缓存重置及历史数据清理仅供管理员谨慎使用。删除仍沿用现有软删除与云端同步安全流程。</div>
+        <button class="btn btn-danger" onclick="deleteSelectedPlaces()" style="width:100%; margin-bottom:10px">🗑 删除资源中心所选</button>
+        <button class="btn btn-danger" onclick="deleteCurrentFilteredPlaces()" style="width:100%; margin-bottom:10px">🧹 删除资源中心当前筛选</button>
+        <button class="btn btn-ghost" onclick="openRecycleBin()" style="width:100%; margin-bottom:10px">♻️ 回收站 <span class="recycle-count" id="recycleBinCount">0</span></button>
+        <button class="btn btn-danger" onclick="clearAllData()" style="width:100%; margin-bottom:10px">🗑 清除所有数据</button>
+        <button class="btn btn-ghost" onclick="resetMallCache()" style="width:100%; margin-bottom:10px">🏬 重置商场坐标缓存</button>
+        <button class="btn btn-danger" onclick="cleanupLegacyTcmImport()" style="width:100%; margin-bottom:10px">🧹 清理旧 TCM/TMC 导入数据</button>
+        <button class="btn btn-ghost" onclick="renderAdminUsers()" style="width:100%; margin-bottom:10px">刷新用户列表</button>
+        <div id="adminUsers"></div>
+      </details>
     </div>
 
     <div class="settings-section">
@@ -1056,7 +1069,7 @@ body.home-mode .map-filter-bar { display:none !important; }
 <div class="dashboard-panel" id="dashboardPanel">
   <div class="list-header">
     <button class="top-btn" onclick="closeDashboard()">←</button>
-    <h2>v3.3.2 数据看板</h2>
+    <h2>BD运营看板</h2>
     <button class="top-btn" onclick="exportPriorityCsv()" title="导出优先线索">📤</button>
   </div>
   <div class="dashboard-body compact">
@@ -1594,6 +1607,7 @@ let editingMallId = null;
 let mallSearchTerm = '';
 let mallStatusFilter = '全部';
 let placeSearchTerm = '';
+let resourceKind = 'institution';
 let mallPickMode = false;
 let bulkMode = false;
 let selectedPlaceIds = new Set();
@@ -2479,8 +2493,32 @@ async function deletePlace() {
 
 // ============ LIST ============
 function openList() {
-  renderList();
+  openResourceCenter();
+}
+function openResourceCenter(kind) {
+  closePrimaryPanels();
+  document.body.classList.remove('home-mode');
+  setAppTab('resources');
+  const targetKind = kind || resourceKind || 'institution';
+  setResourceTab(targetKind);
+  if (targetKind !== 'mall') document.getElementById('listPanel').classList.add('active');
+}
+function setResourceTab(kind) {
+  resourceKind = ['institution','point','mall'].includes(kind) ? kind : 'institution';
+  document.querySelectorAll('#resourceTabs [data-resource-kind]').forEach(button => button.classList.toggle('active', button.dataset.resourceKind === resourceKind));
+  if (resourceKind === 'mall') {
+    setAppTab('resources');
+    document.getElementById('listPanel').classList.remove('active');
+    openMallPanel('resources');
+    return;
+  }
+  closeMallPanel();
   document.getElementById('listPanel').classList.add('active');
+  renderList();
+}
+function getResourceRows() {
+  const rows = getFilteredPlaces();
+  return rows.filter(place => resourceKind === 'point' ? isPointEntry(place) : !isPointEntry(place));
 }
 function closeList() {
   document.getElementById('listPanel').classList.remove('active');
@@ -2541,7 +2579,7 @@ async function restoreDeletedPlace(id) {
 
 function renderList() {
   const body = document.getElementById('listBody');
-  let filtered = getFilteredPlaces();
+  let filtered = getResourceRows();
   const selectedMallForSort = getCoverageTargetById(selectedMallId);
   if (selectedMallForSort) {
     filtered.sort((a,b) => distanceKm(selectedMallForSort.lat, selectedMallForSort.lng, a.lat, a.lng) - distanceKm(selectedMallForSort.lat, selectedMallForSort.lng, b.lat, b.lng));
@@ -2550,7 +2588,8 @@ function renderList() {
   }
 
   if (filtered.length === 0) {
-    body.innerHTML = `<div class="list-empty">没有符合当前筛选的机构</div>`;
+    const emptyText = resourceKind === 'point' ? '没有符合当前筛选的点位' : '没有符合当前筛选的机构';
+    body.innerHTML = `<div class="list-empty">${emptyText}</div>`;
     return;
   }
 
@@ -2612,7 +2651,7 @@ function toggleSelectPlace(id, checked) {
   if (checked) selectedPlaceIds.add(id); else selectedPlaceIds.delete(id);
 }
 function selectAllVisible() {
-  getFilteredPlaces().forEach(p => selectedPlaceIds.add(p.id));
+  getResourceRows().forEach(p => selectedPlaceIds.add(p.id));
   bulkMode = true; renderList(); toast('已选择当前筛选结果');
 }
 function clearSelection() { selectedPlaceIds.clear(); renderList(); toast('已取消选择'); }
@@ -2622,7 +2661,7 @@ async function deleteSelectedPlaces() {
   await bulkDeleteIds(ids);
 }
 async function deleteCurrentFilteredPlaces() {
-  const ids = getFilteredPlaces().map(p => p.id);
+  const ids = getResourceRows().map(p => p.id);
   if (!ids.length) { toast('当前筛选没有机构'); return; }
   await bulkDeleteIds(ids);
 }
@@ -2684,23 +2723,41 @@ function initCoveragePanelDrag() {
 
 // ============ LEAD HOME ============
 function setAppTab(tab) { document.querySelectorAll('#appNav button').forEach(b => b.classList.toggle('active', b.dataset.tab === tab)); }
+function closePrimaryPanels() {
+  ['listPanel','mallPanel','dashboardPanel','comboPanel','settingsPanel','recycleBinPanel'].forEach(id => {
+    const panel = document.getElementById(id);
+    if (panel) panel.classList.remove('active');
+  });
+  const coverage = document.getElementById('coveragePanel');
+  if (coverage) { coverage.classList.remove('active'); coverage.classList.remove('combo-mode'); }
+  const search = document.getElementById('searchPanel');
+  if (search) search.classList.remove('active');
+  clearSearchMarkers();
+}
 function showLeadHome() {
+  closePrimaryPanels();
   setAppTab('leads');
   document.body.classList.add('home-mode');
-  closeList(); closeMallPanel(); closeCoveragePanel(); closeDashboard(); closeComboPanel();
   renderLeadHomeList();
   if (navigator.geolocation && !window._leadHomeLocatedOnce) { window._leadHomeLocatedOnce = true; locateMe(true); }
 }
 function showMapHome() {
+  closePrimaryPanels();
   setAppTab('map');
-  closeDashboard();
   document.body.classList.remove('home-mode');
   setTimeout(() => { if (map) map.invalidateSize(); }, 80);
 }
 function openDashboardFromHome() {
+  closePrimaryPanels();
   setAppTab('dashboard');
   document.body.classList.remove('home-mode');
   setTimeout(() => openDashboard(), 90);
+}
+function openMyFromNav() {
+  closePrimaryPanels();
+  setAppTab('my');
+  document.body.classList.remove('home-mode');
+  openSettings();
 }
 function setLeadFilter(f) {
   leadFilter = f || 'all';
@@ -3037,7 +3094,7 @@ async function loadMallMetaFromCloud() {
   }
 }
 function saveMallsLocal() { localStorage.setItem(MALLS_KEY, JSON.stringify(malls)); }
-function openMallPanel() { setAppTab('map'); closeDashboard(); renderMallList(); document.getElementById('mallPanel').classList.add('active'); }
+function openMallPanel(source) { setAppTab(source === 'resources' ? 'resources' : 'map'); closeDashboard(); renderMallList(); document.getElementById('mallPanel').classList.add('active'); }
 function closeMallPanel() { document.getElementById('mallPanel').classList.remove('active'); }
 function startMallPick() { mallPickMode = true; closeMallPanel(); toast('在地图上点击商场位置'); }
 function resetMallForm() {
@@ -4123,10 +4180,22 @@ function openSettings() {
   document.getElementById('usernameInput').value = currentUsername || '';
   renderAvatarGrid();
   document.getElementById('settingsPanel').classList.add('active');
+  refreshMySystemStatus();
   renderAdminUsers();
 }
 function closeSettings() {
   document.getElementById('settingsPanel').classList.remove('active');
+}
+function refreshMySystemStatus() {
+  const user = document.getElementById('myStatusUser');
+  const sync = document.getElementById('myStatusSync');
+  const network = document.getElementById('myStatusNetwork');
+  const counts = document.getElementById('myStatusCounts');
+  const syncSource = document.getElementById('syncStatus');
+  if (user) user.textContent = `${currentAvatar || '👤'} ${currentUsername || '未设置'}`;
+  if (sync) sync.textContent = syncSource ? syncSource.textContent : '等待同步状态';
+  if (network) network.textContent = navigator.onLine ? '在线' : '离线';
+  if (counts) counts.textContent = `机构/点位 ${places.length} · 回收站 ${deletedPlaces.length} · 基础池 ${baseClinics.length} · 商场 ${malls.length}`;
 }
 function renderAvatarGrid() {
   const box = document.getElementById('avatarGrid');
