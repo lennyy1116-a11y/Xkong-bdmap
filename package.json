@@ -1,0 +1,9 @@
+{
+  "name": "xkong-bdmap-hardening",
+  "private": true,
+  "version": "3.7.0",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "check": "node --check app.inline.js && npm test"
+  }
+}
