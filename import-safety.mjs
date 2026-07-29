@@ -29,12 +29,17 @@ export function reviewImportRow(raw = {}, existing = [], options = {}) {
   row.name = text(row.name);
   row.address = text(row.address);
   if (!row.name) row.messages.push('缺店铺名称');
+  const incomingId = text(row.id);
+  if (incomingId) {
+    const idMatch = existing.find(record => text(record && record.id) === incomingId);
+    if (idMatch) row.messages.push(idMatch.deletedAt ? '记录ID命中回收站，必须通过恢复流程处理' : '记录ID已存在，普通导入禁止覆盖');
+  }
   const validCoord = isValidHongKongCoordinate(row.lat, row.lng, { forbidden: options.forbiddenCoordinates || [] });
   row.coordStatus = validCoord ? 'verified' : 'pending';
   if (!validCoord) row.messages.push('坐标待核，未写入地图');
   row.duplicateMatches = potentialDuplicates(row, existing);
   if (row.duplicateMatches.length) row.messages.push('疑似重复，默认拦截');
-  row.importable = !!row.name && validCoord && row.duplicateMatches.length === 0;
+  row.importable = !!row.name && validCoord && row.duplicateMatches.length === 0 && !row.messages.some(message => message.includes('记录ID'));
   row.reviewStatus = row.importable ? 'ready' : 'blocked';
   return row;
 }
@@ -56,6 +61,26 @@ export function reviewImportRows(rawRows = [], existing = [], options = {}) {
       coordinatePending: rows.filter(r => r.coordStatus === 'pending').length
     }
   };
+}
+
+export function prepareNewImportedRecord(incoming = {}, options = {}) {
+  const record = clone(incoming);
+  for (const key of [
+    'id','revision','deletedAt','deletedBy','deletedByName','deleteReason',
+    'restoredAt','restoredBy','restoredByName','ownerId','ownerName','ownerAvatar',
+    'createdAt','createdBy','createdByAvatar','updatedAt','updatedBy','updatedByName','updatedByAvatar',
+    'messages','duplicateMatches','importable','reviewStatus','rowNumber','coordStatus'
+  ]) delete record[key];
+  record.id = text(options.id);
+  if (!record.id) throw new Error('缺少安全生成的记录ID');
+  record.revision = 0;
+  const now = options.now || new Date().toISOString();
+  const actor = options.actor || '匿名';
+  record.createdAt = now;
+  record.createdBy = actor;
+  record.updatedAt = now;
+  record.updatedBy = actor;
+  return record;
 }
 
 export function mergeImportedRecord(existing, incoming, options = {}) {
@@ -84,6 +109,6 @@ export async function runSafeImport(rows = [], options = {}) {
   return { successCount:succeeded.length, failureCount:failed.length, blockedCount:blocked.length, succeeded, failed, blocked };
 }
 
-const api = { isValidHongKongCoordinate, potentialDuplicates, reviewImportRow, reviewImportRows, mergeImportedRecord, runSafeImport };
+const api = { isValidHongKongCoordinate, potentialDuplicates, reviewImportRow, reviewImportRows, prepareNewImportedRecord, mergeImportedRecord, runSafeImport };
 if (typeof window !== 'undefined') window.BDMapImportSafety = api;
 export default api;

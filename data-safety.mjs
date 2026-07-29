@@ -72,8 +72,8 @@ export async function runBulkSoftDelete(records = [], options = {}) {
   for (const record of records) {
     try {
       const deleted = softDeleteRecord(record, options);
-      await options.persist(deleted, record);
-      succeeded.push(deleted);
+      const persisted = await options.persist(deleted, record);
+      succeeded.push(persisted || deleted);
     } catch (error) {
       failed.push({ record, error: error instanceof Error ? error : new Error(String(error)) });
     }

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-<title>BDmap-v3.7.0-hardening-p3</title>
+<title>BDmap-v3.7.0-hardening-p8</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -684,14 +684,14 @@ body.home-mode .map-filter-bar { display:none !important; }
 </style>
 </head>
 <body class="home-mode">
-<div class="app-nav" id="appNav"><button data-tab="leads" onclick="showLeadHome()">线索</button><button data-tab="map" onclick="showMapHome()">地图</button><button data-tab="dashboard" onclick="openDashboardFromHome()">看板</button></div>
+<div class="app-nav" id="appNav"><button data-tab="leads" onclick="showLeadHome()">线索</button><button data-tab="map" onclick="showMapHome()">地图</button><button data-tab="institutions" onclick="openList()">全部机构</button><button data-tab="dashboard" onclick="openDashboardFromHome()">看板</button></div>
 
 <!-- Lead list home -->
 <div class="lead-home" id="leadHome">
   <div class="lead-home-header">
     <div class="lead-home-top">
-      <h1>📍 BDmap-v3.7.0-hardening-p3</h1>
-      <div style="font-size:12px;color:#2563eb;font-weight:700;margin-top:4px;">版本：v3.7.0-hardening-p3｜安全删除、导入预审与失败恢复</div>
+      <h1>📍 BDmap-v3.7.0-hardening-p8</h1>
+      <div style="font-size:12px;color:#2563eb;font-weight:700;margin-top:4px;">版本：v3.7.0-hardening-p8｜安全删除、导入预审、并发保护与XSS修复</div>
       <button class="lead-tab-btn" onclick="triggerBatchErrorImport()">上传报错</button>
       <input type="file" id="batchErrorFile" accept=".xlsx,.xls" style="display:none" onchange="handleBatchErrorImport(event)">
       <button class="lead-tab-btn" onclick="openBatchShopImport()">批量导入店铺</button>
@@ -738,8 +738,8 @@ body.home-mode .map-filter-bar { display:none !important; }
 
 <!-- Top bar -->
 <div class="top-bar">
-  <h1>📍 BDmap-v3.7.0-hardening-p3</h1>
-      <div style="font-size:12px;color:#2563eb;font-weight:700;margin-top:4px;">版本：v3.7.0-hardening-p3｜安全删除、导入预审与失败恢复</div>
+  <h1>📍 BDmap-v3.7.0-hardening-p8</h1>
+      <div style="font-size:12px;color:#2563eb;font-weight:700;margin-top:4px;">版本：v3.7.0-hardening-p8｜安全删除、导入预审、并发保护与XSS修复</div>
   <span class="stats" id="statsText">0 机构</span>
   <button class="nav-pill-btn" id="btnMall" title="商场覆盖">🏬 商场</button>
   <button class="nav-pill-btn" id="btnSettings" title="设置">⚙ 设置</button>
@@ -1194,6 +1194,8 @@ body.home-mode .map-filter-bar { display:none !important; }
 <script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
 <script type="module" src="./src/data-safety.mjs"></script>
 <script type="module" src="./src/import-safety.mjs"></script>
+<script type="module" src="./src/output-safety.mjs"></script>
+<script type="module" src="./src/runtime-safety.mjs"></script>
 <script>
 // ============ FIREBASE ============
 const firebaseConfig = {
@@ -1239,6 +1241,7 @@ let coverageCacheVersion = 0;
 let lastInstitutionStatus = '已交流';
 let leadSearchTerm = '';
 let leadFilter = 'all';
+let editBaseRevision = null;
 const COVERAGE_KM = 1;
 const COVERAGE_LABEL = '1公里';
 const MALLS_KEY = 'bd_map_malls';
@@ -1621,14 +1624,16 @@ function renderMarkers() {
     renderPool = mergeCoverageRenderPool(renderPool, getBaseMallClinics(selectedMall));
   }
   const coordGroups = new Map();
+  const coordinatePlan = getRuntimeSafety().coordinateGroupPlan(renderPool);
   renderPool.forEach(p => {
     if (isNaN(parseFloat(p.lat)) || isNaN(parseFloat(p.lng))) return;
     const lat0 = parseFloat(p.lat), lng0 = parseFloat(p.lng);
     const coordKey = lat0.toFixed(6) + ',' + lng0.toFixed(6);
     const siblings = coordGroups.get(coordKey) || [];
     coordGroups.set(coordKey, siblings.concat([p.id || siblings.length]));
-    const idx = siblings.length;
-    const total = Math.max(1, renderPool.filter(x => !isNaN(parseFloat(x.lat)) && !isNaN(parseFloat(x.lng)) && parseFloat(x.lat).toFixed(6) + ',' + parseFloat(x.lng).toFixed(6) === coordKey).length);
+    const placement = coordinatePlan.get(p.id) || { index:siblings.length, total:1 };
+    const idx = placement.index;
+    const total = placement.total;
     const angle = (Math.PI * 2 * idx) / total;
     const offset = total > 1 ? 0.000045 : 0; // 约5米，解决同楼/同坐标 marker 互相盖住
     const markerLat = lat0 + Math.sin(angle) * offset;
@@ -1642,21 +1647,21 @@ function renderMarkers() {
     let popupHtml = `
       <div class="popup-name">${esc(p.name)}</div>
       <div class="popup-type">${esc(p.type || '')}</div>
-      <div class="popup-status" style="background:${statusColor};color:#fff">${displayStatus}</div>
+      <div class="popup-status" style="background:${statusColor};color:#fff">${esc(displayStatus)}</div>
     `;
     const pr = calcPriority(p);
     popupHtml += scoreBadgeWithDetailHtml(p.id, pr);
     if (selectedMall) popupHtml += `<div class="popup-detail" style="color:#ff9f1a">🏬 距 ${esc(selectedMall.name)} ${distanceKm(selectedMall.lat, selectedMall.lng, p.lat, p.lng).toFixed(2)} km</div>`;
     if (p.contact) popupHtml += `<div class="popup-detail">👤 ${esc(p.contact)}${p.phone ? ' · ' + esc(p.phone) : ''}</div>`;
     if (p.scale) popupHtml += `<div class="popup-detail">📏 ${esc(p.scale)}</div>`;
-    if (p.staff) popupHtml += `<div class="popup-detail">👨‍⚕️ ${p.staff}人</div>`;
+    if (p.staff) popupHtml += `<div class="popup-detail">👨‍⚕️ ${esc(p.staff)}人</div>`;
     if (visitCount > 0) {
       popupHtml += `<div class="popup-detail">📋 ${visitCount}次${isPointEntry(p) ? '记录' : '交流'}`;
-      if (lastVisit) popupHtml += ` · 最近: ${lastVisit.date}`;
+      if (lastVisit) popupHtml += ` · 最近: ${esc(lastVisit.date)}`;
       popupHtml += `</div>`;
     }
     popupHtml += `<div class="popup-detail" style="color:var(--primary)">归属：${esc(getOwnerLabel(p))}</div>`;
-    if (p.updatedBy) popupHtml += `<div class="popup-detail" style="color:var(--primary)">✍️ ${esc(p.updatedByName || p.updatedBy)}${p.updatedAt ? ' · ' + p.updatedAt.slice(0,10) : ''}</div>`;
+    if (p.updatedBy) popupHtml += `<div class="popup-detail" style="color:var(--primary)">✍️ ${esc(p.updatedByName || p.updatedBy)}${p.updatedAt ? ' · ' + esc(String(p.updatedAt).slice(0,10)) : ''}</div>`;
     if (p.isBaseClinic) popupHtml += `<span class="popup-edit" onclick="promoteBaseClinic('${jsStr(p.id)}')">➕ 加入机构并跟进</span>`;
     else {
       popupHtml += `<span class="popup-edit" onclick="openEditSheet('${jsStr(p.id)}')">✏️ ${isPointEntry(p) ? '编辑点位' : '编辑'}</span>`;
@@ -1822,6 +1827,7 @@ function openEditSheet(id) {
   map.closePopup();
   const p = places.find(x => x.id === id);
   if (!p) return;
+  editBaseRevision = Number(p.revision) || 0;
 
   lastInstitutionStatus = (p.lastInstitutionStatus && p.lastInstitutionStatus !== '点位') ? p.lastInstitutionStatus : (p.status && p.status !== '点位' ? p.status : '已交流');
   setEntryKind(isPointEntry(p) ? 'point' : 'institution');
@@ -1920,6 +1926,7 @@ function getCoverageTargetById(id) {
 }
 function resetForm() {
   document.getElementById('editId').value = '';
+  editBaseRevision = null;
   document.getElementById('fName').value = '';
   document.getElementById('fType').value = '中医诊所';
   if (document.getElementById('entryKind')) setEntryKind('institution');
@@ -1941,7 +1948,7 @@ function renderVisits() {
   }
   container.innerHTML = editVisits.map((v, i) => `
     <div class="visit-entry">
-      <div class="visit-date">${v.date}${v.by ? ' · ' + esc(v.by) : ''}</div>
+      <div class="visit-date">${esc(v.date)}${v.by ? ' · ' + esc(v.by) : ''}</div>
       <div class="visit-note">${esc(v.note)}</div>
       <button class="visit-del" onclick="removeVisit(${i})">×</button>
     </div>
@@ -2018,19 +2025,19 @@ async function savePlace() {
     data.createdAt = places[existIdx].createdAt || new Date().toISOString();
     data.createdBy = places[existIdx].createdBy || currentUsername || '匿名';
     data.createdByAvatar = places[existIdx].createdByAvatar || currentAvatar || '👤';
-    places[existIdx] = data;
   } else {
     data.createdAt = new Date().toISOString();
     data.createdBy = currentUsername || '匿名';
     data.createdByAvatar = currentAvatar;
-    places.push(data);
   }
   try {
     if (btn) { btn.classList.add('loading'); btn.disabled = true; btn.textContent = '保存中...'; }
     feedback('info','正在保存到云端，请稍候...');
-    clearCoverageCache();
+    const savedData = await saveToFirestore(data, editId ? editBaseRevision : null);
+    const savedIdx = places.findIndex(p => p.id === savedData.id);
+    if (savedIdx >= 0) places[savedIdx] = savedData; else places.push(savedData);
+    editBaseRevision = savedData.revision;
     savePlaces();
-    await saveToFirestore(data);
     renderMarkers(); scheduleLeadHomeRender(); updateStats();
     feedback('ok', existIdx >= 0 ? '✅ 已更新并同步到云端' : '✅ 已添加并同步到云端');
     toast(existIdx >= 0 ? '✅ 已更新并同步' : '✅ 已添加并同步');
@@ -2038,9 +2045,27 @@ async function savePlace() {
     setTimeout(() => closeSheet(), 450);
   } catch(err) {
     console.error(err);
+    if (err && err.code === 'revision-conflict' && editId) {
+      try {
+        const latest = await placesCollection.doc(editId).get();
+        if (latest.exists) {
+          const latestData = { id: latest.id, ...latest.data() };
+          const latestIdx = places.findIndex(p => p.id === editId);
+          if (latestData.deletedAt) {
+            if (latestIdx >= 0) places.splice(latestIdx, 1);
+            const deletedIdx = deletedPlaces.findIndex(p => p.id === editId);
+            if (deletedIdx >= 0) deletedPlaces[deletedIdx] = latestData; else deletedPlaces.push(latestData);
+          } else if (latestIdx >= 0) places[latestIdx] = latestData;
+          else places.push(latestData);
+        }
+      } catch (refreshErr) {
+        console.warn('冲突后刷新最新记录失败:', refreshErr);
+      }
+    }
+    clearCoverageCache(); savePlaces(); renderMarkers(); scheduleLeadHomeRender(); updateStats();
     feedback('err','❌ 云端保存失败：' + (err && err.message ? err.message : '请检查网络/权限'));
     document.getElementById('syncStatus').textContent = '⚠️ 同步失败';
-    toast('❌ 保存失败');
+    toast(err && err.code === 'revision-conflict' ? '⚠️ 记录已更新，请重新打开编辑' : '❌ 保存失败，未改动本地资料');
   } finally {
     if (btn) { btn.classList.remove('loading'); btn.disabled = false; btn.textContent = '保存'; }
   }
@@ -2074,11 +2099,12 @@ async function writeAuditLog(action, record, reason) {
     console.warn('Audit log failed without blocking primary operation:', err);
   }
 }
-async function persistSoftDelete(record, reason) {
-  const deleted = getDataSafety().softDeleteRecord(record, { actor: getDeleteActor(), reason });
-  await placesCollection.doc(record.id).set(cleanForFirestore(deleted), { merge: true });
-  await writeAuditLog('soft-delete', deleted, reason);
-  return deleted;
+async function persistSoftDelete(record, reason, action = 'soft-delete') {
+  return runRevisionedMutation(record.id, Number(record.revision) || 0, current => {
+    if (!current) throw new Error('云端记录不存在，已阻止删除');
+    if (current.deletedAt) throw new Error('记录已在回收站');
+    return getDataSafety().softDeleteRecord(current, { actor: getDeleteActor(), reason });
+  }, { action, reason });
 }
 async function deletePlace() {
   const id = document.getElementById('editId').value;
@@ -2154,16 +2180,10 @@ async function restoreDeletedPlace(id) {
   if (!confirm(`确定恢复「${record.name || id}」？`)) return;
   document.getElementById('syncStatus').textContent = '♻️ 正在恢复...';
   try {
-    const restored = getDataSafety().restoreRecord(record, { actor: getDeleteActor() });
-    const deleteFields = firebase.firestore.FieldValue.delete();
-    await placesCollection.doc(id).set({
-      ...cleanForFirestore(restored),
-      deletedAt: deleteFields,
-      deletedBy: deleteFields,
-      deletedByName: deleteFields,
-      deleteReason: deleteFields
-    }, { merge: true });
-    await writeAuditLog('restore', restored, '从回收站恢复');
+    const restored = await runRevisionedMutation(id, Number(record.revision) || 0, current => {
+      if (!current || !current.deletedAt) throw new Error('云端记录不在回收站，已阻止恢复');
+      return getDataSafety().restoreRecord(current, { actor: getDeleteActor() });
+    }, { action:'restore', reason:'从回收站恢复', deleteFields:['deletedAt','deletedBy','deletedByName','deleteReason'] });
     deletedPlaces = deletedPlaces.filter(p => p.id !== id);
     const idx = places.findIndex(p => p.id === id);
     if (idx >= 0) places[idx] = restored; else places.push(restored);
@@ -2211,7 +2231,7 @@ function renderList() {
             ${p.contact ? ' · ' + esc(p.contact) : ''}
           </div>
         </div>
-        <span class="list-status" style="background:${color};color:#fff">${displayStatus}</span>
+        <span class="list-status" style="background:${color};color:#fff">${esc(displayStatus)}</span>
       </div>`;
   }).join('');
 }
@@ -2279,10 +2299,10 @@ async function bulkDeleteIds(ids) {
   document.getElementById('syncStatus').textContent = `🗑 正在处理 0/${records.length}`;
   const result = await getDataSafety().runBulkSoftDelete(records, {
     actor: getDeleteActor(), reason: reason.trim() || '批量删除',
-    persist: async deleted => {
-      await placesCollection.doc(deleted.id).set(cleanForFirestore(deleted), { merge: true });
-      await writeAuditLog('bulk-soft-delete', deleted, reason);
+    persist: async (deleted, original) => {
+      const persisted = await persistSoftDelete(original, reason, 'bulk-soft-delete');
       document.getElementById('syncStatus').textContent = `🗑 正在处理 ${deletedPlaces.length + 1}/${records.length}`;
+      return persisted;
     }
   });
   const succeededIds = new Set(result.succeeded.map(p => p.id));
@@ -2512,7 +2532,8 @@ function leadCardHtml(p) {
   const distText = Number.isFinite(dist) ? `${dist.toFixed(dist < 10 ? 1 : 0)} km` : '等待定位';
   const distClass = Number.isFinite(dist) ? '' : ' unknown';
   const owner = claimed ? `<span>${avatarInlineHtml(getOwnerAvatar(p))}${esc(getOwnerLabel(p))}</span>` : '<span>未认领</span>';
-  const phoneBtn = p.phone ? `<a class="phone" href="tel:${esc(p.phone)}" onclick="event.stopPropagation()">📞 联络</a>` : `<button class="phone" onclick="event.stopPropagation(); toast('暂无电话')">📞 无电话</button>`;
+  const safePhone = safeTelephone(p.phone);
+  const phoneBtn = safePhone ? `<a class="phone" href="tel:${escAttr(safePhone)}" onclick="event.stopPropagation()">📞 联络</a>` : `<button class="phone" onclick="event.stopPropagation(); toast('暂无电话')">📞 无电话</button>`;
   const claimBtn = mine ? `<button class="claim" onclick="editClaimedLead('${jsStr(p.id)}')">✏️ 编辑</button>` : `<button class="claim" onclick="claimLead('${jsStr(p.id)}')">${claimed ? '👤 已认领' : '👤 认领'}</button>`;
   const resolveBtn = err ? `<button class="resolve" onclick="resolveLeadError('${jsStr(p.id)}')">✅ 已修正</button>` : `<button class="map" onclick="locateLeadOnMap('${jsStr(p.id)}')">🗺 地图</button>`;
   return `<div class="lead-card ${mine?'claimed-mine':''} ${err?'error':''}" onclick="locateLeadOnMap('${jsStr(p.id)}')">
@@ -2549,52 +2570,65 @@ async function claimLead(id) {
   const ownerId = getOwnerId(p);
   if (ownerId === getCurrentOwnerId()) { editClaimedLead(id); return; }
   if (ownerId && ownerId !== 'base_tcm_pool' && ownerId !== normalizeOwnerId('匿名') && ownerId !== getCurrentOwnerId()) { toast('已被别人认领'); return; }
-  let data = places.find(x => x.id === id || x.id === 'place_' + id || clinicMatchKey(x) === clinicMatchKey(p));
+  const existing = places.find(x => x.id === id || x.id === 'place_' + id || clinicMatchKey(x) === clinicMatchKey(p));
   const now = new Date().toISOString();
-  if (!data) data = { ...p, id: p.isBaseClinic ? 'place_' + p.id : (p.id || 'place_' + Date.now().toString(36)), isBaseClinic:false, sourceBaseId:p.id, createdAt:now };
-  data.ownerId = getCurrentOwnerId(); data.ownerName = currentUsername || '匿名'; data.ownerAvatar = currentAvatar;
-  data.claimedAt = now; data.claimedBy = currentUsername || '匿名'; data.status = data.status && data.status !== '基础池' ? data.status : '已交流';
-  data.updatedAt = now; data.updatedBy = currentUsername || '匿名'; data.updatedByAvatar = currentAvatar;
-  const idx = places.findIndex(x => x.id === data.id);
-  if (idx >= 0) places[idx] = data; else places.push(data);
-  clearCoverageCache(); savePlaces(); scheduleLeadHomeRender(); renderMarkers(); updateStats();
-  try { await saveToFirestore(data); toast('👤 已认领'); } catch(e) { console.error(e); toast('⚠️ 本地已认领，云端同步失败'); }
+  const recordId = existing ? existing.id : (p.isBaseClinic ? 'place_' + p.id : (p.id || 'place_' + Date.now().toString(36)));
+  try {
+    const saved = await runRevisionedMutation(recordId, existing ? (Number(existing.revision) || 0) : null, current => {
+      const data = current ? { ...current } : { ...p, id:recordId, isBaseClinic:false, sourceBaseId:p.id, createdAt:now };
+      const currentOwner = getOwnerId(data);
+      if (currentOwner && currentOwner !== 'base_tcm_pool' && currentOwner !== normalizeOwnerId('匿名') && currentOwner !== getCurrentOwnerId()) throw new Error('已被别人认领');
+      data.ownerId = getCurrentOwnerId(); data.ownerName = currentUsername || '匿名'; data.ownerAvatar = currentAvatar;
+      data.claimedAt = now; data.claimedBy = currentUsername || '匿名'; data.status = data.status && data.status !== '基础池' ? data.status : '已交流';
+      data.updatedAt = now; data.updatedBy = currentUsername || '匿名'; data.updatedByAvatar = currentAvatar;
+      return data;
+    });
+    const idx = places.findIndex(x => x.id === saved.id);
+    if (idx >= 0) places[idx] = saved; else places.push(saved);
+    clearCoverageCache(); savePlaces(); scheduleLeadHomeRender(); renderMarkers(); updateStats(); toast('👤 已认领');
+  } catch(e) { console.error(e); toast('⚠️ 认领失败：' + (e.message || '请刷新重试')); }
 }
 async function reportLeadError(id) {
   const p = findLeadRecord(id); if (!p) return toast('找不到线索');
   const type = prompt('报错类型：地址错误 / 电话错误 / 重复店铺 / 已停业 / 类型错误 / 其他', '地址错误');
   if (!type) return;
   const note = prompt('补充说明（可空）', '') || '';
-  let data = places.find(x => x.id === id || x.id === 'place_' + id || clinicMatchKey(x) === clinicMatchKey(p));
+  const existing = places.find(x => x.id === id || x.id === 'place_' + id || clinicMatchKey(x) === clinicMatchKey(p));
   const now = new Date().toISOString();
-  if (!data) data = { ...p, id: p.isBaseClinic ? 'place_' + p.id : (p.id || 'place_' + Date.now().toString(36)), isBaseClinic:false, sourceBaseId:p.id, createdAt:now };
-  data.errorReports = [...(data.errorReports||[]), { type, note, by: currentUsername || '匿名', byAvatar: currentAvatar, at: now }];
-  data.dataQualityStatus = '待核实';
-  data.dataQualityIssueType = type;
-  data.updatedAt = now; data.updatedBy = currentUsername || '匿名'; data.updatedByAvatar = currentAvatar;
-  const idx = places.findIndex(x => x.id === data.id);
-  if (idx >= 0) places[idx] = data; else places.push(data);
-  clearCoverageCache(); savePlaces(); scheduleLeadHomeRender(); renderMarkers(); updateStats();
-  try { await saveToFirestore(data); toast('⚠️ 已提交报错'); } catch(e) { console.error(e); toast('⚠️ 本地已记录，云端同步失败'); }
+  const recordId = existing ? existing.id : (p.isBaseClinic ? 'place_' + p.id : (p.id || 'place_' + Date.now().toString(36)));
+  try {
+    const saved = await runRevisionedMutation(recordId, existing ? (Number(existing.revision) || 0) : null, current => {
+      const data = current ? { ...current } : { ...p, id:recordId, isBaseClinic:false, sourceBaseId:p.id, createdAt:now };
+      data.errorReports = [...(data.errorReports||[]), { type, note, by:currentUsername || '匿名', byAvatar:currentAvatar, at:now }];
+      data.dataQualityStatus = '待核实'; data.dataQualityIssueType = type;
+      data.updatedAt = now; data.updatedBy = currentUsername || '匿名'; data.updatedByAvatar = currentAvatar;
+      return data;
+    });
+    const idx = places.findIndex(x => x.id === saved.id);
+    if (idx >= 0) places[idx] = saved; else places.push(saved);
+    clearCoverageCache(); savePlaces(); scheduleLeadHomeRender(); renderMarkers(); updateStats(); toast('⚠️ 已提交报错');
+  } catch(e) { console.error(e); toast('⚠️ 报错提交失败：' + (e.message || '请刷新重试')); }
 }
 
 async function resolveLeadError(id) {
   const p = findLeadRecord(id); if (!p) return toast('找不到线索');
-  let data = places.find(x => x.id === id || x.id === 'place_' + id || clinicMatchKey(x) === clinicMatchKey(p));
-  if (!data) return toast('这条线索还没有运营记录，无法修正');
+  const existing = places.find(x => x.id === id || x.id === 'place_' + id || clinicMatchKey(x) === clinicMatchKey(p));
+  if (!existing) return toast('这条线索还没有运营记录，无法修正');
   const note = prompt('修正说明（可空）', '已核实/已修正') || '';
   const now = new Date().toISOString();
-  data.resolvedReports = [...(data.resolvedReports||[]), { type: data.dataQualityIssueType || data.dataQualityStatus || '报错', note, by: currentUsername || '匿名', byAvatar: currentAvatar, at: now }];
-  data.dataQualityStatus = '';
-  data.dataQualityIssueType = '';
-  data.resolvedAt = now;
-  data.resolvedBy = currentUsername || '匿名';
-  data.resolveNote = note;
-  data.updatedAt = now; data.updatedBy = currentUsername || '匿名'; data.updatedByAvatar = currentAvatar;
-  const idx = places.findIndex(x => x.id === data.id);
-  if (idx >= 0) places[idx] = data;
-  clearCoverageCache(); savePlaces(); scheduleLeadHomeRender(); renderMarkers(); updateStats();
-  try { await saveToFirestore(data); toast('✅ 已标记修正'); } catch(e) { console.error(e); toast('⚠️ 本地已修正，云端同步失败'); }
+  try {
+    const saved = await runRevisionedMutation(existing.id, Number(existing.revision) || 0, current => {
+      if (!current) throw new Error('云端记录不存在');
+      const data = { ...current };
+      data.resolvedReports = [...(data.resolvedReports||[]), { type:data.dataQualityIssueType || data.dataQualityStatus || '报错', note, by:currentUsername || '匿名', byAvatar:currentAvatar, at:now }];
+      data.dataQualityStatus = ''; data.dataQualityIssueType = ''; data.resolvedAt = now; data.resolvedBy = currentUsername || '匿名'; data.resolveNote = note;
+      data.updatedAt = now; data.updatedBy = currentUsername || '匿名'; data.updatedByAvatar = currentAvatar;
+      return data;
+    });
+    const idx = places.findIndex(x => x.id === saved.id);
+    if (idx >= 0) places[idx] = saved;
+    clearCoverageCache(); savePlaces(); scheduleLeadHomeRender(); renderMarkers(); updateStats(); toast('✅ 已标记修正');
+  } catch(e) { console.error(e); toast('⚠️ 修正失败：' + (e.message || '请刷新重试')); }
 }
 function locateLeadOnMap(id) {
   const p = findLeadRecord(id); if (!p || !p.lat || !p.lng) return toast('没有坐标');
@@ -2749,7 +2783,7 @@ function renderMalls() {
   mallLayer.clearLayers(); coverageLayer.clearLayers();
   malls.forEach(m => {
     const marker = L.marker([m.lat,m.lng], { icon: L.divIcon({ className:'', html:'<div class="mall-marker">🏬</div>', iconSize:[34,34], iconAnchor:[17,17] }) });
-    marker.bindPopup(`<div class="popup-name">🏬 ${esc(m.name)}</div><div class="popup-detail">${m.no ? m.no + '. ' : ''}${esc(m.area || '')} · ${esc(m.developer || '')}</div><div class="popup-detail">状态：${esc(m.coopStatus || '待评估')}</div><div class="popup-detail">客流：${esc(m.traffic || '-')} ${esc(m.trafficNote || '')}</div>${m.note ? '<div class="popup-detail">📝 ' + esc(m.note) + '</div>' : ''}<div class="point-actions"><button class="coverage-action-btn" onclick="selectMall('${jsStr(m.id)}')">查看1公里诊所</button><button onclick="addComboCenter('${jsStr(m.id)}')">加入组合</button></div>`);
+    marker.bindPopup(`<div class="popup-name">🏬 ${esc(m.name)}</div><div class="popup-detail">${m.no ? esc(m.no) + '. ' : ''}${esc(m.area || '')} · ${esc(m.developer || '')}</div><div class="popup-detail">状态：${esc(m.coopStatus || '待评估')}</div><div class="popup-detail">客流：${esc(m.traffic || '-')} ${esc(m.trafficNote || '')}</div>${m.note ? '<div class="popup-detail">📝 ' + esc(m.note) + '</div>' : ''}<div class="point-actions"><button class="coverage-action-btn" onclick="selectMall('${jsStr(m.id)}')">查看1公里诊所</button><button onclick="addComboCenter('${jsStr(m.id)}')">加入组合</button></div>`);
     mallLayer.addLayer(marker);
   });
   places.filter(p => isPointEntry(p)).forEach(p => {
@@ -2789,7 +2823,7 @@ function renderMallList() {
     const active = m.id === selectedMallId;
     return `<div class="mall-item ${active?'active':''}" onclick="selectMall('${jsStr(m.id)}')">
       <div class="mall-name">🏬 ${esc(m.name)} <span class="mall-status-badge ${esc(m.coopStatus || '待评估')}">${esc(m.coopStatus || '待评估')}</span></div>
-      <div class="mall-meta">${m.no ? m.no + '. ' : ''}${esc(m.area || '')} · ${esc(m.developer || '')}<br>1公里未接触诊所：${hits} 家 · 客流：${esc(m.traffic || '-')} ${esc(m.trafficNote || '')}<br>${m.nextStep ? '下一步：' + esc(m.nextStep) + '<br>' : ''}${esc(m.address || '')}</div>${m.note ? '<div class="mall-note-line">📝 ' + esc(m.note) + '</div>' : ''}
+      <div class="mall-meta">${m.no ? esc(m.no) + '. ' : ''}${esc(m.area || '')} · ${esc(m.developer || '')}<br>1公里未接触诊所：${hits} 家 · 客流：${esc(m.traffic || '-')} ${esc(m.trafficNote || '')}<br>${m.nextStep ? '下一步：' + esc(m.nextStep) + '<br>' : ''}${esc(m.address || '')}</div>${m.note ? '<div class="mall-note-line">📝 ' + esc(m.note) + '</div>' : ''}
       <div class="mall-actions"><button class="primary" onclick="event.stopPropagation(); selectMall('${jsStr(m.id)}')">${active ? '退出1km覆盖' : '查看1km诊所'}</button><button onclick="event.stopPropagation(); editMall('${jsStr(m.id)}')">编辑状态/备注</button><button onclick="event.stopPropagation(); deleteMall('${jsStr(m.id)}')">删除</button></div>
     </div>`;
   }).join('');
@@ -2988,7 +3022,6 @@ function renderMapComboBar() {
   stats.textContent = `并集 ${a.unionCount} 家｜交集 ${a.intersection.length} 家｜重复 ${a.duplicateCount}｜重叠率 ${Math.round(a.overlapRate*100)}%（${overlapLabel(a.overlapRate)}）`;
 }
 function syncComboResultMode(tab) {
-  syncComboResultMode(tab);
   document.querySelectorAll('.combo-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
   document.querySelectorAll('.map-combo-actions button[data-tab]').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
 }
@@ -3423,7 +3456,7 @@ async function loadBaseClinics() {
     toast('基础诊所池加载失败，请确认 tcm-base-clinics.json 已上传');
   }
 }
-function promoteBaseClinic(id) {
+async function promoteBaseClinic(id) {
   const p = baseClinics.find(x => x.id === id);
   if (!p) return;
   const now = new Date().toISOString();
@@ -3444,17 +3477,21 @@ function promoteBaseClinic(id) {
     updatedByAvatar: currentAvatar,
     visits: [{ date: now.slice(0,16).replace('T',' '), by: currentUsername || '匿名', note: '从官方基础诊所池加入跟进，已标记为已交流' }]
   };
-  const existIdx = places.findIndex(x => x.id === data.id);
-  if (existIdx >= 0) places[existIdx] = { ...places[existIdx], ...data };
-  else places.push(data);
-  savePlaces();
-  saveToFirestore(data).then(() => {
+  if (places.some(x => x.id === data.id)) return toast('该诊所已在机构池，请直接编辑');
+  try {
+    const saved = await saveToFirestore(data, null);
+    places.push(saved);
+    clearCoverageCache();
+    savePlaces();
     toast('已加入机构池并显示在首页');
     selectedMallId = null;
     closeCoveragePanel();
     renderMarkers(); renderList(); updateStats();
-    openEditSheet(data.id);
-  }).catch(() => toast('加入失败'));
+    openEditSheet(saved.id);
+  } catch (e) {
+    console.error(e);
+    toast('加入失败：' + (e.message || '请刷新重试'));
+  }
 }
 
 function resetMallCache() {
@@ -3625,13 +3662,15 @@ function renderSearchResults(allResults, hasMore) {
   const center = getSearchCenter();
   const bounds = L.latLngBounds();
   bounds.extend([center.lat, center.lng]);
+  const safeResults = [];
 
   const body = document.getElementById('searchBody');
   const selectedDistrictName = (DISTRICTS[selectedDistrict] && DISTRICTS[selectedDistrict].name) || '当前位置';
-  body.innerHTML = '<div style="padding:6px 4px;font-size:13px;color:var(--text2)">找到 ' + allResults.length + ' 家 · ' + selectedDistrictName + '</div>' +
+  body.innerHTML = '<div style="padding:6px 4px;font-size:13px;color:var(--text2)">找到 ' + allResults.length + ' 家 · ' + esc(selectedDistrictName) + '</div>' +
     allResults.map((r, i) => {
       const lat = r.geometry.location.lat();
       const lng = r.geometry.location.lng();
+      safeResults.push({ name:String(r.name || ''), address:String(r.formatted_address || ''), lat, lng });
       const marker = L.marker([lat, lng], {
         icon: L.divIcon({
           className: '',
@@ -3656,20 +3695,27 @@ function renderSearchResults(allResults, hasMore) {
           </div>
           ${exists
             ? '<span style="font-size:12px;color:var(--green)">已录入</span>'
-            : `<button class="btn btn-primary" style="flex-shrink:0" onclick='addFromSearch(${JSON.stringify({
-                name: r.name,
-                address: r.formatted_address || '',
-                lat: lat,
-                lng: lng
-              }).replace(/'/g, "&#39;")})'>+ 添加</button>`
+            : `<button class="btn btn-primary" style="flex-shrink:0" type="button" data-search-add-index="${i}">+ 添加</button>`
           }
-          <button class="btn btn-ghost" style="flex-shrink:0;padding:8px 10px;font-size:12px" onclick="focusSearchMarker(${i})">定位</button>
+          <button class="btn btn-ghost" style="flex-shrink:0;padding:8px 10px;font-size:12px" type="button" data-search-focus-index="${i}">定位</button>
         </div>`;
     }).join('');
 
   if (hasMore) {
     body.innerHTML += '<div style="text-align:center;padding:12px;font-size:13px;color:var(--text2)">⏳ 正在加载更多结果...</div>';
   }
+  if (body._searchResultClickHandler) body.removeEventListener('click', body._searchResultClickHandler);
+  body._searchResultClickHandler = event => {
+    const addButton = event.target.closest('[data-search-add-index]');
+    if (addButton && body.contains(addButton)) {
+      const result = safeResults[Number(addButton.dataset.searchAddIndex)];
+      if (result) addFromSearch(result);
+      return;
+    }
+    const focusButton = event.target.closest('[data-search-focus-index]');
+    if (focusButton && body.contains(focusButton)) focusSearchMarker(Number(focusButton.dataset.searchFocusIndex));
+  };
+  body.addEventListener('click', body._searchResultClickHandler);
 
   if (bounds.isValid()) {
     map.fitBounds(bounds, { padding: [40, 40], maxZoom: 15 });
@@ -3843,10 +3889,9 @@ function importData(event) {
       if (!confirm(`JSON预审：共 ${review.summary.total} 条，安全可导入 ${ready.length} 条，拦截 ${blocked.length} 条。\n确认只写入安全记录？`)) return;
       const result = await window.BDMapImportSafety.runSafeImport(ready, {
         persist: async row => {
-          const idx = places.findIndex(p => p.id === row.id);
-          const record = idx >= 0 ? window.BDMapImportSafety.mergeImportedRecord(places[idx], row, {actor:currentUsername||'匿名'}) : {...row, revision:Number(row.revision||0)+1};
-          await placesCollection.doc(record.id).set(cleanForFirestore(record));
-          if(idx>=0) places[idx]=record; else places.push(record);
+          const record = window.BDMapImportSafety.prepareNewImportedRecord(row, { id:genId(), actor:currentUsername||'匿名' });
+          const saved = await saveToFirestore(record, null);
+          places.push(saved);
         }
       });
       importFailureRows.push(...result.failed.map(x=>({...x.row,failureMessage:x.error.message})));
@@ -3899,8 +3944,8 @@ function renderAdminUsers() {
     return `<div class="admin-user-row">
       <div class="info"><div class="name">${avatarInlineHtml(o.avatar)}${esc(o.name)}</div><div class="meta">ownerId: ${esc(o.id)} · ${ids.length} 个机构</div></div>
       <div class="admin-user-actions">
-        <button class="avatar-edit" onclick="changeOwnerAvatar('${escAttr(o.id)}','${escAttr(o.name)}')">改头像</button>
-        <button onclick="deleteOwnerData('${escAttr(o.id)}','${escAttr(o.name)}')">删除用户数据</button>
+        <button class="avatar-edit" onclick="changeOwnerAvatar('${jsStr(o.id)}','${jsStr(o.name)}')">改头像</button>
+        <button onclick="deleteOwnerData('${jsStr(o.id)}','${jsStr(o.name)}')">删除用户数据</button>
       </div>
     </div>`;
   }).join('');
@@ -3913,26 +3958,29 @@ async function changeOwnerAvatar(ownerId, ownerName) {
   const affected = places.filter(p => getOwnerId(p) === ownerId || normalizeOwnerId(getOwnerName(p)) === ownerId);
   if (!affected.length) { toast('没有找到该用户的数据'); return; }
   if (!confirm(`确认把「${ownerName}」名下 ${affected.length} 个机构头像改为 ${next}？`)) return;
-  affected.forEach(p => {
-    p.ownerAvatar = next;
-    if ((p.createdBy || p.ownerName || '') === ownerName) p.createdByAvatar = next;
-    if ((p.updatedBy || p.ownerName || '') === ownerName) p.updatedByAvatar = next;
-    if (Array.isArray(p.visits)) p.visits.forEach(v => { if (v.by === ownerName) v.byAvatar = next; });
-    p.updatedAt = new Date().toISOString();
-  });
-  savePlaces();
-  renderAdminUsers();
-  renderOwnerFilters();
-  renderMarkers();
-  renderList();
-  toast(`✅ 已修改「${ownerName}」头像：${next}`);
-  try {
-    await Promise.all(affected.map(p => placesCollection.doc(p.id).set(p, { merge: true })));
-    toast(`✅ 已同步头像到云端：${affected.length} 条`);
-  } catch(err) {
-    console.error(err);
-    toast('⚠️ 本地已改，云端同步失败，请稍后重试');
+  const succeeded = [];
+  const failed = [];
+  for (const original of affected) {
+    try {
+      const saved = await runRevisionedMutation(original.id, Number(original.revision) || 0, current => {
+        if (!current) throw new Error('云端记录不存在');
+        const updated = { ...current, ownerAvatar:next, updatedAt:new Date().toISOString() };
+        if ((updated.createdBy || updated.ownerName || '') === ownerName) updated.createdByAvatar = next;
+        if ((updated.updatedBy || updated.ownerName || '') === ownerName) updated.updatedByAvatar = next;
+        if (Array.isArray(updated.visits)) updated.visits = updated.visits.map(v => v.by === ownerName ? { ...v, byAvatar:next } : v);
+        return updated;
+      }, { action:'owner-avatar-update', reason:`修改「${ownerName}」头像` });
+      const idx = places.findIndex(p => p.id === saved.id);
+      if (idx >= 0) places[idx] = saved; else places.push(saved);
+      succeeded.push(saved);
+    } catch (err) {
+      console.error(err);
+      failed.push({ record:original, error:err });
+    }
   }
+  savePlaces(); renderAdminUsers(); renderOwnerFilters(); renderMarkers(); renderList();
+  if (failed.length) toast(`⚠️ 头像已同步 ${succeeded.length}/${affected.length} 条，${failed.length} 条冲突或失败`);
+  else toast(`✅ 已同步头像到云端：${succeeded.length} 条`);
 }
 async function deleteOwnerData(ownerId, ownerName) {
   const ids = places.filter(p => getOwnerId(p) === ownerId).map(p => p.id);
@@ -3970,11 +4018,11 @@ function getOwnerAvatar(p) { return p.ownerAvatar || p.createdByAvatar || p.upda
 function getOwnerLabel(p) { return (isImageAvatar(getOwnerAvatar(p)) ? '头像' : getOwnerAvatar(p)) + ' ' + getOwnerName(p); }
 function isImageAvatar(v) { return typeof v === 'string' && (v.indexOf('data:image/') === 0 || v.indexOf('http://') === 0 || v.indexOf('https://') === 0); }
 function avatarHtml(v) {
-  if (isImageAvatar(v)) return '<img class="avatar-img" src="' + esc(v) + '" alt="头像">';
+  if (isImageAvatar(v)) return '<img class="avatar-img" src="' + escAttr(safeHttpUrl(v)) + '" alt="头像">';
   return esc(v || '👤');
 }
 function avatarInlineHtml(v) {
-  if (isImageAvatar(v)) return '<img class="avatar-inline" src="' + esc(v) + '" alt="头像">';
+  if (isImageAvatar(v)) return '<img class="avatar-inline" src="' + escAttr(safeHttpUrl(v)) + '" alt="头像">';
   return esc(v || '👤') + ' ';
 }
 function ownerLabelHtml(p) { return avatarInlineHtml(getOwnerAvatar(p)) + esc(getOwnerName(p)); }
@@ -4028,23 +4076,70 @@ function cleanForFirestore(value) {
   }
   return value;
 }
-function saveToFirestore(data) {
+function getRuntimeSafety() {
+  if (!window.BDMapRuntimeSafety) throw new Error('运行安全模块尚未载入，请刷新后重试');
+  return window.BDMapRuntimeSafety;
+}
+function runRevisionedMutation(id, expectedRevision, mutate, options = {}) {
+  if (!id) return Promise.reject(new Error('缺少记录ID'));
+  const docRef = placesCollection.doc(id);
+  const auditRef = options.action ? auditLogsCollection.doc() : null;
+  return db.runTransaction(async transaction => {
+    const snapshot = await transaction.get(docRef);
+    const current = snapshot.exists ? { id:snapshot.id, ...snapshot.data() } : null;
+    getRuntimeSafety().assertExpectedRevision(current, expectedRevision);
+    const proposed = await mutate(current ? { ...current } : null);
+    if (!proposed) throw new Error('写入内容为空');
+    const cleanData = cleanForFirestore({ ...proposed, id });
+    const revisioned = getRuntimeSafety().prepareRevisionedWrite(cleanData, current);
+    const writeData = { ...revisioned };
+    for (const field of (options.deleteFields || [])) writeData[field] = firebase.firestore.FieldValue.delete();
+    transaction.set(docRef, writeData, { merge:true });
+    if (auditRef) {
+      transaction.set(auditRef, {
+        action: options.action,
+        recordId: id,
+        recordName: revisioned.name || (current && current.name) || '',
+        actor: getDeleteActor(),
+        at: new Date().toISOString(),
+        reason: options.reason || '',
+        fromRevision: Number(current && current.revision) || 0,
+        toRevision: revisioned.revision
+      });
+    }
+    return revisioned;
+  });
+}
+function saveToFirestore(data, expectedRevision) {
   document.getElementById('syncStatus').textContent = '☁️ 正在同步...';
   const cleanData = cleanForFirestore(data);
   if (!cleanData.createdAt) cleanData.createdAt = new Date().toISOString();
   if (!cleanData.updatedAt) cleanData.updatedAt = new Date().toISOString();
-  return placesCollection.doc(cleanData.id).set(cleanData).then(() => {
-    document.getElementById('syncStatus').textContent = '✅ 已同步';
-  }).catch(err => {
-    console.error('Firestore save error:', err);
-    document.getElementById('syncStatus').textContent = '⚠️ 同步失败';
-    throw err;
-  });
+  return runRevisionedMutation(cleanData.id, expectedRevision, current => ({ ...(current || {}), ...cleanData }))
+    .then(saved => {
+      document.getElementById('syncStatus').textContent = '✅ 已同步';
+      return saved;
+    }).catch(err => {
+      console.error('Firestore save error:', err);
+      document.getElementById('syncStatus').textContent = '⚠️ 同步失败';
+      throw err;
+    });
 }
 function genId() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
-function escAttr(s) { return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/'/g,'&#39;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
-function jsStr(s) { return String(s || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\n/g, '\\n').replace(/\r/g, ''); }
+function outputSafety() {
+  return window.BDMapOutputSafety || {
+    escapeHtml: value => String(value ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'),
+    escapeHtmlAttribute: value => String(value ?? '').replace(/&/g,'&amp;').replace(/'/g,'&#39;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/`/g,'&#96;'),
+    escapeInlineJsString: value => String(value ?? '').replace(/\\/g,'\\x5C').replace(/'/g,'\\x27').replace(/"/g,'\\x22').replace(/</g,'\\x3C').replace(/>/g,'\\x3E').replace(/&/g,'\\x26').replace(/\r/g,'\\r').replace(/\n/g,'\\n'),
+    safeHttpUrl: value => { try { const raw=String(value ?? '').trim(), u=new URL(raw, location.href); return raw && (u.protocol==='http:' || u.protocol==='https:') ? raw : ''; } catch { return ''; } },
+    safeTelephone: value => { const raw=String(value ?? '').trim(); return /^[+0-9()\-\s.]{3,40}$/.test(raw) ? raw : ''; }
+  };
+}
+function escAttr(s) { return outputSafety().escapeHtmlAttribute(s); }
+function esc(s) { return outputSafety().escapeHtml(s); }
+function jsStr(s) { return outputSafety().escapeInlineJsString(s); }
+function safeHttpUrl(s) { return outputSafety().safeHttpUrl(s); }
+function safeTelephone(s) { return outputSafety().safeTelephone(s); }
 
 function mallTrafficScore(m) {
   const n = parseFloat(m.traffic || 0);
@@ -4461,13 +4556,19 @@ async function confirmBatchShopImport(){
   const now=new Date().toISOString();
   let ok=0, fail=0;
   for(const r of rows){
+    const latestDuplicates=findPotentialDuplicatesForShop(r);
+    if(latestDuplicates.length){
+      fail++;
+      r.importStatus='最终查重拦截';
+      r.failureMessage='确认前发现疑似重复：'+latestDuplicates.map(x=>x.name||x.id).join(' / ');
+      importFailureRows.push({...r});
+      continue;
+    }
     const ownerName=r.ownerName || currentUsername || '匿名';
-    let data={ id:makeBatchShopId(r.name,r.address), name:r.name, entryKind:'institution', type:r.type||'中医诊所', address:r.address||'', district:r.district||'', contact:r.contact||'', phone:r.phone||'', status:r.status||'待跟进', lat:Number(r.lat), lng:Number(r.lng), source:r.source||'批量导入', note:r.note||'', visits:[{date:now.slice(0,10), by:currentUsername||'匿名', byAvatar:currentAvatar, note:'批量导入' + (r.note ? '：'+r.note : '')}], ownerId:normalizeOwnerId(ownerName), ownerName, ownerAvatar: ownerName===(currentUsername||'匿名') ? currentAvatar : '👤', createdAt:now, createdBy:currentUsername||'匿名', createdByAvatar:currentAvatar, updatedAt:now, updatedBy:currentUsername||'匿名', updatedByAvatar:currentAvatar, importSource:'batch_shop_import', geocodeStatus:r.coordStatus, geocodeAddress:r.geocodeAddress||'', revision:1 };
-    const idx=places.findIndex(p=>clinicMatchKey(p)===clinicMatchKey(data));
-    if(idx>=0){ data=window.BDMapImportSafety.mergeImportedRecord(places[idx], data, {now,actor:currentUsername||'匿名'}); }
+    const data={ id:makeBatchShopId(r.name,r.address), name:r.name, entryKind:'institution', type:r.type||'中医诊所', address:r.address||'', district:r.district||'', contact:r.contact||'', phone:r.phone||'', status:r.status||'待跟进', lat:Number(r.lat), lng:Number(r.lng), source:r.source||'批量导入', note:r.note||'', visits:[{date:now.slice(0,10), by:currentUsername||'匿名', byAvatar:currentAvatar, note:'批量导入' + (r.note ? '：'+r.note : '')}], ownerId:normalizeOwnerId(ownerName), ownerName, ownerAvatar: ownerName===(currentUsername||'匿名') ? currentAvatar : '👤', createdAt:now, createdBy:currentUsername||'匿名', createdByAvatar:currentAvatar, updatedAt:now, updatedBy:currentUsername||'匿名', updatedByAvatar:currentAvatar, importSource:'batch_shop_import', geocodeStatus:r.coordStatus, geocodeAddress:r.geocodeAddress||'', revision:0 };
     try{
-      await saveToFirestore(data);
-      if(idx>=0) places[idx]=data; else places.push(data);
+      const saved = await saveToFirestore(data, null);
+      places.push(saved);
       r.importStatus='已导入';
       r.failureMessage='';
       ok++;
@@ -4531,10 +4632,10 @@ function findClinicForImport(row) {
   return null;
 }
 function makeImportEditableRecord(match, row) {
-  let data = places.find(x => x.id === match.id || x.id === 'place_' + match.id || x.sourceBaseId === match.id || clinicMatchKey(x) === clinicMatchKey(match));
+  const existing = places.find(x => x.id === match.id || x.id === 'place_' + match.id || x.sourceBaseId === match.id || clinicMatchKey(x) === clinicMatchKey(match));
   const now = new Date().toISOString();
-  if (!data) data = { ...match, id: match.isBaseClinic ? 'place_' + match.id : (match.id || 'place_' + Date.now().toString(36)), isBaseClinic:false, sourceBaseId: match.id, createdAt:now };
-  return data;
+  if (existing) return { ...existing };
+  return { ...match, id: match.isBaseClinic ? 'place_' + match.id : (match.id || 'place_' + Date.now().toString(36)), isBaseClinic:false, sourceBaseId: match.id, createdAt:now };
 }
 async function handleBatchErrorImport(event) {
   const file = event.target.files && event.target.files[0];
@@ -4560,6 +4661,8 @@ async function handleBatchErrorImport(event) {
     const match = findClinicForImport(row);
     if (!match) { stats.failed++; failures.push(`第${r}行：找不到匹配诊所 ${row.name || row.clinic_id || ''}`); continue; }
     const data = makeImportEditableRecord(match, row);
+    const original = places.find(x => x.id === data.id);
+    const expectedRevision = original ? (Number(original.revision) || 0) : null;
     if (action === '已修正') {
       data.resolvedReports = [...(data.resolvedReports||[]), { type:data.dataQualityIssueType || data.dataQualityStatus || '报错', note, by:currentUsername || '匿名', byAvatar:currentAvatar, at:now, source:'batch_upload' }];
       data.dataQualityStatus = ''; data.dataQualityIssueType = ''; data.resolvedAt = now; data.resolvedBy = currentUsername || '匿名'; data.resolveNote = note;
@@ -4570,9 +4673,12 @@ async function handleBatchErrorImport(event) {
       byType[action] = (byType[action] || 0) + 1;
     }
     data.updatedAt = now; data.updatedBy = currentUsername || '匿名'; data.updatedByAvatar = currentAvatar;
-    const idx = places.findIndex(x => x.id === data.id);
-    if (idx >= 0) places[idx] = data; else places.push(data);
-    try { await saveToFirestore(data); stats.processed++; } catch(e) { console.error(e); stats.failed++; failures.push(`第${r}行：云端保存失败 ${data.name || data.id}`); }
+    try {
+      const saved = await saveToFirestore(data, expectedRevision);
+      const idx = places.findIndex(x => x.id === saved.id);
+      if (idx >= 0) places[idx] = saved; else places.push(saved);
+      stats.processed++;
+    } catch(e) { console.error(e); stats.failed++; failures.push(`第${r}行：云端保存失败 ${data.name || data.id}`); }
   }
   clearCoverageCache(); savePlaces(); scheduleLeadHomeRender(); renderMarkers(); updateStats();
   const typeText = Object.entries(byType).map(([k,v])=>`${k}:${v}`).join('，') || '无';
