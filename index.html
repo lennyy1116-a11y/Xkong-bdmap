@@ -155,8 +155,9 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
   white-space: nowrap; flex-shrink: 0;
 }
 .filter-chip.active { background: var(--primary); border-color: var(--primary); color: #fff; }
-.owner-filters { padding-top: 0; }
+.owner-filters { padding-top: 0; align-items:center; }
 .owner-chip { display:inline-flex; align-items:center; gap:4px; }
+.owner-select { width:100%; min-width:150px; padding:7px 34px 7px 10px; border:1px solid #444; border-radius:10px; background:var(--bg); color:var(--text); font-size:13px; }
 .list-body { flex: 1; overflow-y: auto; padding: 8px 12px; }
 .list-item {
   background: var(--card); border-radius: var(--radius); padding: 14px;
@@ -658,6 +659,7 @@ body.home-mode .app-nav { display:grid !important; }
 body.home-mode .map-filter-bar { display:none !important; }
 .map-filter-chip { flex-shrink:0; border:1px solid #444; background:var(--card); color:var(--text2); border-radius:999px; padding:6px 10px; font-size:12px; font-weight:900; display:inline-flex; align-items:center; gap:4px; }
 .map-filter-chip.active { background:var(--orange); border-color:var(--orange); color:#fff; }
+.map-owner-select { flex:0 0 auto; max-width:180px; padding:6px 30px 6px 10px; border:1px solid #444; border-radius:999px; background:var(--card); color:var(--text); font-size:12px; font-weight:800; }
 .home-hint { top:max(104px, calc(env(safe-area-inset-top) + 104px)); }
 
 
@@ -758,7 +760,7 @@ body.home-mode .map-filter-bar { display:none !important; }
   <button class="map-filter-chip" data-kind="status" data-value="已交流" onclick="setMapStatusFilter('已交流')">🟡 已交流</button>
   <button class="map-filter-chip" data-kind="status" data-value="有意向" onclick="setMapStatusFilter('有意向')">🟢 有意向</button>
   <button class="map-filter-chip" data-kind="status" data-value="已合作" onclick="setMapStatusFilter('已合作')">🔵 已合作</button>
-  <span id="mapOwnerFilterChips" style="display:flex;gap:6px"></span>
+  <select id="mapOwnerSelect" class="map-owner-select" aria-label="按负责人筛选" onchange="setMapOwnerFilter(this.value)"><option value="全部">👥 全部人员</option></select>
 </div>
 <div id="map"></div>
 <div class="home-hint" id="homeHint"><button class="home-hint-close" onclick="hideHomeHint()">×</button>首页仅显示团队已跟进机构；官方中医名录是底层基础诊所池，只在商场1公里覆盖分析中显示。</div>
@@ -905,7 +907,7 @@ body.home-mode .map-filter-bar { display:none !important; }
     <span class="filter-chip" data-filter="暂不合作">🔴 暂不合作</span>
   </div>
   <div class="list-filters owner-filters" id="ownerFilters">
-    <span class="filter-chip owner-chip active" data-owner="全部">👥 全部人员</span>
+    <select id="ownerSelect" class="owner-select" aria-label="按负责人筛选" onchange="setOwnerFilter(this.value)"><option value="全部">👥 全部人员</option></select>
   </div>
   <div class="bulk-tools">
     <button onclick="toggleBulkMode()">☑️ 批量选择</button>
@@ -1585,6 +1587,7 @@ let editVisits = [];
 let searchMarkers = [];
 let currentFilter = '全部';
 let ownerFilter = '全部';
+let mallPanelSource = 'map';
 let tapMode = false;
 let sheetPickMode = false;
 let selectedDistrict = 'current';
@@ -1940,16 +1943,7 @@ function setMapOwnerFilter(ownerId) {
 }
 function updateMapFilterBar() {
   document.querySelectorAll('.map-filter-chip[data-kind="status"]').forEach(b => b.classList.toggle('active', normalizeStatus(b.dataset.value) === normalizeStatus(currentFilter)));
-  const box = document.getElementById('mapOwnerFilterChips');
-  if (!box) return;
-  const owners = getOwners().filter(o => o.id !== '全部');
-  const allCls = ownerFilter === '全部' ? ' active' : '';
-  const allBtn = `<button class="map-filter-chip${allCls}" onclick="setMapOwnerFilter('全部')">👥 全部人员</button>`;
-  const ownerBtns = owners.map(o => {
-    const cls = ownerFilter === o.id ? ' active' : '';
-    return `<button class="map-filter-chip${cls}" onclick="setMapOwnerFilter('${jsStr(o.id)}')">${avatarInlineHtml(o.avatar)}${esc(o.name)}</button>`;
-  }).join('');
-  box.innerHTML = allBtn + ownerBtns;
+  renderOwnerSelectOptions('mapOwnerSelect');
 }
 function getFilteredPlaces() {
   const selectedMall = getCoverageTargetById(selectedMallId);
@@ -2512,7 +2506,7 @@ function setResourceTab(kind) {
     openMallPanel('resources');
     return;
   }
-  closeMallPanel();
+  hideMallPanel();
   document.getElementById('listPanel').classList.add('active');
   renderList();
 }
@@ -2665,12 +2659,14 @@ async function deleteCurrentFilteredPlaces() {
   if (!ids.length) { toast('当前筛选没有机构'); return; }
   await bulkDeleteIds(ids);
 }
-async function bulkDeleteIds(ids) {
+async function bulkDeleteIds(ids, options = {}) {
   const records = ids.map(id => places.find(p => p.id === id)).filter(Boolean);
   if (!records.length) return toast('找不到待删除记录');
-  const confirmation = prompt(`高风险操作：将 ${records.length} 条记录移入回收站。\n请输入「移入回收站 ${records.length}」继续：`);
-  if (confirmation !== `移入回收站 ${records.length}`) return toast('已取消批量删除');
-  const reason = prompt('请输入本次批量删除原因:', '批量资料清理');
+  if (!options.confirmed) {
+    const confirmation = prompt(`高风险操作：将 ${records.length} 条记录移入回收站。\n请输入「移入回收站 ${records.length}」继续：`);
+    if (confirmation !== `移入回收站 ${records.length}`) return toast('已取消批量删除');
+  }
+  const reason = options.reason || prompt('请输入本次批量删除原因:', '批量资料清理');
   if (reason === null) return;
   try {
     downloadDeletionBackup(records, 'bulk-soft-delete');
@@ -3094,9 +3090,15 @@ async function loadMallMetaFromCloud() {
   }
 }
 function saveMallsLocal() { localStorage.setItem(MALLS_KEY, JSON.stringify(malls)); }
-function openMallPanel(source) { setAppTab(source === 'resources' ? 'resources' : 'map'); closeDashboard(); renderMallList(); document.getElementById('mallPanel').classList.add('active'); }
-function closeMallPanel() { document.getElementById('mallPanel').classList.remove('active'); }
-function startMallPick() { mallPickMode = true; closeMallPanel(); toast('在地图上点击商场位置'); }
+function openMallPanel(source) { mallPanelSource = source === 'resources' ? 'resources' : 'map'; setAppTab(mallPanelSource); closeDashboard(); renderMallList(); document.getElementById('mallPanel').classList.add('active'); }
+function hideMallPanel() { document.getElementById('mallPanel').classList.remove('active'); }
+function closeMallPanel() {
+  const returnTarget = mallPanelSource;
+  hideMallPanel();
+  if (returnTarget === 'resources') openResourceCenter('institution');
+  else setAppTab('map');
+}
+function startMallPick() { mallPickMode = true; hideMallPanel(); setAppTab('map'); toast('在地图上点击商场位置'); }
 function resetMallForm() {
   editingMallId = null;
   ['mallName','mallTraffic','mallTrafficNote','mallAddress','mallLat','mallLng','mallNextStep','mallNote'].forEach(id=>document.getElementById(id).value='');
@@ -4404,10 +4406,18 @@ async function changeOwnerAvatar(ownerId, ownerName) {
 }
 async function deleteOwnerData(ownerId, ownerName) {
   const ids = places.filter(p => getOwnerId(p) === ownerId).map(p => p.id);
-  if (!ids.length) { toast('该用户没有机构数据'); return; }
-  const confirmText = prompt(`将删除「${ownerName}」名下 ${ids.length} 个机构。\n这不是删除登录账号，而是删除该用户归属的点位数据。\n请输入 DELETE 确认：`);
+  const isCurrentLocalProfile = ownerId === getCurrentOwnerId();
+  if (!ids.length && !isCurrentLocalProfile) { toast('该用户没有机构数据'); return; }
+  const confirmText = prompt(`将清理「${ownerName}」名下 ${ids.length} 条资料${isCurrentLocalProfile ? '，并移除此设备上的当前用户资料' : ''}。\n云端资料会进入回收站，可恢复。\n请输入 DELETE 确认：`);
   if (confirmText !== 'DELETE') { toast('已取消'); return; }
-  await bulkDeleteIds(ids);
+  if (ids.length) await bulkDeleteIds(ids, { confirmed:true, reason:`管理员清理用户「${ownerName}」资料` });
+  if (isCurrentLocalProfile) {
+    localStorage.removeItem(USERNAME_KEY);
+    localStorage.removeItem(USER_AVATAR_KEY);
+    currentUsername = '';
+    currentAvatar = '👤';
+    updateCurrentUserBadge();
+  }
   renderAdminUsers();
   renderOwnerFilters();
 }
@@ -4463,20 +4473,25 @@ function getOwners() {
   return Object.values(map).sort((a,b) => b.count - a.count || a.name.localeCompare(b.name));
 }
 function renderOwnerFilters() {
-  const box = document.getElementById('ownerFilters');
-  if (!box) return;
+  renderOwnerSelectOptions('ownerSelect');
+  renderOwnerSelectOptions('mapOwnerSelect');
+}
+function renderOwnerSelectOptions(selectId) {
+  const select = document.getElementById(selectId);
+  if (!select) return;
   const owners = getOwners();
-  box.innerHTML = '<span class="filter-chip owner-chip ' + (ownerFilter === '全部' ? 'active' : '') + '" data-owner="全部">👥 全部人员</span>' + owners.map(o =>
-    '<span class="filter-chip owner-chip ' + (ownerFilter === o.id ? 'active' : '') + '" data-owner="' + esc(o.id) + '">' + avatarInlineHtml(o.avatar) + esc(o.name) + '</span>'
+  const validIds = new Set(owners.map(o => o.id));
+  if (ownerFilter !== '全部' && !validIds.has(ownerFilter)) ownerFilter = '全部';
+  select.innerHTML = '<option value="全部">👥 全部人员 (' + owners.length + ')</option>' + owners.map(o =>
+    '<option value="' + escAttr(o.id) + '">' + esc((isImageAvatar(o.avatar) ? '👤' : (o.avatar || '👤')) + ' ' + o.name + ' · ' + o.count) + '</option>'
   ).join('');
-  box.querySelectorAll('.filter-chip').forEach(chip => {
-    chip.onclick = () => {
-      ownerFilter = chip.dataset.owner || '全部';
-      renderOwnerFilters();
-      renderMarkers();
-      renderList();
-    };
-  });
+  select.value = ownerFilter;
+}
+function setOwnerFilter(ownerId) {
+  ownerFilter = ownerId || '全部';
+  renderOwnerFilters();
+  renderMarkers();
+  renderList();
 }
 function savePlaces() {
   // Also save to localStorage as offline backup
