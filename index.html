@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-<title>BDmap-v3.7.0-hardening-dev</title>
+<title>BDmap-v3.7.0-hardening-p3</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -690,8 +690,8 @@ body.home-mode .map-filter-bar { display:none !important; }
 <div class="lead-home" id="leadHome">
   <div class="lead-home-header">
     <div class="lead-home-top">
-      <h1>📍 BDmap-v3.7.0-hardening-dev</h1>
-      <div style="font-size:12px;color:#2563eb;font-weight:700;margin-top:4px;">开发标识：v3.7.0-hardening-dev｜安全删除、备份与回收站</div>
+      <h1>📍 BDmap-v3.7.0-hardening-p3</h1>
+      <div style="font-size:12px;color:#2563eb;font-weight:700;margin-top:4px;">版本：v3.7.0-hardening-p3｜安全删除、导入预审与失败恢复</div>
       <button class="lead-tab-btn" onclick="triggerBatchErrorImport()">上传报错</button>
       <input type="file" id="batchErrorFile" accept=".xlsx,.xls" style="display:none" onchange="handleBatchErrorImport(event)">
       <button class="lead-tab-btn" onclick="openBatchShopImport()">批量导入店铺</button>
@@ -718,7 +718,7 @@ body.home-mode .map-filter-bar { display:none !important; }
 <div class="batch-shop-modal" id="batchShopModal">
   <div class="batch-shop-box">
     <div class="batch-shop-head">
-      <div><h2>批量导入店铺</h2><p>先下载模板填写，再上传预览；系统会校验必填、疑似重复、坐标状态，确认后才写入地图和线索。</p></div>
+    <div><h2>批量导入店铺</h2><p>先下载模板填写，再上传预览；疑似重复和坐标待核默认不会写入，确认后只提交安全行。</p></div>
       <button class="batch-shop-close" onclick="closeBatchShopImport()">关闭</button>
     </div>
     <div class="batch-shop-body">
@@ -730,7 +730,7 @@ body.home-mode .map-filter-bar { display:none !important; }
       </div>
       <div class="batch-shop-summary" id="batchShopSummary">还没上传文件。建议销售至少填写：店铺名称、地址、电话。</div>
       <div class="batch-shop-table-wrap"><table class="batch-shop-table" id="batchShopTable"><thead><tr><th>行</th><th>状态</th><th>店铺</th><th>地址</th><th>电话</th><th>坐标</th><th>重复/备注</th></tr></thead><tbody><tr><td colspan="7" class="muted">等待上传Excel</td></tr></tbody></table></div>
-      <div class="batch-shop-hint">定位规则：有lat/lng直接用；无坐标则优先走Google地址定位，失败再用OpenStreetMap/Nominatim兜底；定位失败或地址太粗会标为“坐标待核点”，仍可导入但会带报错标签，方便后续筛选修正。</div>
+      <div class="batch-shop-hint">定位规则：有效香港lat/lng直接用；无坐标才自动定位。定位失败、地址太粗、疑似重复都会被拦截，必须修正后重新预审，绝不再用当前位置冒充店铺坐标。</div>
     </div>
   </div>
 </div>
@@ -738,8 +738,8 @@ body.home-mode .map-filter-bar { display:none !important; }
 
 <!-- Top bar -->
 <div class="top-bar">
-  <h1>📍 BDmap-v3.7.0-hardening-dev</h1>
-      <div style="font-size:12px;color:#2563eb;font-weight:700;margin-top:4px;">开发标识：v3.7.0-hardening-dev｜安全删除、备份与回收站</div>
+  <h1>📍 BDmap-v3.7.0-hardening-p3</h1>
+      <div style="font-size:12px;color:#2563eb;font-weight:700;margin-top:4px;">版本：v3.7.0-hardening-p3｜安全删除、导入预审与失败恢复</div>
   <span class="stats" id="statsText">0 机构</span>
   <button class="nav-pill-btn" id="btnMall" title="商场覆盖">🏬 商场</button>
   <button class="nav-pill-btn" id="btnSettings" title="设置">⚙ 设置</button>
@@ -1193,6 +1193,7 @@ body.home-mode .map-filter-bar { display:none !important; }
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
 <script type="module" src="./src/data-safety.mjs"></script>
+<script type="module" src="./src/import-safety.mjs"></script>
 <script>
 // ============ FIREBASE ============
 const firebaseConfig = {
@@ -3829,35 +3830,31 @@ function importData(event) {
     try {
       const data = JSON.parse(e.target.result);
       if (!Array.isArray(data)) throw new Error('格式错误');
-      let added = 0;
-      let updated = 0;
-      const validItems = [];
-      data.forEach(item => {
-        if (!item.id || !item.name || item.lat === undefined || item.lng === undefined) return;
-        item.lat = Number(item.lat);
-        item.lng = Number(item.lng);
-        if (!Number.isFinite(item.lat) || !Number.isFinite(item.lng)) return;
-        const idx = places.findIndex(p => p.id === item.id);
-        if (idx >= 0) {
-          places[idx] = { ...places[idx], ...item };
-          updated++;
-        } else {
-          places.push(item);
-          added++;
+      if (!window.BDMapImportSafety) throw new Error('导入安全模块未加载');
+      const normalized = data.map((item, index) => ({ ...item, rowNumber:index + 1, lat:Number(item.lat), lng:Number(item.lng) }));
+      const review = window.BDMapImportSafety.reviewImportRows(normalized, [...places, ...deletedPlaces], { forbiddenCoordinates:[currentPos] });
+      const ready = review.rows.filter(row => row.importable);
+      const blocked = review.rows.filter(row => !row.importable);
+      importFailureRows = blocked.map(row => ({...row, failureMessage:(row.messages||[]).join('；')}));
+      if (!ready.length) {
+        alert(`JSON预审完成，但没有安全可导入记录。\n拦截：${blocked.length}\n请导出原文件修正重复、名称或坐标后再导入。`);
+        return;
+      }
+      if (!confirm(`JSON预审：共 ${review.summary.total} 条，安全可导入 ${ready.length} 条，拦截 ${blocked.length} 条。\n确认只写入安全记录？`)) return;
+      const result = await window.BDMapImportSafety.runSafeImport(ready, {
+        persist: async row => {
+          const idx = places.findIndex(p => p.id === row.id);
+          const record = idx >= 0 ? window.BDMapImportSafety.mergeImportedRecord(places[idx], row, {actor:currentUsername||'匿名'}) : {...row, revision:Number(row.revision||0)+1};
+          await placesCollection.doc(record.id).set(cleanForFirestore(record));
+          if(idx>=0) places[idx]=record; else places.push(record);
         }
-        validItems.push(item);
       });
-      savePlaces();
-      renderOwnerFilters();
-      updateMapFilterBar();
-      renderMarkers();
-      updateStats();
-      toast(`📥 本地导入完成：新增 ${added}，更新 ${updated}，正在同步云端...`);
-      await syncImportedToFirestore(validItems);
-      toast(`✅ 云端同步完成：${validItems.length} 条`);
+      importFailureRows.push(...result.failed.map(x=>({...x.row,failureMessage:x.error.message})));
+      clearCoverageCache(); savePlaces(); renderOwnerFilters(); updateMapFilterBar(); renderMarkers(); updateStats();
+      alert(`JSON导入完成\n成功：${result.successCount}\n云端失败：${result.failureCount}\n预审拦截：${blocked.length}`);
     } catch(err) {
       console.error(err);
-      toast('❌ 导入失败：文件格式不正确');
+      toast('❌ 导入失败：' + (err && err.message ? err.message : '文件格式不正确'));
     }
   };
   reader.readAsText(file);
@@ -4329,6 +4326,7 @@ async function copyDashboardSummary() {
 
 // ============ BATCH SHOP IMPORT v3.6.10 ============
 let batchShopPreviewRows = [];
+let importFailureRows = [];
 const BATCH_SHOP_HEADERS = ['店铺名称','类型','地址','区域','联系人','电话','来源','备注','认领人','状态','lat','lng'];
 function openBatchShopImport(){
   const m=document.getElementById('batchShopModal'); if(m) m.classList.add('active'); renderBatchShopPreview();
@@ -4349,9 +4347,9 @@ function isCoarseAddress(addr){
   if (/附近|某|一帶|一带|周邊|周边|商場內|商场内/.test(a)) return true;
   return false;
 }
-function findPotentialDuplicatesForShop(draft){
+function findPotentialDuplicatesForShop(draft, stagedRows=[]){
   const nameKey=normalizeClinicText(draft.name), addrKey=normalizeClinicText(draft.address), phoneKey=normalizePhoneText(draft.phone);
-  const all=[...places, ...baseClinics];
+  const all=[...places, ...deletedPlaces, ...baseClinics, ...stagedRows];
   return all.filter(p=>{
     const pn=normalizeClinicText(p.name), pa=normalizeClinicText(p.address), pp=normalizePhoneText(p.phone || p.contact);
     if (nameKey && addrKey && pn===nameKey && pa===addrKey) return true;
@@ -4406,12 +4404,12 @@ async function handleBatchShopFile(event){
       const item={ rowNumber:r, name, address, phone, type, district, contact, source, note, ownerName, status, lat:parseFloat(latRaw), lng:parseFloat(lngRaw), messages:[], importable:true, coordStatus:'待处理', duplicateMatches:[] };
       if(!name){ item.importable=false; item.messages.push('缺店铺名称'); }
       if(!address){ item.messages.push('缺地址'); }
-      const hasCoords=!isNaN(item.lat) && !isNaN(item.lng);
+      const hasCoords=window.BDMapImportSafety && window.BDMapImportSafety.isValidHongKongCoordinate(item.lat,item.lng);
       if(hasCoords){ item.coordStatus='已提供坐标'; }
-      else if(!address){ item.coordStatus='无地址待核点'; item.lat=currentPos.lat; item.lng=currentPos.lng; item.messages.push('无地址，暂用当前位置'); }
+      else if(!address){ item.coordStatus='坐标待核点'; item.lat=null; item.lng=null; item.importable=false; item.messages.push('无地址且无有效坐标，默认拦截'); }
       else { item.coordStatus='等待自动定位'; }
-      item.duplicateMatches=findPotentialDuplicatesForShop(item);
-      if(item.duplicateMatches.length){ item.messages.push('疑似重复：'+item.duplicateMatches.map(x=>x.name).join(' / ')); }
+      item.duplicateMatches=findPotentialDuplicatesForShop(item, rows);
+      if(item.duplicateMatches.length){ item.importable=false; item.messages.push('疑似重复，默认拦截：'+item.duplicateMatches.map(x=>x.name).join(' / ')); }
       rows.push(item);
     }
     batchShopPreviewRows=rows;
@@ -4425,12 +4423,12 @@ async function geocodeBatchShopRows(){
   for(let i=0;i<targets.length;i++){
     const row=targets[i];
     const summary=document.getElementById('batchShopSummary'); if(summary) summary.textContent=`正在自动定位 ${i+1}/${targets.length}：${row.name}`;
-    if(isCoarseAddress(row.address)){ row.coordStatus='坐标待核点'; row.messages.push('地址偏粗，需核点'); row.lat=currentPos.lat; row.lng=currentPos.lng; renderBatchShopPreview(); continue; }
+    if(isCoarseAddress(row.address)){ row.coordStatus='坐标待核点'; row.importable=false; row.messages.push('地址偏粗，需核点，默认拦截'); row.lat=null; row.lng=null; renderBatchShopPreview(); continue; }
     try{
       const geo=await geocodeBatchShopAddress(row.address + ' 香港');
-      if(geo){ row.lat=geo.lat; row.lng=geo.lng; row.coordStatus='自动定位'; row.geocodeAddress=geo.displayName; }
-      else { row.coordStatus='坐标待核点'; row.messages.push('自动定位失败'); row.lat=currentPos.lat; row.lng=currentPos.lng; }
-    }catch(e){ row.coordStatus='坐标待核点'; row.messages.push('定位服务失败'); row.lat=currentPos.lat; row.lng=currentPos.lng; }
+      if(geo && window.BDMapImportSafety.isValidHongKongCoordinate(geo.lat,geo.lng)){ row.lat=geo.lat; row.lng=geo.lng; row.coordStatus='自动定位'; row.geocodeAddress=geo.displayName; }
+      else { row.coordStatus='坐标待核点'; row.importable=false; row.messages.push('自动定位失败，默认拦截'); row.lat=null; row.lng=null; }
+    }catch(e){ row.coordStatus='坐标待核点'; row.importable=false; row.messages.push('定位服务失败，默认拦截'); row.lat=null; row.lng=null; }
     renderBatchShopPreview();
     await new Promise(res=>setTimeout(res, 350));
   }
@@ -4443,7 +4441,7 @@ function renderBatchShopPreview(){
   const rows=batchShopPreviewRows;
   if(!rows.length){ tbody.innerHTML='<tr><td colspan="7" class="muted">等待上传Excel</td></tr>'; summary.textContent='还没上传文件。建议销售至少填写：店铺名称、地址、电话。'; return; }
   const importable=rows.filter(x=>x.importable).length, dup=rows.filter(x=>x.duplicateMatches.length).length, pending=rows.filter(x=>String(x.coordStatus).includes('待核')).length, bad=rows.filter(x=>!x.importable).length;
-  summary.textContent=`读取 ${rows.length} 行｜可导入 ${importable}｜疑似重复 ${dup}｜坐标待核 ${pending}｜不可导入 ${bad}`;
+  summary.textContent=`读取 ${rows.length} 行｜安全可导入 ${importable}｜疑似重复拦截 ${dup}｜坐标待核拦截 ${pending}｜不可导入 ${bad}`;
   tbody.innerHTML=rows.slice(0,220).map(x=>{
     const cls=!x.importable?'err':(x.duplicateMatches.length || String(x.coordStatus).includes('待核')?'warn':'ok');
     const status=!x.importable?'不可导入':(x.duplicateMatches.length?'疑似重复':'可导入');
@@ -4457,29 +4455,44 @@ async function downloadBatchShopTemplate(){
   toast('已下载批量导入模板');
 }
 async function confirmBatchShopImport(){
-  const rows=batchShopPreviewRows.filter(x=>x.importable);
+  const rows=batchShopPreviewRows.filter(x=>x.importable && x.importStatus!=='已导入');
   if(!rows.length){ toast('没有可导入行'); return; }
-  if(!confirm(`确认导入 ${rows.length} 条？疑似重复不会自动跳过，请确认已检查预览。`)) return;
+  if(!confirm(`确认只导入 ${rows.length} 条安全行？疑似重复和坐标待核默认不会写入。`)) return;
   const now=new Date().toISOString();
   let ok=0, fail=0;
   for(const r of rows){
-    const coordPending=String(r.coordStatus).includes('待核') || String(r.coordStatus).includes('无地址');
     const ownerName=r.ownerName || currentUsername || '匿名';
-    const data={ id:makeBatchShopId(r.name,r.address), name:r.name, entryKind:'institution', type:r.type||'中医诊所', address:r.address||'', district:r.district||'', contact:r.contact||'', phone:r.phone||'', status:r.status||'待跟进', lat:r.lat||currentPos.lat, lng:r.lng||currentPos.lng, source:r.source||'批量导入', note:r.note||'', visits:[{date:now.slice(0,10), by:currentUsername||'匿名', byAvatar:currentAvatar, note:'批量导入' + (r.note ? '：'+r.note : '')}], ownerId:normalizeOwnerId(ownerName), ownerName, ownerAvatar: ownerName===(currentUsername||'匿名') ? currentAvatar : '👤', createdAt:now, createdBy:currentUsername||'匿名', createdByAvatar:currentAvatar, updatedAt:now, updatedBy:currentUsername||'匿名', updatedByAvatar:currentAvatar, importSource:'batch_shop_import', geocodeStatus:r.coordStatus, geocodeAddress:r.geocodeAddress||'' };
-    if(coordPending){ data.dataQualityStatus='待核实'; data.dataQualityIssueType='坐标待核点'; data.errorReports=[{type:'坐标待核点', note:(r.messages||[]).join('；'), by:currentUsername||'匿名', byAvatar:currentAvatar, at:now, source:'batch_shop_import'}]; }
+    let data={ id:makeBatchShopId(r.name,r.address), name:r.name, entryKind:'institution', type:r.type||'中医诊所', address:r.address||'', district:r.district||'', contact:r.contact||'', phone:r.phone||'', status:r.status||'待跟进', lat:Number(r.lat), lng:Number(r.lng), source:r.source||'批量导入', note:r.note||'', visits:[{date:now.slice(0,10), by:currentUsername||'匿名', byAvatar:currentAvatar, note:'批量导入' + (r.note ? '：'+r.note : '')}], ownerId:normalizeOwnerId(ownerName), ownerName, ownerAvatar: ownerName===(currentUsername||'匿名') ? currentAvatar : '👤', createdAt:now, createdBy:currentUsername||'匿名', createdByAvatar:currentAvatar, updatedAt:now, updatedBy:currentUsername||'匿名', updatedByAvatar:currentAvatar, importSource:'batch_shop_import', geocodeStatus:r.coordStatus, geocodeAddress:r.geocodeAddress||'', revision:1 };
     const idx=places.findIndex(p=>clinicMatchKey(p)===clinicMatchKey(data));
-    if(idx>=0){ data.id=places[idx].id; data.createdAt=places[idx].createdAt||data.createdAt; places[idx]={...places[idx], ...data}; }
-    else places.push(data);
-    try{ await saveToFirestore(data); ok++; }catch(e){ console.error(e); fail++; }
+    if(idx>=0){ data=window.BDMapImportSafety.mergeImportedRecord(places[idx], data, {now,actor:currentUsername||'匿名'}); }
+    try{
+      await saveToFirestore(data);
+      if(idx>=0) places[idx]=data; else places.push(data);
+      r.importStatus='已导入';
+      r.failureMessage='';
+      ok++;
+    }catch(e){
+      console.error(e);
+      fail++;
+      r.importStatus='云端失败';
+      r.failureMessage=e && e.message ? e.message : '云端写入失败';
+      importFailureRows.push({...r});
+    }
   }
   clearCoverageCache(); savePlaces(); renderOwnerFilters(); updateMapFilterBar(); scheduleLeadHomeRender(); renderMarkers(); updateStats();
   toast(`批量导入完成：成功 ${ok}，失败 ${fail}`);
-  alert(`批量导入完成\n成功：${ok}\n失败：${fail}\n坐标待核点会出现在“报错”页签。`);
+  alert(`批量导入完成\n成功：${ok}\n失败：${fail}\n预审拦截：${batchShopPreviewRows.length-rows.length}\n失败项可导出后修正重试。`);
 }
 async function exportBatchShopReviewXlsx(){
-  if(!batchShopPreviewRows.length){ toast('还没有预览数据'); return; }
-  const headers=['row','name','address','type','phone','contact','source','status','lat','lng','coord_status','importable','messages'];
-  const rows=batchShopPreviewRows.map(x=>({ row:x.rowNumber, name:x.name, address:x.address, type:x.type, phone:x.phone, contact:x.contact, source:x.source, status:x.status, lat:x.lat||'', lng:x.lng||'', coord_status:x.coordStatus, importable:x.importable?'Y':'N', messages:(x.messages||[]).join('；') }));
+  const reviewRows=[...batchShopPreviewRows, ...importFailureRows];
+  if(!reviewRows.length){ toast('还没有预览或失败数据'); return; }
+  const headers=['row','name','address','type','phone','contact','source','status','lat','lng','coord_status','import_status','importable','messages','failure_message'];
+  const seen=new Set();
+  const rows=reviewRows.filter(x=>{
+    const key=[x.rowNumber,x.name,x.address,x.failureMessage||''].join('|');
+    if(seen.has(key)) return false;
+    seen.add(key); return true;
+  }).map(x=>({ row:x.rowNumber, name:x.name, address:x.address, type:x.type, phone:x.phone, contact:x.contact, source:x.source, status:x.status, lat:x.lat||'', lng:x.lng||'', coord_status:x.coordStatus, import_status:x.importStatus||'', importable:x.importable?'Y':'N', messages:(x.messages||[]).join('；'), failure_message:x.failureMessage||'' }));
   await downloadXlsx('BDmap_批量导入店铺_待核失败表.xlsx', headers, rows, { sheetName:'待核失败表' });
   toast('已导出待核/失败表');
 }
