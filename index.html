@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-<title>BDmap-v3.6.10 头像管理最小修复版</title>
+<title>BDmap-v3.7.0-hardening-dev</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -336,6 +336,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .bulk-tools button { flex-shrink:0; border:1px solid #444; background:var(--bg); color:var(--text); border-radius:16px; padding:6px 10px; font-size:12px; }
 .bulk-tools button.danger { background:var(--red); border-color:var(--red); color:#fff; }
 .list-check { width:18px; height:18px; margin-top:2px; accent-color:var(--primary); flex-shrink:0; }
+.recycle-count { min-width:20px; height:20px; border-radius:999px; display:inline-flex; align-items:center; justify-content:center; background:var(--red); color:#fff; font-size:11px; font-weight:900; }
+.recycle-item { padding:12px 14px; border-bottom:1px solid #333; display:flex; gap:10px; align-items:flex-start; }
+.recycle-item-info { flex:1; min-width:0; }
+.recycle-item-name { font-weight:800; margin-bottom:5px; }
+.recycle-item-meta { color:var(--text2); font-size:12px; line-height:1.5; }
+.recycle-restore { border:0; border-radius:10px; padding:8px 11px; background:var(--primary); color:#fff; font-weight:800; flex-shrink:0; }
 
 
 .coverage-clinic-list { margin:10px 0 14px; }
@@ -684,8 +690,8 @@ body.home-mode .map-filter-bar { display:none !important; }
 <div class="lead-home" id="leadHome">
   <div class="lead-home-header">
     <div class="lead-home-top">
-      <h1>📍 BDmap-v3.6.10 头像管理最小修复版</h1>
-      <div style="font-size:12px;color:#2563eb;font-weight:700;margin-top:4px;">版本标识：v3.6.10｜用户列表改头像最小修复 + 保留v3.6.7地图/线索逻辑｜2026-05-27</div>
+      <h1>📍 BDmap-v3.7.0-hardening-dev</h1>
+      <div style="font-size:12px;color:#2563eb;font-weight:700;margin-top:4px;">开发标识：v3.7.0-hardening-dev｜安全删除、备份与回收站</div>
       <button class="lead-tab-btn" onclick="triggerBatchErrorImport()">上传报错</button>
       <input type="file" id="batchErrorFile" accept=".xlsx,.xls" style="display:none" onchange="handleBatchErrorImport(event)">
       <button class="lead-tab-btn" onclick="openBatchShopImport()">批量导入店铺</button>
@@ -732,8 +738,8 @@ body.home-mode .map-filter-bar { display:none !important; }
 
 <!-- Top bar -->
 <div class="top-bar">
-  <h1>📍 BDmap-v3.6.10 头像管理最小修复版</h1>
-      <div style="font-size:12px;color:#2563eb;font-weight:700;margin-top:4px;">版本标识：v3.6.10｜用户列表改头像最小修复 + 保留v3.6.7地图/线索逻辑｜2026-05-27</div>
+  <h1>📍 BDmap-v3.7.0-hardening-dev</h1>
+      <div style="font-size:12px;color:#2563eb;font-weight:700;margin-top:4px;">开发标识：v3.7.0-hardening-dev｜安全删除、备份与回收站</div>
   <span class="stats" id="statsText">0 机构</span>
   <button class="nav-pill-btn" id="btnMall" title="商场覆盖">🏬 商场</button>
   <button class="nav-pill-btn" id="btnSettings" title="设置">⚙ 设置</button>
@@ -903,8 +909,19 @@ body.home-mode .map-filter-bar { display:none !important; }
     <button onclick="clearSelection()">取消选择</button>
     <button class="danger" onclick="deleteSelectedPlaces()">🗑 删除所选</button>
     <button class="danger" onclick="deleteCurrentFilteredPlaces()">🧹 删除当前筛选</button>
+    <button onclick="openRecycleBin()">♻️ 回收站 <span class="recycle-count" id="recycleBinCount">0</span></button>
   </div>
   <div class="list-body" id="listBody"></div>
+</div>
+
+<!-- Recycle bin: soft-deleted records only; no permanent-delete control. -->
+<div class="list-panel" id="recycleBinPanel">
+  <div class="list-header">
+    <button class="top-btn" onclick="closeRecycleBin()">←</button>
+    <h2>♻️ 回收站</h2>
+    <span class="stats" id="recycleBinHeaderCount">0 条</span>
+  </div>
+  <div class="list-body" id="recycleBinBody"></div>
 </div>
 
 <!-- Search panel -->
@@ -1175,6 +1192,7 @@ body.home-mode .map-filter-bar { display:none !important; }
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
+<script type="module" src="./src/data-safety.mjs"></script>
 <script>
 // ============ FIREBASE ============
 const firebaseConfig = {
@@ -1191,6 +1209,7 @@ const db = firebase.firestore();
 const placesCollection = db.collection('places');
 const mallMetaCollection = db.collection('mallMeta');
 const appConfigCollection = db.collection('appConfig');
+const auditLogsCollection = db.collection('auditLogs');
 
 // ============ APP STATE ============
 const STORAGE_KEY = 'bd_map_places';
@@ -1200,6 +1219,7 @@ const USERNAME_KEY = 'bd_map_username';
 const USER_AVATAR_KEY = 'bd_map_user_avatar';
 const AVATAR_POOL = ['🦅','🏃','🌿','🧭','🐯','🦊','🐼','🐧','🐶','🐱','🐰','🦁','🐺','🐻','🐨','🐵','🦉','🦋','🐉','🔥','⭐','🌙','☀️','⚡','🌊','🍀','🌿','🌸','🌻','🍄','💊','🏥','🩺','🧬','🧪','📍','🗺️','🎯','🚀','💼','📊','🧩','💎','👑','🎧','🎮','🍵','☕','🥐','🍜'];
 let places = [];
+let deletedPlaces = [];
 let baseClinics = [];
 let map, markersLayer, comboResultLayer, myLocMarker;
 let currentPos = { lat: 22.3193, lng: 114.1694 }; // default: HK
@@ -1358,6 +1378,7 @@ function coverageCacheKey(center) {
   return [center && center.id || 'unknown', Number(center && center.lat || 0).toFixed(6), Number(center && center.lng || 0).toFixed(6), getDataVersionKey()].join('|');
 }
 function shouldShowOnHome(p) {
+  if (!p || p.deletedAt) return false;
   if (isPointEntry(p)) return true;
   if (isInstitutionEntry(p)) return true;
   if (isManualEntry(p)) return true;
@@ -1460,13 +1481,15 @@ function init() {
 
   // Firestore real-time listener
   placesCollection.onSnapshot(snapshot => {
-    places = [];
+    const allRecords = [];
     snapshot.forEach(doc => {
-      places.push(doc.data());
+      allRecords.push({ id: doc.id, ...doc.data() });
     });
+    places = allRecords.filter(p => !p.deletedAt);
+    deletedPlaces = allRecords.filter(p => !!p.deletedAt);
     clearCoverageCache();
     // Also backup to localStorage
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(places));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(allRecords));
     syncCustomTypesFromPlaces();
     renderOwnerFilters();
     updateMapFilterBar();
@@ -1474,18 +1497,23 @@ function init() {
     renderMalls();
     scheduleLeadHomeRender();
     updateStats();
-    document.getElementById('syncStatus').textContent = '✅ 实时同步中 · ' + places.length + ' 条数据';
+    updateRecycleBinCount();
+    if (document.getElementById('recycleBinPanel').classList.contains('active')) renderRecycleBin();
+    document.getElementById('syncStatus').textContent = '✅ 实时同步中 · ' + places.length + ' 条有效数据';
   }, err => {
     console.error('Firestore listener error:', err);
     document.getElementById('syncStatus').textContent = '⚠️ 离线模式';
     // Fallback to localStorage
-    places = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    const localRecords = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    places = localRecords.filter(p => !p.deletedAt);
+    deletedPlaces = localRecords.filter(p => !!p.deletedAt);
     syncCustomTypesFromPlaces();
     renderOwnerFilters();
     updateMapFilterBar();
     renderMarkers();
     scheduleLeadHomeRender();
     updateStats();
+    updateRecycleBinCount();
   });
 }
 
@@ -1566,6 +1594,7 @@ function updateMapFilterBar() {
 function getFilteredPlaces() {
   const selectedMall = getCoverageTargetById(selectedMallId);
   return places.filter(p => {
+    if (!p || p.deletedAt) return false;
     const status = normalizeStatus(p.status);
     const isUncontacted = isUncontactedPlace(p);
     const matchStatus = currentFilter === '全部' || status === normalizeStatus(currentFilter);
@@ -2016,19 +2045,67 @@ async function savePlace() {
   }
 }
 
-function deletePlace() {
+function getDataSafety() {
+  if (!window.BDMapDataSafety) throw new Error('安全删除模块尚未载入，请刷新后重试');
+  return window.BDMapDataSafety;
+}
+function getDeleteActor() {
+  const name = (currentUsername || '匿名').trim() || '匿名';
+  return { id: normalizeOwnerId(name) || name, name };
+}
+function downloadDeletionBackup(records, operation) {
+  const payload = getDataSafety().createBackupPayload(records, { actor: getDeleteActor(), operation: operation || 'soft-delete' });
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `bdmap-delete-backup-${new Date().toISOString().replace(/[:.]/g,'-')}.json`;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  return payload;
+}
+async function writeAuditLog(action, record, reason) {
+  try {
+    await auditLogsCollection.add({ action, recordId: record.id, recordName: record.name || '', actor: getDeleteActor(), at: new Date().toISOString(), reason: reason || '' });
+  } catch (err) {
+    console.warn('Audit log failed without blocking primary operation:', err);
+  }
+}
+async function persistSoftDelete(record, reason) {
+  const deleted = getDataSafety().softDeleteRecord(record, { actor: getDeleteActor(), reason });
+  await placesCollection.doc(record.id).set(cleanForFirestore(deleted), { merge: true });
+  await writeAuditLog('soft-delete', deleted, reason);
+  return deleted;
+}
+async function deletePlace() {
   const id = document.getElementById('editId').value;
   if (!id) return;
-  if (!confirm('确定删除这个机构？')) return;
-  places = places.filter(p => p.id !== id);
-  clearCoverageCache();
-  savePlaces();
-  deleteFromFirestore(id);
-  renderMarkers();
-  scheduleLeadHomeRender();
-  updateStats();
-  closeSheet();
-  toast('🗑 已删除并同步');
+  const record = places.find(p => p.id === id);
+  if (!record) return toast('找不到这个机构');
+  const reason = prompt('请输入删除原因（记录会进入回收站，可恢复）:', '资料清理');
+  if (reason === null) return;
+  if (!confirm(`确定将「${record.name || id}」移入回收站？删除前会下载JSON备份。`)) return;
+  try {
+    downloadDeletionBackup([record], 'single-soft-delete');
+  } catch (err) {
+    console.error(err); toast('❌ 备份下载失败，已阻止删除'); return;
+  }
+  document.getElementById('syncStatus').textContent = '🗑 正在移入回收站...';
+  try {
+    const deleted = await persistSoftDelete(record, reason.trim() || '用户删除');
+    places = places.filter(p => p.id !== id);
+    deletedPlaces.push(deleted);
+    clearCoverageCache(); savePlaces(); renderMarkers(); scheduleLeadHomeRender(); updateStats(); updateRecycleBinCount();
+    closeSheet();
+    document.getElementById('syncStatus').textContent = '✅ 已移入回收站';
+    toast('♻️ 已移入回收站并同步');
+  } catch (err) {
+    console.error(err);
+    document.getElementById('syncStatus').textContent = '⚠️ 删除失败';
+    toast('❌ 云端删除失败，原记录已保留');
+  }
 }
 
 // ============ LIST ============
@@ -2038,6 +2115,65 @@ function openList() {
 }
 function closeList() {
   document.getElementById('listPanel').classList.remove('active');
+}
+function updateRecycleBinCount() {
+  const count = deletedPlaces.length;
+  const badge = document.getElementById('recycleBinCount');
+  const header = document.getElementById('recycleBinHeaderCount');
+  if (badge) badge.textContent = String(count);
+  if (header) header.textContent = count + ' 条';
+}
+function openRecycleBin() {
+  renderRecycleBin();
+  document.getElementById('recycleBinPanel').classList.add('active');
+}
+function closeRecycleBin() {
+  document.getElementById('recycleBinPanel').classList.remove('active');
+}
+function renderRecycleBin() {
+  updateRecycleBinCount();
+  const body = document.getElementById('recycleBinBody');
+  if (!body) return;
+  const rows = [...deletedPlaces].sort((a,b) => String(b.deletedAt || '').localeCompare(String(a.deletedAt || '')));
+  if (!rows.length) {
+    body.innerHTML = '<div class="list-empty">回收站为空</div>';
+    return;
+  }
+  body.innerHTML = rows.map(p => `<div class="recycle-item">
+    <div class="recycle-item-info">
+      <div class="recycle-item-name">${esc(p.name || p.id)}</div>
+      <div class="recycle-item-meta">删除时间：${esc(p.deletedAt || '未知')}<br>操作人：${esc(p.deletedByName || p.deletedBy || '未知')}<br>原因：${esc(p.deleteReason || '未填写')}</div>
+    </div>
+    <button class="recycle-restore" onclick="restoreDeletedPlace('${jsStr(p.id)}')">恢复</button>
+  </div>`).join('');
+}
+async function restoreDeletedPlace(id) {
+  const record = deletedPlaces.find(p => p.id === id);
+  if (!record) return toast('找不到回收站记录');
+  if (!confirm(`确定恢复「${record.name || id}」？`)) return;
+  document.getElementById('syncStatus').textContent = '♻️ 正在恢复...';
+  try {
+    const restored = getDataSafety().restoreRecord(record, { actor: getDeleteActor() });
+    const deleteFields = firebase.firestore.FieldValue.delete();
+    await placesCollection.doc(id).set({
+      ...cleanForFirestore(restored),
+      deletedAt: deleteFields,
+      deletedBy: deleteFields,
+      deletedByName: deleteFields,
+      deleteReason: deleteFields
+    }, { merge: true });
+    await writeAuditLog('restore', restored, '从回收站恢复');
+    deletedPlaces = deletedPlaces.filter(p => p.id !== id);
+    const idx = places.findIndex(p => p.id === id);
+    if (idx >= 0) places[idx] = restored; else places.push(restored);
+    clearCoverageCache(); savePlaces(); renderOwnerFilters(); renderMarkers(); renderList(); scheduleLeadHomeRender(); updateStats(); renderRecycleBin();
+    document.getElementById('syncStatus').textContent = '✅ 已恢复并同步';
+    toast('✅ 已从回收站恢复');
+  } catch (err) {
+    console.error(err);
+    document.getElementById('syncStatus').textContent = '⚠️ 恢复失败';
+    toast('❌ 云端恢复失败，回收站记录仍保留');
+  }
 }
 
 function renderList() {
@@ -2120,24 +2256,42 @@ function clearSelection() { selectedPlaceIds.clear(); renderList(); toast('已�
 async function deleteSelectedPlaces() {
   const ids = Array.from(selectedPlaceIds);
   if (!ids.length) { toast('还没选择机构'); return; }
-  if (!confirm(`确定删除所选 ${ids.length} 个机构？会同步删除云端。`)) return;
   await bulkDeleteIds(ids);
 }
 async function deleteCurrentFilteredPlaces() {
   const ids = getFilteredPlaces().map(p => p.id);
   if (!ids.length) { toast('当前筛选没有机构'); return; }
-  if (!confirm(`确定删除当前筛选下的 ${ids.length} 个机构？会同步删除云端。`)) return;
   await bulkDeleteIds(ids);
 }
 async function bulkDeleteIds(ids) {
-  places = places.filter(p => !ids.includes(p.id));
-  selectedPlaceIds.clear(); savePlaces(); renderOwnerFilters(); renderMarkers(); renderList(); updateStats();
-  for (let i=0; i<ids.length; i+=100) {
-    await Promise.all(ids.slice(i,i+100).map(id => placesCollection.doc(id).delete()));
-    document.getElementById('syncStatus').textContent = `🗑 正在删除 ${Math.min(i+100, ids.length)}/${ids.length}`;
+  const records = ids.map(id => places.find(p => p.id === id)).filter(Boolean);
+  if (!records.length) return toast('找不到待删除记录');
+  const confirmation = prompt(`高风险操作：将 ${records.length} 条记录移入回收站。\n请输入「移入回收站 ${records.length}」继续：`);
+  if (confirmation !== `移入回收站 ${records.length}`) return toast('已取消批量删除');
+  const reason = prompt('请输入本次批量删除原因:', '批量资料清理');
+  if (reason === null) return;
+  try {
+    downloadDeletionBackup(records, 'bulk-soft-delete');
+  } catch (err) {
+    console.error(err); toast('❌ 备份下载失败，已阻止批量删除'); return;
   }
-  document.getElementById('syncStatus').textContent = '✅ 已同步';
-  toast(`🗑 已删除 ${ids.length} 个机构`);
+  document.getElementById('syncStatus').textContent = `🗑 正在处理 0/${records.length}`;
+  const result = await getDataSafety().runBulkSoftDelete(records, {
+    actor: getDeleteActor(), reason: reason.trim() || '批量删除',
+    persist: async deleted => {
+      await placesCollection.doc(deleted.id).set(cleanForFirestore(deleted), { merge: true });
+      await writeAuditLog('bulk-soft-delete', deleted, reason);
+      document.getElementById('syncStatus').textContent = `🗑 正在处理 ${deletedPlaces.length + 1}/${records.length}`;
+    }
+  });
+  const succeededIds = new Set(result.succeeded.map(p => p.id));
+  places = places.filter(p => !succeededIds.has(p.id));
+  deletedPlaces.push(...result.succeeded);
+  result.succeeded.forEach(p => selectedPlaceIds.delete(p.id));
+  clearCoverageCache(); savePlaces(); renderOwnerFilters(); renderMarkers(); renderList(); scheduleLeadHomeRender(); updateStats(); updateRecycleBinCount();
+  const failedText = result.failed.slice(0,10).map(x => `${x.record.name || x.record.id}: ${x.error.message}`).join('\n');
+  document.getElementById('syncStatus').textContent = result.failureCount ? '⚠️ 批量操作部分失败' : '✅ 已移入回收站';
+  alert(`批量操作完成\n成功：${result.successCount}\n失败：${result.failureCount}${failedText ? '\n\n失败项：\n' + failedText : ''}`);
 }
 
 function initCoveragePanelDrag() {
@@ -3861,7 +4015,7 @@ function renderOwnerFilters() {
 }
 function savePlaces() {
   // Also save to localStorage as offline backup
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(places));
+  localStorage.setItem(STORAGE_KEY, JSON.stringify([...places, ...deletedPlaces]));
 }
 function cleanForFirestore(value) {
   if (value === undefined) return null;
@@ -3888,11 +4042,6 @@ function saveToFirestore(data) {
     console.error('Firestore save error:', err);
     document.getElementById('syncStatus').textContent = '⚠️ 同步失败';
     throw err;
-  });
-}
-function deleteFromFirestore(id) {
-  placesCollection.doc(id).delete().catch(err => {
-    console.error('Firestore delete error:', err);
   });
 }
 function genId() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
