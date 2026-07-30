@@ -655,7 +655,9 @@
     ],
     "entryKind": "institution",
     "sourceType": "官方注册名冊（CMCHK注册中医）",
-    "verificationStatus": "registry_verified"
+    "verificationStatus": "registry_verified",
+    "latitude": 22.3894128,
+    "longitude": 113.9800312
   },
   {
     "id": "tcm_000052",
@@ -12011,7 +12013,9 @@
     ],
     "entryKind": "institution",
     "sourceType": "官方注册名冊（CMCHK注册中医）",
-    "verificationStatus": "registry_verified"
+    "verificationStatus": "registry_verified",
+    "latitude": 22.3067947,
+    "longitude": 114.1706582
   },
   {
     "id": "tcm_000706",
@@ -28325,7 +28329,9 @@
     ],
     "entryKind": "institution",
     "sourceType": "官方注册名冊（CMCHK注册中医）",
-    "verificationStatus": "registry_verified"
+    "verificationStatus": "registry_verified",
+    "latitude": 22.3694755,
+    "longitude": 114.1780266
   },
   {
     "id": "tcm_001588",
@@ -30105,7 +30111,9 @@
     ],
     "entryKind": "institution",
     "sourceType": "官方注册名冊（CMCHK注册中医）",
-    "verificationStatus": "registry_verified"
+    "verificationStatus": "registry_verified",
+    "latitude": 22.3717373,
+    "longitude": 114.1156705
   },
   {
     "id": "tcm_001673",
@@ -49580,7 +49588,9 @@
     ],
     "entryKind": "institution",
     "sourceType": "官方注册名冊（CMCHK注册中医）",
-    "verificationStatus": "registry_verified"
+    "verificationStatus": "registry_verified",
+    "latitude": 22.3358524,
+    "longitude": 114.1950918
   },
   {
     "id": "tcm_002567",
@@ -83873,7 +83883,9 @@
     "matchedCategories": [
       "医疗/中医診所"
     ],
-    "entryKind": "institution"
+    "entryKind": "institution",
+    "latitude": 22.3146631,
+    "longitude": 114.1634429
   },
   {
     "id": "src_44465dde3f",
@@ -85401,7 +85413,9 @@
     "matchedCategories": [
       "医疗/中医診所"
     ],
-    "entryKind": "institution"
+    "entryKind": "institution",
+    "latitude": 22.3244104,
+    "longitude": 114.1603631
   },
   {
     "id": "src_6d31170a43",
@@ -94858,7 +94872,9 @@
     "website": "",
     "verificationStatus": "single_source_pending",
     "sourceType": "OpenStreetMap全港缓存批量重筛",
-    "dataVersion": "health-open-pool-stage1-2026-07-30"
+    "dataVersion": "health-open-pool-stage1-2026-07-30",
+    "latitude": 22.2866625,
+    "longitude": 114.1395909
   },
   {
     "id": "health_stage1_osm-n6865766736",
@@ -95559,7 +95575,9 @@
     "website": "",
     "verificationStatus": "single_source_pending",
     "sourceType": "OpenStreetMap全港缓存批量重筛",
-    "dataVersion": "health-open-pool-stage1-2026-07-30"
+    "dataVersion": "health-open-pool-stage1-2026-07-30",
+    "latitude": 22.49655,
+    "longitude": 114.1387584
   },
   {
     "id": "health_stage1_osm-n11592753153",
@@ -101395,7 +101413,9 @@
     "verificationStatus": "single_source_pending",
     "sourceType": "预约平台/医疗目录（FindDoc 牙科诊所名录）",
     "coordinateStatus": "pending",
-    "dataVersion": "health-open-pool-medical-stage2-2026-07-30"
+    "dataVersion": "health-open-pool-medical-stage2-2026-07-30",
+    "latitude": 22.3246538,
+    "longitude": 114.1680383
   },
   {
     "id": "health_med2_7283c655990e9855",
@@ -111387,7 +111407,9 @@
     "verificationStatus": "single_source_pending",
     "sourceType": "预约平台/医疗目录（FindDoc 牙科诊所名录）",
     "coordinateStatus": "pending",
-    "dataVersion": "health-open-pool-medical-stage2-2026-07-30"
+    "dataVersion": "health-open-pool-medical-stage2-2026-07-30",
+    "latitude": 22.3737515,
+    "longitude": 114.1164803
   },
   {
     "id": "health_med2_def8bbe471be62ea",
@@ -127839,7 +127861,9 @@
     "verificationStatus": "single_source_pending",
     "sourceType": "预约平台/医疗目录（FindDoc 牙科诊所名录）",
     "coordinateStatus": "pending",
-    "dataVersion": "health-open-pool-medical-stage2-2026-07-30"
+    "dataVersion": "health-open-pool-medical-stage2-2026-07-30",
+    "latitude": 22.296249,
+    "longitude": 114.1689005
   },
   {
     "id": "health_med2_4248cceb4851f0a6",
@@ -134145,7 +134169,9 @@
     "verificationStatus": "single_source_pending",
     "sourceType": "预约平台/医疗目录（FindDoc 牙科诊所名录）",
     "coordinateStatus": "pending",
-    "dataVersion": "health-open-pool-medical-stage2-2026-07-30"
+    "dataVersion": "health-open-pool-medical-stage2-2026-07-30",
+    "latitude": 22.2776353,
+    "longitude": 114.1829035
   },
   {
     "id": "health_med2_d725713eb4263b7f",
@@ -140147,7 +140173,9 @@
     "verificationStatus": "single_source_pending",
     "sourceType": "预约平台/医疗目录（FindDoc 普通科诊所名录）",
     "coordinateStatus": "pending",
-    "dataVersion": "health-open-pool-medical-stage2-2026-07-30"
+    "dataVersion": "health-open-pool-medical-stage2-2026-07-30",
+    "latitude": 22.2860849,
+    "longitude": 114.136919
   },
   {
     "id": "health_med2_b628dee43182526c",
@@ -143603,7 +143631,9 @@
     "verificationStatus": "single_source_pending",
     "sourceType": "预约平台/医疗目录（FindDoc 普通科诊所名录）",
     "coordinateStatus": "pending",
-    "dataVersion": "health-open-pool-medical-stage2-2026-07-30"
+    "dataVersion": "health-open-pool-medical-stage2-2026-07-30",
+    "latitude": 22.2824039,
+    "longitude": 114.1566772
   },
   {
     "id": "health_med2_d577d602f0a7debe",
@@ -152683,7 +152713,9 @@
     "verificationStatus": "single_source_pending",
     "sourceType": "预约平台/医疗目录（FindDoc 普通科诊所名录）",
     "coordinateStatus": "pending",
-    "dataVersion": "health-open-pool-medical-stage2-2026-07-30"
+    "dataVersion": "health-open-pool-medical-stage2-2026-07-30",
+    "latitude": 22.4029664,
+    "longitude": 113.9787844
   },
   {
     "id": "health_med2_20eef38e1dbd214c",
@@ -168147,7 +168179,9 @@
     "verificationStatus": "single_source_pending",
     "sourceType": "预约平台/医疗目录（FindDoc 普通科诊所名录）",
     "coordinateStatus": "pending",
-    "dataVersion": "health-open-pool-medical-stage2-2026-07-30"
+    "dataVersion": "health-open-pool-medical-stage2-2026-07-30",
+    "latitude": 22.3035263,
+    "longitude": 114.252409
   },
   {
     "id": "health_med2_95b38986a559c7b4",
@@ -169779,7 +169813,9 @@
     "verificationStatus": "single_source_pending",
     "sourceType": "预约平台/医疗目录（FindDoc 普通科诊所名录）",
     "coordinateStatus": "pending",
-    "dataVersion": "health-open-pool-medical-stage2-2026-07-30"
+    "dataVersion": "health-open-pool-medical-stage2-2026-07-30",
+    "latitude": 22.443949,
+    "longitude": 114.029332
   },
   {
     "id": "health_med2_6eec1383b22e0624",
@@ -174451,7 +174487,9 @@
     "verificationStatus": "single_source_pending",
     "sourceType": "预约平台/医疗目录（FindDoc 普通科诊所名录）",
     "coordinateStatus": "pending",
-    "dataVersion": "health-open-pool-medical-stage2-2026-07-30"
+    "dataVersion": "health-open-pool-medical-stage2-2026-07-30",
+    "latitude": 22.3364063,
+    "longitude": 114.1400484
   },
   {
     "id": "health_med2_a217160673f1eca0",
@@ -177071,7 +177109,9 @@
     "verificationStatus": "single_source_pending",
     "sourceType": "预约平台/医疗目录（FindDoc 普通科诊所名录）",
     "coordinateStatus": "pending",
-    "dataVersion": "health-open-pool-medical-stage2-2026-07-30"
+    "dataVersion": "health-open-pool-medical-stage2-2026-07-30",
+    "latitude": 22.2764477,
+    "longitude": 114.1734765
   },
   {
     "id": "health_med2_26cbbc404833a3ef",
@@ -204239,7 +204279,9 @@
     "verificationStatus": "single_source_pending",
     "sourceType": "预约平台/医疗目录（FindDoc 整形外科诊所名录）",
     "coordinateStatus": "pending",
-    "dataVersion": "health-open-pool-medical-stage2-2026-07-30"
+    "dataVersion": "health-open-pool-medical-stage2-2026-07-30",
+    "latitude": 22.280489,
+    "longitude": 114.157237
   },
   {
     "id": "health_med2_7653c34853b41dda",
@@ -206859,7 +206901,9 @@
     "verificationStatus": "single_source_pending",
     "coordinateStatus": "pending",
     "sourceType": "生活服务平台（Toby 按摩店目录）",
-    "dataVersion": "health-open-pool-commercial-increment-2026-07-30"
+    "dataVersion": "health-open-pool-commercial-increment-2026-07-30",
+    "latitude": 22.31535,
+    "longitude": 114.225424
   },
   {
     "id": "health_inc3_51077e052aa8c17c",
@@ -214267,7 +214311,9 @@
     "verificationStatus": "single_source_pending",
     "coordinateStatus": "pending",
     "sourceType": "行业目录（香港物理治疗中心资讯网）",
-    "dataVersion": "health-open-pool-commercial-increment-2026-07-30"
+    "dataVersion": "health-open-pool-commercial-increment-2026-07-30",
+    "latitude": 22.313354,
+    "longitude": 114.2228428
   },
   {
     "id": "health_inc3_859b5bcf42c41627",
