@@ -51,8 +51,22 @@ test('Link Hong Kong retail dataset is versioned, official-source-backed and exc
   }
 });
 
+test('retail and car park estate assets are excluded from the mall pool', () => {
+  assert.equal(data.properties.some(item => /(商舖|商铺).*(停車場|停车场)/.test(`${item.name || ''} ${item.nameZH || ''}`)), false);
+});
+
+test('lead page uses the unified category taxonomy and does not expose data-source brands', () => {
+  for (const category of ['医疗','推拿按摩','健康养生','餐饮','美容美体']) {
+    assert.match(html, new RegExp(`data-category="${category}"`));
+  }
+  assert.match(app, /const LEAD_CATEGORY_TAXONOMY = /);
+  assert.match(app, /function getLeadCategory\(row\)/);
+  const leadCardSource = app.match(/function leadCardHtml\(p\) \{[\s\S]*?\n\}/)?.[0] || '';
+  assert.doesNotMatch(leadCardSource, /getClinicSourceLabel|_leadSource|FindDoc|eHealth|CMCHK/);
+});
+
 test('mall loader uses the new dataset version to discard legacy built-ins while preserving user-created malls', () => {
-  assert.match(app, /const MALL_DATA_VERSION = 'link-hk-retail-2026-07-30-v1'/);
+  assert.match(app, /const MALL_DATA_VERSION = 'link-hk-retail-2026-07-30-v2'/);
   assert.match(app, /const MALL_DATA_VERSION_KEY = 'bd_map_malls_version'/);
   assert.match(app, /const BUILTIN_LINK_MALLS = /);
   assert.doesNotMatch(app, /BUILTIN_MALLS_116/);
