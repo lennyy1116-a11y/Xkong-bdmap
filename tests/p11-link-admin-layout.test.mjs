@@ -55,14 +55,52 @@ test('retail and car park estate assets are excluded from the mall pool', () => 
   assert.equal(data.properties.some(item => /(商舖|商铺).*(停車場|停车场)/.test(`${item.name || ''} ${item.nameZH || ''}`)), false);
 });
 
-test('lead page uses the unified category taxonomy and does not expose data-source brands', () => {
-  for (const category of ['医疗','推拿按摩','健康养生','餐饮','美容美体']) {
+test('lead page separates ownership, primary category and secondary category controls', () => {
+  assert.match(html, /class="lead-filter-section ownership"[\s\S]*data-filter="unclaimed"[\s\S]*data-filter="claimed"/);
+  assert.match(html, /class="lead-filter-section categories"[\s\S]*id="leadCategoryRow"/);
+  assert.match(html, /class="lead-filter-section secondary"[\s\S]*id="leadSecondaryRow"/);
+  for (const category of ['医疗','推拿按摩','健康养生','餐饮','美容美体','待分类']) {
     assert.match(html, new RegExp(`data-category="${category}"`));
   }
+  assert.match(app, /let leadSecondaryCategory = '全部'/);
+  assert.match(app, /function renderLeadSecondaryFilters\(\)/);
+  assert.match(app, /function setLeadSecondaryCategory\(category\)/);
+});
+
+test('lead categorization uses explicit fields and keywords without forcing unknown records into medical', async () => {
+  const taxonomySource = app.match(/const LEAD_CATEGORY_TAXONOMY = \{[\s\S]*?\n\};/)?.[0];
+  const functionSource = app.match(/function getLeadCategory\(row\) \{[\s\S]*?\n\}/)?.[0];
+  assert.ok(taxonomySource && functionSource);
+  const { runInNewContext } = await import('node:vm');
+  const classify = runInNewContext(`${taxonomySource}; ${functionSource}; getLeadCategory`);
+  assert.deepEqual({ ...classify({ name:'康健物理治療中心', type:'养生馆' }) }, { primary:'医疗', secondary:'康复护理' });
+  assert.deepEqual({ ...classify({ name:'泰舒服按摩足療', type:'自定义' }) }, { primary:'推拿按摩', secondary:'按摩足疗' });
+  assert.deepEqual({ ...classify({ name:'Shape健身中心', type:'自定义' }) }, { primary:'健康养生', secondary:'健身房' });
+  assert.deepEqual({ ...classify({ name:'Glow美甲美睫', type:'美容院' }) }, { primary:'美容美体', secondary:'美甲' });
+  assert.deepEqual({ ...classify({ name:'无法判断机构', type:'自定义' }) }, { primary:'待分类', secondary:'待分类' });
+});
+
+test('lead cards expose business categories but not collection-source brands', () => {
   assert.match(app, /const LEAD_CATEGORY_TAXONOMY = /);
   assert.match(app, /function getLeadCategory\(row\)/);
   const leadCardSource = app.match(/function leadCardHtml\(p\) \{[\s\S]*?\n\}/)?.[0] || '';
   assert.doesNotMatch(leadCardSource, /getClinicSourceLabel|_leadSource|FindDoc|eHealth|CMCHK/);
+});
+
+test('all base pools remain unclaimed until a real user claims a lead', () => {
+  assert.match(app, /function isUnclaimedOwnerId\(ownerId\)/);
+  assert.match(app, /base_tcm_pool/);
+  assert.match(app, /base_health_pool/);
+  assert.match(app, /_leadClaimed:\s*!isUnclaimedOwnerId\(ownerId\)/);
+  assert.match(app, /_leadMine:\s*!isUnclaimedOwnerId\(ownerId\)\s*&&\s*ownerId === getCurrentOwnerId\(\)/);
+});
+
+test('admin owner removal releases claims without deleting institution records', () => {
+  const source = app.match(/async function deleteOwnerData\(ownerId, ownerName\) \{[\s\S]*?\n\}/)?.[0] || '';
+  assert.match(source, /runRevisionedMutation/);
+  assert.match(source, /getBasePoolOwner/);
+  assert.doesNotMatch(source, /bulkDeleteIds|persistSoftDelete|softDeleteRecord/);
+  assert.match(source, /移除认领/);
 });
 
 test('mall loader uses the new dataset version to discard legacy built-ins while preserving user-created malls', () => {

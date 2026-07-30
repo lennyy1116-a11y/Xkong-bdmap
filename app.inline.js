@@ -44,6 +44,7 @@ let lastInstitutionStatus = '已交流';
 let leadSearchTerm = '';
 let leadFilter = 'all';
 let leadCategory = '全部';
+let leadSecondaryCategory = '全部';
 let editBaseRevision = null;
 const COVERAGE_KM = 1;
 const COVERAGE_LABEL = '1公里';
@@ -1217,23 +1218,66 @@ const LEAD_CATEGORY_TAXONOMY = {
   '推拿按摩': ['正骨推拿','按摩足疗','SPA水疗','泰式按摩','拔罐刮痧','艾灸馆'],
   '健康养生': ['瑜伽馆','健身房','心理咨询','营养健康'],
   '餐饮': ['养生茶饮','轻食','药膳'],
-  '美容美体': ['美体美容','美甲','美睫','半永久']
+  '美容美体': ['美体美容','美甲','美睫','半永久'],
+  '待分类': ['待分类']
 };
 function getLeadCategory(row) {
   const raw = String(row.secondaryCategory || row.type || '').trim();
   const parts = raw.split(/[\/／]/).map(x => x.trim()).filter(Boolean);
   let primary = String(row.primaryCategory || (parts.length > 1 ? parts[0] : '')).trim();
   let secondary = String(row.secondaryCategory || (parts.length > 1 ? parts[parts.length - 1] : raw)).trim();
-  if (/中醫診所|中医诊所|註冊中醫|注册中医|FindDoc中醫師|eHealth醫護機構/i.test(raw)) secondary = '中医诊所';
-  if (!primary || !LEAD_CATEGORY_TAXONOMY[primary] || !LEAD_CATEGORY_TAXONOMY[primary].includes(secondary)) {
-    primary = Object.keys(LEAD_CATEGORY_TAXONOMY).find(k => LEAD_CATEGORY_TAXONOMY[k].includes(secondary)) || '医疗';
-  }
-  if (!LEAD_CATEGORY_TAXONOMY[primary].includes(secondary)) secondary = primary === '医疗' ? '综合诊所' : LEAD_CATEGORY_TAXONOMY[primary][0];
-  return { primary, secondary };
+  if (LEAD_CATEGORY_TAXONOMY[primary] && LEAD_CATEGORY_TAXONOMY[primary].includes(secondary)) return { primary, secondary };
+  const explicitPrimary = Object.keys(LEAD_CATEGORY_TAXONOMY).find(k => LEAD_CATEGORY_TAXONOMY[k].includes(secondary));
+  if (explicitPrimary) return { primary:explicitPrimary, secondary };
+  const text = [row.name,row.nameZH,row.nameEN,row.type,row.primaryCategory,row.secondaryCategory,row.tags,row.note].filter(Boolean).join(' ');
+  const rules = [
+    ['推拿按摩','泰式按摩',/泰式.*按摩|thai\s*massage/i],
+    ['推拿按摩','SPA水疗',/\bspa\b|水療|水疗/i],
+    ['推拿按摩','拔罐刮痧',/拔罐|刮痧/i],
+    ['推拿按摩','艾灸馆',/艾灸/i],
+    ['推拿按摩','正骨推拿',/正骨|推拿/i],
+    ['推拿按摩','按摩足疗',/按摩|足療|足疗|massage/i],
+    ['医疗','康复护理',/物理治療|物理治疗|康復|康复|復康|复康|痛症|護理|护理/i],
+    ['医疗','口腔诊所',/牙科|齒科|齿科|口腔|dent(?:al|ist)/i],
+    ['医疗','眼科中心',/眼科|視光|视光|optical|ophthalm/i],
+    ['医疗','体检中心',/體檢|体检|身體檢查|身体检查|檢查中心|检查中心|health\s*check/i],
+    ['医疗','皮肤医美',/皮膚|皮肤|醫美|医美|整形|derma/i],
+    ['医疗','辅助生殖',/生殖|試管|试管|不孕|fertility|ivf/i],
+    ['医疗','中医诊所',/中醫|中医|註冊中醫|注册中医|finddoc中醫師|ehealth醫護機構/i],
+    ['医疗','综合诊所',/診所|诊所|醫務|医务|medical|clinic/i],
+    ['健康养生','瑜伽馆',/瑜伽|yoga/i],
+    ['健康养生','健身房',/健身|fitness|\bgym\b/i],
+    ['健康养生','心理咨询',/心理|輔導|辅导|counsell|psycholog/i],
+    ['健康养生','营养健康',/營養|营养|健康管理|養生|养生|wellness/i],
+    ['美容美体','美甲',/美甲|nail/i],
+    ['美容美体','美睫',/美睫|睫毛|lash/i],
+    ['美容美体','半永久',/半永久|紋繡|纹绣|microblad/i],
+    ['美容美体','美体美容',/美容|美體|美体|纖體|纤体|beauty|slimming/i],
+    ['餐饮','养生茶饮',/養生茶|养生茶|茶飲|茶饮/i],
+    ['餐饮','轻食',/輕食|轻食|沙律|沙拉/i],
+    ['餐饮','药膳',/藥膳|药膳/i]
+  ];
+  const matched = rules.find(rule => rule[2].test(text));
+  return matched ? { primary:matched[0], secondary:matched[1] } : { primary:'待分类', secondary:'待分类' };
 }
 function setLeadCategory(category) {
   leadCategory = LEAD_CATEGORY_TAXONOMY[category] ? category : '全部';
+  leadSecondaryCategory = '全部';
   document.querySelectorAll('.lead-filter-chip[data-category]').forEach(b => b.classList.toggle('active', b.dataset.category === leadCategory));
+  renderLeadSecondaryFilters();
+  renderLeadHomeList();
+}
+function renderLeadSecondaryFilters() {
+  const section = document.getElementById('leadSecondarySection');
+  const row = document.getElementById('leadSecondaryRow');
+  if (!section || !row) return;
+  const categories = LEAD_CATEGORY_TAXONOMY[leadCategory] || [];
+  section.classList.toggle('active', categories.length > 0);
+  row.innerHTML = categories.length ? ['全部', ...categories].map(category => `<button class="lead-filter-chip${category === leadSecondaryCategory ? ' active' : ''}" data-secondary-category="${escAttr(category)}" onclick="setLeadSecondaryCategory('${jsStr(category)}')">${category === '全部' ? '全部二级' : esc(category)}</button>`).join('') : '';
+}
+function setLeadSecondaryCategory(category) {
+  leadSecondaryCategory = (LEAD_CATEGORY_TAXONOMY[leadCategory] || []).includes(category) ? category : '全部';
+  document.querySelectorAll('.lead-filter-chip[data-secondary-category]').forEach(b => b.classList.toggle('active', b.dataset.secondaryCategory === leadSecondaryCategory));
   renderLeadHomeList();
 }
 let leadRowsCache = null;
@@ -1248,8 +1292,8 @@ function enrichLeadRow(row) {
   return {
     ...row,
     _leadOwnerId: ownerId,
-    _leadClaimed: !!(ownerId && ownerId !== 'base_tcm_pool' && ownerId !== normalizeOwnerId('匿名')),
-    _leadMine: ownerId === getCurrentOwnerId(),
+    _leadClaimed: !isUnclaimedOwnerId(ownerId),
+    _leadMine: !isUnclaimedOwnerId(ownerId) && ownerId === getCurrentOwnerId(),
     _leadPrimaryCategory: category.primary,
     _leadSecondaryCategory: category.secondary,
     _leadError: hasLeadError(row),
@@ -1335,6 +1379,7 @@ function renderLeadHomeList() {
   const total = rows.length;
   if (leadSearchTerm) rows = rows.filter(p => p._leadHaystack.includes(leadSearchTerm));
   if (leadCategory !== '全部') rows = rows.filter(p => p._leadPrimaryCategory === leadCategory);
+  if (leadSecondaryCategory !== '全部') rows = rows.filter(p => p._leadSecondaryCategory === leadSecondaryCategory);
   rows = sortLeadRows(rows.filter(passLeadFilter));
   const claimed = allRows.filter(p => p._leadClaimed).length;
   const errorCount = allRows.filter(p => p._leadError).length;
@@ -1394,8 +1439,8 @@ async function exportPointsXlsx() {
 }
 function leadCardHtml(p) {
   const ownerId = p._leadOwnerId || getOwnerId(p);
-  const claimed = p._leadClaimed !== undefined ? p._leadClaimed : (ownerId && ownerId !== 'base_tcm_pool' && ownerId !== normalizeOwnerId('匿名'));
-  const mine = p._leadMine !== undefined ? p._leadMine : ownerId === getCurrentOwnerId();
+  const claimed = p._leadClaimed !== undefined ? p._leadClaimed : !isUnclaimedOwnerId(ownerId);
+  const mine = p._leadMine !== undefined ? p._leadMine : (!isUnclaimedOwnerId(ownerId) && ownerId === getCurrentOwnerId());
   const category = p._leadPrimaryCategory ? { primary:p._leadPrimaryCategory, secondary:p._leadSecondaryCategory } : getLeadCategory(p);
   const err = p._leadError !== undefined ? p._leadError : hasLeadError(p);
   const dist = p._leadDistanceKm !== undefined ? p._leadDistanceKm : getLeadDistanceKm(p);
@@ -1439,7 +1484,7 @@ async function claimLead(id) {
   if (!p) return toast('找不到线索');
   const ownerId = getOwnerId(p);
   if (ownerId === getCurrentOwnerId()) { editClaimedLead(id); return; }
-  if (ownerId && ownerId !== 'base_tcm_pool' && ownerId !== normalizeOwnerId('匿名') && ownerId !== getCurrentOwnerId()) { toast('已被别人认领'); return; }
+  if (!isUnclaimedOwnerId(ownerId) && ownerId !== getCurrentOwnerId()) { toast('已被别人认领'); return; }
   const existing = places.find(x => x.id === id || x.id === 'place_' + id || clinicMatchKey(x) === clinicMatchKey(p));
   const now = new Date().toISOString();
   const recordId = existing ? existing.id : (p.isBaseClinic ? 'place_' + p.id : (p.id || 'place_' + Date.now().toString(36)));
@@ -1447,7 +1492,7 @@ async function claimLead(id) {
     const saved = await runRevisionedMutation(recordId, existing ? (Number(existing.revision) || 0) : null, current => {
       const data = current ? { ...current } : { ...p, id:recordId, isBaseClinic:false, sourceBaseId:p.id, createdAt:now };
       const currentOwner = getOwnerId(data);
-      if (currentOwner && currentOwner !== 'base_tcm_pool' && currentOwner !== normalizeOwnerId('匿名') && currentOwner !== getCurrentOwnerId()) throw new Error('已被别人认领');
+      if (!isUnclaimedOwnerId(currentOwner) && currentOwner !== getCurrentOwnerId()) throw new Error('已被别人认领');
       data.ownerId = getCurrentOwnerId(); data.ownerName = currentUsername || '匿名'; data.ownerAvatar = currentAvatar;
       data.claimedAt = now; data.claimedBy = currentUsername || '匿名'; data.status = data.status && data.status !== '基础池' ? data.status : '已交流';
       data.updatedAt = now; data.updatedBy = currentUsername || '匿名'; data.updatedByAvatar = currentAvatar;
@@ -2932,12 +2977,26 @@ async function changeOwnerAvatar(ownerId, ownerName) {
   else toast(`✅ 已同步头像到云端：${succeeded.length} 条`);
 }
 async function deleteOwnerData(ownerId, ownerName) {
-  const ids = places.filter(p => getOwnerId(p) === ownerId).map(p => p.id);
+  const records = places.filter(p => getOwnerId(p) === ownerId);
   const isCurrentLocalProfile = ownerId === getCurrentOwnerId();
-  if (!ids.length && !isCurrentLocalProfile) { toast('该用户没有机构数据'); return; }
-  const confirmText = prompt(`将清理「${ownerName}」名下 ${ids.length} 条资料${isCurrentLocalProfile ? '，并移除此设备上的当前用户资料' : ''}。\n云端资料会进入回收站，可恢复。\n请输入 DELETE 确认：`);
-  if (confirmText !== 'DELETE') { toast('已取消'); return; }
-  if (ids.length) await bulkDeleteIds(ids, { confirmed:true, reason:`管理员清理用户「${ownerName}」资料` });
+  if (!records.length && !isCurrentLocalProfile) { toast('该用户没有认领资料'); return; }
+  const confirmText = prompt(`将移除「${ownerName}」对 ${records.length} 条机构的认领。\n机构及底池资料会保留，不会进入回收站。\n请输入 RELEASE 确认：`);
+  if (confirmText !== 'RELEASE') { toast('已取消'); return; }
+  const released = [];
+  const failed = [];
+  for (const original of records) {
+    try {
+      const baseOwner = getBasePoolOwner(original);
+      const saved = await runRevisionedMutation(original.id, Number(original.revision) || 0, current => {
+        if (!current) throw new Error('云端记录不存在');
+        return { ...current, ...baseOwner, updatedAt:new Date().toISOString(), updatedBy:currentUsername || '管理员' };
+      }, { action:'owner-release', reason:`管理员移除「${ownerName}」认领`, deleteFields:['claimedAt','claimedBy'] });
+      const idx = places.findIndex(p => p.id === saved.id);
+      if (idx >= 0) places[idx] = saved;
+      released.push(saved);
+    } catch (err) { console.error(err); failed.push(original.id); }
+  }
+  clearCoverageCache(); clearLeadRowsCache(); savePlaces();
   if (isCurrentLocalProfile) {
     localStorage.removeItem(USERNAME_KEY);
     localStorage.removeItem(USER_AVATAR_KEY);
@@ -2947,6 +3006,9 @@ async function deleteOwnerData(ownerId, ownerName) {
   }
   renderAdminUsers();
   renderOwnerFilters();
+  renderMarkers(); renderList(); renderLeadHomeList(); updateStats();
+  if (failed.length) toast(`⚠️ 已移除认领 ${released.length}/${records.length} 条，${failed.length} 条失败`);
+  else toast(`✅ 已移除认领 ${released.length} 条，机构资料已保留`);
 }
 async function cleanupLegacyTcmImport() {
   const legacyIds = places.filter(p => {
@@ -2970,6 +3032,14 @@ function normalizeOwnerId(name) {
 }
 function getCurrentOwnerId() { return normalizeOwnerId(currentUsername || '匿名'); }
 function getOwnerId(p) { return p.ownerId || normalizeOwnerId(p.ownerName || p.createdBy || p.updatedBy || '匿名'); }
+function isUnclaimedOwnerId(ownerId) {
+  return !ownerId || ownerId === 'base_tcm_pool' || ownerId === 'base_health_pool' || ownerId === normalizeOwnerId('匿名');
+}
+function getBasePoolOwner(record) {
+  const baseId = record && (record.sourceBaseId || (String(record.id || '').startsWith('place_') ? String(record.id).slice(6) : ''));
+  const base = baseClinics.find(item => item.id === baseId || clinicMatchKey(item) === clinicMatchKey(record));
+  return base ? { ownerId:base.ownerId || '', ownerName:base.ownerName || '', ownerAvatar:base.ownerAvatar || '' } : { ownerId:normalizeOwnerId('匿名'), ownerName:'匿名', ownerAvatar:'👤' };
+}
 function getOwnerName(p) { return p.ownerName || p.createdBy || p.updatedBy || '匿名'; }
 function getOwnerAvatar(p) { return p.ownerAvatar || p.createdByAvatar || p.updatedByAvatar || '👤'; }
 function getOwnerLabel(p) { return (isImageAvatar(getOwnerAvatar(p)) ? '头像' : getOwnerAvatar(p)) + ' ' + getOwnerName(p); }

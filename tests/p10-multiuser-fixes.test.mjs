@@ -12,11 +12,13 @@ test('resource mall panel remembers its source and back returns to resource cent
   assert.match(app, /function hideMallPanel\(\)/);
 });
 
-test('owner deletion uses one confirmation path and can remove current local profile', () => {
+test('owner removal releases claims, preserves records and can remove current local profile', () => {
   const body = app.match(/async function deleteOwnerData[\s\S]*?\n}\nasync function cleanupLegacyTcmImport/)?.[0] || '';
   assert.ok(body);
-  assert.match(body, /bulkDeleteIds\(ids, \{ confirmed:true/);
-  assert.doesNotMatch(body, /await bulkDeleteIds\(ids\);/);
+  assert.match(body, /runRevisionedMutation/);
+  assert.match(body, /getBasePoolOwner/);
+  assert.doesNotMatch(body, /bulkDeleteIds|persistSoftDelete/);
+  assert.match(body, /机构及底池资料会保留/);
   assert.match(body, /localStorage\.removeItem\(USERNAME_KEY\)/);
 });
 
