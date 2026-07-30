@@ -161,6 +161,14 @@ async function addCustomType(initialValue) {
   }
   return type;
 }
+function handlePrimaryCategoryChange() {
+  const primary = document.getElementById('fPrimaryCategory').value;
+  const secSelect = document.getElementById('fSecondaryCategory');
+  const options = LEAD_CATEGORY_TAXONOMY[primary] || [];
+  secSelect.innerHTML = options.length
+    ? ['<option value="">请选择</option>', ...options.map(o => `<option value="${escAttr(o)}">${esc(o)}</option>`)].join('')
+    : '<option value="">请先选一级类目</option>';
+}
 async function handleTypeSelectChange() {
   const select = document.getElementById('fType');
   if (!select || select.value !== '__custom__') return;
@@ -582,12 +590,18 @@ function setEntryKind(kind) {
   document.getElementById('visitLabel').textContent = k === 'point' ? '点位记录' : '交流记录';
   document.getElementById('newVisitNote').placeholder = k === 'point' ? '添加点位备注、巡场记录、合作进展...' : '添加本次交流备注...';
   document.getElementById('fName').placeholder = k === 'point' ? '例如：朗豪坊 / 乐富广场活动点' : '例如：仁心堂中医诊所';
+  const catRow = document.getElementById('institutionCategoryRow');
+  const secRow = document.getElementById('institutionSecondaryRow');
   if (k === 'point') {
     if (activeStatus && activeStatus !== '点位') lastInstitutionStatus = activeStatus;
     if (['中医诊所','美容院','艾灸馆','养生馆','NGO'].includes(document.getElementById('fType').value)) document.getElementById('fType').value = '商场';
+    if (catRow) catRow.style.display = 'none';
+    if (secRow) secRow.style.display = 'none';
   } else {
     if (['商场','社区场地','活动地点','议员办事处'].includes(document.getElementById('fType').value)) document.getElementById('fType').value = '中医诊所';
     setStatusChip(lastInstitutionStatus || '已交流');
+    if (catRow) catRow.style.display = '';
+    if (secRow) secRow.style.display = '';
   }
 }
 
@@ -636,6 +650,18 @@ function openEditSheet(id) {
   document.getElementById('fName').value = p.name || '';
   ensureTypeOption(p.type);
   document.getElementById('fType').value = p.type || '中医诊所';
+  const catRow = document.getElementById('institutionCategoryRow');
+  const secRow = document.getElementById('institutionSecondaryRow');
+  if (!isPointEntry(p)) {
+    if (catRow) catRow.style.display = '';
+    if (secRow) secRow.style.display = '';
+    document.getElementById('fPrimaryCategory').value = p.primaryCategory || '';
+    handlePrimaryCategoryChange();
+    document.getElementById('fSecondaryCategory').value = p.secondaryCategory || '';
+  } else {
+    if (catRow) catRow.style.display = 'none';
+    if (secRow) secRow.style.display = 'none';
+  }
   document.getElementById('fAddr').value = p.address || '';
   document.getElementById('fContact').value = p.contact || '';
   document.getElementById('fPhone').value = p.phone || '';
@@ -727,6 +753,8 @@ function resetForm() {
   editBaseRevision = null;
   document.getElementById('fName').value = '';
   document.getElementById('fType').value = '中医诊所';
+  document.getElementById('fPrimaryCategory').value = '';
+  handlePrimaryCategoryChange();
   if (document.getElementById('entryKind')) setEntryKind('institution');
   document.getElementById('fAddr').value = '';
   document.getElementById('fContact').value = '';
@@ -802,6 +830,8 @@ async function savePlace() {
     entryKind,
     lastInstitutionStatus: entryKind === 'point' ? (lastInstitutionStatus || selectedInstitutionStatus || '已交流') : selectedInstitutionStatus,
     type: selectedType,
+    primaryCategory: entryKind === 'institution' ? (document.getElementById('fPrimaryCategory').value || '') : '',
+    secondaryCategory: entryKind === 'institution' ? (document.getElementById('fSecondaryCategory').value || '') : '',
     address: document.getElementById('fAddr').value.trim(),
     contact: document.getElementById('fContact').value.trim(),
     phone: document.getElementById('fPhone').value.trim(),

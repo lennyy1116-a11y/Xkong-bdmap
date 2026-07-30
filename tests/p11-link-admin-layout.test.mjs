@@ -87,6 +87,21 @@ test('lead cards expose business categories but not collection-source brands', (
   assert.doesNotMatch(leadCardSource, /getClinicSourceLabel|_leadSource|FindDoc|eHealth|CMCHK/);
 });
 
+test('institution form has primary and secondary category selectors', () => {
+  assert.match(html, /id="fPrimaryCategory"/);
+  assert.match(html, /id="fSecondaryCategory"/);
+  assert.match(html, /id="institutionCategoryRow"/);
+  assert.match(html, /id="institutionSecondaryRow"/);
+  assert.match(html, /onchange="handlePrimaryCategoryChange\(\)"/);
+  assert.match(html, /value="医疗".*>医疗</);
+  assert.match(html, /value="推拿按摩".*>推拿按摩</);
+  assert.match(html, /value="健康养生".*>健康养生</);
+  assert.match(html, /value="餐饮".*>餐饮</);
+  assert.match(html, /value="美容美体".*>美容美体</);
+  assert.match(app, /function handlePrimaryCategoryChange\(\)/);
+  assert.match(app, /LEAD_CATEGORY_TAXONOMY\[primary\]/);
+});
+
 test('all base pools remain unclaimed until a real user claims a lead', () => {
   assert.match(app, /function isUnclaimedOwnerId\(ownerId\)/);
   assert.match(app, /base_tcm_pool/);
