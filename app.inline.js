@@ -1815,20 +1815,20 @@ function toggleCoveragePanelSize() {
 }
 function openCoveragePanel() { const p=document.getElementById('coveragePanel'); p.classList.remove('combo-mode'); setCoveragePanelExpanded(false); renderCoverageClinicPage(); p.classList.add('active'); updateCoverageUi(); }
 function closeCoveragePanel() { const p=document.getElementById('coveragePanel'); p.classList.remove('active'); p.classList.remove('combo-mode'); setCoveragePanelExpanded(false); updateCoverageUi(); }
-function getClinicSourceLabel(p) {
-  const src = String(p.source || (p.finddocUrl ? 'finddoc' : '') || ((p.visits||[]).map(v=>v.note||'').join(' '))).toLowerCase();
-  if (src.includes('finddoc')) return 'FindDoc';
-  if (src.includes('ehealth') || src.includes('hcp')) return 'eHealth';
-  if (src.includes('中醫藥管理') || src.includes('cmchk')) return 'CMCHK';
-  return '';
+function getClinicCategoryLabel(p) {
+  const cat = getLeadCategory(p);
+  return cat.primary === '待分类' ? '' : `${cat.primary}／${cat.secondary}`;
 }
 function passCoverageFilter(p) {
   const f = coverageFilter || 'all';
   if (f === 'all') return true;
   if (f === 'phone') return !!(p.phone || p.contactPhone);
-  const label = getClinicSourceLabel(p).toLowerCase();
-  if (f === 'finddoc') return label === 'finddoc';
-  if (f === 'ehealth') return label === 'ehealth';
+  const cat = getLeadCategory(p);
+  if (f === '医疗') return cat.primary === '医疗';
+  if (f === '推拿按摩') return cat.primary === '推拿按摩';
+  if (f === '健康养生') return cat.primary === '健康养生';
+  if (f === '美容美体') return cat.primary === '美容美体';
+  if (f === '餐饮') return cat.primary === '餐饮';
   return true;
 }
 function setCoverageFilter(f) {
@@ -1839,9 +1839,9 @@ function setCoverageFilter(f) {
 }
 function clinicBadges(p) {
   const phone = p.phone ? '<span class="phone-badge">电话</span>' : '';
-  const src = getClinicSourceLabel(p);
-  const source = src ? `<span class="source-badge">${esc(src)}</span>` : '';
-  return phone + source;
+  const cat = getClinicCategoryLabel(p);
+  const category = cat ? `<span class="source-badge">${esc(cat)}</span>` : '';
+  return phone + category;
 }
 function renderCoverageClinicPage() {
   const selected = getCoverageTargetById(selectedMallId);
@@ -2174,7 +2174,7 @@ function clinicExportRow(p, extra={}) {
     name: p.name || '',
     address: p.address || '',
     type: p.type || '',
-    source: getClinicSourceLabel(p) || (p.isBaseClinic ? 'CMCHK' : ''),
+    source: getClinicCategoryLabel(p) || (p.isBaseClinic ? '医疗／中医诊所' : ''),
     contact: p.contact || '',
     phone: p.phone || '',
     lat: p.lat || '',

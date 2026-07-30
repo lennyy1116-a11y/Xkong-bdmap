@@ -1248,8 +1248,11 @@ body.home-mode .map-filter-bar { display:none !important; }
     <div class="coverage-source-filters" id="coverageSourceFilters">
       <button class="coverage-filter-chip active" data-filter="all" onclick="setCoverageFilter('all')">全部</button>
       <button class="coverage-filter-chip" data-filter="phone" onclick="setCoverageFilter('phone')">有电话</button>
-      <button class="coverage-filter-chip" data-filter="finddoc" onclick="setCoverageFilter('finddoc')">FindDoc</button>
-      <button class="coverage-filter-chip" data-filter="ehealth" onclick="setCoverageFilter('ehealth')">eHealth</button>
+      <button class="coverage-filter-chip" data-filter="医疗" onclick="setCoverageFilter('医疗')">医疗</button>
+      <button class="coverage-filter-chip" data-filter="推拿按摩" onclick="setCoverageFilter('推拿按摩')">推拿按摩</button>
+      <button class="coverage-filter-chip" data-filter="健康养生" onclick="setCoverageFilter('健康养生')">健康养生</button>
+      <button class="coverage-filter-chip" data-filter="美容美体" onclick="setCoverageFilter('美容美体')">美容美体</button>
+      <button class="coverage-filter-chip" data-filter="餐饮" onclick="setCoverageFilter('餐饮')">餐饮</button>
     </div>
     <div class="export-row"><button onclick="exportCurrentCoverageCsv()">导出表格</button><button onclick="exportCurrentCoverageErrorTemplate()">报错上传Excel模板</button><button onclick="copyCurrentCoverageSummary()">复制摘要</button></div>
     <div id="coverageClinicList" class="coverage-clinic-list"></div>
@@ -3436,20 +3439,20 @@ function toggleCoveragePanelSize() {
 }
 function openCoveragePanel() { const p=document.getElementById('coveragePanel'); p.classList.remove('combo-mode'); setCoveragePanelExpanded(false); renderCoverageClinicPage(); p.classList.add('active'); updateCoverageUi(); }
 function closeCoveragePanel() { const p=document.getElementById('coveragePanel'); p.classList.remove('active'); p.classList.remove('combo-mode'); setCoveragePanelExpanded(false); updateCoverageUi(); }
-function getClinicSourceLabel(p) {
-  const src = String(p.source || (p.finddocUrl ? 'finddoc' : '') || ((p.visits||[]).map(v=>v.note||'').join(' '))).toLowerCase();
-  if (src.includes('finddoc')) return 'FindDoc';
-  if (src.includes('ehealth') || src.includes('hcp')) return 'eHealth';
-  if (src.includes('中醫藥管理') || src.includes('cmchk')) return 'CMCHK';
-  return '';
+function getClinicCategoryLabel(p) {
+  const cat = getLeadCategory(p);
+  return cat.primary === '待分类' ? '' : `${cat.primary}／${cat.secondary}`;
 }
 function passCoverageFilter(p) {
   const f = coverageFilter || 'all';
   if (f === 'all') return true;
   if (f === 'phone') return !!(p.phone || p.contactPhone);
-  const label = getClinicSourceLabel(p).toLowerCase();
-  if (f === 'finddoc') return label === 'finddoc';
-  if (f === 'ehealth') return label === 'ehealth';
+  const cat = getLeadCategory(p);
+  if (f === '医疗') return cat.primary === '医疗';
+  if (f === '推拿按摩') return cat.primary === '推拿按摩';
+  if (f === '健康养生') return cat.primary === '健康养生';
+  if (f === '美容美体') return cat.primary === '美容美体';
+  if (f === '餐饮') return cat.primary === '餐饮';
   return true;
 }
 function setCoverageFilter(f) {
@@ -3460,9 +3463,9 @@ function setCoverageFilter(f) {
 }
 function clinicBadges(p) {
   const phone = p.phone ? '<span class="phone-badge">电话</span>' : '';
-  const src = getClinicSourceLabel(p);
-  const source = src ? `<span class="source-badge">${esc(src)}</span>` : '';
-  return phone + source;
+  const cat = getClinicCategoryLabel(p);
+  const category = cat ? `<span class="source-badge">${esc(cat)}</span>` : '';
+  return phone + category;
 }
 function renderCoverageClinicPage() {
   const selected = getCoverageTargetById(selectedMallId);
@@ -3795,7 +3798,7 @@ function clinicExportRow(p, extra={}) {
     name: p.name || '',
     address: p.address || '',
     type: p.type || '',
-    source: getClinicSourceLabel(p) || (p.isBaseClinic ? 'CMCHK' : ''),
+    source: getClinicCategoryLabel(p) || (p.isBaseClinic ? '医疗／中医诊所' : ''),
     contact: p.contact || '',
     phone: p.phone || '',
     lat: p.lat || '',
