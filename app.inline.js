@@ -1418,8 +1418,8 @@ function renderLeadHomeList() {
   if (exportRow) exportRow.classList.toggle('active', leadFilter === 'error');
   const mineExportRow = document.getElementById('leadMineExportRow');
   if (mineExportRow) mineExportRow.classList.toggle('active', leadFilter === 'mine');
-  const filterNames = { all:'全部', unclaimed:'未认领', claimed:'已认领', mine:'我的认领', error:'报错', phone:'有电话' };
-  summary.textContent = `${filterNames[leadFilter] || '线索'}：当前 ${rows.length}/${total} 条｜默认按距离近到远｜已认领 ${claimed}｜报错 ${errorCount}｜有电话 ${phone}`;
+  const filterNames = { all:'全部', unclaimed:'未认领', claimed:'已认领', mine:'我的认领', error:'报错', phone:'有联系方式' };
+  summary.textContent = `${filterNames[leadFilter] || '线索'}：当前 ${rows.length}/${total} 条｜默认按距离近到远｜已认领 ${claimed}｜报错 ${errorCount}｜有联系方式 ${phone}`;
   body.innerHTML = rows.length ? rows.slice(0,180).map(leadCardHtml).join('') : '<div class="lead-empty">没有符合条件的线索</div>';
 }
 async function exportLeadErrorRowsXlsx() {
@@ -1857,7 +1857,7 @@ function renderCoverageClinicPage() {
   });
   const warmCount = hits.filter(p => getCoverageSortRank(p) < 3).length;
   title.textContent = `${selected.name} · 1公里诊所`;
-  summary.textContent = `当前 ${hits.length}/${allHits.length} 家｜已沟通/意向/合作 ${warmCount} 家置顶｜有电话 ${allHits.filter(x=>x.phone).length} 家`;
+  summary.textContent = `当前 ${hits.length}/${allHits.length} 家｜已沟通/意向/合作 ${warmCount} 家置顶｜有联系方式 ${allHits.filter(x=>x.phone).length} 家`;
   box.innerHTML = hits.length ? hits.map((p,i) => {
     const d = p._distanceKm !== undefined ? p._distanceKm : distanceKm(selected.lat, selected.lng, p.lat, p.lng);
     const rowClass = getCoverageListClass(p);

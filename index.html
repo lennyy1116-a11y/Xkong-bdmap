@@ -737,7 +737,7 @@ body.home-mode .map-filter-bar { display:none !important; }
       </div>
       <div class="lead-utility-row">
         <button class="lead-filter-chip" data-filter="error" onclick="setLeadFilter('error')">报错</button>
-        <button class="lead-filter-chip" data-filter="phone" onclick="setLeadFilter('phone')">有电话</button>
+        <button class="lead-filter-chip" data-filter="phone" onclick="setLeadFilter('phone')">有联系方式</button>
       </div>
     </div>
     <div class="lead-filter-section categories">
@@ -1247,7 +1247,7 @@ body.home-mode .map-filter-bar { display:none !important; }
     <div id="coverageSummary" class="mall-meta" style="padding:4px 4px 10px"></div>
     <div class="coverage-source-filters" id="coverageSourceFilters">
       <button class="coverage-filter-chip active" data-filter="all" onclick="setCoverageFilter('all')">全部</button>
-      <button class="coverage-filter-chip" data-filter="phone" onclick="setCoverageFilter('phone')">有电话</button>
+      <button class="coverage-filter-chip" data-filter="phone" onclick="setCoverageFilter('phone')">有联系方式</button>
       <button class="coverage-filter-chip" data-filter="医疗" onclick="setCoverageFilter('医疗')">医疗</button>
       <button class="coverage-filter-chip" data-filter="推拿按摩" onclick="setCoverageFilter('推拿按摩')">推拿按摩</button>
       <button class="coverage-filter-chip" data-filter="健康养生" onclick="setCoverageFilter('健康养生')">健康养生</button>
@@ -3042,8 +3042,8 @@ function renderLeadHomeList() {
   if (exportRow) exportRow.classList.toggle('active', leadFilter === 'error');
   const mineExportRow = document.getElementById('leadMineExportRow');
   if (mineExportRow) mineExportRow.classList.toggle('active', leadFilter === 'mine');
-  const filterNames = { all:'全部', unclaimed:'未认领', claimed:'已认领', mine:'我的认领', error:'报错', phone:'有电话' };
-  summary.textContent = `${filterNames[leadFilter] || '线索'}：当前 ${rows.length}/${total} 条｜默认按距离近到远｜已认领 ${claimed}｜报错 ${errorCount}｜有电话 ${phone}`;
+  const filterNames = { all:'全部', unclaimed:'未认领', claimed:'已认领', mine:'我的认领', error:'报错', phone:'有联系方式' };
+  summary.textContent = `${filterNames[leadFilter] || '线索'}：当前 ${rows.length}/${total} 条｜默认按距离近到远｜已认领 ${claimed}｜报错 ${errorCount}｜有联系方式 ${phone}`;
   body.innerHTML = rows.length ? rows.slice(0,180).map(leadCardHtml).join('') : '<div class="lead-empty">没有符合条件的线索</div>';
 }
 async function exportLeadErrorRowsXlsx() {
@@ -3481,7 +3481,7 @@ function renderCoverageClinicPage() {
   });
   const warmCount = hits.filter(p => getCoverageSortRank(p) < 3).length;
   title.textContent = `${selected.name} · 1公里诊所`;
-  summary.textContent = `当前 ${hits.length}/${allHits.length} 家｜已沟通/意向/合作 ${warmCount} 家置顶｜有电话 ${allHits.filter(x=>x.phone).length} 家`;
+  summary.textContent = `当前 ${hits.length}/${allHits.length} 家｜已沟通/意向/合作 ${warmCount} 家置顶｜有联系方式 ${allHits.filter(x=>x.phone).length} 家`;
   box.innerHTML = hits.length ? hits.map((p,i) => {
     const d = p._distanceKm !== undefined ? p._distanceKm : distanceKm(selected.lat, selected.lng, p.lat, p.lng);
     const rowClass = getCoverageListClass(p);
