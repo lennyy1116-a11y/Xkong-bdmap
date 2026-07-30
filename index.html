@@ -2636,7 +2636,12 @@ function goToPlace(id) {
   const p = places.find(x => x.id === id) || baseClinics.find(x => x.id === id);
   if (!p) { toast('找不到这个点位'); return; }
   closeList();
-  map.setView([p.lat, p.lng], 18);
+  const lat = Number(p.lat), lng = Number(p.lng);
+  if (!Number.isFinite(lat) || !Number.isFinite(lng)) {
+    toast('该机构已进入线索池，坐标待补充，暂不能地图定位');
+    return;
+  }
+  map.setView([lat, lng], 18);
   let opened = false;
   markersLayer.eachLayer(layer => {
     const ll = layer.getLatLng();
