@@ -10,6 +10,18 @@ test('My page scroll body leaves room for the fixed five-tab bottom navigation',
   assert.match(html, /\.settings-body\s*\{[^}]*padding-bottom:\s*max\(calc\(\s*96px\s*\+\s*env\(safe-area-inset-bottom\)\s*\),\s*96px\)/s);
 });
 
+test('place editor modal stays above bottom navigation and keeps its actions clear of the safe area', () => {
+  const navZ = Number(html.match(/\.app-nav\s*\{[^}]*z-index:\s*(\d+)/s)?.[1]);
+  const overlayZ = Number(html.match(/\.sheet-overlay\s*\{[^}]*z-index:\s*(\d+)/s)?.[1]);
+  const sheetZ = Number(html.match(/\.sheet\s*\{[^}]*z-index:\s*(\d+)/s)?.[1]);
+
+  assert.ok(overlayZ > navZ, `sheet overlay z-index ${overlayZ} must exceed app nav ${navZ}`);
+  assert.ok(sheetZ > overlayZ, `sheet z-index ${sheetZ} must exceed overlay ${overlayZ}`);
+  assert.match(html, /\.sheet\s*\{[^}]*padding-bottom:\s*max\(calc\(\s*20px\s*\+\s*env\(safe-area-inset-bottom\)\s*\),\s*20px\)/s);
+  assert.match(app, /function openSheet\(\)\s*\{[\s\S]*sheetOverlay[^\n]*classList\.add\('active'\)[\s\S]*sheet[^\n]*classList\.add\('active'\)/);
+  assert.match(app, /function closeSheet\(\)\s*\{[\s\S]*sheetOverlay[^\n]*classList\.remove\('active'\)[\s\S]*sheet[^\n]*classList\.remove\('active'\)/);
+});
+
 test('admin and dangerous operations stay locked until the configured password is accepted', () => {
   assert.match(html, /id="adminGate"/);
   assert.match(html, /<input[^>]*type="password"[^>]*id="adminPasswordInput"/);

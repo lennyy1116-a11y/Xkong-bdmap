@@ -61,16 +61,16 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 
 /* Bottom sheet */
 .sheet-overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 2000;
+  position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 3000;
   display: none; opacity: 0; transition: opacity 0.2s;
 }
 .sheet-overlay.active { display: block; opacity: 1; }
 .sheet {
-  position: fixed; bottom: 0; left: 0; right: 0; z-index: 2001;
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 3001;
   background: var(--card); border-radius: 16px 16px 0 0;
   max-height: 88vh; overflow-y: auto;
   transform: translateY(100%); transition: transform 0.3s ease;
-  padding: 20px 16px; padding-bottom: max(20px, env(safe-area-inset-bottom));
+  padding: 20px 16px; padding-bottom: max(calc(20px + env(safe-area-inset-bottom)), 20px);
 }
 .sheet.active { transform: translateY(0); }
 .sheet-handle { width: 40px; height: 4px; background: #555; border-radius: 2px; margin: 0 auto 16px; }
