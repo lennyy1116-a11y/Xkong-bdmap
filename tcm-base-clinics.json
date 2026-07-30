@@ -77939,5 +77939,6305 @@
     "isBaseClinic": true,
     "source": "ehealth_hcpr_org",
     "finddocUrl": ""
+  },
+  {
+    "id": "health_stage1_osm-n5393357437",
+    "name": "SOL Wellness",
+    "type": "健康养生/营养健康",
+    "address": "41-43 嘉咸街 Graham Street",
+    "contact": "",
+    "phone": "+852 25819699",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.28282,
+    "lng": 114.153192,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/5393357437；核验状态：single_source_pending；类别：健康养生/营养健康；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "中西區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "健康养生",
+    "secondaryCategory": "营养健康",
+    "matchedCategories": [
+      "健康养生/营养健康"
+    ],
+    "source": "https://www.openstreetmap.org/node/5393357437",
+    "website": "https://sol-wellness.com/",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4862093643",
+    "name": "Feng Yang Fang Chinese Medicine",
+    "type": "医疗/中医诊所",
+    "address": "皇后大道西 Queen's Road West",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2868234,
+    "lng": 114.1394805,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4862093643；核验状态：single_source_pending；类别：医疗/中医诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "中西區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "中医诊所",
+    "matchedCategories": [
+      "医疗/中医诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4862093643",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4862057451",
+    "name": "和順堂中醫診所",
+    "type": "医疗/中医诊所",
+    "address": "德輔道西 Des Voeux Road West",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2867094,
+    "lng": 114.1367159,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4862057451；核验状态：single_source_pending；类别：医疗/中医诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "中西區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "中医诊所",
+    "matchedCategories": [
+      "医疗/中医诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4862057451",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4870055745",
+    "name": "Dentada",
+    "type": "医疗/口腔诊所",
+    "address": "卑路乍街 Belcher's Street",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2823623,
+    "lng": 114.1262743,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4870055745；核验状态：single_source_pending；类别：医疗/口腔诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "中西區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "口腔诊所",
+    "matchedCategories": [
+      "医疗/口腔诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4870055745",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n5795094184",
+    "name": "Dr. Edgar Shih",
+    "type": "医疗/口腔诊所",
+    "address": "38-48 皇后大道中 Queen's Road Central",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2818927,
+    "lng": 114.1561685,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/5795094184；核验状态：single_source_pending；类别：医疗/口腔诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "中西區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "口腔诊所",
+    "matchedCategories": [
+      "医疗/口腔诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/5795094184",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4850179780",
+    "name": "李祖恩牙科醫生",
+    "type": "医疗/口腔诊所",
+    "address": "皇后大道西 Queen's Road West",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2868841,
+    "lng": 114.1408964,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4850179780；核验状态：single_source_pending；类别：医疗/口腔诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "中西區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "口腔诊所",
+    "matchedCategories": [
+      "医疗/口腔诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4850179780",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-w219065031",
+    "name": "菲臘牙科醫院",
+    "type": "医疗/口腔诊所",
+    "address": "34 醫院道 Hospital Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.286501,
+    "lng": 114.1442896,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/way/219065031；核验状态：single_source_pending；类别：医疗/口腔诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "中西區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "口腔诊所",
+    "matchedCategories": [
+      "医疗/口腔诊所"
+    ],
+    "source": "https://www.openstreetmap.org/way/219065031",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4870091586",
+    "name": "謝智基牙科醫生",
+    "type": "医疗/口腔诊所",
+    "address": "65 吉席街 Catchick Street",
+    "contact": "",
+    "phone": "28182323",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2832496,
+    "lng": 114.1275397,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4870091586；核验状态：single_source_pending；类别：医疗/口腔诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "中西區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "口腔诊所",
+    "matchedCategories": [
+      "医疗/口腔诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4870091586",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n13754954969",
+    "name": "香港中央牙科技術室",
+    "type": "医疗/口腔诊所",
+    "address": "7 134 皇后大道西 Queen's Road West",
+    "contact": "",
+    "phone": "+852 25475386",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2862604,
+    "lng": 114.1453324,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/13754954969；核验状态：single_source_pending；类别：医疗/口腔诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "中西區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "口腔诊所",
+    "matchedCategories": [
+      "医疗/口腔诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/13754954969",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n5192931521",
+    "name": "Qualiy Healthcare Physiotheropy Central",
+    "type": "医疗/康复护理",
+    "address": "1038 皇后大道中 Queen's Road Central",
+    "contact": "",
+    "phone": "25236378",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2839712,
+    "lng": 114.1543134,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/5192931521；核验状态：single_source_pending；类别：医疗/康复护理；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "中西區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "康复护理",
+    "matchedCategories": [
+      "医疗/康复护理"
+    ],
+    "source": "https://www.openstreetmap.org/node/5192931521",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n13571797519",
+    "name": "RISE Physical Therapy",
+    "type": "医疗/康复护理",
+    "address": "5/F, Hoseinee House, 69 Wyndham Street, Central, Hong Kong",
+    "contact": "",
+    "phone": "+852 5606 3774",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2816286,
+    "lng": 114.1548977,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/13571797519；核验状态：single_source_pending；类别：医疗/康复护理；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "中西區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "康复护理",
+    "matchedCategories": [
+      "医疗/康复护理"
+    ],
+    "source": "https://www.openstreetmap.org/node/13571797519",
+    "website": "https://rise-physical-therapy.com/",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n13742862434",
+    "name": "東華三院何超蕸綜合復康中心",
+    "type": "医疗/康复护理",
+    "address": "1-15 域多利道 Victoria Road",
+    "contact": "",
+    "phone": "+852 28193048",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2820989,
+    "lng": 114.1257934,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/13742862434；核验状态：single_source_pending；类别：医疗/康复护理；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "中西區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "康复护理",
+    "matchedCategories": [
+      "医疗/康复护理"
+    ],
+    "source": "https://www.openstreetmap.org/node/13742862434",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4540378202",
+    "name": "Central Medical Diagnostic Centre",
+    "type": "医疗/综合诊所",
+    "address": "59 皇后大道中 Queen's Road Central",
+    "contact": "",
+    "phone": "25220108",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2829125,
+    "lng": 114.1557328,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4540378202；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "中西區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4540378202",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4847720421",
+    "name": "Dr Benjamin Chow. Orthopaedic",
+    "type": "医疗/综合诊所",
+    "address": "9 皇后大道中 Queen's Road Central",
+    "contact": "",
+    "phone": "21570888",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2806776,
+    "lng": 114.1586288,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4847720421；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "中西區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4847720421",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n5653943021",
+    "name": "Dr Horne",
+    "type": "医疗/综合诊所",
+    "address": "29 皇后大道中 Queen's Road Central",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2817973,
+    "lng": 114.15682,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/5653943021；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "中西區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/5653943021",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n5477123322",
+    "name": "Dr Pang gynécologue",
+    "type": "医疗/综合诊所",
+    "address": "36 皇后大道中 Queen's Road Central",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2818192,
+    "lng": 114.1563721,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/5477123322；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "中西區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/5477123322",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4862113247",
+    "name": "Foot Doc",
+    "type": "医疗/综合诊所",
+    "address": "德輔道西 Des Voeux Road West",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2874499,
+    "lng": 114.1384586,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4862113247；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "中西區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4862113247",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n11294661126",
+    "name": "°CRYO Hong Kong",
+    "type": "医疗/综合诊所",
+    "address": "22 德輔道中 Des Voeux Road Central",
+    "contact": "",
+    "phone": "+852 21179618",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2824575,
+    "lng": 114.1572029,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/11294661126；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "中西區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/11294661126",
+    "website": "https://www.cryo.com.hk/",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n9698180257",
+    "name": "中區捐血站",
+    "type": "医疗/综合诊所",
+    "address": "40-42 德輔道中 Des Voeux Road Central",
+    "contact": "",
+    "phone": "+852 2526 1420",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2831576,
+    "lng": 114.1566529,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/9698180257；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "中西區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/9698180257",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4862635219",
+    "name": "劉智豪醫生醫務所",
+    "type": "医疗/综合诊所",
+    "address": "卑路乍街 Belcher's Street",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2833444,
+    "lng": 114.130379,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4862635219；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "中西區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4862635219",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-w367544824",
+    "name": "嘉諾撒醫院",
+    "type": "医疗/综合诊所",
+    "address": "1 舊山頂道 Old Peak Road Mid-Levels",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.277133,
+    "lng": 114.1539525,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/way/367544824；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "中西區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/way/367544824",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-w312192610",
+    "name": "堅尼地城賽馬會診療所",
+    "type": "医疗/综合诊所",
+    "address": "45 域多利道 Victoria Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2817616,
+    "lng": 114.1239499,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/way/312192610；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "中西區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/way/312192610",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-w948423604",
+    "name": "明德國際醫院",
+    "type": "医疗/综合诊所",
+    "address": "41 加列山道 Mount Kellett Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2593124,
+    "lng": 114.1492353,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/way/948423604；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "中西區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/way/948423604",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n13754954962",
+    "name": "西營盤賽馬會家庭醫學診所",
+    "type": "医疗/综合诊所",
+    "address": "1 134 皇后大道西 Queen's Road West",
+    "contact": "",
+    "phone": "+852 28598203",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.286503,
+    "lng": 114.1449472,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/13754954962；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "中西區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/13754954962",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4862125279",
+    "name": "西醫李漢鈞",
+    "type": "医疗/综合诊所",
+    "address": "390 皇后大道西 Queen's Road West",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2866486,
+    "lng": 114.1395081,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4862125279；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "中西區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4862125279",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n6865766736",
+    "name": "陳祖彥醫生",
+    "type": "医疗/综合诊所",
+    "address": "330-6 皇后大道西 Queen's Road West Sai Ying Pun Hong Kong",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2868658,
+    "lng": 114.1416311,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/6865766736；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "中西區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/6865766736",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n7625196785",
+    "name": "香港肩腕膝中心",
+    "type": "医疗/综合诊所",
+    "address": "夏慤道 Harcourt Road",
+    "contact": "",
+    "phone": "+852 25378884",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2805976,
+    "lng": 114.1629073,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/7625196785；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "中西區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/7625196785",
+    "website": "https://www.topshoulder.com.hk/",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n8295234398",
+    "name": "正心堂中醫診所",
+    "type": "医疗/中医诊所",
+    "address": "9號 天慈商場地下1B號舖 天喜街 Tin Hei Street 元朗天水圍 Tin Shui Wai, Yuen Long 新界 New Territories",
+    "contact": "",
+    "phone": "+852 65586634",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.4533102,
+    "lng": 114.0066701,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/8295234398；核验状态：single_source_pending；类别：医疗/中医诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "元朗",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "中医诊所",
+    "matchedCategories": [
+      "医疗/中医诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/8295234398",
+    "website": "https://www.facebook.com/Positivemind.cmc",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n10123422589",
+    "name": "元朗捐血站",
+    "type": "医疗/综合诊所",
+    "address": "115-127 青山公路－元朗段 Castle Peak Road – Yuen Long",
+    "contact": "",
+    "phone": "+852 2478 6000",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.4446976,
+    "lng": 114.0281984,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/10123422589；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "元朗",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/10123422589",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-w432761232",
+    "name": "元朗賽馬會健康院",
+    "type": "医疗/综合诊所",
+    "address": "269 青山公路 - 元朗段 Castle Peak Road - Yuen Long 元朗 Yuen Long",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.4455169,
+    "lng": 114.0229495,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/way/432761232；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "元朗",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/way/432761232",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n10796686876",
+    "name": "北京同仁堂",
+    "type": "医疗/综合诊所",
+    "address": "198 青山公路－元朗段 Castle Peak Road – Yuen Long",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.4443479,
+    "lng": 114.0261411,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/10796686876；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "元朗",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/10796686876",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-w255754951",
+    "name": "天水圍(天業路)家庭醫學綜合中心",
+    "type": "医疗/综合诊所",
+    "address": "3 天業路 Tin Yip Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.4655277,
+    "lng": 114.0057191,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/way/255754951；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "元朗",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/way/255754951",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n13589756161",
+    "name": "天水圍(天瑞路)家庭醫學診所",
+    "type": "医疗/综合诊所",
+    "address": "0 3 天瑞路 Tin Shui Road",
+    "contact": "",
+    "phone": "+852 24485511",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.4546464,
+    "lng": 114.0013772,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/13589756161；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "元朗",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/13589756161",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-w432760298",
+    "name": "家庭計劃指導會",
+    "type": "医疗/综合诊所",
+    "address": "149-153 元朗安寧路 Yuen Long On Ning Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.4459395,
+    "lng": 114.0230477,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/way/432760298；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "元朗",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/way/432760298",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-w166673305",
+    "name": "容鳳書健康中心",
+    "type": "医疗/综合诊所",
+    "address": "26 西菁街 Sai Ching Street 元朗 Yuen Long",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.4410877,
+    "lng": 114.0271118,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/way/166673305；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "元朗",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/way/166673305",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4549338711",
+    "name": "中醫坊",
+    "type": "医疗/中医诊所",
+    "address": "45A 符興街 Fu Hing Street",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.503947,
+    "lng": 114.127107,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4549338711；核验状态：single_source_pending；类别：医疗/中医诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "北區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "中医诊所",
+    "matchedCategories": [
+      "医疗/中医诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4549338711",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4549338707",
+    "name": "卓彥植牙中心",
+    "type": "医疗/口腔诊所",
+    "address": "66 龍琛路 Lung Sum Avenue",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.5031148,
+    "lng": 114.1278651,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4549338707；核验状态：single_source_pending；类别：医疗/口腔诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "北區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "口腔诊所",
+    "matchedCategories": [
+      "医疗/口腔诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4549338707",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n8594769686",
+    "name": "位元堂",
+    "type": "医疗/综合诊所",
+    "address": "50 新康街 San Hong Street",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.5043323,
+    "lng": 114.1283996,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/8594769686；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "北區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/8594769686",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n6267177875",
+    "name": "北京同仁堂",
+    "type": "医疗/综合诊所",
+    "address": "54 新康街 San Hong Street",
+    "contact": "",
+    "phone": "+852 31424233",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.5042727,
+    "lng": 114.1284607,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/6267177875；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "北區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/6267177875",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-w387833998",
+    "name": "沙頭角家庭醫學診所",
+    "type": "医疗/综合诊所",
+    "address": "58 沙頭角公路－石涌凹段 Sha Tau Kok Road – Shek Chung Au",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.5359377,
+    "lng": 114.210143,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/way/387833998；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "北區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/way/387833998",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-w255289144",
+    "name": "石湖墟賽馬會診療所",
+    "type": "医疗/综合诊所",
+    "address": "108-130 Jockey Club Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.5052211,
+    "lng": 114.1292486,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/way/255289144；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "北區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/way/255289144",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-w722893738",
+    "name": "粉嶺健康中心",
+    "type": "医疗/综合诊所",
+    "address": "2 璧峰路 Pik Fung Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.496424,
+    "lng": 114.13875,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/way/722893738；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "北區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/way/722893738",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n11592753160",
+    "name": "粉嶺公務員診所",
+    "type": "医疗/综合诊所",
+    "address": "8 2 璧峰路 Pik Fung Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.4963102,
+    "lng": 114.1387439,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/11592753160；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "北區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/11592753160",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n11592753155",
+    "name": "粉嶺社會衞生科診所",
+    "type": "医疗/综合诊所",
+    "address": "6 2 璧峰路 Pik Fung Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.4965501,
+    "lng": 114.1385707,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/11592753155；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "北區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/11592753155",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n11592753153",
+    "name": "粉嶺職業健康診所",
+    "type": "医疗/综合诊所",
+    "address": "7 2 璧峰路 Pik Fung Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.496387,
+    "lng": 114.1387432,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/11592753153；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "北區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/11592753153",
+    "website": "https://www.labour.gov.hk/eng/tele/oh2b5.htm",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4471479483",
+    "name": "西醫王家鑾",
+    "type": "医疗/综合诊所",
+    "address": "38 新發街 San Fat Street",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.5033535,
+    "lng": 114.1271388,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4471479483；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "北區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4471479483",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4849814939",
+    "name": "Dental Clinic",
+    "type": "医疗/口腔诊所",
+    "address": "香港仔大道 Aberdeen Main Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2486552,
+    "lng": 114.1555955,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4849814939；核验状态：single_source_pending；类别：医疗/口腔诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "南區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "口腔诊所",
+    "matchedCategories": [
+      "医疗/口腔诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4849814939",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-w462376648",
+    "name": "東華三院賽馬會復康中心",
+    "type": "医疗/康复护理",
+    "address": "4 惠福道 Welfare Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2466852,
+    "lng": 114.1639201,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/way/462376648；核验状态：single_source_pending；类别：医疗/康复护理；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "南區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "康复护理",
+    "matchedCategories": [
+      "医疗/康复护理"
+    ],
+    "source": "https://www.openstreetmap.org/way/462376648",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4577908799",
+    "name": "東華三院賽馬會藝進綜合職業復康中心",
+    "type": "医疗/康复护理",
+    "address": "0",
+    "contact": "",
+    "phone": "+852 2870 9305",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2463335,
+    "lng": 114.1644879,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4577908799；核验状态：single_source_pending；类别：医疗/康复护理；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "南區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "康复护理",
+    "matchedCategories": [
+      "医疗/康复护理"
+    ],
+    "source": "https://www.openstreetmap.org/node/4577908799",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-w454533857",
+    "name": "香港防癌會賽馬會癌症康復中心",
+    "type": "医疗/康复护理",
+    "address": "30 南朗山道 Nam Long Shan Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2434735,
+    "lng": 114.1653746,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/way/454533857；核验状态：single_source_pending；类别：医疗/康复护理；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "南區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "康复护理",
+    "matchedCategories": [
+      "医疗/康复护理"
+    ],
+    "source": "https://www.openstreetmap.org/way/454533857",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n13704561365",
+    "name": "李惠敏醫生",
+    "type": "医疗/综合诊所",
+    "address": "1 & 2 G 33 石排灣道 Shek Pai Wan Road 田灣 Tin Wan",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.250116,
+    "lng": 114.1473639,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/13704561365；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "南區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/13704561365",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-w234585216",
+    "name": "赤柱公立醫局",
+    "type": "医疗/综合诊所",
+    "address": "14 黃麻角道 Wong Ma Kok Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2177263,
+    "lng": 114.2134424,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/way/234585216；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "南區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/way/234585216",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-w454436025",
+    "name": "鴨脷洲診所",
+    "type": "医疗/综合诊所",
+    "address": "161 鴨脷洲大街 Main Street, Ap Lei Chau",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2432168,
+    "lng": 114.1535885,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/way/454436025；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "南區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/way/454436025",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n12995132121",
+    "name": "富蝶中醫診所",
+    "type": "医疗/中医诊所",
+    "address": "8 G",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.4636414,
+    "lng": 114.1765722,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/12995132121；核验状态：single_source_pending；类别：医疗/中医诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "大埔",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "中医诊所",
+    "matchedCategories": [
+      "医疗/中医诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/12995132121",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n12495669526",
+    "name": "樂善堂鄭温文蕙醫療中心",
+    "type": "医疗/口腔诊所",
+    "address": "3 1 寶湖道 Plover Cove Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.4495979,
+    "lng": 114.1677273,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/12495669526；核验状态：single_source_pending；类别：医疗/口腔诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "大埔",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "口腔诊所",
+    "matchedCategories": [
+      "医疗/口腔诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/12495669526",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n6328325345",
+    "name": "潘磊牙科醫務所",
+    "type": "医疗/口腔诊所",
+    "address": "P210",
+    "contact": "",
+    "phone": "2658 8577",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.4488468,
+    "lng": 114.1741728,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/6328325345；核验状态：single_source_pending；类别：医疗/口腔诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "大埔",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "口腔诊所",
+    "matchedCategories": [
+      "医疗/口腔诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/6328325345",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4858329412",
+    "name": "紐約脊醫物理治療中心 New York Chiropractic & Physiotherapy Center",
+    "type": "医疗/康复护理",
+    "address": "廣福道 Kwong Fuk Road 大埔 Tai Po",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.4479646,
+    "lng": 114.1688196,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4858329412；核验状态：single_source_pending；类别：医疗/康复护理；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "大埔",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "康复护理",
+    "matchedCategories": [
+      "医疗/康复护理"
+    ],
+    "source": "https://www.openstreetmap.org/node/4858329412",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4858647439",
+    "name": "Yan Oi Tong Tse Ng Tsui Ha Medical Centre",
+    "type": "医疗/综合诊所",
+    "address": "廣福道 Kwong Fuk Road 大埔 Tai Po",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.4491632,
+    "lng": 114.1653295,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4858647439；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "大埔",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4858647439",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n6323135580",
+    "name": "俊善堂",
+    "type": "医疗/综合诊所",
+    "address": "75 廣福道",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.4487504,
+    "lng": 114.1671818,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/6323135580；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "大埔",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/6323135580",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n6320858122",
+    "name": "卓健",
+    "type": "医疗/综合诊所",
+    "address": "71 廣福道 Kwong Fuk Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.4487758,
+    "lng": 114.1670872,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/6320858122；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "大埔",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/6320858122",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n5788040087",
+    "name": "大埔王少清家庭醫學診所",
+    "type": "医疗/综合诊所",
+    "address": "1 寶湖里 Po Wu Lane",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.4501812,
+    "lng": 114.1682649,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/5788040087；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "大埔",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/5788040087",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-w234741116",
+    "name": "大埔王少清診所",
+    "type": "医疗/综合诊所",
+    "address": "1 Po Wu Lane",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.4501447,
+    "lng": 114.168066,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/way/234741116；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "大埔",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/way/234741116",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-w210646585",
+    "name": "大埔賽馬會診所",
+    "type": "医疗/综合诊所",
+    "address": "37 Ting Kok Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.4539566,
+    "lng": 114.1655714,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/way/210646585；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "大埔",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/way/210646585",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n5712685443",
+    "name": "天馬體格評估及治療中心",
+    "type": "医疗/综合诊所",
+    "address": "139 廣福道 Kwong Fuk Road 大埔 Taipo",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.4479477,
+    "lng": 114.1688562,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/5712685443；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "大埔",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/5712685443",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n12995132120",
+    "name": "富蝶綜合醫務中心",
+    "type": "医疗/综合诊所",
+    "address": "9 G",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.4635861,
+    "lng": 114.1765798,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/12995132120；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "大埔",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/12995132120",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n6328325346",
+    "name": "胡少文醫生",
+    "type": "医疗/综合诊所",
+    "address": "P315",
+    "contact": "",
+    "phone": "2651 8881",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.4488567,
+    "lng": 114.1742023,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/6328325346；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "大埔",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/6328325346",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n12000623251",
+    "name": "HealthCare Medical Centre",
+    "type": "健康养生/营养健康",
+    "address": "景峰徑 King Fung Path 屯門 Tuen Mun",
+    "contact": "",
+    "phone": "+852 21469977",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.403028,
+    "lng": 113.9795723,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/12000623251；核验状态：single_source_pending；类别：健康养生/营养健康；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "屯門",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "健康养生",
+    "secondaryCategory": "营养健康",
+    "matchedCategories": [
+      "健康养生/营养健康"
+    ],
+    "source": "https://www.openstreetmap.org/node/12000623251",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n12022232192",
+    "name": "Tuen Mun District Health Centre",
+    "type": "健康养生/营养健康",
+    "address": "1 133 青山公路－新墟段 Castle Peak Road – San Hui Tuen Mun",
+    "contact": "",
+    "phone": "+852 2332 2218",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.3976809,
+    "lng": 113.9771115,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/12022232192；核验状态：single_source_pending；类别：健康养生/营养健康；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "屯門",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "健康养生",
+    "secondaryCategory": "营养健康",
+    "matchedCategories": [
+      "健康养生/营养健康"
+    ],
+    "source": "https://www.openstreetmap.org/node/12022232192",
+    "website": "https://www.tmdhc.org.hk/en",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n12009545513",
+    "name": "NG Ka Yan TCM.",
+    "type": "医疗/中医诊所",
+    "address": "3 青棉徑 Tsing Min Path 屯門 Tuen Mun",
+    "contact": "",
+    "phone": "+852 3705 0232",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.4042215,
+    "lng": 113.9791499,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/12009545513；核验状态：single_source_pending；类别：医疗/中医诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "屯門",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "中医诊所",
+    "matchedCategories": [
+      "医疗/中医诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/12009545513",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n12089114644",
+    "name": "Dr. Smile",
+    "type": "医疗/口腔诊所",
+    "address": "9 青翠徑 Tsing Chui Path 屯門 Tuen Mun",
+    "contact": "",
+    "phone": "+85225651665",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.4028928,
+    "lng": 113.9788135,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/12089114644；核验状态：single_source_pending；类别：医疗/口腔诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "屯門",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "口腔诊所",
+    "matchedCategories": [
+      "医疗/口腔诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/12089114644",
+    "website": "https://www.drsmile.com.hk/index.php?section=home&lang=en",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-w464256754",
+    "name": "大欖牙科診所",
+    "type": "医疗/口腔诊所",
+    "address": "100 大欖涌路 Tai Lam Chung Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.3694009,
+    "lng": 114.0226176,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/way/464256754；核验状态：single_source_pending；类别：医疗/口腔诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "屯門",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "口腔诊所",
+    "matchedCategories": [
+      "医疗/口腔诊所"
+    ],
+    "source": "https://www.openstreetmap.org/way/464256754",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-w223278139",
+    "name": "仁愛分科診療所",
+    "type": "医疗/综合诊所",
+    "address": "6 Tuen Lee Street",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.3910407,
+    "lng": 113.9791256,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/way/223278139；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "屯門",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/way/223278139",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n13373988520",
+    "name": "屯門湖康家庭醫學診所",
+    "type": "医疗/综合诊所",
+    "address": "1 2 湖康街 Wu Hong Street",
+    "contact": "",
+    "phone": "+852 24583788",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.3771451,
+    "lng": 113.9671827,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/13373988520；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "屯門",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/13373988520",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-w258421185",
+    "name": "屯門診所",
+    "type": "医疗/综合诊所",
+    "address": "11 Tsing Yin Street",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.3995048,
+    "lng": 113.9758365,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/way/258421185；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "屯門",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/way/258421185",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4858263680",
+    "name": "Priority Healthcare Medical Centre",
+    "type": "健康养生/营养健康",
+    "address": "渣華道 Java Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2918121,
+    "lng": 114.1982121,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4858263680；核验状态：single_source_pending；类别：健康养生/营养健康；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "東區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "健康养生",
+    "secondaryCategory": "营养健康",
+    "matchedCategories": [
+      "健康养生/营养健康"
+    ],
+    "source": "https://www.openstreetmap.org/node/4858263680",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n13369034491",
+    "name": "港島樂妍站",
+    "type": "健康养生/营养健康",
+    "address": "2 1 康民街 Hong Man Street",
+    "contact": "",
+    "phone": "+852 2855 1333",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2654822,
+    "lng": 114.2342285,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/13369034491；核验状态：single_source_pending；类别：健康养生/营养健康；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "東區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "健康养生",
+    "secondaryCategory": "营养健康",
+    "matchedCategories": [
+      "健康养生/营养健康"
+    ],
+    "source": "https://www.openstreetmap.org/node/13369034491",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4844224175",
+    "name": "Chinese Medicine Clinic",
+    "type": "医疗/中医诊所",
+    "address": "翠杏街 Chui Hang Street",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2649898,
+    "lng": 114.2359884,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4844224175；核验状态：single_source_pending；类别：医疗/中医诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "東區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "中医诊所",
+    "matchedCategories": [
+      "医疗/中医诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4844224175",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n10796542494",
+    "name": "康河中醫診所",
+    "type": "医疗/中医诊所",
+    "address": "太康街 Tai Hong Street",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2847398,
+    "lng": 114.2232751,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/10796542494；核验状态：single_source_pending；类别：医疗/中医诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "東區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "中医诊所",
+    "matchedCategories": [
+      "医疗/中医诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/10796542494",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4847959966",
+    "name": "盛世中醫堂",
+    "type": "医疗/中医诊所",
+    "address": "筲箕灣道 Shau Kei Wan Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2803995,
+    "lng": 114.2240243,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4847959966；核验状态：single_source_pending；类别：医疗/中医诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "東區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "中医诊所",
+    "matchedCategories": [
+      "医疗/中医诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4847959966",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4860748990",
+    "name": "農本方中醫診所",
+    "type": "医疗/中医诊所",
+    "address": "英皇道 King's Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2917503,
+    "lng": 114.203932,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4860748990；核验状态：single_source_pending；类别：医疗/中医诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "東區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "中医诊所",
+    "matchedCategories": [
+      "医疗/中医诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4860748990",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4856216455",
+    "name": "Dr. Augustine Tsang Dental Centre",
+    "type": "医疗/口腔诊所",
+    "address": "筲箕灣道 Shau Kei Wan Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.283362,
+    "lng": 114.2207017,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4856216455；核验状态：single_source_pending；类别：医疗/口腔诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "東區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "口腔诊所",
+    "matchedCategories": [
+      "医疗/口腔诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4856216455",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4848058998",
+    "name": "Dr. Chow Yun Hong Bds",
+    "type": "医疗/口腔诊所",
+    "address": "太樂街 Tai Lok Street",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2828717,
+    "lng": 114.221033,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4848058998；核验状态：single_source_pending；类别：医疗/口腔诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "東區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "口腔诊所",
+    "matchedCategories": [
+      "医疗/口腔诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4848058998",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4860226271",
+    "name": "Dr. Wong Dental Clinic",
+    "type": "医疗/口腔诊所",
+    "address": "渣華道 Java Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.291439,
+    "lng": 114.1963302,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4860226271；核验状态：single_source_pending；类别：医疗/口腔诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "東區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "口腔诊所",
+    "matchedCategories": [
+      "医疗/口腔诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4860226271",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4858622474",
+    "name": "One Dental Clinic",
+    "type": "医疗/口腔诊所",
+    "address": "英皇道 King's Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2902813,
+    "lng": 114.1967855,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4858622474；核验状态：single_source_pending；类别：医疗/口腔诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "東區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "口腔诊所",
+    "matchedCategories": [
+      "医疗/口腔诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4858622474",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4860226249",
+    "name": "Pro Smile",
+    "type": "医疗/口腔诊所",
+    "address": "渣華道 Java Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2912005,
+    "lng": 114.1957617,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4860226249；核验状态：single_source_pending；类别：医疗/口腔诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "東區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "口腔诊所",
+    "matchedCategories": [
+      "医疗/口腔诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4860226249",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4860171929",
+    "name": "Tang Shiu Kin Dental Clinic",
+    "type": "医疗/口腔诊所",
+    "address": "七姊妹道 Tsat Tsz Mui Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2913622,
+    "lng": 114.2049914,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4860171929；核验状态：single_source_pending；类别：医疗/口腔诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "東區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "口腔诊所",
+    "matchedCategories": [
+      "医疗/口腔诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4860171929",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4860214624",
+    "name": "友頤牙科中心",
+    "type": "医疗/口腔诊所",
+    "address": "198 電氣道 Electric Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2882254,
+    "lng": 114.1927586,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4860214624；核验状态：single_source_pending；类别：医疗/口腔诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "東區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "口腔诊所",
+    "matchedCategories": [
+      "医疗/口腔诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4860214624",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n9876495180",
+    "name": "城健牙科綜合醫療中心",
+    "type": "医疗/口腔诊所",
+    "address": "1 38 成安街 Shing On Street",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2811668,
+    "lng": 114.2208896,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/9876495180；核验状态：single_source_pending；类别：医疗/口腔诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "東區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "口腔诊所",
+    "matchedCategories": [
+      "医疗/口腔诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/9876495180",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4848058984",
+    "name": "梁榮森牙科醫生",
+    "type": "医疗/口腔诊所",
+    "address": "筲箕灣道 Shau Kei Wan Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2827207,
+    "lng": 114.2212303,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4848058984；核验状态：single_source_pending；类别：医疗/口腔诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "東區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "口腔诊所",
+    "matchedCategories": [
+      "医疗/口腔诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4848058984",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4847959960",
+    "name": "鍾慶龍牙科醫生",
+    "type": "医疗/口腔诊所",
+    "address": "筲箕灣道 Shau Kei Wan Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2802262,
+    "lng": 114.2247492,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4847959960；核验状态：single_source_pending；类别：医疗/口腔诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "東區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "口腔诊所",
+    "matchedCategories": [
+      "医疗/口腔诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4847959960",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4856216462",
+    "name": "New York Chiropractic & Physiotherapy",
+    "type": "医疗/康复护理",
+    "address": "英皇道 King's Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2846182,
+    "lng": 114.2122259,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4856216462；核验状态：single_source_pending；类别：医疗/康复护理；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "東區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "康复护理",
+    "matchedCategories": [
+      "医疗/康复护理"
+    ],
+    "source": "https://www.openstreetmap.org/node/4856216462",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4848058992",
+    "name": "Dr. Chiu Chap Fai",
+    "type": "医疗/综合诊所",
+    "address": "筲箕灣道 Shau Kei Wan Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2829201,
+    "lng": 114.2210741,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4848058992；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "東區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4848058992",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4856216458",
+    "name": "Dr. Keith Lee",
+    "type": "医疗/综合诊所",
+    "address": "筲箕灣道 Shau Kei Wan Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2835194,
+    "lng": 114.2205873,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4856216458；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "東區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4856216458",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4856511536",
+    "name": "Dr. Ng Wing Fai",
+    "type": "医疗/综合诊所",
+    "address": "北角道 North Point Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2906901,
+    "lng": 114.1965882,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4856511536；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "東區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4856511536",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4855848394",
+    "name": "Family Medicine and Primary Care Centre (Taikoo)",
+    "type": "医疗/综合诊所",
+    "address": "太古城道 Taikoo Shing Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2856577,
+    "lng": 114.2138573,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4855848394；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "東區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4855848394",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4847959985",
+    "name": "位元堂",
+    "type": "医疗/综合诊所",
+    "address": "116 筲箕灣道 Shau Kei Wan Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.281859,
+    "lng": 114.221907,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4847959985；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "東區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4847959985",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4855921037",
+    "name": "余仁生",
+    "type": "医疗/综合诊所",
+    "address": "英皇道 King's Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2894964,
+    "lng": 114.1944076,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4855921037；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "東區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4855921037",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4265737634",
+    "name": "北京同仁堂",
+    "type": "医疗/综合诊所",
+    "address": "383 英皇道 King's Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2909581,
+    "lng": 114.1983712,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4265737634；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "東區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4265737634",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4860214623",
+    "name": "唐德倫醫生",
+    "type": "医疗/综合诊所",
+    "address": "電氣道 Electric Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2882049,
+    "lng": 114.1927399,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4860214623；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "東區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4860214623",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4856511521",
+    "name": "宏健醫務中心",
+    "type": "医疗/综合诊所",
+    "address": "英皇道 King's Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2900345,
+    "lng": 114.1949011,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4856511521；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "東區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4856511521",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-w101959236",
+    "name": "柏立基夫人健康院",
+    "type": "医疗/综合诊所",
+    "address": "140 七姊妹道 Tsat Tsz Mui Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2913235,
+    "lng": 114.2050052,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/way/101959236；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "東區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/way/101959236",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n13369034490",
+    "name": "柴灣學生健康服務中心",
+    "type": "医疗/综合诊所",
+    "address": "1 1 康民街 Hong Man Street",
+    "contact": "",
+    "phone": "+852 2515 2813",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2652055,
+    "lng": 114.2341876,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/13369034490；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "東區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/13369034490",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n13369034489",
+    "name": "柴灣家庭醫學診所",
+    "type": "医疗/综合诊所",
+    "address": "0 1 康民街 Hong Man Street",
+    "contact": "",
+    "phone": "+852 2556 0261",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2652091,
+    "lng": 114.2342504,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/13369034489；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "東區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/13369034489",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-w860828672",
+    "name": "西灣河健康中心",
+    "type": "医疗/综合诊所",
+    "address": "28 太康街 Tai Hong Street 西灣河 Sai Wan Ho",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.284575,
+    "lng": 114.2237429,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/way/860828672；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "東區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/way/860828672",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n12307152489",
+    "name": "霍建中 – 康健綜合醫務中心",
+    "type": "医疗/综合诊所",
+    "address": "杏花新城G60號舖",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2771777,
+    "lng": 114.2402951,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/12307152489；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "東區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/12307152489",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-w739000780",
+    "name": "養和東區醫療中心",
+    "type": "医疗/综合诊所",
+    "address": "5 阿公岩村道 A Kung Ngam Village Road",
+    "contact": "",
+    "phone": "+852 29171000",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2825284,
+    "lng": 114.232657,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/way/739000780；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "東區",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/way/739000780",
+    "website": "https://www.hksh-emc.com/",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n13154468785",
+    "name": "黃廣興中醫",
+    "type": "医疗/中医诊所",
+    "address": "第23座 Block 23",
+    "contact": "",
+    "phone": "+852 6138 3261",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.3859408,
+    "lng": 114.2021897,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/13154468785；核验状态：single_source_pending；类别：医疗/中医诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "沙田",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "中医诊所",
+    "matchedCategories": [
+      "医疗/中医诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/13154468785",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4529230084",
+    "name": "Codex Genetics",
+    "type": "医疗/综合诊所",
+    "address": "G06 科技大道西 Science Park West Avenue Chun Ma",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.4258649,
+    "lng": 114.2122883,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4529230084；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "沙田",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4529230084",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-w390448490",
+    "name": "仁安醫院",
+    "type": "医疗/综合诊所",
+    "address": "18 富健街 Fu Kin Street",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.3603692,
+    "lng": 114.1753967,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/way/390448490；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "沙田",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/way/390448490",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-w188007061",
+    "name": "沙田 (大圍) 診所",
+    "type": "医疗/综合诊所",
+    "address": "2 文禮路 Man Lai Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.3774186,
+    "lng": 114.1841016,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/way/188007061；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "沙田",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/way/188007061",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-w1447151465",
+    "name": "沙田瀝源健康院",
+    "type": "医疗/综合诊所",
+    "address": "9 瀝源街 Lek Yuen Street",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.3837092,
+    "lng": 114.1918595,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/way/1447151465；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "沙田",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/way/1447151465",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n10032632816",
+    "name": "青木堂中醫",
+    "type": "医疗/中医诊所",
+    "address": "48 南昌街 Nam Cheong Street",
+    "contact": "",
+    "phone": "+852 2381 0023",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.3272078,
+    "lng": 114.1616928,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/10032632816；核验状态：single_source_pending；类别：医疗/中医诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "深水埗",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "中医诊所",
+    "matchedCategories": [
+      "医疗/中医诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/10032632816",
+    "website": "https://icauldron.com/",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4862727301",
+    "name": "恆皓護齒中心",
+    "type": "医疗/口腔诊所",
+    "address": "營盤街 Camp Street",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.3351141,
+    "lng": 114.1607822,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4862727301；核验状态：single_source_pending；类别：医疗/口腔诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "深水埗",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "口腔诊所",
+    "matchedCategories": [
+      "医疗/口腔诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4862727301",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4864740327",
+    "name": "陽明牙醫診所",
+    "type": "医疗/口腔诊所",
+    "address": "元州街 Un Chau Street",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.3383173,
+    "lng": 114.155301,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4864740327；核验状态：single_source_pending；类别：医疗/口腔诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "深水埗",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "口腔诊所",
+    "matchedCategories": [
+      "医疗/口腔诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4864740327",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4862113264",
+    "name": "周國雄醫生",
+    "type": "医疗/综合诊所",
+    "address": "168 大埔道 Tai Po Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.3310821,
+    "lng": 114.165508,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4862113264；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "深水埗",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4862113264",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4862649040",
+    "name": "國際獅子會腎病教育中心及研究基金洗腎中心",
+    "type": "医疗/综合诊所",
+    "address": "132 元州街 Un Chau Street",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.3341571,
+    "lng": 114.1610586,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4862649040；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "深水埗",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4862649040",
+    "website": "http://www.lkec-lionskidney.org.hk/",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-w384987650",
+    "name": "寶血醫院",
+    "type": "医疗/综合诊所",
+    "address": "113 元州街 Un Chau Street",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.333991,
+    "lng": 114.1616619,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/way/384987650；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "深水埗",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/way/384987650",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4865157199",
+    "name": "希維爾醫務中心",
+    "type": "医疗/综合诊所",
+    "address": "青山道 Castle Peak Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.337497,
+    "lng": 114.1577295,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4865157199；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "深水埗",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4865157199",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n10221422808",
+    "name": "永生堂",
+    "type": "医疗/综合诊所",
+    "address": "5 長沙灣道 Cheung Sha Wan Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.3267647,
+    "lng": 114.1672286,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/10221422808；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "深水埗",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/10221422808",
+    "website": "https://wingsangtong.com/",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4862713650",
+    "name": "深水埗醫務中心",
+    "type": "医疗/综合诊所",
+    "address": "欽州街 Yen Chow Street",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.3293803,
+    "lng": 114.1586339,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4862713650；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "深水埗",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4862713650",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4865164052",
+    "name": "西醫馮建華",
+    "type": "医疗/综合诊所",
+    "address": "東京街 Tonkin Street",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.3366671,
+    "lng": 114.1589216,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4865164052；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "深水埗",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4865164052",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4490862543",
+    "name": "西醫黃志偉醫務所",
+    "type": "医疗/综合诊所",
+    "address": "平台 podium",
+    "contact": "",
+    "phone": "+852 2779 9031",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.3321771,
+    "lng": 114.1671206,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4490862543；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "深水埗",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4490862543",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n9442471803",
+    "name": "視點護眼",
+    "type": "医疗/综合诊所",
+    "address": "140C",
+    "contact": "",
+    "phone": "+852 6113 5401",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.3307435,
+    "lng": 114.1595495,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/9442471803；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "深水埗",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/9442471803",
+    "website": "https://mewe.com/p/ipointoptical",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-w1452370419",
+    "name": "長沙灣賽馬會家庭醫學診所",
+    "type": "医疗/综合诊所",
+    "address": "2 廣利道 Kwong Lee Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.3405687,
+    "lng": 114.1585108,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/way/1452370419；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "深水埗",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/way/1452370419",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4862129595",
+    "name": "確康脊醫中心",
+    "type": "推拿按摩/正骨推拿",
+    "address": "70B 大埔道 Tai Po Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.3287511,
+    "lng": 114.1668711,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4862129595；核验状态：single_source_pending；类别：推拿按摩/正骨推拿；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "深水埗",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "推拿按摩",
+    "secondaryCategory": "正骨推拿",
+    "matchedCategories": [
+      "推拿按摩/正骨推拿"
+    ],
+    "source": "https://www.openstreetmap.org/node/4862129595",
+    "website": "https://cogentchiro.com/",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4860056198",
+    "name": "Max PLus Healthcare Centre",
+    "type": "健康养生/营养健康",
+    "address": "波斯富街 Percival Street",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2781956,
+    "lng": 114.183561,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4860056198；核验状态：single_source_pending；类别：健康养生/营养健康；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "灣仔",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "健康养生",
+    "secondaryCategory": "营养健康",
+    "matchedCategories": [
+      "健康养生/营养健康"
+    ],
+    "source": "https://www.openstreetmap.org/node/4860056198",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n6404185192",
+    "name": "北京同仁堂福明堂中醫藥中心",
+    "type": "医疗/中医诊所",
+    "address": "6-18 天樂里 Tin Lok Lane Wan Chai",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.278146,
+    "lng": 114.17963,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/6404185192；核验状态：single_source_pending；类别：医疗/中医诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "灣仔",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "中医诊所",
+    "matchedCategories": [
+      "医疗/中医诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/6404185192",
+    "website": "https://www.fookmingtong.com.hk",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4855903929",
+    "name": "拉法中醫",
+    "type": "医疗/中医诊所",
+    "address": "英皇道 King's Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2855763,
+    "lng": 114.1927963,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4855903929；核验状态：single_source_pending；类别：医疗/中医诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "灣仔",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "中医诊所",
+    "matchedCategories": [
+      "医疗/中医诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4855903929",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n1299465446",
+    "name": "李灼珊中醫館",
+    "type": "医疗/中医诊所",
+    "address": "218 灣仔道 Wan Chai Road Wan Chai",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2778874,
+    "lng": 114.1784049,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/1299465446；核验状态：single_source_pending；类别：医疗/中医诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "灣仔",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "中医诊所",
+    "matchedCategories": [
+      "医疗/中医诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/1299465446",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4860342495",
+    "name": "Medi Fast Health Check Centre",
+    "type": "医疗/体检中心",
+    "address": "禮頓道 Leighton Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2776362,
+    "lng": 114.1844711,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4860342495；核验状态：single_source_pending；类别：医疗/体检中心；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "灣仔",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "体检中心",
+    "matchedCategories": [
+      "医疗/体检中心"
+    ],
+    "source": "https://www.openstreetmap.org/node/4860342495",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4855903933",
+    "name": "仁心牙科",
+    "type": "医疗/口腔诊所",
+    "address": "英皇道 King's Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2861107,
+    "lng": 114.192779,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4855903933；核验状态：single_source_pending；类别：医疗/口腔诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "灣仔",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "口腔诊所",
+    "matchedCategories": [
+      "医疗/口腔诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4855903933",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n8212399083",
+    "name": "健牙仕",
+    "type": "医疗/口腔诊所",
+    "address": "軒尼詩道 Hennessy Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2790736,
+    "lng": 114.179959,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/8212399083；核验状态：single_source_pending；类别：医疗/口腔诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "灣仔",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "口腔诊所",
+    "matchedCategories": [
+      "医疗/口腔诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/8212399083",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-w260868026",
+    "name": "麥理浩牙科中心",
+    "type": "医疗/口腔诊所",
+    "address": "286 皇后大道東 Queen's Road East",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2752123,
+    "lng": 114.1784784,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/way/260868026；核验状态：single_source_pending；类别：医疗/口腔诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "灣仔",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "口腔诊所",
+    "matchedCategories": [
+      "医疗/口腔诊所"
+    ],
+    "source": "https://www.openstreetmap.org/way/260868026",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4855903934",
+    "name": "CICE",
+    "type": "医疗/综合诊所",
+    "address": "英皇道 King's Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2862087,
+    "lng": 114.1927967,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4855903934；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "灣仔",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4855903934",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4850169217",
+    "name": "Hercules Medical Diognostic & MRI Centre",
+    "type": "医疗/综合诊所",
+    "address": "告士打道 Gloucester Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2808052,
+    "lng": 114.1809887,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4850169217；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "灣仔",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4850169217",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4856120478",
+    "name": "Med-Link Medical Centre",
+    "type": "医疗/综合诊所",
+    "address": "摩理臣山道 Morrison Hill Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2777786,
+    "lng": 114.1796941,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4856120478；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "灣仔",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4856120478",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4860805977",
+    "name": "Spring Family Medical Clinic",
+    "type": "医疗/综合诊所",
+    "address": "英皇道 King's Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2825361,
+    "lng": 114.1922915,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4860805977；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "灣仔",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4860805977",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4862008486",
+    "name": "Tiarijin Medical Specialist Center",
+    "type": "医疗/综合诊所",
+    "address": "浣紗街 Wun Sha Street",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2791178,
+    "lng": 114.1924578,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4862008486；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "灣仔",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4862008486",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4860774423",
+    "name": "余仁生",
+    "type": "医疗/综合诊所",
+    "address": "利園山道 Lee Garden Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2787421,
+    "lng": 114.1837967,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4860774423；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "灣仔",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4860774423",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4174631891",
+    "name": "北京同仁堂",
+    "type": "医疗/综合诊所",
+    "address": "駱克道 Lockhart Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2804242,
+    "lng": 114.1826315,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4174631891；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "灣仔",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4174631891",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4856278454",
+    "name": "名仕醫務中心",
+    "type": "医疗/综合诊所",
+    "address": "186 軒尼詩道 Hennessy Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2775588,
+    "lng": 114.1741538,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4856278454；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "灣仔",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4856278454",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n8449215677",
+    "name": "極殿",
+    "type": "医疗/综合诊所",
+    "address": "15 白沙道 Pak Sha Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.279214,
+    "lng": 114.184263,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/8449215677；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "灣仔",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/8449215677",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-w455976903",
+    "name": "灣仔分科診所",
+    "type": "医疗/综合诊所",
+    "address": "99 堅尼地道 Kennedy Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2737679,
+    "lng": 114.1749299,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/way/455976903；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "灣仔",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/way/455976903",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n5255082723",
+    "name": "灣仔捐血站",
+    "type": "医疗/综合诊所",
+    "address": "7 告士打道 Gloucester Road Wan Chai",
+    "contact": "",
+    "phone": "+852 6392 5778",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.27962,
+    "lng": 114.1731,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/5255082723；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "灣仔",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/5255082723",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n13373824830",
+    "name": "灣仔貝夫人家庭醫學診所",
+    "type": "医疗/综合诊所",
+    "address": "LG",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2753689,
+    "lng": 114.177859,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/13373824830；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "灣仔",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/13373824830",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-w113146461",
+    "name": "聖保祿醫院",
+    "type": "医疗/综合诊所",
+    "address": "2 東院道 Eastern Hospital Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2780884,
+    "lng": 114.1882187,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/way/113146461；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "灣仔",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/way/113146461",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4860342496",
+    "name": "草醫",
+    "type": "医疗/综合诊所",
+    "address": "禮頓道 Leighton Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2777395,
+    "lng": 114.1841862,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4860342496；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "灣仔",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4860342496",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n6424771907",
+    "name": "莊駿祥醫生",
+    "type": "医疗/综合诊所",
+    "address": "軒尼詩道 Hennessy Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2784964,
+    "lng": 114.1792694,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/6424771907；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "灣仔",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/6424771907",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n4860203943",
+    "name": "豐盛行",
+    "type": "医疗/综合诊所",
+    "address": "Shop C1 160 電氣道 Electric Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.287271,
+    "lng": 114.1919479,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/4860203943；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "灣仔",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/4860203943",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-w759892852",
+    "name": "鄧志昂專科診療院",
+    "type": "医疗/综合诊所",
+    "address": "284 皇后大道東 Queen's Road East",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2752313,
+    "lng": 114.1782143,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/way/759892852；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "灣仔",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/way/759892852",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n9698180256",
+    "name": "銅鑼灣捐血站",
+    "type": "医疗/综合诊所",
+    "address": "2-4 羅素街 Russell Street",
+    "contact": "",
+    "phone": "+852 2834 2084",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2786114,
+    "lng": 114.1815544,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/9698180256；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "灣仔",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/9698180256",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-w230722324",
+    "name": "養和醫院",
+    "type": "医疗/综合诊所",
+    "address": "2 黃泥涌道 Wong Nai Chung Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2694361,
+    "lng": 114.1828947,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/way/230722324；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "灣仔",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/way/230722324",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-w948435421",
+    "name": "香港港安醫院",
+    "type": "医疗/综合诊所",
+    "address": "40 司徒拔道 Stubbs Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2635405,
+    "lng": 114.1841733,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/way/948435421；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "灣仔",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/way/948435421",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-w266353153",
+    "name": "香港紅卍字會",
+    "type": "医疗/综合诊所",
+    "address": "25 皇龍道 Dragon Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2820052,
+    "lng": 114.1930471,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/way/266353153；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "灣仔",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/way/266353153",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n12517815616",
+    "name": "和順堂中醫診所",
+    "type": "医疗/中医诊所",
+    "address": "青山公路－深井段 Castle Peak Road – Sham Tseng",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.3671694,
+    "lng": 114.0613806,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/12517815616；核验状态：single_source_pending；类别：医疗/中医诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "荃灣",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "中医诊所",
+    "matchedCategories": [
+      "医疗/中医诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/12517815616",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n9907891274",
+    "name": "劉大志黃彩欣牙科醫務所",
+    "type": "医疗/口腔诊所",
+    "address": "4 兆和街 Shiu Wo Street",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.3722485,
+    "lng": 114.1169972,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/9907891274；核验状态：single_source_pending；类别：医疗/口腔诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "荃灣",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "口腔诊所",
+    "matchedCategories": [
+      "医疗/口腔诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/9907891274",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-w203136651",
+    "name": "明愛賽馬會荃灣診所",
+    "type": "医疗/综合诊所",
+    "address": "146 Chung On Street",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.3680429,
+    "lng": 114.116073,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/way/203136651；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "荃灣",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/way/203136651",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-w359305537",
+    "name": "紅十字會捐血中心",
+    "type": "医疗/综合诊所",
+    "address": "8 大河道 Tai Ho Road 荃灣",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.3729466,
+    "lng": 114.1166806,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/way/359305537；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "荃灣",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/way/359305537",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n3217057379",
+    "name": "葛量洪夫人健康院",
+    "type": "医疗/综合诊所",
+    "address": "青山公路－荃灣段 Castle Peak Road – Tsuen Wan",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.3705901,
+    "lng": 114.1197301,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/3217057379；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "荃灣",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/3217057379",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n12138908007",
+    "name": "鐘家輝醫生",
+    "type": "医疗/综合诊所",
+    "address": "青山公路－深井段 Castle Peak Road – Sham Tseng",
+    "contact": "",
+    "phone": "24918373",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.367834,
+    "lng": 114.0604565,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/12138908007；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "荃灣",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/12138908007",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-w322885525",
+    "name": "伍若瑜夫人健康院",
+    "type": "医疗/综合诊所",
+    "address": "310 和宜合道 Wo Yi Hop Road 葵涌 Kwai Chung",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.3762182,
+    "lng": 114.1367673,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/way/322885525；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "葵青",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/way/322885525",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-w389513978",
+    "name": "北葵涌診療所",
+    "type": "医疗/综合诊所",
+    "address": "125 大白田街 Tai Pak Tin Street",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.3697904,
+    "lng": 114.1401209,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/way/389513978；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "葵青",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/way/389513978",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-w206061171",
+    "name": "南葵涌賽馬會分科診療所",
+    "type": "医疗/综合诊所",
+    "address": "310 葵盛圍 Kwai Shing Circuit 葵盛 Kwai Shing",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.3607533,
+    "lng": 114.1252411,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/way/206061171；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "葵青",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/way/206061171",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-w205666089",
+    "name": "青衣市區家庭醫學診所",
+    "type": "医疗/综合诊所",
+    "address": "21 青綠街 Tsing Luk Street",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.3545595,
+    "lng": 114.1058934,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/way/205666089；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "葵青",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/way/205666089",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n13991876046",
+    "name": "Central Health",
+    "type": "健康养生/营养健康",
+    "address": "109A",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2960522,
+    "lng": 114.0162501,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/13991876046；核验状态：single_source_pending；类别：健康养生/营养健康；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "離島",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "健康养生",
+    "secondaryCategory": "营养健康",
+    "matchedCategories": [
+      "健康养生/营养健康"
+    ],
+    "source": "https://www.openstreetmap.org/node/13991876046",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n7159756146",
+    "name": "卓健 Quality HealthCare",
+    "type": "健康养生/营养健康",
+    "address": "108",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2961804,
+    "lng": 114.0162504,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/7159756146；核验状态：single_source_pending；类别：健康养生/营养健康；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "離島",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "健康养生",
+    "secondaryCategory": "营养健康",
+    "matchedCategories": [
+      "健康养生/营养健康"
+    ],
+    "source": "https://www.openstreetmap.org/node/7159756146",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n9871496198",
+    "name": "為群跌打",
+    "type": "医疗/中医诊所",
+    "address": "香港街市 Hong Kong Market",
+    "contact": "",
+    "phone": "+852-9443-0080",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2811333,
+    "lng": 113.9353899,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/9871496198；核验状态：single_source_pending；类别：医疗/中医诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "離島",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "中医诊所",
+    "matchedCategories": [
+      "医疗/中医诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/9871496198",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n7159790590",
+    "name": "海灣牙科 Bayside Dental",
+    "type": "医疗/口腔诊所",
+    "address": "109B",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2960073,
+    "lng": 114.0162258,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/7159790590；核验状态：single_source_pending；类别：医疗/口腔诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "離島",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "口腔诊所",
+    "matchedCategories": [
+      "医疗/口腔诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/7159790590",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-w864042201",
+    "name": "北南丫家庭醫學診所",
+    "type": "医疗/综合诊所",
+    "address": "100 榕樹灣大街 Yung Shue Wan Main Street",
+    "contact": "",
+    "phone": "+852 2982 0213",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2243101,
+    "lng": 114.111151,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/way/864042201；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "離島",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/way/864042201",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n13371531369",
+    "name": "北大嶼山家庭醫學綜合中心（北大嶼山醫院）",
+    "type": "医疗/综合诊所",
+    "address": "8 松仁路 Chung Yan Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2825514,
+    "lng": 113.9389229,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/13371531369；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "離島",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/13371531369",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-w378596739",
+    "name": "坪洲健康院",
+    "type": "医疗/综合诊所",
+    "address": "1A 聖家路 Shing Ka Road 坪洲 Peng Chau",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2836493,
+    "lng": 114.0391976,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/way/378596739；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "離島",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/way/378596739",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-w316044957",
+    "name": "大澳賽馬會診所",
+    "type": "医疗/综合诊所",
+    "address": "103 石仔埗街 Shek Tsai Po Street 大澳 Tai O",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2556856,
+    "lng": 113.8580109,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/way/316044957；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "離島",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/way/316044957",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-w1338981215",
+    "name": "彭意殷醫生醫務所",
+    "type": "医疗/综合诊所",
+    "address": "6",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2962325,
+    "lng": 113.9532104,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/way/1338981215；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "離島",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/way/1338981215",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n7159790592",
+    "name": "百草軒",
+    "type": "医疗/综合诊所",
+    "address": "106B",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.2963491,
+    "lng": 114.0160717,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/7159790592；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "離島",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/7159790592",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n12299975257",
+    "name": "宋衛華醫生",
+    "type": "医疗/综合诊所",
+    "address": "31",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.3358989,
+    "lng": 114.2056913,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/12299975257；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "黃大仙",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/12299975257",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-n12299975238",
+    "name": "李信昌醫生",
+    "type": "医疗/综合诊所",
+    "address": "10",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.3350498,
+    "lng": 114.2054683,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/node/12299975238；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "黃大仙",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/node/12299975238",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-w195543370",
+    "name": "東九龍分科診療所",
+    "type": "医疗/综合诊所",
+    "address": "160 斧山道 Hammer Hill Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.339383,
+    "lng": 114.2079296,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/way/195543370；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "黃大仙",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/way/195543370",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-w184550808",
+    "name": "柏立基健康院",
+    "type": "医疗/综合诊所",
+    "address": "600 太子道東 Prince Edward Road East",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.3324492,
+    "lng": 114.1955913,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/way/184550808；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "黃大仙",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/way/184550808",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-w263310063",
+    "name": "橫頭磡賽馬會診所",
+    "type": "医疗/综合诊所",
+    "address": "200 聯合道 Junction Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.3389644,
+    "lng": 114.1852923,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/way/263310063；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "黃大仙",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/way/263310063",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
+  },
+  {
+    "id": "health_stage1_osm-w514448540",
+    "name": "香港乳癌基金會賽馬會乳健中心 (九龍)",
+    "type": "医疗/综合诊所",
+    "address": "28 龍翔道 Lung Cheung Road",
+    "contact": "",
+    "phone": "",
+    "staff": "",
+    "status": "基础池",
+    "lat": 22.3368419,
+    "lng": 114.2071701,
+    "visits": [
+      {
+        "date": "2026-07-30",
+        "by": "全港商业健康机构公海库首批导入",
+        "note": "来源：https://www.openstreetmap.org/way/514448540；核验状态：single_source_pending；类别：医疗/综合诊所；首批阶段版，待持续补充第二来源核验。"
+      }
+    ],
+    "ownerId": "base_health_pool",
+    "ownerName": "商业健康机构公海库",
+    "ownerAvatar": "🏥",
+    "district": "黃大仙",
+    "isBaseClinic": true,
+    "entryKind": "institution",
+    "primaryCategory": "医疗",
+    "secondaryCategory": "综合诊所",
+    "matchedCategories": [
+      "医疗/综合诊所"
+    ],
+    "source": "https://www.openstreetmap.org/way/514448540",
+    "website": "",
+    "verificationStatus": "single_source_pending",
+    "sourceType": "OpenStreetMap全港缓存批量重筛",
+    "dataVersion": "health-open-pool-stage1-2026-07-30"
   }
 ]
