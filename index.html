@@ -622,7 +622,7 @@ body.home-mode .lead-home { display:flex; }
 .lead-owner-pill { flex-shrink:0; display:inline-flex; align-items:center; gap:4px; max-width:88px; border-radius:999px; padding:4px 7px; background:rgba(74,144,217,.14); color:#b9ddff; font-size:11px; font-weight:900; overflow:hidden; }
 .lead-owner-pill.unclaimed { background:rgba(255,255,255,.07); color:var(--text2); }
 .lead-owner-pill span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-.lead-actions { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:7px; margin-top:10px; }
+.lead-actions { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:7px; margin-top:10px; }
 .lead-actions button, .lead-actions a { text-align:center; text-decoration:none; border:1px solid #444; background:var(--bg); color:var(--text); border-radius:10px; padding:8px 5px; font-size:12px; font-weight:900; }
 .lead-actions .claim { border-color:rgba(74,144,217,.55); color:#9dccff; }
 .lead-actions .phone { border-color:rgba(46,204,113,.55); color:#96f0ba; }
@@ -652,7 +652,7 @@ body.home-mode .lead-distance { color:#ffb65c; font-weight:900; }
 body.home-mode .batch-import-note { margin-top:6px; color:var(--text2); font-size:11px; line-height:1.35; }
 
 
-.app-nav { position:fixed; left:0; right:0; bottom:0; z-index:2900; display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:0; background:rgba(15,20,35,.96); border-top:1px solid rgba(255,255,255,.12); padding:6px 6px max(6px, env(safe-area-inset-bottom)); backdrop-filter:blur(12px); box-shadow:0 -4px 18px rgba(0,0,0,.34); }
+.app-nav { position:fixed; left:0; right:0; bottom:0; z-index:2900; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:0; background:rgba(15,20,35,.96); border-top:1px solid rgba(255,255,255,.12); padding:6px 6px max(6px, env(safe-area-inset-bottom)); backdrop-filter:blur(12px); box-shadow:0 -4px 18px rgba(0,0,0,.34); }
 .app-nav button { border:0; background:transparent; color:var(--text2); border-radius:10px; padding:9px 4px; font-size:13px; font-weight:900; }
 .app-nav button.active { background:var(--primary); color:#fff; }
 #btnMall, #btnSettings { display:none !important; }
@@ -714,17 +714,13 @@ body.home-mode .map-filter-bar { display:none !important; }
 </style>
 </head>
 <body class="home-mode">
-<div class="app-nav" id="appNav"><button data-tab="leads" onclick="showLeadHome()">线索</button><button data-tab="map" onclick="showMapHome()">地图</button><button data-tab="resources" onclick="openResourceCenter()">资源</button><button data-tab="dashboard" onclick="openDashboardFromHome()">看板</button><button data-tab="my" onclick="openMyFromNav()">我的</button></div>
+<div class="app-nav" id="appNav"><button data-tab="leads" onclick="showLeadHome()">线索</button><button data-tab="map" onclick="showMapHome()">地图</button><button data-tab="resources" onclick="openResourceCenter()">资源</button><button data-tab="my" onclick="openMyFromNav()">我的</button></div>
 
 <!-- Lead list home -->
 <div class="lead-home" id="leadHome">
   <div class="lead-home-header">
     <div class="lead-home-top">
       <h1>BD工作台</h1>
-      <button class="lead-tab-btn" onclick="triggerBatchErrorImport()">上传报错</button>
-      <input type="file" id="batchErrorFile" accept=".xlsx,.xls" style="display:none" onchange="handleBatchErrorImport(event)">
-      <button class="lead-tab-btn" onclick="openBatchShopImport()">批量导入店铺</button>
-      <input type="file" id="batchShopFile" accept=".xlsx,.xls" style="display:none" onchange="handleBatchShopFile(event)">
     </div>
     <div class="lead-search-row"><input id="leadSearchInput" placeholder="搜索店铺/地址/类型/电话" oninput="leadSearchTerm=this.value.trim().toLowerCase(); renderLeadHomeList();"></div>
     <div class="lead-filter-section ownership">
@@ -1053,7 +1049,10 @@ body.home-mode .map-filter-bar { display:none !important; }
         <div class="system-status-item">网络<b id="myStatusNetwork">-</b></div>
         <div class="system-status-item">业务数据<b id="myStatusCounts">-</b></div>
       </div>
-      <button class="btn btn-ghost" onclick="refreshMySystemStatus()" style="width:100%">刷新状态</button>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="openDashboardFromMy()">团队统计</button>
+        <button class="btn btn-ghost" onclick="refreshMySystemStatus()">刷新状态</button>
+      </div>
       <p style="margin-top:10px">版本：v3.7.0-hardening-p9（P10 UI预览）</p>
     </div>
 
@@ -1100,6 +1099,12 @@ body.home-mode .map-filter-bar { display:none !important; }
           <div class="admin-gate-error" id="adminGateError" aria-live="polite"></div>
         </div>
         <div id="adminControls" hidden>
+        <div class="btn-row" style="margin-bottom:10px">
+          <button class="btn btn-ghost" onclick="triggerBatchErrorImport()">上传报错表</button>
+          <input type="file" id="batchErrorFile" accept=".xlsx,.xls" style="display:none" onchange="handleBatchErrorImport(event)">
+          <button class="btn btn-ghost" onclick="openBatchShopImport()">批量导入店铺</button>
+          <input type="file" id="batchShopFile" accept=".xlsx,.xls" style="display:none" onchange="handleBatchShopFile(event)">
+        </div>
         <div class="admin-danger-note">批量删除、回收站、缓存重置及历史数据清理仅供管理员谨慎使用。删除仍沿用现有软删除与云端同步安全流程。</div>
         <button class="btn btn-danger" onclick="deleteSelectedPlaces()" style="width:100%; margin-bottom:10px">🗑 删除资源中心所选</button>
         <button class="btn btn-danger" onclick="deleteCurrentFilteredPlaces()" style="width:100%; margin-bottom:10px">🧹 删除资源中心当前筛选</button>
@@ -2851,8 +2856,11 @@ function showMapHome() {
   setTimeout(() => { if (map) map.invalidateSize(); }, 80);
 }
 function openDashboardFromHome() {
+  openDashboardFromMy();
+}
+function openDashboardFromMy() {
   closePrimaryPanels();
-  setAppTab('dashboard');
+  setAppTab('my');
   document.body.classList.remove('home-mode');
   setTimeout(() => openDashboard(), 90);
 }
@@ -3043,7 +3051,7 @@ function renderLeadHomeList() {
   const mineExportRow = document.getElementById('leadMineExportRow');
   if (mineExportRow) mineExportRow.classList.toggle('active', leadFilter === 'mine');
   const filterNames = { all:'全部', unclaimed:'未认领', claimed:'已认领', mine:'我的认领', error:'报错', phone:'有联系方式' };
-  summary.textContent = `${filterNames[leadFilter] || '线索'}：当前 ${rows.length}/${total} 条｜默认按距离近到远｜已认领 ${claimed}｜报错 ${errorCount}｜有联系方式 ${phone}`;
+  summary.textContent = `当前 ${rows.length} 条 · 已认领 ${claimed} · 有联系方式 ${phone}`;
   body.innerHTML = rows.length ? rows.slice(0,180).map(leadCardHtml).join('') : '<div class="lead-empty">没有符合条件的线索</div>';
 }
 async function exportLeadErrorRowsXlsx() {
@@ -3097,27 +3105,22 @@ function leadCardHtml(p) {
   const mine = p._leadMine !== undefined ? p._leadMine : (!isUnclaimedOwnerId(ownerId) && ownerId === getCurrentOwnerId());
   const category = p._leadPrimaryCategory ? { primary:p._leadPrimaryCategory, secondary:p._leadSecondaryCategory } : getLeadCategory(p);
   const err = p._leadError !== undefined ? p._leadError : hasLeadError(p);
-  const dist = p._leadDistanceKm !== undefined ? p._leadDistanceKm : getLeadDistanceKm(p);
-  const distText = Number.isFinite(dist) ? `${dist.toFixed(dist < 10 ? 1 : 0)} km` : '等待定位';
-  const distClass = Number.isFinite(dist) ? '' : ' unknown';
   const owner = claimed ? `<span>${avatarInlineHtml(getOwnerAvatar(p))}${esc(getOwnerLabel(p))}</span>` : '<span>未认领</span>';
-  const safePhone = safeTelephone(p.phone);
-  const phoneBtn = safePhone ? `<a class="phone" href="tel:${escAttr(safePhone)}" onclick="event.stopPropagation()">📞 联络</a>` : `<button class="phone" onclick="event.stopPropagation(); toast('暂无电话')">📞 无电话</button>`;
-  const claimBtn = mine ? `<button class="claim" onclick="editClaimedLead('${jsStr(p.id)}')">✏️ 编辑</button>` : `<button class="claim" onclick="claimLead('${jsStr(p.id)}')">${claimed ? '👤 已认领' : '👤 认领'}</button>`;
-  const resolveBtn = err ? `<button class="resolve" onclick="resolveLeadError('${jsStr(p.id)}')">✅ 已修正</button>` : `<button class="map" onclick="locateLeadOnMap('${jsStr(p.id)}')">🗺 地图</button>`;
+  const primaryBtn = mine
+    ? `<button class="claim" onclick="editClaimedLead('${jsStr(p.id)}')">编辑详情</button>`
+    : claimed
+      ? `<button class="claim" onclick="locateLeadOnMap('${jsStr(p.id)}')">查看详情</button>`
+      : `<button class="claim" onclick="claimLead('${jsStr(p.id)}')">认领</button>`;
   return `<div class="lead-card ${mine?'claimed-mine':''} ${err?'error':''}" onclick="locateLeadOnMap('${jsStr(p.id)}')">
     <div class="lead-card-top"><div class="lead-card-main">
       <div class="lead-card-name">${esc(p.name || '未命名店铺')}</div>
-      <div class="lead-card-type">${esc(category.primary)} · ${esc(category.secondary)}${p.phone ? '<span class="lead-tag phone">电话</span>' : ''}${err ? '<span class="lead-tag err">'+esc(p._leadErrorLabel || getLeadErrorLabel(p))+'</span>' : ''}</div>
-      <div class="lead-distance-field${distClass}">📍 距离：${distText}</div>
+      <div class="lead-card-type">${esc(category.secondary)} · ${esc(p.district || '地区待核')}</div>
       <div class="lead-card-addr">${esc(p.address || '暂无地址')}</div>
-      ${err ? '<div class="lead-error-line">⚠️ ' + esc(p._leadErrorLabel || getLeadErrorLabel(p)) + ' · 待核实</div>' : ''}
+      ${err ? '<div class="lead-error-line">资料待核实</div>' : ''}
     </div><div class="lead-owner-pill ${claimed?'':'unclaimed'}">${owner}</div></div>
     <div class="lead-actions" onclick="event.stopPropagation()">
-      ${claimBtn}
-      ${phoneBtn}
-      <button class="error" onclick="reportLeadError('${jsStr(p.id)}')">⚠️ 报错</button>
-      ${resolveBtn}
+      ${primaryBtn}
+      <button class="map" onclick="locateLeadOnMap('${jsStr(p.id)}')">导航</button>
     </div>
   </div>`;
 }

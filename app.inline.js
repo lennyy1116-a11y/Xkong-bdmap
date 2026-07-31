@@ -1227,8 +1227,11 @@ function showMapHome() {
   setTimeout(() => { if (map) map.invalidateSize(); }, 80);
 }
 function openDashboardFromHome() {
+  openDashboardFromMy();
+}
+function openDashboardFromMy() {
   closePrimaryPanels();
-  setAppTab('dashboard');
+  setAppTab('my');
   document.body.classList.remove('home-mode');
   setTimeout(() => openDashboard(), 90);
 }
@@ -1419,7 +1422,7 @@ function renderLeadHomeList() {
   const mineExportRow = document.getElementById('leadMineExportRow');
   if (mineExportRow) mineExportRow.classList.toggle('active', leadFilter === 'mine');
   const filterNames = { all:'全部', unclaimed:'未认领', claimed:'已认领', mine:'我的认领', error:'报错', phone:'有联系方式' };
-  summary.textContent = `${filterNames[leadFilter] || '线索'}：当前 ${rows.length}/${total} 条｜默认按距离近到远｜已认领 ${claimed}｜报错 ${errorCount}｜有联系方式 ${phone}`;
+  summary.textContent = `当前 ${rows.length} 条 · 已认领 ${claimed} · 有联系方式 ${phone}`;
   body.innerHTML = rows.length ? rows.slice(0,180).map(leadCardHtml).join('') : '<div class="lead-empty">没有符合条件的线索</div>';
 }
 async function exportLeadErrorRowsXlsx() {
@@ -1473,27 +1476,22 @@ function leadCardHtml(p) {
   const mine = p._leadMine !== undefined ? p._leadMine : (!isUnclaimedOwnerId(ownerId) && ownerId === getCurrentOwnerId());
   const category = p._leadPrimaryCategory ? { primary:p._leadPrimaryCategory, secondary:p._leadSecondaryCategory } : getLeadCategory(p);
   const err = p._leadError !== undefined ? p._leadError : hasLeadError(p);
-  const dist = p._leadDistanceKm !== undefined ? p._leadDistanceKm : getLeadDistanceKm(p);
-  const distText = Number.isFinite(dist) ? `${dist.toFixed(dist < 10 ? 1 : 0)} km` : '等待定位';
-  const distClass = Number.isFinite(dist) ? '' : ' unknown';
   const owner = claimed ? `<span>${avatarInlineHtml(getOwnerAvatar(p))}${esc(getOwnerLabel(p))}</span>` : '<span>未认领</span>';
-  const safePhone = safeTelephone(p.phone);
-  const phoneBtn = safePhone ? `<a class="phone" href="tel:${escAttr(safePhone)}" onclick="event.stopPropagation()">📞 联络</a>` : `<button class="phone" onclick="event.stopPropagation(); toast('暂无电话')">📞 无电话</button>`;
-  const claimBtn = mine ? `<button class="claim" onclick="editClaimedLead('${jsStr(p.id)}')">✏️ 编辑</button>` : `<button class="claim" onclick="claimLead('${jsStr(p.id)}')">${claimed ? '👤 已认领' : '👤 认领'}</button>`;
-  const resolveBtn = err ? `<button class="resolve" onclick="resolveLeadError('${jsStr(p.id)}')">✅ 已修正</button>` : `<button class="map" onclick="locateLeadOnMap('${jsStr(p.id)}')">🗺 地图</button>`;
+  const primaryBtn = mine
+    ? `<button class="claim" onclick="editClaimedLead('${jsStr(p.id)}')">编辑详情</button>`
+    : claimed
+      ? `<button class="claim" onclick="locateLeadOnMap('${jsStr(p.id)}')">查看详情</button>`
+      : `<button class="claim" onclick="claimLead('${jsStr(p.id)}')">认领</button>`;
   return `<div class="lead-card ${mine?'claimed-mine':''} ${err?'error':''}" onclick="locateLeadOnMap('${jsStr(p.id)}')">
     <div class="lead-card-top"><div class="lead-card-main">
       <div class="lead-card-name">${esc(p.name || '未命名店铺')}</div>
-      <div class="lead-card-type">${esc(category.primary)} · ${esc(category.secondary)}${p.phone ? '<span class="lead-tag phone">电话</span>' : ''}${err ? '<span class="lead-tag err">'+esc(p._leadErrorLabel || getLeadErrorLabel(p))+'</span>' : ''}</div>
-      <div class="lead-distance-field${distClass}">📍 距离：${distText}</div>
+      <div class="lead-card-type">${esc(category.secondary)} · ${esc(p.district || '地区待核')}</div>
       <div class="lead-card-addr">${esc(p.address || '暂无地址')}</div>
-      ${err ? '<div class="lead-error-line">⚠️ ' + esc(p._leadErrorLabel || getLeadErrorLabel(p)) + ' · 待核实</div>' : ''}
+      ${err ? '<div class="lead-error-line">资料待核实</div>' : ''}
     </div><div class="lead-owner-pill ${claimed?'':'unclaimed'}">${owner}</div></div>
     <div class="lead-actions" onclick="event.stopPropagation()">
-      ${claimBtn}
-      ${phoneBtn}
-      <button class="error" onclick="reportLeadError('${jsStr(p.id)}')">⚠️ 报错</button>
-      ${resolveBtn}
+      ${primaryBtn}
+      <button class="map" onclick="locateLeadOnMap('${jsStr(p.id)}')">导航</button>
     </div>
   </div>`;
 }

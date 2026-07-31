@@ -4,13 +4,13 @@ import { readFileSync } from 'node:fs';
 
 const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
 
-test('P10 uses five primary navigation destinations', () => {
+test('P12 uses four primary navigation destinations', () => {
   for (const [tab, label] of [
-    ['leads', '线索'], ['map', '地图'], ['resources', '资源'], ['dashboard', '看板'], ['my', '我的']
+    ['leads', '线索'], ['map', '地图'], ['resources', '资源'], ['my', '我的']
   ]) {
     assert.match(html, new RegExp(`data-tab="${tab}"[^>]*>[\\s\\S]*?${label}`));
   }
-  assert.doesNotMatch(html, /data-tab="institutions"/);
+  assert.doesNotMatch(html, /data-tab="dashboard"|data-tab="institutions"/);
 });
 
 test('resource center exposes institution point and mall tabs without changing the data model', () => {
