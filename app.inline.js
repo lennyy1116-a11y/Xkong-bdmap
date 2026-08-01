@@ -1820,7 +1820,7 @@ function getClinicCategoryLabel(p) {
 function passCoverageFilter(p) {
   const f = coverageFilter || 'all';
   if (f === 'all') return true;
-  if (f === 'phone') return !!(p.phone || p.contactPhone);
+  if (f === 'claimed') return !isUnclaimedOwnerId(getOwnerId(p));
   const cat = getLeadCategory(p);
   if (f === '医疗') return cat.primary === '医疗';
   if (f === '推拿按摩') return cat.primary === '推拿按摩';
@@ -1863,8 +1863,9 @@ function renderCoverageClinicPage() {
     return getCoverageSortRank(a) - getCoverageSortRank(b) || da - db;
   });
   const warmCount = hits.filter(p => getCoverageSortRank(p) < 3).length;
+  const claimedCount = allHits.filter(p => !isUnclaimedOwnerId(getOwnerId(p))).length;
   title.textContent = `${selected.name} · 1公里诊所`;
-  summary.textContent = `当前 ${hits.length}/${allHits.length} 家｜已沟通/意向/合作 ${warmCount} 家置顶｜有联系方式 ${allHits.filter(x=>x.phone).length} 家`;
+  summary.textContent = `当前 ${hits.length}/${allHits.length} 家｜已认领 ${claimedCount} 家｜已沟通/意向/合作 ${warmCount} 家置顶`;
   box.innerHTML = hits.length ? hits.map((p,i) => {
     const d = p._distanceKm !== undefined ? p._distanceKm : distanceKm(selected.lat, selected.lng, p.lat, p.lng);
     const rowClass = getCoverageListClass(p);
