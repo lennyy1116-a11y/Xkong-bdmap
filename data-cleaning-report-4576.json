@@ -1,0 +1,67 @@
+{
+  "backup": "/Users/pro/tcm-base-clinics-pre-final-sync-20260802-011143.json",
+  "count_before": 4585,
+  "count_after": 4576,
+  "changed": {
+    "name": 179,
+    "district": 1002,
+    "category": 48
+  },
+  "deleted": [
+    {
+      "seq": 2603,
+      "id": "gm_ChIJk-KVo1MHBDQRU-3bR9GVTjc",
+      "name": "Sham Shui Po Sports Ground",
+      "address": "3號 Hing Wah St, Sham Shui Po"
+    },
+    {
+      "seq": 2604,
+      "id": "gm_ChIJsw8Od7EABDQR1AjAD9x9pw0",
+      "name": "Tung Chau Street Park Squash Centre",
+      "address": "163號 Tung Chau St, Sham Shui Po"
+    },
+    {
+      "seq": 2606,
+      "id": "gm_ChIJxzmdbDUHBDQRiIFSx_A9Mrs",
+      "name": "Shek Kip Mei Park Sports Centre",
+      "address": "Shek Kip Mei Park Sports Centre, 290 Nam Cheong St"
+    },
+    {
+      "seq": 2790,
+      "id": "gm_ChIJw-zgEigHBDQRaHKUfConAh8",
+      "name": "Morse Park Sports Centre",
+      "address": "40 Fung Mo St, Chuk Un"
+    },
+    {
+      "seq": 3410,
+      "id": "gm_ChIJiyImJXX6AzQRSZAsGxk3iuQ",
+      "name": "元朗體育館健身室",
+      "address": "元朗馬田路52號文化康樂大樓3樓"
+    },
+    {
+      "seq": 3473,
+      "id": "gm_ChIJSxASwA_2AzQRYuiai5NPa9g",
+      "name": "North District Sports Ground",
+      "address": "26 Tin Ping Rd, Sheung Shui"
+    },
+    {
+      "seq": 3770,
+      "id": "gm_ChIJf6n_lJcFBDQRuDO3OrHo8DY",
+      "name": "Sai Kung Tang Shiu Kin Sports Ground",
+      "address": "41 Fuk Man Rd, Sai Kung"
+    },
+    {
+      "seq": 4463,
+      "id": "H00433",
+      "name": "恆安堂中醫診所-新竹東區中醫診所推薦",
+      "address": "No. 51號, Shengli Rd, Chenggong Village, East District, Hsinchu City, Taiwan 300"
+    },
+    {
+      "seq": 4467,
+      "id": "H00437",
+      "name": "恆安堂中醫診所—預約制，需電話預約掛號",
+      "address": "No. 159, Zhongshan Rd, Gongrong Village, Beigang Township, Yunlin County, Taiwan 651"
+    }
+  ],
+  "sha256": "22337a8fc63ebd457fedfb8efeb62ef0669a791ef8d0b3170ac6791301ab9693"
+}
