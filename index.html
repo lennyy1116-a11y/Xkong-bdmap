@@ -3470,6 +3470,15 @@ function clinicBadges(p) {
   const category = cat ? `<span class="source-badge">${esc(cat)}</span>` : '';
   return phone + category;
 }
+function openCoverageClinicDetails(id) {
+  const selected = getCoverageTargetById(selectedMallId);
+  const row = selected ? getMallClinics(selected).find(p => p.id === id || p._promotedPlaceId === id) : null;
+  if (!row) { goToPlace(id); return; }
+  const promoted = row._promotedPlaceId ? places.find(p => p.id === row._promotedPlaceId) : getPromotedPlaceForBaseClinic(row);
+  const targetId = (promoted && promoted.id) || row.id;
+  closeCoveragePanel();
+  goToPlace(targetId);
+}
 function renderCoverageClinicPage() {
   const selected = getCoverageTargetById(selectedMallId);
   const title = document.getElementById('coverageTitle');
@@ -3488,7 +3497,7 @@ function renderCoverageClinicPage() {
   box.innerHTML = hits.length ? hits.map((p,i) => {
     const d = p._distanceKm !== undefined ? p._distanceKm : distanceKm(selected.lat, selected.lng, p.lat, p.lng);
     const rowClass = getCoverageListClass(p);
-    return `<div class="coverage-clinic-item ${rowClass}" onclick="goToPlace('${jsStr(p.id)}')">
+    return `<div class="coverage-clinic-item ${rowClass}" onclick="openCoverageClinicDetails('${jsStr(p.id)}')">
       <div><span class="rank">${i+1}</span><strong>${esc(p.name)}</strong>${getCoverageStatusBadge(p)}${clinicBadges(p)} <span class="distance">${d.toFixed(2)} km</span></div>
       <div class="meta">${esc(p.address || '')}<br>${esc(p.contact || '')}${p.phone ? ' · ' + esc(p.phone) : ''}</div>
       <div class="copy-row" onclick="event.stopPropagation()">
