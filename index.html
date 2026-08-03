@@ -667,15 +667,35 @@ body.home-mode .batch-import-note { margin-top:6px; color:var(--text2); font-siz
 .app-nav { position:fixed; left:0; right:0; bottom:0; z-index:2900; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:0; background:rgba(15,20,35,.96); border-top:1px solid rgba(255,255,255,.12); padding:6px 6px max(6px, env(safe-area-inset-bottom)); backdrop-filter:blur(12px); box-shadow:0 -4px 18px rgba(0,0,0,.34); }
 .app-nav button { border:0; background:transparent; color:var(--text2); border-radius:10px; padding:9px 4px; font-size:13px; font-weight:900; }
 .app-nav button.active { background:var(--primary); color:#fff; }
-#btnMall, #btnSettings { display:none !important; }
+.lead-priority-strip { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin:10px 0; }
+.lead-priority-card { border:1px solid rgba(74,144,217,.35); background:rgba(74,144,217,.10); border-radius:12px; padding:10px; }
+.lead-priority-card strong { display:block; font-size:13px; margin-bottom:4px; }
+.lead-priority-card span { color:var(--text2); font-size:12px; line-height:1.4; }
+.lead-filter-panel { border:1px solid rgba(255,255,255,.10); border-radius:12px; margin:8px 0; overflow:hidden; }
+.lead-filter-head { display:flex; align-items:center; gap:8px; padding:9px 10px; background:rgba(255,255,255,.04); }
+.lead-filter-condition { flex:1; min-width:0; color:var(--text2); font-size:12px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.lead-filter-clear,.lead-filter-toggle { border:0; border-radius:8px; padding:6px 8px; background:var(--bg); color:var(--text); font-weight:800; }
+.lead-filter-panel.collapsed .lead-filter-body { display:none; }
+.identity-notice { margin:8px 0; padding:9px 10px; border-radius:10px; background:rgba(241,196,15,.10); color:#f7d774; font-size:12px; line-height:1.45; }
+.coverage-workspace-btn { position:fixed; right:16px; top:max(62px, calc(env(safe-area-inset-top) + 62px)); z-index:1300; border:1px solid rgba(255,255,255,.16); border-radius:999px; background:var(--card); color:var(--text); padding:8px 11px; font-size:12px; font-weight:900; box-shadow:0 4px 14px rgba(0,0,0,.3); }
+.app-dialog { position:fixed; inset:0; z-index:7000; display:none; align-items:center; justify-content:center; padding:18px; background:rgba(0,0,0,.62); }
+.app-dialog.active { display:flex; }
+.app-dialog-box { width:min(420px,100%); background:var(--card); border:1px solid rgba(255,255,255,.14); border-radius:16px; padding:18px; box-shadow:0 20px 60px rgba(0,0,0,.5); }
+.app-dialog-box h2 { margin:0 0 8px; font-size:18px; }
+.app-dialog-message { color:var(--text2); white-space:pre-wrap; line-height:1.5; }
+.app-dialog-input { width:100%; margin-top:12px; padding:11px 12px; border:1px solid #444; border-radius:9px; background:var(--bg); color:var(--text); }
+.app-dialog-actions { display:flex; gap:8px; margin-top:16px; }
+.app-dialog-actions button { flex:1; border:0; border-radius:9px; padding:10px; font-weight:900; }
+.admin-panel { position:fixed; inset:0; z-index:3100; background:var(--bg); transform:translateX(100%); transition:transform .3s ease; display:flex; flex-direction:column; }
+.admin-panel.active { transform:translateX(0); }
+.admin-body { flex:1; overflow:auto; padding:12px 14px max(96px, calc(96px + env(safe-area-inset-bottom))); }
 .resource-tabs { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; padding:9px 12px; background:var(--card); border-bottom:1px solid #333; }
 .resource-tabs button { border:1px solid #444; background:var(--bg); color:var(--text2); border-radius:10px; padding:8px; font-weight:900; }
 .resource-tabs button.active { background:var(--primary); border-color:var(--primary); color:#fff; }
 .system-status-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin:8px 0; }
 .system-status-item { background:var(--bg); border-radius:10px; padding:9px; font-size:12px; color:var(--text2); line-height:1.45; }
 .system-status-item b { display:block; color:var(--text); margin-top:2px; overflow-wrap:anywhere; }
-#adminArea { background:rgba(231,76,60,.08); border:1px solid rgba(231,76,60,.28); border-radius:12px; padding:10px; }
-#adminArea summary { cursor:pointer; color:#ffb0a8; font-weight:900; }
+.admin-gate-card { background:rgba(231,76,60,.08); border:1px solid rgba(231,76,60,.28); border-radius:12px; padding:12px; }
 body.home-mode .top-bar { display:none !important; }
 body.home-mode .app-nav { display:grid !important; }
 .lead-home-header { padding-top: max(12px, env(safe-area-inset-top)) !important; }
@@ -726,7 +746,7 @@ body.home-mode .map-filter-bar { display:none !important; }
 </style>
 </head>
 <body class="home-mode">
-<div class="app-nav" id="appNav"><button data-tab="leads" onclick="showLeadHome()">线索</button><button data-tab="map" onclick="showMapHome()">地图</button><button data-tab="resources" onclick="openResourceCenter()">资源</button><button data-tab="my" onclick="openMyFromNav()">我的</button></div>
+<div class="app-nav" id="appNav"><button data-tab="leads" onclick="navigateTo('leads')">线索</button><button data-tab="map" onclick="navigateTo('map')">地图</button><button data-tab="resources" onclick="navigateTo('resources')">资源库</button><button data-tab="my" onclick="navigateTo('my')">我的</button></div>
 
 <!-- Lead list home -->
 <div class="lead-home" id="leadHome">
@@ -734,7 +754,15 @@ body.home-mode .map-filter-bar { display:none !important; }
     <div class="lead-home-top">
       <h1>BD工作台</h1>
     </div>
-    <div class="lead-search-row"><input id="leadSearchInput" placeholder="搜索店铺/地址/类型/电话" oninput="leadSearchTerm=this.value.trim().toLowerCase(); renderLeadHomeList();"></div>
+    <div class="lead-priority-strip">
+      <button class="lead-priority-card" id="leadTodayActions" onclick="openDashboardFromHome()"><strong>今日行动</strong><span id="leadTodayActionsSummary">查看待推进任务</span></button>
+      <button class="lead-priority-card" id="leadMyClaimedSummary" onclick="setLeadFilter('mine')"><strong>我的认领</strong><span id="leadMyClaimedCount">尚未设置身份</span></button>
+    </div>
+    <div class="identity-notice" id="identityNotice">可匿名浏览；认领线索前需要先在“我的”设置姓名。当前身份：匿名访客。</div>
+    <div class="lead-search-row"><input id="leadSearchInput" placeholder="搜索店铺、地址、电话或正式类目" oninput="leadSearchTerm=this.value.trim().toLowerCase(); renderLeadHomeList();"></div>
+    <div id="leadFilterPanel" class="lead-filter-panel collapsed">
+      <div class="lead-filter-head"><div class="lead-filter-condition" id="leadFilterCondition">全部线索｜全部类目</div><button class="lead-filter-clear" onclick="clearLeadFilters()">清除</button><button class="lead-filter-toggle" onclick="toggleLeadFilters()">筛选⌄</button></div>
+      <div class="lead-filter-body">
     <div class="lead-filter-section ownership">
       <div class="lead-filter-section-head"><span class="lead-filter-section-title">认领状态</span><span class="lead-filter-section-note">与业务类目分开筛选</span></div>
       <div class="lead-filter-row" id="leadFilterRow">
@@ -766,6 +794,8 @@ body.home-mode .map-filter-bar { display:none !important; }
     <div class="lead-filter-section secondary" id="leadSecondarySection"><div class="lead-filter-section-head"><span class="lead-filter-section-title">二级类目</span><span class="lead-filter-section-note">按当前一级类目细分</span></div><div class="lead-filter-row" id="leadSecondaryRow"></div></div>
     <div class="lead-error-export-row" id="leadMineExportRow"><button onclick="exportMyClaimedLeadsXlsx()">导出我的认领</button></div>
     <div class="lead-error-export-row" id="leadErrorExportRow"><button onclick="exportLeadErrorRowsXlsx()">导出报错表格</button></div>
+      </div>
+    </div>
     <div class="lead-home-summary" id="leadHomeSummary">加载中...</div>
   </div>
   <div class="lead-list-body" id="leadListBody"></div>
@@ -798,8 +828,6 @@ body.home-mode .map-filter-bar { display:none !important; }
 <div class="top-bar">
   <h1>BD工作台</h1>
   <span class="stats" id="statsText">0 机构</span>
-  <button class="nav-pill-btn" id="btnMall" title="商场覆盖">🏬 商场</button>
-  <button class="nav-pill-btn" id="btnSettings" title="设置">⚙ 设置</button>
 </div>
 
 <!-- Map -->
@@ -811,21 +839,14 @@ body.home-mode .map-filter-bar { display:none !important; }
   <select id="mapOwnerSelect" class="map-owner-select" aria-label="按负责人筛选" onchange="setMapOwnerFilter(this.value)"><option value="全部">👥 全部人员</option></select>
 </div>
 <div id="map"></div>
-<div class="home-hint" id="homeHint"><button class="home-hint-close" onclick="hideHomeHint()">×</button>首页仅显示团队已跟进机构；官方中医名录是底层基础诊所池，只在商场1公里覆盖分析中显示。</div>
+<button class="coverage-workspace-btn" id="btnCoverageWorkspace" onclick="openCoverageWorkspace()">覆盖工作区</button>
 
 
 <button class="coverage-reopen" id="btnReopenCoverage" style="display:none" onclick="openCoveragePanel()">📋 1km清单</button>
 <div class="map-combo-bar" id="mapComboBar">
   <div class="map-combo-top"><span id="mapComboTitle">组合覆盖</span><button onclick="clearMapCombo()" style="border:0;background:transparent;color:var(--text2);font-weight:900">×</button></div>
-  <div class="combo-centers" id="mapComboCenters"></div>
   <div class="map-combo-stats" id="mapComboStats">从商场/点位弹窗加入组合</div>
-  <div class="combo-map-hint">地图上黄色虚线圈 = 已加入组合的覆盖中心；橙色📍 = 手动点位。</div>
-  <div class="map-combo-actions">
-    <button data-tab="union" onclick="openComboResultOnMap('union')">并集</button>
-    <button data-tab="intersection" onclick="openComboResultOnMap('intersection')">交集</button>
-    <button data-tab="exclusive" onclick="openComboResultOnMap('exclusive')">独占</button>
-    <button onclick="copyComboSummary()">复制</button>
-  </div>
+  <div class="map-combo-actions"><button id="mapComboPrimaryAction" onclick="openComboResultOnMap('union')">查看组合结果</button></div>
 </div>
 
 <!-- FAB buttons -->
@@ -1066,52 +1087,30 @@ body.home-mode .map-filter-bar { display:none !important; }
         <button class="btn btn-primary" onclick="openDashboardFromMy()">团队统计</button>
         <button class="btn btn-ghost" onclick="refreshMySystemStatus()">刷新状态</button>
       </div>
-      <p style="margin-top:10px">版本：v3.7.0-hardening-p9（P10 UI预览）</p>
-    </div>
-
-    <div class="settings-section">
-      <h3>Google Maps API Key</h3>
-      <p>搜索附近机构需要API Key。没有的话地图和手动标记功能正常使用。</p>
-      <div class="form-group">
-        <input type="text" id="apiKeyInput" placeholder="粘贴你的API Key">
-      </div>
-      <button class="btn btn-primary" onclick="saveApiKey()" style="width:100%">保存Key</button>
-
-      <div style="margin-top:16px; padding:14px; background:var(--bg); border-radius:10px;">
-        <h3 style="margin-bottom:8px">如何获取API Key</h3>
-        <ol>
-          <li>打开 <a href="https://console.cloud.google.com" target="_blank">Google Cloud Console</a></li>
-          <li>创建一个项目（或选已有的）</li>
-          <li>进入「API和服务」→「库」</li>
-          <li>搜索并启用 <b>Places API (New)</b> 和 <b>Maps JavaScript API</b></li>
-          <li>进入「凭据」→「创建凭据」→「API密钥」</li>
-          <li>复制Key粘贴到上方输入框</li>
-          <li>（建议）在Key的限制里添加HTTP引用来源限制</li>
-        </ol>
-        <p style="margin-top:10px">⚠️ 需要绑定结算账号（信用卡），每月有$200免费额度，约可搜1万次，日常BD完全够用。</p>
-      </div>
+      <p style="margin-top:10px">版本：v3.7.0</p>
     </div>
 
     <div class="settings-section" id="mySystemManagementSection">
-      <h3>系统管理</h3>
-      <p>业务数据通过 Firebase 云端同步，并使用浏览器本地缓存支持加载与离线回退。建议定期导出完整 JSON 备份。</p>
-      <div class="btn-row">
-        <button class="btn btn-primary" onclick="exportData()">📤 导出完整JSON</button>
-        <button class="btn btn-primary" onclick="exportPointsXlsx()">📍 导出点位</button>
-        <button class="btn btn-ghost" onclick="document.getElementById('importFile').click()">📥 导入完整JSON</button>
-        <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+      <h3>管理员</h3>
+      <p>Google API 配置、完整数据管理与危险操作集中在锁定的管理员页面。</p>
+      <button class="btn btn-ghost" onclick="openAdminPanel()" style="width:100%">进入管理员页面 🔒</button>
+    </div>
+  </div>
+</div>
+
+<!-- Admin panel -->
+<div class="admin-panel" id="adminPanel">
+  <div class="list-header"><button class="top-btn" onclick="closeAdminPanel()">←</button><h2>管理员</h2></div>
+  <div class="admin-body">
+    <div class="admin-gate-card">
+      <div class="admin-gate" id="adminGate">
+        <p>请输入管理员密码。离开本页会自动重新锁定。</p>
+        <div class="admin-gate-row"><input type="password" id="adminPasswordInput" autocomplete="current-password" placeholder="管理员密码" onkeydown="if(event.key === 'Enter') unlockAdminArea()"><button class="btn btn-primary" type="button" onclick="unlockAdminArea()">进入</button></div>
+        <div class="admin-gate-error" id="adminGateError" aria-live="polite"></div>
       </div>
-      <details id="adminArea" ontoggle="handleAdminAreaToggle(event)">
-        <summary>管理员与危险操作 🔒</summary>
-        <div class="admin-gate" id="adminGate">
-          <p>请输入管理员密码后进入。离开“我的”页面会自动重新锁定。</p>
-          <div class="admin-gate-row">
-            <input type="password" id="adminPasswordInput" autocomplete="current-password" placeholder="管理员密码" onkeydown="if(event.key === 'Enter') unlockAdminArea()">
-            <button class="btn btn-primary" type="button" onclick="unlockAdminArea()">进入</button>
-          </div>
-          <div class="admin-gate-error" id="adminGateError" aria-live="polite"></div>
-        </div>
-        <div id="adminControls" hidden>
+      <div id="adminControls" hidden>
+        <div class="settings-section"><h3>Google Maps API 配置</h3><p>仅管理员可更新附近搜索使用的 API Key。</p><div class="form-group"><input type="text" id="apiKeyInput" placeholder="粘贴 API Key"></div><button class="btn btn-primary" onclick="saveApiKey()" style="width:100%">保存 Key</button></div>
+        <div class="settings-section"><h3>完整数据管理</h3><p>Firebase 云端同步，本地缓存用于加载和离线回退。</p><div class="btn-row"><button class="btn btn-primary" onclick="exportData()">导出完整JSON</button><button class="btn btn-primary" onclick="exportPointsXlsx()">导出点位</button><button class="btn btn-ghost" onclick="document.getElementById('importFile').click()">导入完整JSON</button><input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)"></div></div>
         <div class="btn-row" style="margin-bottom:10px">
           <button class="btn btn-ghost" onclick="triggerBatchErrorImport()">上传报错表</button>
           <input type="file" id="batchErrorFile" accept=".xlsx,.xls" style="display:none" onchange="handleBatchErrorImport(event)">
@@ -1128,21 +1127,6 @@ body.home-mode .map-filter-bar { display:none !important; }
         <button class="btn btn-ghost" onclick="renderAdminUsers()" style="width:100%; margin-bottom:10px">刷新用户列表</button>
         <div id="adminUsers"></div>
         <button class="btn btn-ghost" type="button" onclick="lockAdminArea()" style="width:100%; margin-top:10px">🔒 锁定管理员区域</button>
-        </div>
-      </details>
-    </div>
-
-    <div class="settings-section">
-      <h3>快捷搜索关键词</h3>
-      <p>搜索时可直接使用以下关键词：</p>
-      <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:8px">
-        <span class="filter-chip" style="cursor:default">中医诊所</span>
-        <span class="filter-chip" style="cursor:default">Chinese medicine</span>
-        <span class="filter-chip" style="cursor:default">美容院</span>
-        <span class="filter-chip" style="cursor:default">Beauty salon</span>
-        <span class="filter-chip" style="cursor:default">艾灸</span>
-        <span class="filter-chip" style="cursor:default">Moxibustion</span>
-        <span class="filter-chip" style="cursor:default">養生</span>
       </div>
     </div>
   </div>
@@ -1229,29 +1213,6 @@ body.home-mode .map-filter-bar { display:none !important; }
 
 
 
-<!-- Coverage combo panel -->
-<div class="combo-panel" id="comboPanel">
-  <div class="list-header">
-    <button class="top-btn" onclick="closeComboPanel()">←</button>
-    <h2>覆盖组合分析</h2>
-    <button class="top-btn" onclick="copyComboSummary()" title="复制摘要">📋</button>
-    <button class="top-btn" onclick="exportComboCsv()" title="导出表格">📤</button>
-  </div>
-  <div class="combo-body">
-    <div class="inline-search" style="padding-left:0;padding-right:0"><input type="text" id="comboSearchInput" placeholder="搜索商场/点位，勾选2-5个" oninput="comboSearchTerm=this.value.trim().toLowerCase(); renderComboPicker();"></div>
-    <div id="comboSelectedHint" class="mall-meta" style="padding:2px 2px 8px">请选择2-5个覆盖中心。</div>
-    <div class="combo-pick-list" id="comboPickList"></div>
-    <div class="combo-stat-grid" id="comboStats"></div>
-    <div id="comboExclusiveStats"></div>
-    <div class="combo-tabs" id="comboTabs">
-      <button class="combo-tab active" data-tab="union" onclick="setComboTab('union')">并集</button>
-      <button class="combo-tab" data-tab="intersection" onclick="setComboTab('intersection')">共同交集</button>
-      <button class="combo-tab" data-tab="exclusive" onclick="setComboTab('exclusive')">独占</button>
-    </div>
-    <div id="comboResultList"></div>
-  </div>
-</div>
-
 <!-- Coverage clinic panel -->
 <div class="mall-panel" id="coveragePanel">
   <div class="coverage-handle" id="coverageHandle" onclick="toggleCoveragePanelSize()"></div>
@@ -1297,6 +1258,11 @@ body.home-mode .map-filter-bar { display:none !important; }
 
 <!-- Toast -->
 <div class="toast" id="toast"></div>
+
+<!-- Shared application dialog -->
+<div class="app-dialog" id="appDialog" role="dialog" aria-modal="true" aria-labelledby="appDialogTitle">
+  <div class="app-dialog-box"><h2 id="appDialogTitle">提示</h2><div class="app-dialog-message" id="appDialogMessage"></div><input class="app-dialog-input" id="appDialogInput" style="display:none"><div class="app-dialog-actions"><button id="appDialogCancel" class="btn-ghost">取消</button><button id="appDialogConfirm" class="btn-primary">确定</button></div></div>
+</div>
 <div class="pick-location-bar" id="pickLocationBar"><div class="msg">拖动地图到目标位置，点一下地图回填坐标/地址</div><button class="cancel" onclick="cancelSheetPickLocation()">取消</button></div>
 
 <!-- Online bar -->
@@ -1759,18 +1725,6 @@ const STATUS_COLORS = {
 };
 
 
-function hideHomeHint() {
-  const el = document.getElementById('homeHint');
-  if (el) el.style.display = 'none';
-  localStorage.setItem('bd_map_hide_home_hint', '1');
-}
-function restoreHomeHintState() {
-  if (localStorage.getItem('bd_map_hide_home_hint') === '1') {
-    const el = document.getElementById('homeHint');
-    if (el) el.style.display = 'none';
-  }
-}
-
 let customTypes = [];
 function normalizeTypeList(types) {
   return [...new Set((types || []).map(x => String(x || '').trim()).filter(Boolean))].sort((a,b) => a.localeCompare(b, 'zh-Hant'));
@@ -1810,7 +1764,7 @@ async function saveCustomTypeToCloud(type) {
   await appConfigCollection.doc('institutionTypes').set({ types: next, updatedAt: new Date().toISOString(), updatedBy: currentUsername || '匿名' }, { merge: true });
 }
 async function addCustomType(initialValue) {
-  const val = prompt('请输入新的机构类型', initialValue || '');
+  const val = await showAppPrompt('新增点位类型', '请输入新的点位类型', initialValue || '');
   const type = String(val || '').trim();
   if (!type) return '';
   ensureTypeOption(type);
@@ -1887,7 +1841,6 @@ function init() {
   mallLayer = L.layerGroup().addTo(map);
   loadMalls();
   loadBaseClinics();
-  restoreHomeHintState();
   initCustomTypesCloudListener();
   setAppTab('leads');
   renderLeadHomeList();
@@ -1947,20 +1900,7 @@ function init() {
   updateStats();
   locateMe(true);
 
-  // Ask for username if not set
-  if (!currentUsername) {
-    setTimeout(() => {
-      const name = prompt('请输入你的名字（团队协同用）:');
-      if (name && name.trim()) {
-        currentUsername = name.trim();
-        localStorage.setItem(USERNAME_KEY, currentUsername);
-        updateCurrentUserBadge();
-        toast('👋 你好 ' + currentUsername);
-      }
-    }, 500);
-  } else {
-    updateCurrentUserBadge();
-  }
+  updateCurrentUserBadge();
 
   // Firestore real-time listener
   placesCollection.onSnapshot(snapshot => {
@@ -2609,9 +2549,9 @@ async function deletePlace() {
   if (!id) return;
   const record = places.find(p => p.id === id);
   if (!record) return toast('找不到这个机构');
-  const reason = prompt('请输入删除原因（记录会进入回收站，可恢复）:', '资料清理');
+  const reason = await showAppPrompt('删除机构', '请输入删除原因（记录会进入回收站，可恢复）', '资料清理');
   if (reason === null) return;
-  if (!confirm(`确定将「${record.name || id}」移入回收站？删除前会下载JSON备份。`)) return;
+  if (!await showAppConfirm('移入回收站', `确定将「${record.name || id}」移入回收站？删除前会下载JSON备份。`)) return;
   try {
     downloadDeletionBackup([record], 'single-soft-delete');
   } catch (err) {
@@ -2699,7 +2639,7 @@ function renderRecycleBin() {
 async function restoreDeletedPlace(id) {
   const record = deletedPlaces.find(p => p.id === id);
   if (!record) return toast('找不到回收站记录');
-  if (!confirm(`确定恢复「${record.name || id}」？`)) return;
+  if (!await showAppConfirm('恢复记录', `确定恢复「${record.name || id}」？`)) return;
   document.getElementById('syncStatus').textContent = '♻️ 正在恢复...';
   try {
     const restored = await runRevisionedMutation(id, Number(record.revision) || 0, current => {
@@ -2742,15 +2682,17 @@ function renderList() {
     const ownerLabel = getOwnerLabel(p);
     const ownerBadgeHtml = ownerLabelHtml(p);
     const pr = calcPriority(p);
+    const category = getLeadCategory(p);
+    const kindLabel = isPointEntry(p) ? (p.type || '点位') : `${category.primary}／${category.secondary}`;
     return `
       <div class="list-item" onclick="goToPlace('${jsStr(p.id)}')">
         ${bulkMode ? `<input class="list-check" type="checkbox" ${selectedPlaceIds.has(p.id) ? 'checked' : ''} onclick="event.stopPropagation(); toggleSelectPlace('${jsStr(p.id)}', this.checked)">` : ''}
         <div class="list-dot" style="background:${color}"></div>
         <div class="list-info">
           <div class="list-name"><span>${esc(p.name)}</span><span class="priority-badge ${pr.level}">${pr.score} ${priorityLabel(pr.level)}</span><span class="owner-badge">${ownerBadgeHtml}</span></div>
-          <div class="list-addr">${esc(p.address || p.type || '')}</div>
+          <div class="list-addr">${esc(p.address || '')}</div>
           <div class="list-meta">
-            ${ownerBadgeHtml}${p.type ? ' · ' + esc(p.type) : ''} · ${visitCount}次${isPointEntry(p) ? '记录' : '交流'}
+            ${ownerBadgeHtml} · ${esc(kindLabel)} · ${visitCount}次${isPointEntry(p) ? '记录' : '交流'}
             ${p.contact ? ' · ' + esc(p.contact) : ''}
           </div>
         </div>
@@ -2816,10 +2758,10 @@ async function bulkDeleteIds(ids, options = {}) {
   const records = ids.map(id => places.find(p => p.id === id)).filter(Boolean);
   if (!records.length) return toast('找不到待删除记录');
   if (!options.confirmed) {
-    const confirmation = prompt(`高风险操作：将 ${records.length} 条记录移入回收站。\n请输入「移入回收站 ${records.length}」继续：`);
+    const confirmation = await showAppPrompt('高风险操作', `将 ${records.length} 条记录移入回收站。\n请输入「移入回收站 ${records.length}」继续：`, '');
     if (confirmation !== `移入回收站 ${records.length}`) return toast('已取消批量删除');
   }
-  const reason = options.reason || prompt('请输入本次批量删除原因:', '批量资料清理');
+  const reason = options.reason || await showAppPrompt('批量删除', '请输入本次批量删除原因', '批量资料清理');
   if (reason === null) return;
   try {
     downloadDeletionBackup(records, 'bulk-soft-delete');
@@ -2842,7 +2784,7 @@ async function bulkDeleteIds(ids, options = {}) {
   clearCoverageCache(); savePlaces(); renderOwnerFilters(); renderMarkers(); renderList(); scheduleLeadHomeRender(); updateStats(); updateRecycleBinCount();
   const failedText = result.failed.slice(0,10).map(x => `${x.record.name || x.record.id}: ${x.error.message}`).join('\n');
   document.getElementById('syncStatus').textContent = result.failureCount ? '⚠️ 批量操作部分失败' : '✅ 已移入回收站';
-  alert(`批量操作完成\n成功：${result.successCount}\n失败：${result.failureCount}${failedText ? '\n\n失败项：\n' + failedText : ''}`);
+  await showAppDialog('批量操作完成', `成功：${result.successCount}\n失败：${result.failureCount}${failedText ? '\n\n失败项：\n' + failedText : ''}`);
 }
 
 function initCoveragePanelDrag() {
@@ -2871,9 +2813,31 @@ function initCoveragePanelDrag() {
 
 
 // ============ LEAD HOME ============
-function setAppTab(tab) { document.querySelectorAll('#appNav button').forEach(b => b.classList.toggle('active', b.dataset.tab === tab)); }
+const PRIMARY_APP_TABS = ['leads', 'map', 'resources', 'my'];
+function setAppTab(tab) {
+  const activeTab = PRIMARY_APP_TABS.includes(tab) ? tab : 'leads';
+  document.querySelectorAll('#appNav button').forEach(b => b.classList.toggle('active', b.dataset.tab === activeTab));
+}
+function navigateTo(tab) {
+  if (!PRIMARY_APP_TABS.includes(tab)) return;
+  if (tab === 'leads') showLeadHome();
+  else if (tab === 'map') showMapHome();
+  else if (tab === 'resources') openResourceCenter();
+  else openMyFromNav();
+}
+function openCoverageWorkspace() {
+  showMapHome();
+  clearSingleCoverageSilent();
+  const bar = document.getElementById('mapComboBar');
+  if (bar) bar.classList.add('active');
+  renderMapComboBar();
+  renderMalls();
+  renderMarkers();
+  updateCoverageUi();
+  toast('从商场或点位加入2-5个覆盖中心进行组合分析');
+}
 function closePrimaryPanels() {
-  ['listPanel','mallPanel','dashboardPanel','comboPanel','settingsPanel','recycleBinPanel'].forEach(id => {
+  ['listPanel','mallPanel','dashboardPanel','settingsPanel','adminPanel','recycleBinPanel'].forEach(id => {
     const panel = document.getElementById(id);
     if (panel) panel.classList.remove('active');
   });
@@ -3173,6 +3137,7 @@ function editClaimedLead(id) {
 async function claimLead(id) {
   const p = findLeadRecord(id);
   if (!p) return toast('找不到线索');
+  if (!await ensureUserIdentity()) return;
   const ownerId = getOwnerId(p);
   if (ownerId === getCurrentOwnerId()) { editClaimedLead(id); return; }
   if (!isUnclaimedOwnerId(ownerId) && ownerId !== getCurrentOwnerId()) { toast('已被别人认领'); return; }
@@ -3196,9 +3161,9 @@ async function claimLead(id) {
 }
 async function reportLeadError(id) {
   const p = findLeadRecord(id); if (!p) return toast('找不到线索');
-  const type = prompt('报错类型：地址错误 / 电话错误 / 重复店铺 / 已停业 / 类型错误 / 其他', '地址错误');
+  const type = await showAppPrompt('提交报错', '报错类型：地址错误 / 电话错误 / 重复店铺 / 已停业 / 类型错误 / 其他', '地址错误');
   if (!type) return;
-  const note = prompt('补充说明（可空）', '') || '';
+  const note = await showAppPrompt('补充说明', '补充说明（可空）', '') || '';
   const existing = places.find(x => x.id === id || x.id === 'place_' + id || clinicMatchKey(x) === clinicMatchKey(p));
   const now = new Date().toISOString();
   const recordId = existing ? existing.id : (p.isBaseClinic ? 'place_' + p.id : (p.id || 'place_' + Date.now().toString(36)));
@@ -3220,7 +3185,7 @@ async function resolveLeadError(id) {
   const p = findLeadRecord(id); if (!p) return toast('找不到线索');
   const existing = places.find(x => x.id === id || x.id === 'place_' + id || clinicMatchKey(x) === clinicMatchKey(p));
   if (!existing) return toast('这条线索还没有运营记录，无法修正');
-  const note = prompt('修正说明（可空）', '已核实/已修正') || '';
+  const note = await showAppPrompt('修正报错', '修正说明（可空）', '已核实/已修正') || '';
   const now = new Date().toISOString();
   try {
     const saved = await runRevisionedMutation(existing.id, Number(existing.revision) || 0, current => {
@@ -3825,8 +3790,6 @@ function renderComboCoveragePage(tab) {
     return `<div class="coverage-clinic-item ${rowClass}" onclick="goToPlace('${jsStr(p.id)}')"><div><span class="rank">${i+1}</span><strong>${esc(p.name)}</strong>${getCoverageStatusBadge(p)}${clinicBadges(p)} <span class="combo-badge">${label}</span></div><div class="meta">${meta}｜近${esc(p._nearestCenter || p._centerName || '')} ${dist}km<br>${esc(p.address || '')}</div><div class="copy-row" onclick="event.stopPropagation()"><button class="copy-btn" onclick="copyText('${jsStr(p.id)}','address')">复制地址</button><button class="copy-btn" onclick="copyText('${jsStr(p.id)}','phone')">复制电话</button></div></div>`;
   }).join('') : '<div class="list-empty">当前分类没有诊所</div>';
 }
-function openComboPanel() { clearSingleCoverageSilent(); closeMallPanel(); renderComboPicker(); renderComboAnalysis(); renderMapComboBar(); renderMalls(); renderMarkers(); document.getElementById('comboPanel').classList.add('active'); }
-function closeComboPanel() { document.getElementById('comboPanel').classList.remove('active'); }
 function toggleComboCenter(id, checked) {
   if (checked && comboSelectedIds.size >= 5) { toast('最多选择5个覆盖中心'); renderComboPicker(); return; }
   if (checked) comboSelectedIds.add(id); else comboSelectedIds.delete(id);
@@ -4024,7 +3987,7 @@ async function copyText(id, field) {
 }
 
 async function deleteMall(id) {
-  if (!confirm('删除这个商场标注？')) return;
+  if (!await showAppConfirm('删除商场', '删除这个商场标注？')) return;
   malls = malls.filter(m => m.id !== id); if (selectedMallId === id) selectedMallId = null;
   clearCoverageCache(); saveMallsLocal(); renderMalls(); renderMarkers(); renderMallList(); updateCoverageUi();
   try {
@@ -4668,10 +4631,10 @@ function importData(event) {
       const blocked = review.rows.filter(row => !row.importable);
       importFailureRows = blocked.map(row => ({...row, failureMessage:(row.messages||[]).join('；')}));
       if (!ready.length) {
-        alert(`JSON预审完成，但没有安全可导入记录。\n拦截：${blocked.length}\n请导出原文件修正重复、名称或坐标后再导入。`);
+        await showAppDialog('JSON预审', `没有安全可导入记录。\n拦截：${blocked.length}\n请导出原文件修正重复、名称或坐标后再导入。`);
         return;
       }
-      if (!confirm(`JSON预审：共 ${review.summary.total} 条，安全可导入 ${ready.length} 条，拦截 ${blocked.length} 条。\n确认只写入安全记录？`)) return;
+      if (!await showAppConfirm('确认JSON导入', `共 ${review.summary.total} 条，安全可导入 ${ready.length} 条，拦截 ${blocked.length} 条。\n确认只写入安全记录？`)) return;
       const result = await window.BDMapImportSafety.runSafeImport(ready, {
         persist: async row => {
           const record = window.BDMapImportSafety.prepareNewImportedRecord(row, { id:genId(), actor:currentUsername||'匿名' });
@@ -4681,7 +4644,7 @@ function importData(event) {
       });
       importFailureRows.push(...result.failed.map(x=>({...x.row,failureMessage:x.error.message})));
       clearCoverageCache(); savePlaces(); renderOwnerFilters(); updateMapFilterBar(); renderMarkers(); updateStats();
-      alert(`JSON导入完成\n成功：${result.successCount}\n云端失败：${result.failureCount}\n预审拦截：${blocked.length}`);
+      await showAppDialog('JSON导入完成', `成功：${result.successCount}\n云端失败：${result.failureCount}\n预审拦截：${blocked.length}`);
     } catch(err) {
       console.error(err);
       toast('❌ 导入失败：' + (err && err.message ? err.message : '文件格式不正确'));
@@ -4703,9 +4666,10 @@ async function syncImportedToFirestore(items) {
   document.getElementById('syncStatus').textContent = '✅ 已同步';
 }
 
-function clearAllData() {
-  if (!confirm('确定清除所有数据？此操作不可撤销！')) return;
-  if (!confirm('再次确认：清除后无法恢复，确定吗？')) return;
+async function clearAllData() {
+  if (!await showAppConfirm('清除所有数据', '此操作不可撤销，确定继续？')) return;
+  const confirmation = await showAppPrompt('再次确认', '请输入 CLEAR 确认清除所有数据', '');
+  if (confirmation !== 'CLEAR') return toast('已取消');
   places = [];
   savePlaces();
   renderOwnerFilters();
@@ -4736,13 +4700,13 @@ function renderAdminUsers() {
   }).join('');
 }
 async function changeOwnerAvatar(ownerId, ownerName) {
-  const avatar = prompt('输入新的头像 emoji（例如 🐯、🦊、🔥）：', getOwnerAvatar({ ownerId, ownerName }));
+  const avatar = await showAppPrompt('修改用户头像', '输入新的头像 emoji（例如 🐯、🦊、🔥）', getOwnerAvatar({ ownerId, ownerName }));
   if (!avatar) return;
   const next = String(avatar).trim();
   if (!next) return;
   const affected = places.filter(p => getOwnerId(p) === ownerId || normalizeOwnerId(getOwnerName(p)) === ownerId);
   if (!affected.length) { toast('没有找到该用户的数据'); return; }
-  if (!confirm(`确认把「${ownerName}」名下 ${affected.length} 个机构头像改为 ${next}？`)) return;
+  if (!await showAppConfirm('确认修改头像', `把「${ownerName}」名下 ${affected.length} 个机构头像改为 ${next}？`)) return;
   const succeeded = [];
   const failed = [];
   for (const original of affected) {
@@ -4771,7 +4735,7 @@ async function deleteOwnerData(ownerId, ownerName) {
   const records = places.filter(p => getOwnerId(p) === ownerId);
   const isCurrentLocalProfile = ownerId === getCurrentOwnerId();
   if (!records.length && !isCurrentLocalProfile) { toast('该用户没有认领资料'); return; }
-  const confirmText = prompt(`将移除「${ownerName}」对 ${records.length} 条机构的认领。\n机构及底池资料会保留，不会进入回收站。\n请输入 RELEASE 确认：`);
+  const confirmText = await showAppPrompt('移除用户认领', `将移除「${ownerName}」对 ${records.length} 条机构的认领。\n机构及底池资料会保留，不会进入回收站。\n请输入 RELEASE 确认：`, '');
   if (confirmText !== 'RELEASE') { toast('已取消'); return; }
   const released = [];
   const failed = [];
@@ -4809,7 +4773,7 @@ async function cleanupLegacyTcmImport() {
     return oid.includes('system_tcm_import') || oid.includes('base_tcm_pool') || owner.includes('tcm') || owner.includes('tmc') || owner.includes('名錄導入') || owner.includes('名录导入') || id.startsWith('tcm_');
   }).map(p => p.id);
   if (!legacyIds.length) { toast('没有发现旧 TCM/TMC 导入数据'); return; }
-  const confirmText = prompt(`将清理旧 TCM/TMC 导入数据 ${legacyIds.length} 条。\n新版基础诊所池不会受影响。\n请输入 CLEAN 确认：`);
+  const confirmText = await showAppPrompt('清理旧导入数据', `将清理旧 TCM/TMC 导入数据 ${legacyIds.length} 条。\n新版基础诊所池不会受影响。\n请输入 CLEAN 确认：`, '');
   if (confirmText !== 'CLEAN') { toast('已取消'); return; }
   await bulkDeleteIds(legacyIds);
   renderAdminUsers();
@@ -5149,7 +5113,7 @@ function scoreBadgeWithDetailHtml(id, pr) {
   return `<div class="popup-detail"><span class="priority-badge clickable ${pr.level}" onclick="event.stopPropagation(); toggleScoreDetail('${jsStr(domId)}')">${pr.score} ${priorityLabel(pr.level)}</span></div><div class="score-breakdown-wrap" id="${esc(domId)}">${scoreBreakdownHtml(pr)}</div>`;
 }
 function enrichPriority(list) { return list.map(p => ({...p, _priority: calcPriority(p)})); }
-function openDashboard() { setAppTab('dashboard'); closeList(); closeMallPanel(); closeCoveragePanel(); renderDashboard(); document.getElementById('dashboardPanel').classList.add('active'); }
+function openDashboard() { closeList(); closeMallPanel(); closeCoveragePanel(); renderDashboard(); document.getElementById('dashboardPanel').classList.add('active'); }
 function closeDashboard() { document.getElementById('dashboardPanel').classList.remove('active'); if (!document.body.classList.contains('home-mode')) setAppTab('map'); }
 function getPriorityPool() {
   return enrichPriority([...places, ...baseClinics.filter(p => !places.some(x => x.id === 'place_'+p.id || (x.name===p.name && x.address===p.address)))])
@@ -5378,7 +5342,7 @@ async function downloadBatchShopTemplate(){
 async function confirmBatchShopImport(){
   const rows=batchShopPreviewRows.filter(x=>x.importable && x.importStatus!=='已导入');
   if(!rows.length){ toast('没有可导入行'); return; }
-  if(!confirm(`确认只导入 ${rows.length} 条安全行？疑似重复和坐标待核默认不会写入。`)) return;
+  if(!await showAppConfirm('确认批量导入', `只导入 ${rows.length} 条安全行？疑似重复和坐标待核默认不会写入。`)) return;
   const now=new Date().toISOString();
   let ok=0, fail=0;
   for(const r of rows){
@@ -5408,7 +5372,7 @@ async function confirmBatchShopImport(){
   }
   clearCoverageCache(); savePlaces(); renderOwnerFilters(); updateMapFilterBar(); scheduleLeadHomeRender(); renderMarkers(); updateStats();
   toast(`批量导入完成：成功 ${ok}，失败 ${fail}`);
-  alert(`批量导入完成\n成功：${ok}\n失败：${fail}\n预审拦截：${batchShopPreviewRows.length-rows.length}\n失败项可导出后修正重试。`);
+  await showAppDialog('批量导入完成', `成功：${ok}\n失败：${fail}\n预审拦截：${batchShopPreviewRows.length-rows.length}\n失败项可导出后修正重试。`);
 }
 async function exportBatchShopReviewXlsx(){
   const reviewRows=[...batchShopPreviewRows, ...importFailureRows];
@@ -5509,7 +5473,7 @@ async function handleBatchErrorImport(event) {
   clearCoverageCache(); savePlaces(); scheduleLeadHomeRender(); renderMarkers(); updateStats();
   const typeText = Object.entries(byType).map(([k,v])=>`${k}:${v}`).join('，') || '无';
   const report = `批量报错上传完成\n有效动作行：${stats.total}\n已处理：${stats.processed}\n跳过空白：${stats.skipped}\n已修正：${stats.fixed}\n失败：${stats.failed}\n分类：${typeText}${failures.length ? '\n\n失败明细：\n' + failures.slice(0,20).join('\n') : ''}`;
-  alert(report);
+  await showAppDialog('批量报错上传完成', report);
   toast('批量报错上传完成');
 }
 function openTopPriorityOnMap() {
@@ -5531,6 +5495,56 @@ function toast(msg) {
   t.textContent = msg;
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+let appDialogResolver = null;
+function showAppDialog(title, message) {
+  return openAppDialog({ title, message, mode:'notice' });
+}
+function showAppConfirm(title, message) {
+  return openAppDialog({ title, message, mode:'confirm' });
+}
+function showAppPrompt(title, message, initialValue) {
+  return openAppDialog({ title, message, mode:'prompt', initialValue });
+}
+function openAppDialog({ title='提示', message='', mode='notice', initialValue='' } = {}) {
+  const dialog = document.getElementById('appDialog');
+  const input = document.getElementById('appDialogInput');
+  const cancel = document.getElementById('appDialogCancel');
+  const confirmButton = document.getElementById('appDialogConfirm');
+  if (!dialog || !input || !cancel || !confirmButton) return Promise.resolve(mode === 'prompt' ? null : false);
+  if (appDialogResolver) appDialogResolver(mode === 'prompt' ? null : false);
+  document.getElementById('appDialogTitle').textContent = title;
+  document.getElementById('appDialogMessage').textContent = message;
+  input.style.display = mode === 'prompt' ? '' : 'none';
+  input.value = mode === 'prompt' ? String(initialValue || '') : '';
+  cancel.style.display = mode === 'notice' ? 'none' : '';
+  dialog.classList.add('active');
+  return new Promise(resolve => {
+    const finish = value => {
+      dialog.classList.remove('active');
+      appDialogResolver = null;
+      confirmButton.onclick = null;
+      cancel.onclick = null;
+      resolve(value);
+    };
+    appDialogResolver = finish;
+    confirmButton.onclick = () => finish(mode === 'prompt' ? input.value : true);
+    cancel.onclick = () => finish(mode === 'prompt' ? null : false);
+    input.onkeydown = event => { if (event.key === 'Enter') confirmButton.click(); };
+    setTimeout(() => (mode === 'prompt' ? input : confirmButton).focus(), 0);
+  });
+}
+async function ensureUserIdentity() {
+  if (String(currentUsername || '').trim()) return true;
+  const name = await showAppPrompt('设置姓名', '认领、编辑或新增机构前需要设置姓名。', '');
+  if (!String(name || '').trim()) { toast('未设置姓名，操作已取消'); return false; }
+  currentUsername = String(name).trim();
+  localStorage.setItem(USERNAME_KEY, currentUsername);
+  updateCurrentUserBadge();
+  scheduleLeadHomeRender();
+  toast('身份已设置：' + currentUsername);
+  return true;
 }
 
 
