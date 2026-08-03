@@ -1,0 +1,48 @@
+{
+  "timestamp": "2026-08-03",
+  "baseline_count": 14545,
+  "added_count": 21,
+  "final_count": 14566,
+  "added_ids": [
+    "TKO4-0006",
+    "TKO4-0010",
+    "TKO4-0016",
+    "TKO4-0017",
+    "TKO4-0019",
+    "TKO4-0020",
+    "TKO4-0021",
+    "TKO4-0059",
+    "TKO4-0060",
+    "TKO4-0061",
+    "TKO4-0064",
+    "TKO4-0065",
+    "TKO4-0128",
+    "TKO4-0129",
+    "TKO4-0130",
+    "TKO4-0182",
+    "TKO4-0188",
+    "TKO4-0189",
+    "TKO4-0191",
+    "TKO4-0245",
+    "TKO4-0250"
+  ],
+  "category_counts": {
+    "医疗/康复护理": 1,
+    "美容美体/美体美容": 6,
+    "健康养生/健身房": 5,
+    "医疗/综合诊所": 3,
+    "医疗/眼科中心": 1,
+    "健康养生/心理咨询": 3,
+    "医疗/中医诊所": 2
+  },
+  "source_file": "/Users/pro/.hermes/exports/TKO_Gateway_4KM可直接新增21条_纠正版_20260803.json",
+  "final_sha256": "54c5486f25fee26ad9e456d4599f704b1c402751ff2321e35fcb25344d28835b",
+  "backup": "tcm-base-clinics-pre-tko21-20260803.json",
+  "validation": {
+    "unique_ids": 14566,
+    "blank_names": 0,
+    "blank_addresses": 0,
+    "numeric_coordinates": 14566,
+    "duplicate_gate_collisions": 0
+  }
+}
