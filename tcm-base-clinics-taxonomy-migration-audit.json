@@ -1,0 +1,42 @@
+{
+  "taxonomyVersion": "2026-07-30",
+  "baselineCount": 14566,
+  "removedAddressReview": 720,
+  "removedObviousNonTarget": 6,
+  "finalCount": 13840,
+  "uniqueIds": 13840,
+  "missingAddress": 0,
+  "invalidL1": 0,
+  "invalidL2Parent": 0,
+  "simplifiedChineseResidual": 0,
+  "manualReviewRequired": 6541,
+  "manualReviewNotRequired": 7299,
+  "l1Counts": {
+    "MED": 5882,
+    "TCM": 3446,
+    "BEA": 2411,
+    "AHP": 1401,
+    "FIT": 426,
+    "NUT": 39,
+    "MHW": 117,
+    "FNB": 88,
+    "CARE": 30
+  },
+  "l1NameCounts": {
+    "医疗诊疗": 5882,
+    "中医与传统医学": 3446,
+    "美容美体与休闲养生": 2411,
+    "康复与辅助医疗": 1401,
+    "运动健身": 426,
+    "营养健康与药品零售": 39,
+    "心理与身心健康": 117,
+    "健康餐饮": 88,
+    "护理养老与社区照护": 30
+  },
+  "outputSha256": "72ce95144b953ee093e517b34bcb19e46b8398156df62b029595b942fd255f29",
+  "removedSha256": "5c2aaf27c0ae6079d7a48bc2a8c8b92a3df6bc7df491cda83e5147db02aa227f",
+  "removedObviousNonTargetSha256": "2713b65979e9f18d91ac6b23c3466b40cfc709e8fc1a3ee582706b2fefa99c56",
+  "protectedFields": "id/lat/lng/phone/source零变化；name/address/district/sourceUrl仅繁转简",
+  "addressPolicy": "未调用或采用Google反查；删除原先标记地址待补全的720条，其余地址内容不补写",
+  "nonTargetPolicy": "仅删除6条高确定性污染：1个公共游泳池、5个纯药房／药业零售；127组历史重复本次不处理"
+}

@@ -741,11 +741,17 @@ body.home-mode .map-filter-bar { display:none !important; }
       <div class="lead-filter-section-head"><span class="lead-filter-section-title">一级类目</span><span class="lead-filter-section-note">选择后显示二级类目</span></div>
       <div class="lead-filter-row" id="leadCategoryRow">
         <button class="lead-filter-chip active" data-category="全部" onclick="setLeadCategory('全部')">全部类目</button>
-        <button class="lead-filter-chip" data-category="医疗" onclick="setLeadCategory('医疗')">医疗</button>
-        <button class="lead-filter-chip" data-category="推拿按摩" onclick="setLeadCategory('推拿按摩')">推拿按摩</button>
-        <button class="lead-filter-chip" data-category="健康养生" onclick="setLeadCategory('健康养生')">健康养生</button>
-        <button class="lead-filter-chip" data-category="餐饮" onclick="setLeadCategory('餐饮')">餐饮</button>
-        <button class="lead-filter-chip" data-category="美容美体" onclick="setLeadCategory('美容美体')">美容美体</button>
+        <button class="lead-filter-chip" data-category="医疗诊疗" onclick="setLeadCategory('医疗诊疗')">医疗诊疗</button>
+        <button class="lead-filter-chip" data-category="中医与传统医学" onclick="setLeadCategory('中医与传统医学')">中医与传统医学</button>
+        <button class="lead-filter-chip" data-category="康复与辅助医疗" onclick="setLeadCategory('康复与辅助医疗')">康复与辅助医疗</button>
+        <button class="lead-filter-chip" data-category="护理养老与社区照护" onclick="setLeadCategory('护理养老与社区照护')">护理养老与社区照护</button>
+        <button class="lead-filter-chip" data-category="心理与身心健康" onclick="setLeadCategory('心理与身心健康')">心理与身心健康</button>
+        <button class="lead-filter-chip" data-category="营养健康与药品零售" onclick="setLeadCategory('营养健康与药品零售')">营养健康与药品零售</button>
+        <button class="lead-filter-chip" data-category="运动健身" onclick="setLeadCategory('运动健身')">运动健身</button>
+        <button class="lead-filter-chip" data-category="健康餐饮" onclick="setLeadCategory('健康餐饮')">健康餐饮</button>
+        <button class="lead-filter-chip" data-category="美容美体与休闲养生" onclick="setLeadCategory('美容美体与休闲养生')">美容美体与休闲养生</button>
+        <button class="lead-filter-chip" data-category="待复核" onclick="setLeadCategory('待复核')">待复核</button>
+
         <button class="lead-filter-chip" data-category="待分类" onclick="setLeadCategory('待分类')">待分类</button>
       </div>
     </div>
@@ -866,11 +872,16 @@ body.home-mode .map-filter-bar { display:none !important; }
       <label>一级类目</label>
       <select id="fPrimaryCategory" onchange="handlePrimaryCategoryChange()">
         <option value="">请选择</option>
-        <option value="医疗">医疗</option>
-        <option value="推拿按摩">推拿按摩</option>
-        <option value="健康养生">健康养生</option>
-        <option value="餐饮">餐饮</option>
-        <option value="美容美体">美容美体</option>
+        <option value="医疗诊疗">MED 医疗诊疗</option>
+        <option value="中医与传统医学">TCM 中医与传统医学</option>
+        <option value="康复与辅助医疗">AHP 康复与辅助医疗</option>
+        <option value="护理养老与社区照护">CARE 护理养老与社区照护</option>
+        <option value="心理与身心健康">MHW 心理与身心健康</option>
+        <option value="营养健康与药品零售">NUT 营养健康与药品零售</option>
+        <option value="运动健身">FIT 运动健身</option>
+        <option value="健康餐饮">FNB 健康餐饮</option>
+        <option value="美容美体与休闲养生">BEA 美容美体与休闲养生</option>
+
       </select>
     </div>
     <div class="form-group" id="institutionSecondaryRow" style="display:none">
@@ -2290,9 +2301,10 @@ function openEditSheet(id) {
   if (!isPointEntry(p)) {
     if (catRow) catRow.style.display = '';
     if (secRow) secRow.style.display = '';
-    document.getElementById('fPrimaryCategory').value = p.primaryCategory || '';
+    const category = getLeadCategory(p);
+    document.getElementById('fPrimaryCategory').value = category.primary || '';
     handlePrimaryCategoryChange();
-    document.getElementById('fSecondaryCategory').value = p.secondaryCategory || '';
+    document.getElementById('fSecondaryCategory').value = category.secondary || '';
   } else {
     if (catRow) catRow.style.display = 'none';
     if (secRow) secRow.style.display = 'none';
@@ -2483,6 +2495,7 @@ async function savePlace() {
     updatedByName: currentUsername || '匿名',
     updatedByAvatar: currentAvatar
   };
+  if (entryKind === 'institution') Object.assign(data, getTaxonomyFields(data.primaryCategory, data.secondaryCategory));
   const existIdx = places.findIndex(p => p.id === data.id);
   if (existIdx >= 0) {
     data.createdAt = places[existIdx].createdAt || new Date().toISOString();
@@ -2882,51 +2895,75 @@ function setLeadFilter(f) {
   renderLeadHomeList();
 }
 const LEAD_CATEGORY_TAXONOMY = {
-  '医疗': ['中医诊所','体检中心','康复护理','口腔诊所','眼科中心','皮肤医美','辅助生殖','综合诊所'],
-  '推拿按摩': ['正骨推拿','按摩足疗','SPA水疗','泰式按摩','拔罐刮痧','艾灸馆'],
-  '健康养生': ['瑜伽馆','健身房','心理咨询','营养健康'],
-  '餐饮': ['养生茶饮','轻食','药膳'],
-  '美容美体': ['美体美容','美甲','美睫','半永久'],
-  '待分类': ['待分类']
+  '医疗诊疗': ['综合／家庭医生诊所','专科诊所','私家医院','日间医疗中心／日间手术中心','体检中心','医学化验所','医学影像／放射诊断中心','牙科／口腔诊所','眼科医疗中心','视光／验眼中心','皮肤科诊所','医疗美容机构','辅助生殖中心','疫苗接种／旅游健康中心','透析／专病治疗中心','睡眠医学／痛症医疗中心'],
+  '中医与传统医学': ['中医综合诊所','中医骨伤／正骨诊所','传统疗法／养生馆'],
+  '康复与辅助医疗': ['物理治疗中心','职业治疗中心','言语治疗中心','脊医诊所','听力／听觉服务中心','足病诊疗／足部康复中心','综合复康中心'],
+  '护理养老与社区照护': ['家居照顾及支援队','长者日间护理中心','社区复康日间中心','安老院／护养院／护理院','认知障碍／记忆照护中心','残疾人士日间训练／支援中心'],
+  '心理与身心健康': ['临床心理服务中心','心理辅导／咨询中心','儿童发展／评估中心','成瘾治疗／辅导中心'],
+  '营养健康与药品零售': ['注册营养师／营养咨询中心','体重管理／健康管理中心','保健品／营养补充品零售'],
+  '运动健身': ['健身房／健身中心','瑜伽馆'],
+  '健康餐饮': ['轻食／健康餐厅','养生茶饮／草本饮品店','药膳／中式养生餐厅'],
+  '美容美体与休闲养生': ['生活美容／美体中心','非医疗皮肤管理中心','SPA水疗中心','按摩／足疗中心','桑拿／浴室／蒸疗中心','美甲店','美睫店','半永久／纹绣中心','头疗／头皮护理中心','产后修复／身体塑形中心']
 };
+const LEAD_CATEGORY_CODE_TO_NAME = {
+  MED:'医疗诊疗', TCM:'中医与传统医学', AHP:'康复与辅助医疗', CARE:'护理养老与社区照护', MHW:'心理与身心健康',
+  NUT:'营养健康与药品零售', FIT:'运动健身', FNB:'健康餐饮', BEA:'美容美体与休闲养生'
+};
+const LEAD_CATEGORY_NAME_TO_CODE = Object.fromEntries(Object.entries(LEAD_CATEGORY_CODE_TO_NAME).map(([code,name]) => [name,code]));
+const LEAD_SECONDARY_NAME_TO_CODE = Object.fromEntries(Object.entries({
+  MED:['MED-01','MED-02','MED-03','MED-04','MED-05','MED-06','MED-07','MED-08','MED-09','MED-10','MED-11','MED-12','MED-13','MED-14','MED-15','MED-16'],
+  TCM:['TCM-01','TCM-02','TCM-06'], AHP:['AHP-01','AHP-02','AHP-03','AHP-04','AHP-05','AHP-06','AHP-08'],
+  CARE:['CARE-02','CARE-03','CARE-04','CARE-05','CARE-07','CARE-08'], MHW:['MHW-02','MHW-03','MHW-04','MHW-06'],
+  NUT:['NUT-01','NUT-02','NUT-04'], FIT:['FIT-01','FIT-03'], FNB:['FNB-01','FNB-02','FNB-03'],
+  BEA:['BEA-01','BEA-02','BEA-03','BEA-04','BEA-05','BEA-06','BEA-07','BEA-08','BEA-09','BEA-10']
+}).flatMap(([code,codes]) => (LEAD_CATEGORY_TAXONOMY[LEAD_CATEGORY_CODE_TO_NAME[code]] || []).map((name,i) => [name,codes[i]])));
+function getTaxonomyFields(primary, secondary) {
+  const l1 = LEAD_CATEGORY_NAME_TO_CODE[primary] || '';
+  return { primary_l1_code:l1, primary_l1_name:primary || '', primary_l2_code:LEAD_SECONDARY_NAME_TO_CODE[secondary] || '', primary_l2_name:secondary || '', taxonomyVersion:'2026-07-30' };
+}
+function needsCategoryReview(row) {
+  return row.manualReviewStatus === 'required' || row.classificationStatus === 'classified_review_required' || row.classificationStatus === 'REVIEW_REQUIRED';
+}
 function getLeadCategory(row) {
   const raw = String(row.secondaryCategory || row.type || '').trim();
   const parts = raw.split(/[\/／]/).map(x => x.trim()).filter(Boolean);
-  let primary = String(row.primaryCategory || (parts.length > 1 ? parts[0] : '')).trim();
-  let secondary = String(row.secondaryCategory || (parts.length > 1 ? parts[parts.length - 1] : raw)).trim();
+  const storedPrimary = String(row.primaryCategory || '').trim();
+  let primary = storedPrimary || LEAD_CATEGORY_CODE_TO_NAME[String(row.primary_l1_code || '').trim()] || String(row.primary_l1_name || (parts.length > 1 ? parts[0] : '')).trim();
+  let secondary = String(row.secondaryCategory || row.primary_l2_name || (parts.length > 1 ? parts[parts.length - 1] : raw)).trim();
   if (LEAD_CATEGORY_TAXONOMY[primary] && LEAD_CATEGORY_TAXONOMY[primary].includes(secondary)) return { primary, secondary };
   const explicitPrimary = Object.keys(LEAD_CATEGORY_TAXONOMY).find(k => LEAD_CATEGORY_TAXONOMY[k].includes(secondary));
   if (explicitPrimary) return { primary:explicitPrimary, secondary };
   const text = [row.name,row.nameZH,row.nameEN,row.type,row.primaryCategory,row.secondaryCategory,row.tags,row.note].filter(Boolean).join(' ');
   const rules = [
-    ['推拿按摩','泰式按摩',/泰式.*按摩|thai\s*massage/i],
-    ['推拿按摩','SPA水疗',/\bspa\b|水療|水疗/i],
-    ['推拿按摩','拔罐刮痧',/拔罐|刮痧/i],
-    ['推拿按摩','艾灸馆',/艾灸/i],
-    ['推拿按摩','正骨推拿',/正骨|推拿/i],
-    ['推拿按摩','按摩足疗',/按摩|足療|足疗|massage/i],
-    ['医疗','康复护理',/物理治療|物理治疗|康復|康复|復康|复康|痛症|護理|护理/i],
-    ['医疗','口腔诊所',/牙科|齒科|齿科|口腔|dent(?:al|ist)/i],
-    ['医疗','眼科中心',/眼科|視光|视光|optical|ophthalm/i],
-    ['医疗','体检中心',/體檢|体检|身體檢查|身体检查|檢查中心|检查中心|health\s*check/i],
-    ['医疗','皮肤医美',/皮膚|皮肤|醫美|医美|整形|derma/i],
-    ['医疗','辅助生殖',/生殖|試管|试管|不孕|fertility|ivf/i],
-    ['医疗','中医诊所',/中醫|中医|註冊中醫|注册中医|finddoc中醫師|ehealth醫護機構/i],
-    ['医疗','综合诊所',/診所|诊所|醫務|医务|medical|clinic/i],
-    ['健康养生','瑜伽馆',/瑜伽|yoga/i],
-    ['健康养生','健身房',/健身|fitness|\bgym\b/i],
-    ['健康养生','心理咨询',/心理|輔導|辅导|counsell|psycholog/i],
-    ['健康养生','营养健康',/營養|营养|健康管理|養生|养生|wellness/i],
-    ['美容美体','美甲',/美甲|nail/i],
-    ['美容美体','美睫',/美睫|睫毛|lash/i],
-    ['美容美体','半永久',/半永久|紋繡|纹绣|microblad/i],
-    ['美容美体','美体美容',/美容|美體|美体|纖體|纤体|beauty|slimming/i],
-    ['餐饮','养生茶饮',/養生茶|养生茶|茶飲|茶饮/i],
-    ['餐饮','轻食',/輕食|轻食|沙律|沙拉/i],
-    ['餐饮','药膳',/藥膳|药膳/i]
+    ['美容美体与休闲养生','SPA水疗中心',/\bspa\b|水療|水疗/i],
+    ['康复与辅助医疗','物理治疗中心',/物理治療|物理治疗|physiotherap/i],
+    ['康复与辅助医疗','综合复康中心',/康復|康复|復康|复康|復健|复健/i],
+    ['中医与传统医学','中医骨伤／正骨诊所',/正骨|中醫骨傷|中医骨伤/i],
+    ['中医与传统医学','传统疗法／养生馆',/拔罐|刮痧|艾灸|養生館|养生馆/i],
+    ['美容美体与休闲养生','按摩／足疗中心',/泰式.*按摩|按摩|足療|足疗|massage/i],
+    ['医疗诊疗','牙科／口腔诊所',/牙科|齒科|齿科|口腔|dent(?:al|ist)/i],
+    ['医疗诊疗','眼科医疗中心',/眼科|ophthalm/i],
+    ['医疗诊疗','视光／验眼中心',/視光|视光|驗眼|验眼|optical|optometr/i],
+    ['医疗诊疗','体检中心',/體檢|体检|身體檢查|身体检查|檢查中心|检查中心|health\s*check/i],
+    ['医疗诊疗','医疗美容机构',/醫美|医美|整形|medical\s*beauty/i],
+    ['医疗诊疗','皮肤科诊所',/皮膚科|皮肤科|derma/i],
+    ['医疗诊疗','辅助生殖中心',/生殖|試管|试管|不孕|fertility|ivf/i],
+    ['中医与传统医学','中医综合诊所',/中醫|中医|註冊中醫|注册中医|finddoc中醫師/i],
+    ['运动健身','瑜伽馆',/瑜伽|yoga/i],
+    ['运动健身','健身房／健身中心',/健身|fitness|\bgym\b/i],
+    ['心理与身心健康','心理辅导／咨询中心',/心理|輔導|辅导|counsell|psycholog/i],
+    ['营养健康与药品零售','注册营养师／营养咨询中心',/營養師|营养师|營養諮詢|营养咨询/i],
+    ['美容美体与休闲养生','美甲店',/美甲|nail/i],
+    ['美容美体与休闲养生','美睫店',/美睫|睫毛|lash/i],
+    ['美容美体与休闲养生','半永久／纹绣中心',/半永久|紋繡|纹绣|microblad/i],
+    ['美容美体与休闲养生','生活美容／美体中心',/美容|美體|美体|纖體|纤体|beauty|slimming/i],
+    ['健康餐饮','养生茶饮／草本饮品店',/養生茶|养生茶|茶飲|茶饮/i],
+    ['健康餐饮','轻食／健康餐厅',/輕食|轻食|沙律|沙拉/i],
+    ['健康餐饮','药膳／中式养生餐厅',/藥膳|药膳/i],
+    ['医疗诊疗','综合／家庭医生诊所',/診所|诊所|醫務|医务|medical|clinic|ehealth醫護機構/i]
   ];
   const matched = rules.find(rule => rule[2].test(text));
-  return matched ? { primary:matched[0], secondary:matched[1] } : { primary:'待分类', secondary:'待分类' };
+  return matched ? { primary:matched[0], secondary:matched[1] } : { primary:'待复核', secondary:'待复核' };
 }
 function setLeadCategory(category) {
   leadCategory = LEAD_CATEGORY_TAXONOMY[category] ? category : '全部';
@@ -3450,19 +3487,14 @@ function openCoveragePanel() { const p=document.getElementById('coveragePanel');
 function closeCoveragePanel() { const p=document.getElementById('coveragePanel'); p.classList.remove('active'); p.classList.remove('combo-mode'); setCoveragePanelExpanded(false); updateCoverageUi(); }
 function getClinicCategoryLabel(p) {
   const cat = getLeadCategory(p);
-  return cat.primary === '待分类' ? '' : `${cat.primary}／${cat.secondary}`;
+  const label = cat.primary === '待复核' ? '待复核' : `${cat.primary}／${cat.secondary}`;
+  return needsCategoryReview(p) && label !== '待复核' ? `${label} · 待复核` : label;
 }
 function passCoverageFilter(p) {
   const f = coverageFilter || 'all';
   if (f === 'all') return true;
   if (f === 'claimed') return !isUnclaimedOwnerId(getOwnerId(p));
-  const cat = getLeadCategory(p);
-  if (f === '医疗') return cat.primary === '医疗';
-  if (f === '推拿按摩') return cat.primary === '推拿按摩';
-  if (f === '健康养生') return cat.primary === '健康养生';
-  if (f === '美容美体') return cat.primary === '美容美体';
-  if (f === '餐饮') return cat.primary === '餐饮';
-  return true;
+  return getLeadCategory(p).primary === f;
 }
 function setCoverageFilter(f) {
   coverageFilter = f || 'all';
