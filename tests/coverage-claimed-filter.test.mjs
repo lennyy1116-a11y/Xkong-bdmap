@@ -6,7 +6,7 @@ const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
 const app = readFileSync(new URL('../app.inline.js', import.meta.url), 'utf8');
 
 test('1km coverage filters expose claimed clinics instead of contact availability', () => {
-  const filters = html.match(/<div class="coverage-source-filters"[\s\S]*?<\/div>/)?.[0] || '';
+  const filters = html.match(/<div class="coverage-source-filters" id="coverageSourceFilters"[\s\S]*?<\/div>/)?.[0] || '';
   assert.match(filters, /data-filter="claimed"[^>]*>已认领/);
   assert.doesNotMatch(filters, /data-filter="phone"|有联系方式/);
 });

@@ -48,6 +48,7 @@ let leadSecondaryCategory = '全部';
 let editBaseRevision = null;
 const COVERAGE_KM = 1;
 const COVERAGE_LABEL = '1公里';
+let singleCoverageKm = COVERAGE_KM;
 const MALLS_KEY = 'bd_map_malls';
 const MALL_DATA_VERSION_KEY = 'bd_map_malls_version';
 const MALL_DATA_VERSION = 'link-hk-retail-2026-07-30-v2';
@@ -193,8 +194,8 @@ function clearCoverageCache() {
   coverageCache = new Map();
   coverageCacheVersion++;
 }
-function coverageCacheKey(center) {
-  return [center && center.id || 'unknown', Number(center && center.lat || 0).toFixed(6), Number(center && center.lng || 0).toFixed(6), getDataVersionKey()].join('|');
+function coverageCacheKey(center, radiusKm = COVERAGE_KM) {
+  return [center && center.id || 'unknown', Number(center && center.lat || 0).toFixed(6), Number(center && center.lng || 0).toFixed(6), Number(radiusKm).toFixed(2), getDataVersionKey()].join('|');
 }
 function shouldShowOnHome(p) {
   if (!p || p.deletedAt) return false;
@@ -419,7 +420,7 @@ function getFilteredPlaces() {
     // 1km覆盖模式：保留已处理机构、手动录入和点位，同时额外展示当前覆盖中心1km内未交流诊所
     if (shouldShowOnHome(p)) return true;
     // 覆盖模式下也显示1km内所有已导入/批量导入机构类型，不再只显示中医诊所。
-    return distanceKm(selectedMall.lat, selectedMall.lng, p.lat, p.lng) <= COVERAGE_KM;
+    return distanceKm(selectedMall.lat, selectedMall.lng, p.lat, p.lng) <= singleCoverageKm;
   });
 }
 function renderMarkers() {
@@ -444,7 +445,7 @@ function renderMarkers() {
     const offset = total > 1 ? 0.000045 : 0; // 约5米，解决同楼/同坐标 marker 互相盖住
     const markerLat = lat0 + Math.sin(angle) * offset;
     const markerLng = lng0 + Math.cos(angle) * offset;
-    const isHighlighted = selectedMall && distanceKm(selectedMall.lat, selectedMall.lng, lat0, lng0) <= COVERAGE_KM;
+    const isHighlighted = selectedMall && distanceKm(selectedMall.lat, selectedMall.lng, lat0, lng0) <= singleCoverageKm;
     const displayStatus = p.status || (p.isBaseClinic ? '基础池' : '未接触');
     const marker = L.marker([markerLat, markerLng], { icon: createIcon(displayStatus, p, isHighlighted) });
     const statusColor = STATUS_COLORS[displayStatus] || '#7f8c8d';
@@ -739,8 +740,8 @@ function selectPointCoverage(id) {
   selectedMallId = id;
   map.setView([p.lat,p.lng],15);
   renderMalls(); renderMarkers(); renderMallList(); updateCoverageUi(); openCoveragePanel();
-  const hits = getMallClinics(pointToCoverageTarget(p)).length;
-  toast(`📍 ${p.name}：1公里内 ${hits} 家未接触诊所`);
+  const hits = getMallClinics(pointToCoverageTarget(p), singleCoverageKm).length;
+  toast(`📍 ${p.name}：${singleCoverageKm}公里内 ${hits} 家诊所/机构`);
 }
 function getCoverageTargetById(id) {
   const mall = malls.find(m => m.id === id);
@@ -1597,7 +1598,7 @@ function exitCoverageMode() {
   updateCoverageUi();
   const panel = document.getElementById('coveragePanel');
   if (panel) panel.classList.remove('active');
-  toast('已退出1km覆盖模式');
+  toast(`已退出${singleCoverageKm}km覆盖模式`);
 }
 function loadMalls() {
   const stored = JSON.parse(localStorage.getItem(MALLS_KEY) || '[]');
@@ -1748,7 +1749,7 @@ function renderMalls() {
     if (c) L.circle([c.lat,c.lng], { radius:COVERAGE_KM*1000, color:'#f1c40f', weight:3, fillColor:'#f1c40f', fillOpacity:.065, dashArray:'5,5' }).addTo(coverageLayer);
   });
   const selected = getCoverageTargetById(selectedMallId);
-  if (selected) L.circle([selected.lat, selected.lng], { radius:COVERAGE_KM*1000, color:'#e67e22', weight:2, fillColor:'#e67e22', fillOpacity:.08 }).addTo(coverageLayer);
+  if (selected) L.circle([selected.lat, selected.lng], { radius:singleCoverageKm*1000, color:'#e67e22', weight:2, fillColor:'#e67e22', fillOpacity:.08 }).addTo(coverageLayer);
 }
 function renderMallList() {
   const box = document.getElementById('mallList');
@@ -1796,8 +1797,8 @@ function selectMall(id) {
   map.setView([m.lat, m.lng], 15);
   renderMalls(); renderMarkers(); renderMallList(); updateCoverageUi();
   openCoveragePanel();
-  const hits = getMallClinics(m).length;
-  toast(`🏬 ${m.name}：1公里内 ${hits} 家未接触诊所`);
+  const hits = getMallClinics(m, singleCoverageKm).length;
+  toast(`🏬 ${m.name}：${singleCoverageKm}公里内 ${hits} 家诊所/机构`);
 }
 function setCoveragePanelExpanded(expanded) {
   const p = document.getElementById('coveragePanel');
@@ -1835,6 +1836,16 @@ function setCoverageFilter(f) {
   if (document.getElementById('coveragePanel').classList.contains('combo-mode') && activeComboResultTab) renderComboCoveragePage(activeComboResultTab);
   else renderCoverageClinicPage();
 }
+function setCoverageRadius(km) {
+  const next = Number(km);
+  if (![1, 4].includes(next) || next === singleCoverageKm) return;
+  singleCoverageKm = next;
+  document.querySelectorAll('.coverage-radius-chip').forEach(b => b.classList.toggle('active', Number(b.dataset.radius) === singleCoverageKm));
+  renderMalls();
+  renderMarkers();
+  renderCoverageClinicPage();
+  updateCoverageUi();
+}
 function clinicBadges(p) {
   const phone = p.phone ? '<span class="phone-badge">电话</span>' : '';
   const cat = getClinicCategoryLabel(p);
@@ -1843,7 +1854,7 @@ function clinicBadges(p) {
 }
 function openCoverageClinicDetails(id) {
   const selected = getCoverageTargetById(selectedMallId);
-  const row = selected ? getMallClinics(selected).find(p => p.id === id || p._promotedPlaceId === id) : null;
+  const row = selected ? getMallClinics(selected, singleCoverageKm).find(p => p.id === id || p._promotedPlaceId === id) : null;
   if (!row) { goToPlace(id); return; }
   const promoted = row._promotedPlaceId ? places.find(p => p.id === row._promotedPlaceId) : getPromotedPlaceForBaseClinic(row);
   const targetId = (promoted && promoted.id) || row.id;
@@ -1856,7 +1867,7 @@ function renderCoverageClinicPage() {
   const summary = document.getElementById('coverageSummary');
   const box = document.getElementById('coverageClinicList');
   if (!selected || !box) return;
-  const allHits = getMallClinics(selected);
+  const allHits = getMallClinics(selected, singleCoverageKm);
   const hits = allHits.filter(passCoverageFilter).sort((a,b) => {
     const da = a._distanceKm !== undefined ? a._distanceKm : distanceKm(selected.lat, selected.lng, a.lat, a.lng);
     const db = b._distanceKm !== undefined ? b._distanceKm : distanceKm(selected.lat, selected.lng, b.lat, b.lng);
@@ -1864,7 +1875,7 @@ function renderCoverageClinicPage() {
   });
   const warmCount = hits.filter(p => getCoverageSortRank(p) < 3).length;
   const claimedCount = allHits.filter(p => !isUnclaimedOwnerId(getOwnerId(p))).length;
-  title.textContent = `${selected.name} · 1公里诊所`;
+  title.textContent = `${selected.name} · ${singleCoverageKm}公里诊所/机构`;
   summary.textContent = `当前 ${hits.length}/${allHits.length} 家｜已认领 ${claimedCount} 家｜已沟通/意向/合作 ${warmCount} 家置顶`;
   box.innerHTML = hits.length ? hits.map((p,i) => {
     const d = p._distanceKm !== undefined ? p._distanceKm : distanceKm(selected.lat, selected.lng, p.lat, p.lng);
@@ -1878,7 +1889,7 @@ function renderCoverageClinicPage() {
         <button class="copy-btn" onclick="copyText('${jsStr(p.id)}','all')">复制整条</button>
       </div>
     </div>`;
-  }).join('') : '<div class="list-empty">这个商场1公里内暂未命中未接触诊所</div>';
+  }).join('') : `<div class="list-empty">这个点位${singleCoverageKm}公里内暂未命中诊所/机构</div>`;
 }
 
 
@@ -2228,16 +2239,16 @@ async function exportComboCsv() {
 function getCurrentCoverageRows() {
   const selected = getCoverageTargetById(selectedMallId);
   if (!selected) return [];
-  return getMallClinics(selected).filter(passCoverageFilter).map((p,i) => clinicExportRow(p, {
+  return getMallClinics(selected, singleCoverageKm).filter(passCoverageFilter).map((p,i) => clinicExportRow(p, {
     distance_km: (p._distanceKm !== undefined ? p._distanceKm : distanceKm(selected.lat, selected.lng, p.lat, p.lng)).toFixed(3),
     coverage_center: selected.name,
-    coverage_mode: 'single_1km'
+    coverage_mode: `single_${singleCoverageKm}km`
   }));
 }
 async function exportCurrentCoverageCsv() {
   const rows = getCurrentCoverageRows();
   if (!rows.length) { toast('当前没有可导出的诊所'); return; }
-  await downloadXlsx(`${rows[0].coverage_center}_1km诊所清单_统一字段.xlsx`, CLINIC_EXPORT_HEADERS, rows, { sheetName:'1km诊所清单', errorValidation:true });
+  await downloadXlsx(`${rows[0].coverage_center}_${singleCoverageKm}km诊所机构清单_统一字段.xlsx`, CLINIC_EXPORT_HEADERS, rows, { sheetName:`${singleCoverageKm}km诊所机构`, errorValidation:true });
   toast('已按统一字段导出Excel，error_upload_action已加下拉');
 }
 function exportCurrentCoverageErrorTemplate() {
@@ -2248,7 +2259,7 @@ function exportCurrentCoverageErrorTemplate() {
 async function copyCurrentCoverageSummary() {
   const rows = getCurrentCoverageRows();
   if (!rows.length) { toast('当前没有诊所'); return; }
-  const text = `${rows[0].mall} 1公里内未接触诊所：${rows.length}家\n` + rows.slice(0,20).map(r => `${r.rank}. ${r.clinic} ${r.distanceKm}km｜${r.address}`).join('\n');
+  const text = `${rows[0].coverage_center} ${singleCoverageKm}公里内诊所/机构：${rows.length}家\n` + rows.slice(0,20).map(r => `${r.rank}. ${r.clinic} ${r.distance_km}km｜${r.address}`).join('\n');
   await navigator.clipboard.writeText(text);
   toast('已复制摘要');
 }
@@ -2361,16 +2372,16 @@ function mergeBaseClinicOwner(base) {
     _promotedPlaceId: promoted.id
   };
 }
-function getBaseMallClinics(mall) {
+function getBaseMallClinics(mall, radiusKm = COVERAGE_KM) {
   return baseClinics
-    .filter(p => isClinicLike(p) && distanceKm(mall.lat, mall.lng, p.lat, p.lng) <= COVERAGE_KM)
+    .filter(p => isClinicLike(p) && distanceKm(mall.lat, mall.lng, p.lat, p.lng) <= radiusKm)
     .map(p => {
       const merged = mergeBaseClinicOwner(p);
       return { ...merged, _distanceKm: distanceKm(mall.lat, mall.lng, p.lat, p.lng), status: merged.status || '基础池' };
     })
     .sort((a,b) => a._distanceKm - b._distanceKm);
 }
-function computeMallClinics(mall) {
+function computeMallClinics(mall, radiusKm = COVERAGE_KM) {
   const byKey = new Map();
   function upsertCoverageRow(raw) {
     const row = { ...raw, _distanceKm: raw._distanceKm !== undefined ? raw._distanceKm : distanceKm(mall.lat, mall.lng, raw.lat, raw.lng) };
@@ -2383,8 +2394,8 @@ function computeMallClinics(mall) {
       keys.forEach(k => byKey.set(k, row));
     }
   }
-  places.filter(p => isClinicLike(p) && distanceKm(mall.lat, mall.lng, p.lat, p.lng) <= COVERAGE_KM).forEach(upsertCoverageRow);
-  getBaseMallClinics(mall).forEach(upsertCoverageRow);
+  places.filter(p => isClinicLike(p) && distanceKm(mall.lat, mall.lng, p.lat, p.lng) <= radiusKm).forEach(upsertCoverageRow);
+  getBaseMallClinics(mall, radiusKm).forEach(upsertCoverageRow);
   const unique = [];
   const outSeen = new Set();
   byKey.forEach(row => {
@@ -2395,11 +2406,11 @@ function computeMallClinics(mall) {
   });
   return unique.sort((a,b) => getCoverageSortRank(a) - getCoverageSortRank(b) || a._distanceKm - b._distanceKm);
 }
-function getMallClinics(mall) {
+function getMallClinics(mall, radiusKm = COVERAGE_KM) {
   if (!mall || !mall.lat || !mall.lng) return [];
-  const key = coverageCacheKey(mall);
+  const key = coverageCacheKey(mall, radiusKm);
   if (coverageCache.has(key)) return coverageCache.get(key);
-  const result = computeMallClinics(mall);
+  const result = computeMallClinics(mall, radiusKm);
   coverageCache.set(key, result);
   return result;
 }
