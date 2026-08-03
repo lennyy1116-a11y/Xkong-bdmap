@@ -750,9 +750,6 @@ body.home-mode .map-filter-bar { display:none !important; }
         <button class="lead-filter-chip" data-category="运动健身" onclick="setLeadCategory('运动健身')">运动健身</button>
         <button class="lead-filter-chip" data-category="健康餐饮" onclick="setLeadCategory('健康餐饮')">健康餐饮</button>
         <button class="lead-filter-chip" data-category="美容美体与休闲养生" onclick="setLeadCategory('美容美体与休闲养生')">美容美体与休闲养生</button>
-        <button class="lead-filter-chip" data-category="待复核" onclick="setLeadCategory('待复核')">待复核</button>
-
-        <button class="lead-filter-chip" data-category="待分类" onclick="setLeadCategory('待分类')">待分类</button>
       </div>
     </div>
     <div class="lead-filter-section secondary" id="leadSecondarySection"><div class="lead-filter-section-head"><span class="lead-filter-section-title">二级类目</span><span class="lead-filter-section-note">按当前一级类目细分</span></div><div class="lead-filter-row" id="leadSecondaryRow"></div></div>
@@ -851,21 +848,14 @@ body.home-mode .map-filter-bar { display:none !important; }
     <input type="text" id="fName" placeholder="例如：仁心堂中医诊所">
   </div>
   <div class="form-row">
-    <div class="form-group">
-      <label>类型</label>
+    <div class="form-group point-only-field">
+      <label>点位类型</label>
       <select id="fType" onchange="handleTypeSelectChange()">
-        <option value="中医诊所">中医诊所</option>
-        <option value="美容院">美容院</option>
-        <option value="艾灸馆">艾灸馆</option>
-        <option value="养生馆">养生馆</option>
-        <option value="社区中心">社区中心</option>
-        <option value="NGO">NGO</option>
-        <option value="其他">其他</option>
         <option value="商场">商场</option>
         <option value="社区场地">社区场地</option>
         <option value="活动地点">活动地点</option>
         <option value="议员办事处">议员办事处</option>
-        <option value="__custom__">➕ 新增类型...</option>
+        <option value="__custom__">➕ 新增点位类型...</option>
       </select>
     </div>
     <div class="form-group" id="institutionCategoryRow" style="display:none">
@@ -994,7 +984,7 @@ body.home-mode .map-filter-bar { display:none !important; }
   <div class="search-handle"></div>
   <div class="search-header">
     <button class="top-btn" onclick="closeSearch()">✕</button>
-    <input type="text" id="searchInput" placeholder="搜索中医诊所、美容院...">
+    <input type="text" id="searchInput" placeholder="搜索机构名称、地址或新类目...">
     <button class="top-btn" onclick="doSearch()" style="background:var(--orange)">🔍</button>
   </div>
   <div class="district-bar" id="districtBar">
@@ -1269,11 +1259,15 @@ body.home-mode .map-filter-bar { display:none !important; }
     <div class="coverage-source-filters" id="coverageSourceFilters">
       <button class="coverage-filter-chip active" data-filter="all" onclick="setCoverageFilter('all')">全部</button>
       <button class="coverage-filter-chip" data-filter="claimed" onclick="setCoverageFilter('claimed')">已认领</button>
-      <button class="coverage-filter-chip" data-filter="医疗" onclick="setCoverageFilter('医疗')">医疗</button>
-      <button class="coverage-filter-chip" data-filter="推拿按摩" onclick="setCoverageFilter('推拿按摩')">推拿按摩</button>
-      <button class="coverage-filter-chip" data-filter="健康养生" onclick="setCoverageFilter('健康养生')">健康养生</button>
-      <button class="coverage-filter-chip" data-filter="美容美体" onclick="setCoverageFilter('美容美体')">美容美体</button>
-      <button class="coverage-filter-chip" data-filter="餐饮" onclick="setCoverageFilter('餐饮')">餐饮</button>
+      <button class="coverage-filter-chip" data-filter="医疗诊疗" onclick="setCoverageFilter('医疗诊疗')">医疗诊疗</button>
+      <button class="coverage-filter-chip" data-filter="中医与传统医学" onclick="setCoverageFilter('中医与传统医学')">中医与传统医学</button>
+      <button class="coverage-filter-chip" data-filter="康复与辅助医疗" onclick="setCoverageFilter('康复与辅助医疗')">康复与辅助医疗</button>
+      <button class="coverage-filter-chip" data-filter="护理养老与社区照护" onclick="setCoverageFilter('护理养老与社区照护')">护理养老与社区照护</button>
+      <button class="coverage-filter-chip" data-filter="心理与身心健康" onclick="setCoverageFilter('心理与身心健康')">心理与身心健康</button>
+      <button class="coverage-filter-chip" data-filter="营养健康与药品零售" onclick="setCoverageFilter('营养健康与药品零售')">营养健康与药品零售</button>
+      <button class="coverage-filter-chip" data-filter="运动健身" onclick="setCoverageFilter('运动健身')">运动健身</button>
+      <button class="coverage-filter-chip" data-filter="健康餐饮" onclick="setCoverageFilter('健康餐饮')">健康餐饮</button>
+      <button class="coverage-filter-chip" data-filter="美容美体与休闲养生" onclick="setCoverageFilter('美容美体与休闲养生')">美容美体与休闲养生</button>
     </div>
     <div class="export-row"><button onclick="exportCurrentCoverageCsv()">导出表格</button><button onclick="exportCurrentCoverageErrorTemplate()">报错上传Excel模板</button><button onclick="copyCurrentCoverageSummary()">复制摘要</button></div>
     <div id="coverageClinicList" class="coverage-clinic-list"></div>
@@ -1774,7 +1768,7 @@ function loadCustomTypeOptions(types) {
   customTypes.forEach(ensureTypeOption);
 }
 function syncCustomTypesFromPlaces() {
-  loadCustomTypeOptions(places.map(p => p && p.type));
+  loadCustomTypeOptions(places.filter(isPointEntry).map(p => p && p.type));
 }
 
 function isInstitutionEntry(p) {
@@ -1782,7 +1776,7 @@ function isInstitutionEntry(p) {
   if (isPointEntry(p)) return false;
   if (p.entryKind === 'institution') return true;
   if (p.importSource === 'batch_shop_import') return true;
-  if (p.name && (p.address || p.phone || p.contact || p.type)) return true;
+  if (p.name && (p.address || p.phone || p.contact || p.primary_l1_code)) return true;
   return false;
 }
 async function saveCustomTypeToCloud(type) {
@@ -2235,16 +2229,16 @@ function setEntryKind(kind) {
   document.getElementById('nameLabel').textContent = k === 'point' ? '点位名称 *' : '机构名称 *';
   document.getElementById('visitLabel').textContent = k === 'point' ? '点位记录' : '交流记录';
   document.getElementById('newVisitNote').placeholder = k === 'point' ? '添加点位备注、巡场记录、合作进展...' : '添加本次交流备注...';
-  document.getElementById('fName').placeholder = k === 'point' ? '例如：朗豪坊 / 乐富广场活动点' : '例如：仁心堂中医诊所';
+  document.getElementById('fName').placeholder = k === 'point' ? '例如：朗豪坊 / 乐富广场活动点' : '例如：仁心堂中医综合诊所';
   const catRow = document.getElementById('institutionCategoryRow');
   const secRow = document.getElementById('institutionSecondaryRow');
   if (k === 'point') {
     if (activeStatus && activeStatus !== '点位') lastInstitutionStatus = activeStatus;
-    if (['中医诊所','美容院','艾灸馆','养生馆','NGO'].includes(document.getElementById('fType').value)) document.getElementById('fType').value = '商场';
+    if (!['商场','社区场地','活动地点','议员办事处'].includes(document.getElementById('fType').value)) document.getElementById('fType').value = '商场';
     if (catRow) catRow.style.display = 'none';
     if (secRow) secRow.style.display = 'none';
   } else {
-    if (['商场','社区场地','活动地点','议员办事处'].includes(document.getElementById('fType').value)) document.getElementById('fType').value = '中医诊所';
+    document.getElementById('fType').value = '商场';
     setStatusChip(lastInstitutionStatus || '已交流');
     if (catRow) catRow.style.display = '';
     if (secRow) secRow.style.display = '';
@@ -2294,8 +2288,8 @@ function openEditSheet(id) {
   document.getElementById('editLat').value = p.lat;
   document.getElementById('editLng').value = p.lng;
   document.getElementById('fName').value = p.name || '';
-  ensureTypeOption(p.type);
-  document.getElementById('fType').value = p.type || '中医诊所';
+  if (isPointEntry(p)) ensureTypeOption(p.type);
+  document.getElementById('fType').value = isPointEntry(p) ? (p.type || '商场') : '商场';
   const catRow = document.getElementById('institutionCategoryRow');
   const secRow = document.getElementById('institutionSecondaryRow');
   if (!isPointEntry(p)) {
@@ -2399,7 +2393,7 @@ function resetForm() {
   document.getElementById('editId').value = '';
   editBaseRevision = null;
   document.getElementById('fName').value = '';
-  document.getElementById('fType').value = '中医诊所';
+  document.getElementById('fType').value = '商场';
   document.getElementById('fPrimaryCategory').value = '';
   handlePrimaryCategoryChange();
   if (document.getElementById('entryKind')) setEntryKind('institution');
@@ -2476,9 +2470,7 @@ async function savePlace() {
     name,
     entryKind,
     lastInstitutionStatus: entryKind === 'point' ? (lastInstitutionStatus || selectedInstitutionStatus || '已交流') : selectedInstitutionStatus,
-    type: selectedType,
-    primaryCategory: entryKind === 'institution' ? (document.getElementById('fPrimaryCategory').value || '') : '',
-    secondaryCategory: entryKind === 'institution' ? (document.getElementById('fSecondaryCategory').value || '') : '',
+    type: entryKind === 'point' ? selectedType : '',
     address: document.getElementById('fAddr').value.trim(),
     contact: document.getElementById('fContact').value.trim(),
     phone: document.getElementById('fPhone').value.trim(),
@@ -2495,7 +2487,12 @@ async function savePlace() {
     updatedByName: currentUsername || '匿名',
     updatedByAvatar: currentAvatar
   };
-  if (entryKind === 'institution') Object.assign(data, getTaxonomyFields(data.primaryCategory, data.secondaryCategory));
+  if (entryKind === 'institution') {
+    const primary = document.getElementById('fPrimaryCategory').value || '';
+    const secondary = document.getElementById('fSecondaryCategory').value || '';
+    if (!primary || !secondary) { feedback('err','请选择完整的一级和二级类目'); toast('请选择完整类目'); return; }
+    Object.assign(data, getTaxonomyFields(primary, secondary));
+  }
   const existIdx = places.findIndex(p => p.id === data.id);
   if (existIdx >= 0) {
     data.createdAt = places[existIdx].createdAt || new Date().toISOString();
@@ -2899,7 +2896,7 @@ const LEAD_CATEGORY_TAXONOMY = {
   '中医与传统医学': ['中医综合诊所','中医骨伤／正骨诊所','传统疗法／养生馆'],
   '康复与辅助医疗': ['物理治疗中心','职业治疗中心','言语治疗中心','脊医诊所','听力／听觉服务中心','足病诊疗／足部康复中心','综合复康中心'],
   '护理养老与社区照护': ['家居照顾及支援队','长者日间护理中心','社区复康日间中心','安老院／护养院／护理院','认知障碍／记忆照护中心','残疾人士日间训练／支援中心'],
-  '心理与身心健康': ['临床心理服务中心','心理辅导／咨询中心','儿童发展／评估中心','成瘾治疗／辅导中心'],
+  '心理与身心健康': ['精神科诊所','临床心理服务中心','心理辅导／咨询中心','儿童发展／评估中心','社区精神健康／复元中心','成瘾治疗／辅导中心'],
   '营养健康与药品零售': ['注册营养师／营养咨询中心','体重管理／健康管理中心','保健品／营养补充品零售'],
   '运动健身': ['健身房／健身中心','瑜伽馆'],
   '健康餐饮': ['轻食／健康餐厅','养生茶饮／草本饮品店','药膳／中式养生餐厅'],
@@ -2913,57 +2910,26 @@ const LEAD_CATEGORY_NAME_TO_CODE = Object.fromEntries(Object.entries(LEAD_CATEGO
 const LEAD_SECONDARY_NAME_TO_CODE = Object.fromEntries(Object.entries({
   MED:['MED-01','MED-02','MED-03','MED-04','MED-05','MED-06','MED-07','MED-08','MED-09','MED-10','MED-11','MED-12','MED-13','MED-14','MED-15','MED-16'],
   TCM:['TCM-01','TCM-02','TCM-06'], AHP:['AHP-01','AHP-02','AHP-03','AHP-04','AHP-05','AHP-06','AHP-08'],
-  CARE:['CARE-02','CARE-03','CARE-04','CARE-05','CARE-07','CARE-08'], MHW:['MHW-02','MHW-03','MHW-04','MHW-06'],
+  CARE:['CARE-02','CARE-03','CARE-04','CARE-05','CARE-07','CARE-08'], MHW:['MHW-01','MHW-02','MHW-03','MHW-04','MHW-05','MHW-06'],
   NUT:['NUT-01','NUT-02','NUT-04'], FIT:['FIT-01','FIT-03'], FNB:['FNB-01','FNB-02','FNB-03'],
   BEA:['BEA-01','BEA-02','BEA-03','BEA-04','BEA-05','BEA-06','BEA-07','BEA-08','BEA-09','BEA-10']
 }).flatMap(([code,codes]) => (LEAD_CATEGORY_TAXONOMY[LEAD_CATEGORY_CODE_TO_NAME[code]] || []).map((name,i) => [name,codes[i]])));
 function getTaxonomyFields(primary, secondary) {
   const l1 = LEAD_CATEGORY_NAME_TO_CODE[primary] || '';
-  return { primary_l1_code:l1, primary_l1_name:primary || '', primary_l2_code:LEAD_SECONDARY_NAME_TO_CODE[secondary] || '', primary_l2_name:secondary || '', taxonomyVersion:'2026-07-30' };
+  const l2 = LEAD_SECONDARY_NAME_TO_CODE[secondary] || '';
+  return { primary_l1_code:l1, primary_l1_name:primary || '', primary_l2_code:l2, primary_l2_name:secondary || '', taxonomyVersion:'2026-07-30' };
+}
+function hasValidTaxonomy(row) {
+  const primary = String(row.primary_l1_name || '').trim();
+  const secondary = String(row.primary_l2_name || '').trim();
+  return Boolean(LEAD_CATEGORY_TAXONOMY[primary] && LEAD_CATEGORY_TAXONOMY[primary].includes(secondary) && LEAD_CATEGORY_NAME_TO_CODE[primary] === String(row.primary_l1_code || '').trim() && LEAD_SECONDARY_NAME_TO_CODE[secondary] === String(row.primary_l2_code || '').trim());
 }
 function needsCategoryReview(row) {
-  return row.manualReviewStatus === 'required' || row.classificationStatus === 'classified_review_required' || row.classificationStatus === 'REVIEW_REQUIRED';
+  return !hasValidTaxonomy(row) || row.manualReviewStatus === 'required' || row.classificationStatus === 'classified_review_required' || row.classificationStatus === 'REVIEW_REQUIRED';
 }
 function getLeadCategory(row) {
-  const raw = String(row.secondaryCategory || row.type || '').trim();
-  const parts = raw.split(/[\/／]/).map(x => x.trim()).filter(Boolean);
-  const storedPrimary = String(row.primaryCategory || '').trim();
-  let primary = storedPrimary || LEAD_CATEGORY_CODE_TO_NAME[String(row.primary_l1_code || '').trim()] || String(row.primary_l1_name || (parts.length > 1 ? parts[0] : '')).trim();
-  let secondary = String(row.secondaryCategory || row.primary_l2_name || (parts.length > 1 ? parts[parts.length - 1] : raw)).trim();
-  if (LEAD_CATEGORY_TAXONOMY[primary] && LEAD_CATEGORY_TAXONOMY[primary].includes(secondary)) return { primary, secondary };
-  const explicitPrimary = Object.keys(LEAD_CATEGORY_TAXONOMY).find(k => LEAD_CATEGORY_TAXONOMY[k].includes(secondary));
-  if (explicitPrimary) return { primary:explicitPrimary, secondary };
-  const text = [row.name,row.nameZH,row.nameEN,row.type,row.primaryCategory,row.secondaryCategory,row.tags,row.note].filter(Boolean).join(' ');
-  const rules = [
-    ['美容美体与休闲养生','SPA水疗中心',/\bspa\b|水療|水疗/i],
-    ['康复与辅助医疗','物理治疗中心',/物理治療|物理治疗|physiotherap/i],
-    ['康复与辅助医疗','综合复康中心',/康復|康复|復康|复康|復健|复健/i],
-    ['中医与传统医学','中医骨伤／正骨诊所',/正骨|中醫骨傷|中医骨伤/i],
-    ['中医与传统医学','传统疗法／养生馆',/拔罐|刮痧|艾灸|養生館|养生馆/i],
-    ['美容美体与休闲养生','按摩／足疗中心',/泰式.*按摩|按摩|足療|足疗|massage/i],
-    ['医疗诊疗','牙科／口腔诊所',/牙科|齒科|齿科|口腔|dent(?:al|ist)/i],
-    ['医疗诊疗','眼科医疗中心',/眼科|ophthalm/i],
-    ['医疗诊疗','视光／验眼中心',/視光|视光|驗眼|验眼|optical|optometr/i],
-    ['医疗诊疗','体检中心',/體檢|体检|身體檢查|身体检查|檢查中心|检查中心|health\s*check/i],
-    ['医疗诊疗','医疗美容机构',/醫美|医美|整形|medical\s*beauty/i],
-    ['医疗诊疗','皮肤科诊所',/皮膚科|皮肤科|derma/i],
-    ['医疗诊疗','辅助生殖中心',/生殖|試管|试管|不孕|fertility|ivf/i],
-    ['中医与传统医学','中医综合诊所',/中醫|中医|註冊中醫|注册中医|finddoc中醫師/i],
-    ['运动健身','瑜伽馆',/瑜伽|yoga/i],
-    ['运动健身','健身房／健身中心',/健身|fitness|\bgym\b/i],
-    ['心理与身心健康','心理辅导／咨询中心',/心理|輔導|辅导|counsell|psycholog/i],
-    ['营养健康与药品零售','注册营养师／营养咨询中心',/營養師|营养师|營養諮詢|营养咨询/i],
-    ['美容美体与休闲养生','美甲店',/美甲|nail/i],
-    ['美容美体与休闲养生','美睫店',/美睫|睫毛|lash/i],
-    ['美容美体与休闲养生','半永久／纹绣中心',/半永久|紋繡|纹绣|microblad/i],
-    ['美容美体与休闲养生','生活美容／美体中心',/美容|美體|美体|纖體|纤体|beauty|slimming/i],
-    ['健康餐饮','养生茶饮／草本饮品店',/養生茶|养生茶|茶飲|茶饮/i],
-    ['健康餐饮','轻食／健康餐厅',/輕食|轻食|沙律|沙拉/i],
-    ['健康餐饮','药膳／中式养生餐厅',/藥膳|药膳/i],
-    ['医疗诊疗','综合／家庭医生诊所',/診所|诊所|醫務|医务|medical|clinic|ehealth醫護機構/i]
-  ];
-  const matched = rules.find(rule => rule[2].test(text));
-  return matched ? { primary:matched[0], secondary:matched[1] } : { primary:'待复核', secondary:'待复核' };
+  if (!hasValidTaxonomy(row)) return { primary:'待复核', secondary:'待复核' };
+  return { primary:String(row.primary_l1_name).trim(), secondary:String(row.primary_l2_name).trim() };
 }
 function setLeadCategory(category) {
   leadCategory = LEAD_CATEGORY_TAXONOMY[category] ? category : '全部';
@@ -3005,7 +2971,7 @@ function enrichLeadRow(row) {
     _leadErrorLabel: errorLabel,
     _leadDistanceKm: dist,
     _leadWarm: getCoverageSortRank(row) < 3,
-    _leadHaystack: [row.name,row.address,row.type,row.contact,row.phone,category.primary,category.secondary,getOwnerLabel(row)].join(' ').toLowerCase()
+    _leadHaystack: [row.name,row.address,row.contact,row.phone,row.primary_l1_code,row.primary_l2_code,category.primary,category.secondary,getOwnerLabel(row)].join(' ').toLowerCase()
   };
 }
 function getLeadRows(force) {
@@ -3487,8 +3453,8 @@ function openCoveragePanel() { const p=document.getElementById('coveragePanel');
 function closeCoveragePanel() { const p=document.getElementById('coveragePanel'); p.classList.remove('active'); p.classList.remove('combo-mode'); setCoveragePanelExpanded(false); updateCoverageUi(); }
 function getClinicCategoryLabel(p) {
   const cat = getLeadCategory(p);
-  const label = cat.primary === '待复核' ? '待复核' : `${cat.primary}／${cat.secondary}`;
-  return needsCategoryReview(p) && label !== '待复核' ? `${label} · 待复核` : label;
+  const label = cat.primary === '待复核' ? '类目待复核' : `${cat.primary}／${cat.secondary}`;
+  return needsCategoryReview(p) && label !== '类目待复核' ? `${label} · 待复核` : label;
 }
 function passCoverageFilter(p) {
   const f = coverageFilter || 'all';
@@ -3811,7 +3777,7 @@ async function copyComboSummary() {
   await navigator.clipboard.writeText(text); toast('组合摘要已复制');
 }
 
-const CLINIC_EXPORT_HEADERS = ['clinic_id','source_base_id','name','address','type','source','contact','phone','lat','lng','owner_id','owner_name','status','distance_km','coverage_center','coverage_mode','data_quality_status','error_type','error_note','error_upload_action'];
+const CLINIC_EXPORT_HEADERS = ['clinic_id','source_base_id','name','address','primary_l1_code','primary_l1_name','primary_l2_code','primary_l2_name','contact','phone','lat','lng','owner_id','owner_name','status','distance_km','coverage_center','coverage_mode','data_quality_status','error_type','error_note','error_upload_action'];
 const ERROR_UPLOAD_ACTIONS = ['','地址错误','电话错误','重复店铺','已停业','类型错误','其他','已修正'];
 function csvEscape(v) { return '"' + String(v === undefined || v === null ? '' : v).replace(/"/g,'""') + '"'; }
 function downloadCsv(filename, headers, rows) {
@@ -3858,8 +3824,10 @@ function clinicExportRow(p, extra={}) {
     source_base_id: p.sourceBaseId || (p.isBaseClinic ? p.id : '') || '',
     name: p.name || '',
     address: p.address || '',
-    type: p.type || '',
-    source: getClinicCategoryLabel(p) || (p.isBaseClinic ? '医疗／中医诊所' : ''),
+    primary_l1_code: p.primary_l1_code || '',
+    primary_l1_name: p.primary_l1_name || '',
+    primary_l2_code: p.primary_l2_code || '',
+    primary_l2_name: p.primary_l2_name || '',
     contact: p.contact || '',
     phone: p.phone || '',
     lat: p.lat || '',
@@ -4152,7 +4120,7 @@ function resetMallCache() {
 }
 function normalizeStatus(s) { return String(s || '未接触').trim().replace('待跟進','待跟进'); }
 function isUncontactedPlace(p) { const s = normalizeStatus(p.status); return s === '未接触' || s === '待跟进' || s === '未交流' || s === '待跟進' || s === '待聯絡' || s === '待联系'; }
-function isClinicLike(p) { const s = ((p.type||'')+' '+(p.name||'')).toLowerCase(); return s.includes('中醫') || s.includes('中医') || s.includes('clinic') || s.includes('診所') || s.includes('诊所'); }
+function isClinicLike(p) { return !isPointEntry(p) && hasValidTaxonomy(p); }
 function distanceKm(lat1,lng1,lat2,lng2) {
   const R=6371, dLat=(lat2-lat1)*Math.PI/180, dLng=(lng2-lng1)*Math.PI/180;
   const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)**2;
@@ -5169,7 +5137,7 @@ async function copyDashboardSummary() {
 // ============ BATCH SHOP IMPORT v3.6.10 ============
 let batchShopPreviewRows = [];
 let importFailureRows = [];
-const BATCH_SHOP_HEADERS = ['店铺名称','类型','地址','区域','联系人','电话','来源','备注','认领人','状态','lat','lng'];
+const BATCH_SHOP_HEADERS = ['店铺名称','一级类目','二级类目','地址','区域','联系人','电话','来源','备注','认领人','状态','lat','lng'];
 function openBatchShopImport(){
   const m=document.getElementById('batchShopModal'); if(m) m.classList.add('active'); renderBatchShopPreview();
 }
@@ -5233,7 +5201,8 @@ async function handleBatchShopFile(event){
       const name=getRowAny(obj,['店铺名称','店鋪名稱','机构名称','機構名稱','诊所名称','診所名稱','name','Name']);
       const address=getRowAny(obj,['地址','address','Address']);
       const phone=getRowAny(obj,['电话','電話','phone','Phone','联系电话','聯絡電話']);
-      const type=getRowAny(obj,['类型','類型','type','Type']) || '中医诊所';
+      const primaryCategory=getRowAny(obj,['一级类目','一級類目','primary_l1_name']);
+      const secondaryCategory=getRowAny(obj,['二级类目','二級類目','primary_l2_name']);
       const district=getRowAny(obj,['区域','區域','district','District']);
       const contact=getRowAny(obj,['联系人','聯絡人','contact','Contact']);
       const source=getRowAny(obj,['来源','來源','source','Source']) || '批量导入';
@@ -5243,7 +5212,9 @@ async function handleBatchShopFile(event){
       const latRaw=getRowAny(obj,['lat','纬度','緯度','latitude']);
       const lngRaw=getRowAny(obj,['lng','经度','經度','longitude','lon']);
       if(!name && !address && !phone) continue;
-      const item={ rowNumber:r, name, address, phone, type, district, contact, source, note, ownerName, status, lat:parseFloat(latRaw), lng:parseFloat(lngRaw), messages:[], importable:true, coordStatus:'待处理', duplicateMatches:[] };
+      const taxonomyFields=getTaxonomyFields(primaryCategory, secondaryCategory);
+      const item={ rowNumber:r, name, address, phone, primaryCategory, secondaryCategory, ...taxonomyFields, district, contact, source, note, ownerName, status, lat:parseFloat(latRaw), lng:parseFloat(lngRaw), messages:[], importable:true, coordStatus:'待处理', duplicateMatches:[] };
+      if(!hasValidTaxonomy(item)){ item.importable=false; item.messages.push('一级／二级类目不在新类目体系中'); }
       if(!name){ item.importable=false; item.messages.push('缺店铺名称'); }
       if(!address){ item.messages.push('缺地址'); }
       const hasCoords=window.BDMapImportSafety && window.BDMapImportSafety.isValidHongKongCoordinate(item.lat,item.lng);
@@ -5288,11 +5259,11 @@ function renderBatchShopPreview(){
     const cls=!x.importable?'err':(x.duplicateMatches.length || String(x.coordStatus).includes('待核')?'warn':'ok');
     const status=!x.importable?'不可导入':(x.duplicateMatches.length?'疑似重复':'可导入');
     const coord=(x.lat&&x.lng)?`${Number(x.lat).toFixed(6)},${Number(x.lng).toFixed(6)}<br><span class="muted">${esc(x.coordStatus)}</span>`:esc(x.coordStatus);
-    return `<tr><td>${x.rowNumber}</td><td class="${cls}">${status}</td><td><b>${esc(x.name)}</b><br><span class="muted">${esc(x.type)} · ${esc(x.source)}</span></td><td>${esc(x.address||'')}</td><td>${esc(x.phone||'')}</td><td>${coord}</td><td>${esc(x.messages.join('；') || '—')}</td></tr>`;
+    return `<tr><td>${x.rowNumber}</td><td class="${cls}">${status}</td><td><b>${esc(x.name)}</b><br><span class="muted">${esc(x.primary_l1_name)}／${esc(x.primary_l2_name)} · ${esc(x.source)}</span></td><td>${esc(x.address||'')}</td><td>${esc(x.phone||'')}</td><td>${coord}</td><td>${esc(x.messages.join('；') || '—')}</td></tr>`;
   }).join('');
 }
 async function downloadBatchShopTemplate(){
-  const rows=[{ '店铺名称':'示例中医诊所', '类型':'中医诊所', '地址':'香港九龙观塘开源道XX号XX大厦地下X号铺', '区域':'观塘', '联系人':'陈生', '电话':'91234567', '来源':'销售扫街', '备注':'示例行，可删除', '认领人':currentUsername||'销售A', '状态':'待跟进', 'lat':'', 'lng':'' }];
+  const rows=[{ '店铺名称':'示例中医综合诊所', '一级类目':'中医与传统医学', '二级类目':'中医综合诊所', '地址':'香港九龙观塘开源道XX号XX大厦地下X号铺', '区域':'观塘', '联系人':'陈生', '电话':'91234567', '来源':'销售扫街', '备注':'示例行，可删除', '认领人':currentUsername||'销售A', '状态':'待跟进', 'lat':'', 'lng':'' }];
   await downloadXlsx('BDmap_批量导入店铺模板.xlsx', BATCH_SHOP_HEADERS, rows, { sheetName:'批量导入店铺' });
   toast('已下载批量导入模板');
 }
@@ -5312,7 +5283,7 @@ async function confirmBatchShopImport(){
       continue;
     }
     const ownerName=r.ownerName || currentUsername || '匿名';
-    const data={ id:makeBatchShopId(r.name,r.address), name:r.name, entryKind:'institution', type:r.type||'中医诊所', address:r.address||'', district:r.district||'', contact:r.contact||'', phone:r.phone||'', status:r.status||'待跟进', lat:Number(r.lat), lng:Number(r.lng), source:r.source||'批量导入', note:r.note||'', visits:[{date:now.slice(0,10), by:currentUsername||'匿名', byAvatar:currentAvatar, note:'批量导入' + (r.note ? '：'+r.note : '')}], ownerId:normalizeOwnerId(ownerName), ownerName, ownerAvatar: ownerName===(currentUsername||'匿名') ? currentAvatar : '👤', createdAt:now, createdBy:currentUsername||'匿名', createdByAvatar:currentAvatar, updatedAt:now, updatedBy:currentUsername||'匿名', updatedByAvatar:currentAvatar, importSource:'batch_shop_import', geocodeStatus:r.coordStatus, geocodeAddress:r.geocodeAddress||'', revision:0 };
+    const data={ id:makeBatchShopId(r.name,r.address), name:r.name, entryKind:'institution', ...getTaxonomyFields(r.primary_l1_name,r.primary_l2_name), address:r.address||'', district:r.district||'', contact:r.contact||'', phone:r.phone||'', status:r.status||'待跟进', lat:Number(r.lat), lng:Number(r.lng), source:r.source||'批量导入', note:r.note||'', visits:[{date:now.slice(0,10), by:currentUsername||'匿名', byAvatar:currentAvatar, note:'批量导入' + (r.note ? '：'+r.note : '')}], ownerId:normalizeOwnerId(ownerName), ownerName, ownerAvatar: ownerName===(currentUsername||'匿名') ? currentAvatar : '👤', createdAt:now, createdBy:currentUsername||'匿名', createdByAvatar:currentAvatar, updatedAt:now, updatedBy:currentUsername||'匿名', updatedByAvatar:currentAvatar, importSource:'batch_shop_import', geocodeStatus:r.coordStatus, geocodeAddress:r.geocodeAddress||'', revision:0 };
     try{
       const saved = await saveToFirestore(data, null);
       places.push(saved);
@@ -5334,13 +5305,13 @@ async function confirmBatchShopImport(){
 async function exportBatchShopReviewXlsx(){
   const reviewRows=[...batchShopPreviewRows, ...importFailureRows];
   if(!reviewRows.length){ toast('还没有预览或失败数据'); return; }
-  const headers=['row','name','address','type','phone','contact','source','status','lat','lng','coord_status','import_status','importable','messages','failure_message'];
+  const headers=['row','name','address','primary_l1_code','primary_l1_name','primary_l2_code','primary_l2_name','phone','contact','source','status','lat','lng','coord_status','import_status','importable','messages','failure_message'];
   const seen=new Set();
   const rows=reviewRows.filter(x=>{
     const key=[x.rowNumber,x.name,x.address,x.failureMessage||''].join('|');
     if(seen.has(key)) return false;
     seen.add(key); return true;
-  }).map(x=>({ row:x.rowNumber, name:x.name, address:x.address, type:x.type, phone:x.phone, contact:x.contact, source:x.source, status:x.status, lat:x.lat||'', lng:x.lng||'', coord_status:x.coordStatus, import_status:x.importStatus||'', importable:x.importable?'Y':'N', messages:(x.messages||[]).join('；'), failure_message:x.failureMessage||'' }));
+  }).map(x=>({ row:x.rowNumber, name:x.name, address:x.address, primary_l1_code:x.primary_l1_code, primary_l1_name:x.primary_l1_name, primary_l2_code:x.primary_l2_code, primary_l2_name:x.primary_l2_name, phone:x.phone, contact:x.contact, source:x.source, status:x.status, lat:x.lat||'', lng:x.lng||'', coord_status:x.coordStatus, import_status:x.importStatus||'', importable:x.importable?'Y':'N', messages:(x.messages||[]).join('；'), failure_message:x.failureMessage||'' }));
   await downloadXlsx('BDmap_批量导入店铺_待核失败表.xlsx', headers, rows, { sheetName:'待核失败表' });
   toast('已导出待核/失败表');
 }
