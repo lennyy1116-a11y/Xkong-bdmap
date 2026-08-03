@@ -102,18 +102,6 @@ const STATUS_COLORS = {
 };
 
 
-function hideHomeHint() {
-  const el = document.getElementById('homeHint');
-  if (el) el.style.display = 'none';
-  localStorage.setItem('bd_map_hide_home_hint', '1');
-}
-function restoreHomeHintState() {
-  if (localStorage.getItem('bd_map_hide_home_hint') === '1') {
-    const el = document.getElementById('homeHint');
-    if (el) el.style.display = 'none';
-  }
-}
-
 let customTypes = [];
 function normalizeTypeList(types) {
   return [...new Set((types || []).map(x => String(x || '').trim()).filter(Boolean))].sort((a,b) => a.localeCompare(b, 'zh-Hant'));
@@ -153,7 +141,7 @@ async function saveCustomTypeToCloud(type) {
   await appConfigCollection.doc('institutionTypes').set({ types: next, updatedAt: new Date().toISOString(), updatedBy: currentUsername || '匿名' }, { merge: true });
 }
 async function addCustomType(initialValue) {
-  const val = prompt('请输入新的机构类型', initialValue || '');
+  const val = await showAppPrompt('新增点位类型', '请输入新的点位类型', initialValue || '');
   const type = String(val || '').trim();
   if (!type) return '';
   ensureTypeOption(type);
@@ -230,7 +218,6 @@ function init() {
   mallLayer = L.layerGroup().addTo(map);
   loadMalls();
   loadBaseClinics();
-  restoreHomeHintState();
   initCustomTypesCloudListener();
   setAppTab('leads');
   renderLeadHomeList();
@@ -290,20 +277,7 @@ function init() {
   updateStats();
   locateMe(true);
 
-  // Ask for username if not set
-  if (!currentUsername) {
-    setTimeout(() => {
-      const name = prompt('请输入你的名字（团队协同用）:');
-      if (name && name.trim()) {
-        currentUsername = name.trim();
-        localStorage.setItem(USERNAME_KEY, currentUsername);
-        updateCurrentUserBadge();
-        toast('👋 你好 ' + currentUsername);
-      }
-    }, 500);
-  } else {
-    updateCurrentUserBadge();
-  }
+  updateCurrentUserBadge();
 
   // Firestore real-time listener
   placesCollection.onSnapshot(snapshot => {
@@ -952,9 +926,9 @@ async function deletePlace() {
   if (!id) return;
   const record = places.find(p => p.id === id);
   if (!record) return toast('找不到这个机构');
-  const reason = prompt('请输入删除原因（记录会进入回收站，可恢复）:', '资料清理');
+  const reason = await showAppPrompt('删除机构', '请输入删除原因（记录会进入回收站，可恢复）', '资料清理');
   if (reason === null) return;
-  if (!confirm(`确定将「${record.name || id}」移入回收站？删除前会下载JSON备份。`)) return;
+  if (!await showAppConfirm('移入回收站', `确定将「${record.name || id}」移入回收站？删除前会下载JSON备份。`)) return;
   try {
     downloadDeletionBackup([record], 'single-soft-delete');
   } catch (err) {
@@ -1042,7 +1016,7 @@ function renderRecycleBin() {
 async function restoreDeletedPlace(id) {
   const record = deletedPlaces.find(p => p.id === id);
   if (!record) return toast('找不到回收站记录');
-  if (!confirm(`确定恢复「${record.name || id}」？`)) return;
+  if (!await showAppConfirm('恢复记录', `确定恢复「${record.name || id}」？`)) return;
   document.getElementById('syncStatus').textContent = '♻️ 正在恢复...';
   try {
     const restored = await runRevisionedMutation(id, Number(record.revision) || 0, current => {
@@ -1085,15 +1059,17 @@ function renderList() {
     const ownerLabel = getOwnerLabel(p);
     const ownerBadgeHtml = ownerLabelHtml(p);
     const pr = calcPriority(p);
+    const category = getLeadCategory(p);
+    const kindLabel = isPointEntry(p) ? (p.type || '点位') : `${category.primary}／${category.secondary}`;
     return `
       <div class="list-item" onclick="goToPlace('${jsStr(p.id)}')">
         ${bulkMode ? `<input class="list-check" type="checkbox" ${selectedPlaceIds.has(p.id) ? 'checked' : ''} onclick="event.stopPropagation(); toggleSelectPlace('${jsStr(p.id)}', this.checked)">` : ''}
         <div class="list-dot" style="background:${color}"></div>
         <div class="list-info">
           <div class="list-name"><span>${esc(p.name)}</span><span class="priority-badge ${pr.level}">${pr.score} ${priorityLabel(pr.level)}</span><span class="owner-badge">${ownerBadgeHtml}</span></div>
-          <div class="list-addr">${esc(p.address || p.type || '')}</div>
+          <div class="list-addr">${esc(p.address || '')}</div>
           <div class="list-meta">
-            ${ownerBadgeHtml}${p.type ? ' · ' + esc(p.type) : ''} · ${visitCount}次${isPointEntry(p) ? '记录' : '交流'}
+            ${ownerBadgeHtml} · ${esc(kindLabel)} · ${visitCount}次${isPointEntry(p) ? '记录' : '交流'}
             ${p.contact ? ' · ' + esc(p.contact) : ''}
           </div>
         </div>
@@ -1159,10 +1135,10 @@ async function bulkDeleteIds(ids, options = {}) {
   const records = ids.map(id => places.find(p => p.id === id)).filter(Boolean);
   if (!records.length) return toast('找不到待删除记录');
   if (!options.confirmed) {
-    const confirmation = prompt(`高风险操作：将 ${records.length} 条记录移入回收站。\n请输入「移入回收站 ${records.length}」继续：`);
+    const confirmation = await showAppPrompt('高风险操作', `将 ${records.length} 条记录移入回收站。\n请输入「移入回收站 ${records.length}」继续：`, '');
     if (confirmation !== `移入回收站 ${records.length}`) return toast('已取消批量删除');
   }
-  const reason = options.reason || prompt('请输入本次批量删除原因:', '批量资料清理');
+  const reason = options.reason || await showAppPrompt('批量删除', '请输入本次批量删除原因', '批量资料清理');
   if (reason === null) return;
   try {
     downloadDeletionBackup(records, 'bulk-soft-delete');
@@ -1185,7 +1161,7 @@ async function bulkDeleteIds(ids, options = {}) {
   clearCoverageCache(); savePlaces(); renderOwnerFilters(); renderMarkers(); renderList(); scheduleLeadHomeRender(); updateStats(); updateRecycleBinCount();
   const failedText = result.failed.slice(0,10).map(x => `${x.record.name || x.record.id}: ${x.error.message}`).join('\n');
   document.getElementById('syncStatus').textContent = result.failureCount ? '⚠️ 批量操作部分失败' : '✅ 已移入回收站';
-  alert(`批量操作完成\n成功：${result.successCount}\n失败：${result.failureCount}${failedText ? '\n\n失败项：\n' + failedText : ''}`);
+  await showAppDialog('批量操作完成', `成功：${result.successCount}\n失败：${result.failureCount}${failedText ? '\n\n失败项：\n' + failedText : ''}`);
 }
 
 function initCoveragePanelDrag() {
@@ -1214,9 +1190,31 @@ function initCoveragePanelDrag() {
 
 
 // ============ LEAD HOME ============
-function setAppTab(tab) { document.querySelectorAll('#appNav button').forEach(b => b.classList.toggle('active', b.dataset.tab === tab)); }
+const PRIMARY_APP_TABS = ['leads', 'map', 'resources', 'my'];
+function setAppTab(tab) {
+  const activeTab = PRIMARY_APP_TABS.includes(tab) ? tab : 'leads';
+  document.querySelectorAll('#appNav button').forEach(b => b.classList.toggle('active', b.dataset.tab === activeTab));
+}
+function navigateTo(tab) {
+  if (!PRIMARY_APP_TABS.includes(tab)) return;
+  if (tab === 'leads') showLeadHome();
+  else if (tab === 'map') showMapHome();
+  else if (tab === 'resources') openResourceCenter();
+  else openMyFromNav();
+}
+function openCoverageWorkspace() {
+  showMapHome();
+  clearSingleCoverageSilent();
+  const bar = document.getElementById('mapComboBar');
+  if (bar) bar.classList.add('active');
+  renderMapComboBar();
+  renderMalls();
+  renderMarkers();
+  updateCoverageUi();
+  toast('从商场或点位加入2-5个覆盖中心进行组合分析');
+}
 function closePrimaryPanels() {
-  ['listPanel','mallPanel','dashboardPanel','comboPanel','settingsPanel','recycleBinPanel'].forEach(id => {
+  ['listPanel','mallPanel','dashboardPanel','settingsPanel','adminPanel','recycleBinPanel'].forEach(id => {
     const panel = document.getElementById(id);
     if (panel) panel.classList.remove('active');
   });
@@ -1516,6 +1514,7 @@ function editClaimedLead(id) {
 async function claimLead(id) {
   const p = findLeadRecord(id);
   if (!p) return toast('找不到线索');
+  if (!await ensureUserIdentity()) return;
   const ownerId = getOwnerId(p);
   if (ownerId === getCurrentOwnerId()) { editClaimedLead(id); return; }
   if (!isUnclaimedOwnerId(ownerId) && ownerId !== getCurrentOwnerId()) { toast('已被别人认领'); return; }
@@ -1539,9 +1538,9 @@ async function claimLead(id) {
 }
 async function reportLeadError(id) {
   const p = findLeadRecord(id); if (!p) return toast('找不到线索');
-  const type = prompt('报错类型：地址错误 / 电话错误 / 重复店铺 / 已停业 / 类型错误 / 其他', '地址错误');
+  const type = await showAppPrompt('提交报错', '报错类型：地址错误 / 电话错误 / 重复店铺 / 已停业 / 类型错误 / 其他', '地址错误');
   if (!type) return;
-  const note = prompt('补充说明（可空）', '') || '';
+  const note = await showAppPrompt('补充说明', '补充说明（可空）', '') || '';
   const existing = places.find(x => x.id === id || x.id === 'place_' + id || clinicMatchKey(x) === clinicMatchKey(p));
   const now = new Date().toISOString();
   const recordId = existing ? existing.id : (p.isBaseClinic ? 'place_' + p.id : (p.id || 'place_' + Date.now().toString(36)));
@@ -1563,7 +1562,7 @@ async function resolveLeadError(id) {
   const p = findLeadRecord(id); if (!p) return toast('找不到线索');
   const existing = places.find(x => x.id === id || x.id === 'place_' + id || clinicMatchKey(x) === clinicMatchKey(p));
   if (!existing) return toast('这条线索还没有运营记录，无法修正');
-  const note = prompt('修正说明（可空）', '已核实/已修正') || '';
+  const note = await showAppPrompt('修正报错', '修正说明（可空）', '已核实/已修正') || '';
   const now = new Date().toISOString();
   try {
     const saved = await runRevisionedMutation(existing.id, Number(existing.revision) || 0, current => {
@@ -2168,8 +2167,6 @@ function renderComboCoveragePage(tab) {
     return `<div class="coverage-clinic-item ${rowClass}" onclick="goToPlace('${jsStr(p.id)}')"><div><span class="rank">${i+1}</span><strong>${esc(p.name)}</strong>${getCoverageStatusBadge(p)}${clinicBadges(p)} <span class="combo-badge">${label}</span></div><div class="meta">${meta}｜近${esc(p._nearestCenter || p._centerName || '')} ${dist}km<br>${esc(p.address || '')}</div><div class="copy-row" onclick="event.stopPropagation()"><button class="copy-btn" onclick="copyText('${jsStr(p.id)}','address')">复制地址</button><button class="copy-btn" onclick="copyText('${jsStr(p.id)}','phone')">复制电话</button></div></div>`;
   }).join('') : '<div class="list-empty">当前分类没有诊所</div>';
 }
-function openComboPanel() { clearSingleCoverageSilent(); closeMallPanel(); renderComboPicker(); renderComboAnalysis(); renderMapComboBar(); renderMalls(); renderMarkers(); document.getElementById('comboPanel').classList.add('active'); }
-function closeComboPanel() { document.getElementById('comboPanel').classList.remove('active'); }
 function toggleComboCenter(id, checked) {
   if (checked && comboSelectedIds.size >= 5) { toast('最多选择5个覆盖中心'); renderComboPicker(); return; }
   if (checked) comboSelectedIds.add(id); else comboSelectedIds.delete(id);
@@ -2367,7 +2364,7 @@ async function copyText(id, field) {
 }
 
 async function deleteMall(id) {
-  if (!confirm('删除这个商场标注？')) return;
+  if (!await showAppConfirm('删除商场', '删除这个商场标注？')) return;
   malls = malls.filter(m => m.id !== id); if (selectedMallId === id) selectedMallId = null;
   clearCoverageCache(); saveMallsLocal(); renderMalls(); renderMarkers(); renderMallList(); updateCoverageUi();
   try {
@@ -2500,6 +2497,7 @@ function getMallClinics(mall, radiusKm = COVERAGE_KM) {
   return result;
 }
 async function loadBaseClinics() {
+  const summary = document.getElementById('leadHomeSummary');
   try {
     const res = await fetch('./tcm-base-clinics.json', { cache: 'no-store' });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -2509,6 +2507,7 @@ async function loadBaseClinics() {
   } catch(e) {
     console.error('Base clinic pool file failed', e);
     baseClinics = [];
+    if (summary) summary.textContent = '基础机构池加载失败，请刷新重试';
     toast(`基础诊所池文件加载失败：${e && e.message ? e.message : '未知错误'}`);
     return;
   }
@@ -2516,10 +2515,11 @@ async function loadBaseClinics() {
     clearCoverageCache();
     renderMarkers();
     renderMallList();
-    scheduleLeadHomeRender();
+    renderLeadHomeList();
     updateStats();
   } catch(e) {
     console.error('Base clinic pool render failed', e);
+    if (summary && summary.textContent === '加载中...') summary.textContent = `基础机构池已加载 ${baseClinics.length} 条，列表渲染失败`;
     toast(`基础诊所池已加载，但地图渲染失败：${e && e.message ? e.message : '未知错误'}`);
   }
 }
@@ -3011,10 +3011,10 @@ function importData(event) {
       const blocked = review.rows.filter(row => !row.importable);
       importFailureRows = blocked.map(row => ({...row, failureMessage:(row.messages||[]).join('；')}));
       if (!ready.length) {
-        alert(`JSON预审完成，但没有安全可导入记录。\n拦截：${blocked.length}\n请导出原文件修正重复、名称或坐标后再导入。`);
+        await showAppDialog('JSON预审', `没有安全可导入记录。\n拦截：${blocked.length}\n请导出原文件修正重复、名称或坐标后再导入。`);
         return;
       }
-      if (!confirm(`JSON预审：共 ${review.summary.total} 条，安全可导入 ${ready.length} 条，拦截 ${blocked.length} 条。\n确认只写入安全记录？`)) return;
+      if (!await showAppConfirm('确认JSON导入', `共 ${review.summary.total} 条，安全可导入 ${ready.length} 条，拦截 ${blocked.length} 条。\n确认只写入安全记录？`)) return;
       const result = await window.BDMapImportSafety.runSafeImport(ready, {
         persist: async row => {
           const record = window.BDMapImportSafety.prepareNewImportedRecord(row, { id:genId(), actor:currentUsername||'匿名' });
@@ -3024,7 +3024,7 @@ function importData(event) {
       });
       importFailureRows.push(...result.failed.map(x=>({...x.row,failureMessage:x.error.message})));
       clearCoverageCache(); savePlaces(); renderOwnerFilters(); updateMapFilterBar(); renderMarkers(); updateStats();
-      alert(`JSON导入完成\n成功：${result.successCount}\n云端失败：${result.failureCount}\n预审拦截：${blocked.length}`);
+      await showAppDialog('JSON导入完成', `成功：${result.successCount}\n云端失败：${result.failureCount}\n预审拦截：${blocked.length}`);
     } catch(err) {
       console.error(err);
       toast('❌ 导入失败：' + (err && err.message ? err.message : '文件格式不正确'));
@@ -3046,9 +3046,10 @@ async function syncImportedToFirestore(items) {
   document.getElementById('syncStatus').textContent = '✅ 已同步';
 }
 
-function clearAllData() {
-  if (!confirm('确定清除所有数据？此操作不可撤销！')) return;
-  if (!confirm('再次确认：清除后无法恢复，确定吗？')) return;
+async function clearAllData() {
+  if (!await showAppConfirm('清除所有数据', '此操作不可撤销，确定继续？')) return;
+  const confirmation = await showAppPrompt('再次确认', '请输入 CLEAR 确认清除所有数据', '');
+  if (confirmation !== 'CLEAR') return toast('已取消');
   places = [];
   savePlaces();
   renderOwnerFilters();
@@ -3079,13 +3080,13 @@ function renderAdminUsers() {
   }).join('');
 }
 async function changeOwnerAvatar(ownerId, ownerName) {
-  const avatar = prompt('输入新的头像 emoji（例如 🐯、🦊、🔥）：', getOwnerAvatar({ ownerId, ownerName }));
+  const avatar = await showAppPrompt('修改用户头像', '输入新的头像 emoji（例如 🐯、🦊、🔥）', getOwnerAvatar({ ownerId, ownerName }));
   if (!avatar) return;
   const next = String(avatar).trim();
   if (!next) return;
   const affected = places.filter(p => getOwnerId(p) === ownerId || normalizeOwnerId(getOwnerName(p)) === ownerId);
   if (!affected.length) { toast('没有找到该用户的数据'); return; }
-  if (!confirm(`确认把「${ownerName}」名下 ${affected.length} 个机构头像改为 ${next}？`)) return;
+  if (!await showAppConfirm('确认修改头像', `把「${ownerName}」名下 ${affected.length} 个机构头像改为 ${next}？`)) return;
   const succeeded = [];
   const failed = [];
   for (const original of affected) {
@@ -3114,7 +3115,7 @@ async function deleteOwnerData(ownerId, ownerName) {
   const records = places.filter(p => getOwnerId(p) === ownerId);
   const isCurrentLocalProfile = ownerId === getCurrentOwnerId();
   if (!records.length && !isCurrentLocalProfile) { toast('该用户没有认领资料'); return; }
-  const confirmText = prompt(`将移除「${ownerName}」对 ${records.length} 条机构的认领。\n机构及底池资料会保留，不会进入回收站。\n请输入 RELEASE 确认：`);
+  const confirmText = await showAppPrompt('移除用户认领', `将移除「${ownerName}」对 ${records.length} 条机构的认领。\n机构及底池资料会保留，不会进入回收站。\n请输入 RELEASE 确认：`, '');
   if (confirmText !== 'RELEASE') { toast('已取消'); return; }
   const released = [];
   const failed = [];
@@ -3152,7 +3153,7 @@ async function cleanupLegacyTcmImport() {
     return oid.includes('system_tcm_import') || oid.includes('base_tcm_pool') || owner.includes('tcm') || owner.includes('tmc') || owner.includes('名錄導入') || owner.includes('名录导入') || id.startsWith('tcm_');
   }).map(p => p.id);
   if (!legacyIds.length) { toast('没有发现旧 TCM/TMC 导入数据'); return; }
-  const confirmText = prompt(`将清理旧 TCM/TMC 导入数据 ${legacyIds.length} 条。\n新版基础诊所池不会受影响。\n请输入 CLEAN 确认：`);
+  const confirmText = await showAppPrompt('清理旧导入数据', `将清理旧 TCM/TMC 导入数据 ${legacyIds.length} 条。\n新版基础诊所池不会受影响。\n请输入 CLEAN 确认：`, '');
   if (confirmText !== 'CLEAN') { toast('已取消'); return; }
   await bulkDeleteIds(legacyIds);
   renderAdminUsers();
@@ -3492,7 +3493,7 @@ function scoreBadgeWithDetailHtml(id, pr) {
   return `<div class="popup-detail"><span class="priority-badge clickable ${pr.level}" onclick="event.stopPropagation(); toggleScoreDetail('${jsStr(domId)}')">${pr.score} ${priorityLabel(pr.level)}</span></div><div class="score-breakdown-wrap" id="${esc(domId)}">${scoreBreakdownHtml(pr)}</div>`;
 }
 function enrichPriority(list) { return list.map(p => ({...p, _priority: calcPriority(p)})); }
-function openDashboard() { setAppTab('dashboard'); closeList(); closeMallPanel(); closeCoveragePanel(); renderDashboard(); document.getElementById('dashboardPanel').classList.add('active'); }
+function openDashboard() { closeList(); closeMallPanel(); closeCoveragePanel(); renderDashboard(); document.getElementById('dashboardPanel').classList.add('active'); }
 function closeDashboard() { document.getElementById('dashboardPanel').classList.remove('active'); if (!document.body.classList.contains('home-mode')) setAppTab('map'); }
 function getPriorityPool() {
   return enrichPriority([...places, ...baseClinics.filter(p => !places.some(x => x.id === 'place_'+p.id || (x.name===p.name && x.address===p.address)))])
@@ -3721,7 +3722,7 @@ async function downloadBatchShopTemplate(){
 async function confirmBatchShopImport(){
   const rows=batchShopPreviewRows.filter(x=>x.importable && x.importStatus!=='已导入');
   if(!rows.length){ toast('没有可导入行'); return; }
-  if(!confirm(`确认只导入 ${rows.length} 条安全行？疑似重复和坐标待核默认不会写入。`)) return;
+  if(!await showAppConfirm('确认批量导入', `只导入 ${rows.length} 条安全行？疑似重复和坐标待核默认不会写入。`)) return;
   const now=new Date().toISOString();
   let ok=0, fail=0;
   for(const r of rows){
@@ -3751,7 +3752,7 @@ async function confirmBatchShopImport(){
   }
   clearCoverageCache(); savePlaces(); renderOwnerFilters(); updateMapFilterBar(); scheduleLeadHomeRender(); renderMarkers(); updateStats();
   toast(`批量导入完成：成功 ${ok}，失败 ${fail}`);
-  alert(`批量导入完成\n成功：${ok}\n失败：${fail}\n预审拦截：${batchShopPreviewRows.length-rows.length}\n失败项可导出后修正重试。`);
+  await showAppDialog('批量导入完成', `成功：${ok}\n失败：${fail}\n预审拦截：${batchShopPreviewRows.length-rows.length}\n失败项可导出后修正重试。`);
 }
 async function exportBatchShopReviewXlsx(){
   const reviewRows=[...batchShopPreviewRows, ...importFailureRows];
@@ -3852,7 +3853,7 @@ async function handleBatchErrorImport(event) {
   clearCoverageCache(); savePlaces(); scheduleLeadHomeRender(); renderMarkers(); updateStats();
   const typeText = Object.entries(byType).map(([k,v])=>`${k}:${v}`).join('，') || '无';
   const report = `批量报错上传完成\n有效动作行：${stats.total}\n已处理：${stats.processed}\n跳过空白：${stats.skipped}\n已修正：${stats.fixed}\n失败：${stats.failed}\n分类：${typeText}${failures.length ? '\n\n失败明细：\n' + failures.slice(0,20).join('\n') : ''}`;
-  alert(report);
+  await showAppDialog('批量报错上传完成', report);
   toast('批量报错上传完成');
 }
 function openTopPriorityOnMap() {
@@ -3876,6 +3877,56 @@ function toast(msg) {
   setTimeout(() => t.classList.remove('show'), 2200);
 }
 
+let appDialogResolver = null;
+function showAppDialog(title, message) {
+  return openAppDialog({ title, message, mode:'notice' });
+}
+function showAppConfirm(title, message) {
+  return openAppDialog({ title, message, mode:'confirm' });
+}
+function showAppPrompt(title, message, initialValue) {
+  return openAppDialog({ title, message, mode:'prompt', initialValue });
+}
+function openAppDialog({ title='提示', message='', mode='notice', initialValue='' } = {}) {
+  const dialog = document.getElementById('appDialog');
+  const input = document.getElementById('appDialogInput');
+  const cancel = document.getElementById('appDialogCancel');
+  const confirmButton = document.getElementById('appDialogConfirm');
+  if (!dialog || !input || !cancel || !confirmButton) return Promise.resolve(mode === 'prompt' ? null : false);
+  if (appDialogResolver) appDialogResolver(mode === 'prompt' ? null : false);
+  document.getElementById('appDialogTitle').textContent = title;
+  document.getElementById('appDialogMessage').textContent = message;
+  input.style.display = mode === 'prompt' ? '' : 'none';
+  input.value = mode === 'prompt' ? String(initialValue || '') : '';
+  cancel.style.display = mode === 'notice' ? 'none' : '';
+  dialog.classList.add('active');
+  return new Promise(resolve => {
+    const finish = value => {
+      dialog.classList.remove('active');
+      appDialogResolver = null;
+      confirmButton.onclick = null;
+      cancel.onclick = null;
+      resolve(value);
+    };
+    appDialogResolver = finish;
+    confirmButton.onclick = () => finish(mode === 'prompt' ? input.value : true);
+    cancel.onclick = () => finish(mode === 'prompt' ? null : false);
+    input.onkeydown = event => { if (event.key === 'Enter') confirmButton.click(); };
+    setTimeout(() => (mode === 'prompt' ? input : confirmButton).focus(), 0);
+  });
+}
+async function ensureUserIdentity() {
+  if (String(currentUsername || '').trim()) return true;
+  const name = await showAppPrompt('设置姓名', '认领、编辑或新增机构前需要设置姓名。', '');
+  if (!String(name || '').trim()) { toast('未设置姓名，操作已取消'); return false; }
+  currentUsername = String(name).trim();
+  localStorage.setItem(USERNAME_KEY, currentUsername);
+  updateCurrentUserBadge();
+  scheduleLeadHomeRender();
+  toast('身份已设置：' + currentUsername);
+  return true;
+}
+
 
 function showLoading() { document.getElementById('loading').classList.add('show'); }
 function hideLoading() { document.getElementById('loading').classList.remove('show'); }
@@ -3894,10 +3945,16 @@ document.getElementById('btnAdd').onclick = () => {
 };
 
 document.getElementById('btnGps').onclick = () => locateMe(false);
-document.getElementById('btnMall').onclick = openMallPanel;
-document.getElementById('btnSettings').onclick = openSettings;
-document.getElementById('btnSearch').onclick = openSearch;
-document.getElementById('sheetOverlay').onclick = closeSheet;
+const optionalEventBindings = [
+  ['btnMall', 'onclick', openMallPanel],
+  ['btnSettings', 'onclick', openSettings],
+  ['btnSearch', 'onclick', openSearch],
+  ['sheetOverlay', 'onclick', closeSheet]
+];
+optionalEventBindings.forEach(([id, eventName, handler]) => {
+  const element = document.getElementById(id);
+  if (element) element[eventName] = handler;
+});
 
 // Status chips
 document.querySelectorAll('.status-chip').forEach(chip => {
