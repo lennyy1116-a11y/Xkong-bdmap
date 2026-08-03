@@ -67,20 +67,19 @@ test('lead page separates ownership, primary category and secondary category con
   assert.match(app, /function setLeadSecondaryCategory\(category\)/);
 });
 
-test('lead categorization uses explicit fields and keywords without forcing unknown records into medical', async () => {
+test('lead categorization uses only canonical taxonomy fields and never guesses from legacy type or keywords', async () => {
   const taxonomySource = app.match(/const LEAD_CATEGORY_TAXONOMY = \{[\s\S]*?\n\};/)?.[0];
   const codeMapSource = app.match(/const LEAD_CATEGORY_CODE_TO_NAME = \{[\s\S]*?\n\};/)?.[0];
+  const nameToCodeSource = app.match(/const LEAD_CATEGORY_NAME_TO_CODE = [^;]+;/)?.[0];
+  const secondaryMapSource = app.match(/const LEAD_SECONDARY_NAME_TO_CODE = Object\.fromEntries\([\s\S]*?\n\}\)\.flatMap\([\s\S]*?\)\);/)?.[0];
+  const validSource = app.match(/function hasValidTaxonomy\(row\) \{[\s\S]*?\n\}/)?.[0];
   const functionSource = app.match(/function getLeadCategory\(row\) \{[\s\S]*?\n\}/)?.[0];
-  assert.ok(taxonomySource && codeMapSource && functionSource);
+  assert.ok(taxonomySource && codeMapSource && nameToCodeSource && secondaryMapSource && validSource && functionSource);
   const { runInNewContext } = await import('node:vm');
-  const classify = runInNewContext(`${taxonomySource}; ${codeMapSource}; ${functionSource}; getLeadCategory`);
-  assert.deepEqual({ ...classify({ name:'康健物理治療中心', type:'养生馆' }) }, { primary:'康复与辅助医疗', secondary:'物理治疗中心' });
-  assert.deepEqual({ ...classify({ name:'泰舒服按摩足療', type:'自定义' }) }, { primary:'美容美体与休闲养生', secondary:'按摩／足疗中心' });
-  assert.deepEqual({ ...classify({ name:'Shape健身中心', type:'自定义' }) }, { primary:'运动健身', secondary:'健身房／健身中心' });
-  assert.deepEqual({ ...classify({ name:'Glow美甲美睫', type:'美容院' }) }, { primary:'美容美体与休闲养生', secondary:'美甲店' });
-  assert.deepEqual({ ...classify({ name:'无法判断机构', type:'自定义' }) }, { primary:'待复核', secondary:'待复核' });
-  assert.deepEqual({ ...classify({ primary_l1_code:'TCM', primary_l2_name:'中医综合诊所' }) }, { primary:'中医与传统医学', secondary:'中医综合诊所' });
-  assert.deepEqual({ ...classify({ primaryCategory:'医疗诊疗', secondaryCategory:'牙科／口腔诊所', manualReviewStatus:'required' }) }, { primary:'医疗诊疗', secondary:'牙科／口腔诊所' });
+  const classify = runInNewContext(`${taxonomySource}; ${codeMapSource}; ${nameToCodeSource}; ${secondaryMapSource}; ${validSource}; ${functionSource}; getLeadCategory`);
+  assert.deepEqual({ ...classify({ primary_l1_code:'TCM', primary_l1_name:'中医与传统医学', primary_l2_code:'TCM-01', primary_l2_name:'中医综合诊所' }) }, { primary:'中医与传统医学', secondary:'中医综合诊所' });
+  assert.deepEqual({ ...classify({ name:'康健物理治疗中心', type:'养生馆' }) }, { primary:'待复核', secondary:'待复核' });
+  assert.deepEqual({ ...classify({ primaryCategory:'医疗诊疗', secondaryCategory:'牙科／口腔诊所' }) }, { primary:'待复核', secondary:'待复核' });
 });
 
 test('lead cards expose business categories but not collection-source brands', () => {
@@ -109,7 +108,8 @@ test('institution form has primary and secondary category selectors', () => {
   assert.match(app, /function handlePrimaryCategoryChange\(\)/);
   assert.match(app, /LEAD_CATEGORY_TAXONOMY\[primary\]/);
   assert.match(app, /function getTaxonomyFields\(primary, secondary\)/);
-  assert.match(app, /Object\.assign\(data, getTaxonomyFields\(data\.primaryCategory, data\.secondaryCategory\)\)/);
+  assert.match(app, /Object\.assign\(data, getTaxonomyFields\(primary, secondary\)\)/);
+  assert.match(app, /请选择完整的一级和二级类目/);
 });
 
 test('all base pools remain unclaimed until a real user claims a lead', () => {
