@@ -21,6 +21,7 @@ const APIKEY_KEY = 'bd_map_google_key';
 const DEFAULT_GOOGLE_MAPS_KEY = 'AIzaSyAQ4mpeoPh6KU1BZC2bfN6FzM_gMW3GsZM';
 const USERNAME_KEY = 'bd_map_username';
 const USER_AVATAR_KEY = 'bd_map_user_avatar';
+const USER_ROLE_KEY = 'bd_map_user_role';
 const AVATAR_POOL = ['🦅','🏃','🌿','🧭','🐯','🦊','🐼','🐧','🐶','🐱','🐰','🦁','🐺','🐻','🐨','🐵','🦉','🦋','🐉','🔥','⭐','🌙','☀️','⚡','🌊','🍀','🌿','🌸','🌻','🍄','💊','🏥','🩺','🧬','🧪','📍','🗺️','🎯','🚀','💼','📊','🧩','💎','👑','🎧','🎮','🍵','☕','🥐','🍜'];
 let places = [];
 let deletedPlaces = [];
@@ -38,6 +39,7 @@ let selectedDistrict = 'current';
 let _pagination = null;
 let currentUsername = localStorage.getItem(USERNAME_KEY) || '';
 let currentAvatar = localStorage.getItem(USER_AVATAR_KEY) || '👤';
+let currentRole = localStorage.getItem(USER_ROLE_KEY) || 'BD拓展';
 let coverageCache = new Map();
 let coverageCacheVersion = 0;
 let lastInstitutionStatus = '已交流';
@@ -1237,8 +1239,14 @@ function showMapHome() {
   document.body.classList.remove('home-mode');
   setTimeout(() => { if (map) map.invalidateSize(); }, 80);
 }
-function openDashboardFromHome() {
-  openDashboardFromMy();
+function openMyClaims() {
+  if (!String(currentUsername || '').trim()) {
+    openMyFromNav();
+    setTimeout(() => document.getElementById('usernameInput')?.focus(), 120);
+    toast('请先设置姓名和角色，再查看我的认领');
+    return;
+  }
+  setLeadFilter('mine');
 }
 function openDashboardFromMy() {
   closePrimaryPanels();
@@ -1425,6 +1433,16 @@ function renderLeadHomeList() {
   if (exportRow) exportRow.classList.toggle('active', leadFilter === 'error');
   const mineExportRow = document.getElementById('leadMineExportRow');
   if (mineExportRow) mineExportRow.classList.toggle('active', leadFilter === 'mine');
+  const mineCount = allRows.filter(p => p._leadMine).length;
+  const mineCountEl = document.getElementById('leadMyClaimedCount');
+  if (mineCountEl) mineCountEl.textContent = currentUsername ? `${currentRole} · ${mineCount} 条线索` : '去设置姓名和角色 →';
+  const identityNotice = document.getElementById('identityNotice');
+  if (identityNotice) {
+    identityNotice.classList.toggle('ready', Boolean(currentUsername));
+    identityNotice.innerHTML = currentUsername
+      ? `当前身份：<strong>${esc(currentUsername)}</strong><span>${esc(currentRole)}</span>`
+      : '尚未设置认领身份，点击“我的认领”完成姓名和角色设置。';
+  }
   const filterNames = { all:'全部', unclaimed:'未认领', claimed:'已认领', mine:'我的认领', error:'报错', phone:'有联系方式' };
   summary.textContent = `当前 ${rows.length} 条 · 已认领 ${claimed} · 有联系方式 ${phone}`;
   body.innerHTML = rows.length ? rows.slice(0,180).map(leadCardHtml).join('') : '<div class="lead-empty">没有符合条件的线索</div>';
@@ -2885,6 +2903,8 @@ function openSettings() {
   lockAdminArea();
   document.getElementById('apiKeyInput').value = localStorage.getItem(APIKEY_KEY) || '';
   document.getElementById('usernameInput').value = currentUsername || '';
+  const roleInput = document.getElementById('userRoleInput');
+  if (roleInput) roleInput.value = currentRole || 'BD拓展';
   renderAvatarGrid();
   document.getElementById('settingsPanel').classList.add('active');
   refreshMySystemStatus();
@@ -2900,7 +2920,7 @@ function refreshMySystemStatus() {
   const network = document.getElementById('myStatusNetwork');
   const counts = document.getElementById('myStatusCounts');
   const syncSource = document.getElementById('syncStatus');
-  if (user) user.textContent = `${currentAvatar || '👤'} ${currentUsername || '未设置'}`;
+  if (user) user.textContent = `${currentAvatar || '👤'} ${currentUsername || '未设置'} · ${currentRole || '未设置角色'}`;
   if (sync) sync.textContent = syncSource ? syncSource.textContent : '等待同步状态';
   if (network) network.textContent = navigator.onLine ? '在线' : '离线';
   if (counts) counts.textContent = `机构/点位 ${places.length} · 回收站 ${deletedPlaces.length} · 基础池 ${baseClinics.length} · 商场 ${malls.length}`;
@@ -2956,13 +2976,17 @@ function saveUsername() {
   const name = document.getElementById('usernameInput').value.trim();
   if (name) {
     currentUsername = name;
+    currentRole = document.getElementById('userRoleInput').value || 'BD拓展';
     localStorage.setItem(USERNAME_KEY, name);
     localStorage.setItem(USER_AVATAR_KEY, currentAvatar);
+    localStorage.setItem(USER_ROLE_KEY, currentRole);
     updateCurrentUserBadge();
     renderOwnerFilters();
     renderMarkers();
     renderList();
-    toast('✅ 用户资料已保存: ' + currentAvatar + ' ' + name);
+    scheduleLeadHomeRender();
+    refreshMySystemStatus();
+    toast('用户资料已保存：' + name + ' · ' + currentRole);
   } else {
     toast('请输入名称');
   }

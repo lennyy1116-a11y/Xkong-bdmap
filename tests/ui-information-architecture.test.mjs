@@ -11,13 +11,31 @@ function pos(token) {
   return index;
 }
 
-test('workbench prioritizes actions and my claims before search and collapsed filters', () => {
-  assert.ok(pos('id="leadTodayActions"') < pos('id="leadSearchInput"'));
+test('workbench prioritizes my claims before search and removes the today action shortcut', () => {
+  assert.ok(!html.includes('id="leadTodayActions"'));
+  assert.ok(!html.includes('leadTodayActionsSummary'));
   assert.ok(pos('id="leadMyClaimedSummary"') < pos('id="leadSearchInput"'));
+  assert.match(html, /id="leadMyClaimedSummary"[^>]*onclick="openMyClaims\(\)"/);
   assert.match(html, /id="leadFilterPanel"[^>]*class="[^"]*collapsed/);
   assert.match(html, /id="leadFilterCondition"/);
   assert.match(html, /onclick="toggleLeadFilters\(\)"/);
   assert.match(html, /onclick="clearLeadFilters\(\)"/);
+});
+
+test('my profile supports role setup and refreshes claim identity after saving', () => {
+  assert.match(html, /id="userRoleInput"/);
+  assert.match(html, /<option value="BD拓展">BD拓展<\/option>/);
+  assert.match(app, /const USER_ROLE_KEY = 'bd_map_user_role'/);
+  assert.match(app, /function openMyClaims\(\)/);
+  assert.match(app, /openMyFromNav\(\)/);
+  assert.match(app, /currentRole = document\.getElementById\('userRoleInput'\)\.value/);
+  assert.match(app, /scheduleLeadHomeRender\(\)/);
+});
+
+test('claim identity cards use the unified blue slate visual system', () => {
+  assert.match(html, /\.lead-priority-card\s*\{[^}]*--claim-accent:#4a90d9/s);
+  assert.match(html, /\.identity-notice\s*\{[^}]*background:rgba\(74,144,217,/s);
+  assert.doesNotMatch(html, /\.identity-notice\s*\{[^}]*241,196,15/s);
 });
 
 test('resource and my navigation use business-facing names and isolated admin surface', () => {
