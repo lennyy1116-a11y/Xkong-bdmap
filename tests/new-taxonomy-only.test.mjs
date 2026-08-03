@@ -36,8 +36,9 @@ test('BDmap reads canonical code/name fields only and never guesses institution 
 test('all BDmap category controls and exports use the new taxonomy', () => {
   for (const category of Object.keys(ctx.LEAD_CATEGORY_TAXONOMY)) {
     assert.match(html, new RegExp(`data-category="${category}"`));
-    assert.match(html, new RegExp(`data-filter="${category}"`));
+    assert.match(app, new RegExp(`LEAD_CATEGORY_TAXONOMY[\\s\\S]*['"]${category}['"]`));
   }
+  assert.match(app, /Object\.keys\(LEAD_CATEGORY_TAXONOMY\)/);
   assert.doesNotMatch(html, /data-category="待分类"|data-filter="推拿按摩"|data-filter="健康养生"|data-filter="美容美体"|data-filter="餐饮"/);
   assert.match(app, /CLINIC_EXPORT_HEADERS = \['clinic_id'[\s\S]*'primary_l1_code'[\s\S]*'primary_l2_name'/);
   assert.match(app, /BATCH_SHOP_HEADERS = \['店铺名称','一级类目','二级类目'/);

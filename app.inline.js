@@ -48,7 +48,11 @@ let leadSecondaryCategory = '全部';
 let editBaseRevision = null;
 const COVERAGE_KM = 1;
 const COVERAGE_LABEL = '1公里';
+const COVERAGE_FILTER_STATE_KEY = 'bd_map_coverage_filter_state';
 let singleCoverageKm = COVERAGE_KM;
+let coveragePrimaryCategory = '全部';
+let coverageSecondaryCategory = '全部';
+let coverageOwnership = 'all';
 const MALLS_KEY = 'bd_map_malls';
 const MALL_DATA_VERSION_KEY = 'bd_map_malls_version';
 const MALL_DATA_VERSION = 'link-hk-retail-2026-07-30-v2';
@@ -277,6 +281,8 @@ function init() {
   map.on('mouseup mousemove', () => clearTimeout(pressTimer));
 
   initCoveragePanelDrag();
+  loadCoverageFilterState();
+  renderCoverageTaxonomyFilters();
 
   renderOwnerFilters();
   renderMarkers();
@@ -430,6 +436,7 @@ function renderMarkers() {
   if (selectedMall && baseClinics.length) {
     renderPool = mergeCoverageRenderPool(renderPool, getBaseMallClinics(selectedMall, singleCoverageKm));
   }
+  if (selectedMall) renderPool = renderPool.filter(passSingleCoverageFilter);
   const coordGroups = new Map();
   const coordinatePlan = getRuntimeSafety().coordinateGroupPlan(renderPool);
   renderPool.forEach(p => {
@@ -1817,26 +1824,107 @@ function getClinicCategoryLabel(p) {
   const label = cat.primary === '待复核' ? '类目待复核' : `${cat.primary}／${cat.secondary}`;
   return needsCategoryReview(p) && label !== '类目待复核' ? `${label} · 待复核` : label;
 }
-function passCoverageFilter(p) {
-  const f = coverageFilter || 'all';
-  if (f === 'all') return true;
-  if (f === 'claimed') return !isUnclaimedOwnerId(getOwnerId(p));
-  return getLeadCategory(p).primary === f;
+function loadCoverageFilterState() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(COVERAGE_FILTER_STATE_KEY) || '{}');
+    if ([1, 4].includes(Number(saved.radiusKm))) singleCoverageKm = Number(saved.radiusKm);
+    if (saved.primary === '全部' || LEAD_CATEGORY_TAXONOMY[saved.primary]) coveragePrimaryCategory = saved.primary || '全部';
+    const validSecondaries = LEAD_CATEGORY_TAXONOMY[coveragePrimaryCategory] || [];
+    coverageSecondaryCategory = validSecondaries.includes(saved.secondary) ? saved.secondary : '全部';
+    if (['all','unclaimed','claimed'].includes(saved.ownership)) coverageOwnership = saved.ownership;
+  } catch(e) { console.warn('coverage filter state load failed', e); }
 }
-function setCoverageFilter(f) {
-  coverageFilter = f || 'all';
-  document.querySelectorAll('.coverage-filter-chip').forEach(b => b.classList.toggle('active', b.dataset.filter === coverageFilter));
-  if (document.getElementById('coveragePanel').classList.contains('combo-mode') && activeComboResultTab) renderComboCoveragePage(activeComboResultTab);
-  else renderCoverageClinicPage();
+function saveCoverageFilterState() {
+  localStorage.setItem(COVERAGE_FILTER_STATE_KEY, JSON.stringify({
+    radiusKm:singleCoverageKm,
+    primary:coveragePrimaryCategory,
+    secondary:coverageSecondaryCategory,
+    ownership:coverageOwnership
+  }));
+}
+function passSingleCoverageFilter(p) {
+  const cat = getLeadCategory(p);
+  if (coveragePrimaryCategory !== '全部' && cat.primary !== coveragePrimaryCategory) return false;
+  if (coverageSecondaryCategory !== '全部' && cat.secondary !== coverageSecondaryCategory) return false;
+  const claimed = !isUnclaimedOwnerId(getOwnerId(p));
+  if (coverageOwnership === 'claimed' && !claimed) return false;
+  if (coverageOwnership === 'unclaimed' && claimed) return false;
+  return true;
+}
+function passCoverageFilter(p) { return passSingleCoverageFilter(p); }
+function getCoverageFilterSummaryLabel() {
+  const labels = [`${singleCoverageKm}km`];
+  if (coveragePrimaryCategory !== '全部') labels.push(coveragePrimaryCategory);
+  if (coverageSecondaryCategory !== '全部') labels.push(coverageSecondaryCategory);
+  if (coverageOwnership === 'claimed') labels.push('已认领');
+  if (coverageOwnership === 'unclaimed') labels.push('未认领');
+  if (labels.length === 1) labels.push('全部类目');
+  return labels.join('｜');
+}
+function renderCoverageTaxonomyFilters() {
+  const primaryBox = document.getElementById('coveragePrimaryFilters');
+  const secondaryBox = document.getElementById('coverageSecondaryFilters');
+  if (primaryBox) primaryBox.innerHTML = ['全部', ...Object.keys(LEAD_CATEGORY_TAXONOMY)].map(name => `<button class="coverage-filter-chip ${coveragePrimaryCategory===name?'active':''}" onclick="setCoveragePrimaryCategory('${jsStr(name)}')">${esc(name === '全部' ? '全部一级' : name)}</button>`).join('');
+  const secondaries = coveragePrimaryCategory === '全部' ? [] : (LEAD_CATEGORY_TAXONOMY[coveragePrimaryCategory] || []);
+  if (secondaryBox) {
+    secondaryBox.innerHTML = secondaries.length
+      ? ['全部', ...secondaries].map(name => `<button class="coverage-filter-chip ${coverageSecondaryCategory===name?'active':''}" onclick="setCoverageSecondaryCategory('${jsStr(name)}')">${esc(name === '全部' ? '全部二级' : name)}</button>`).join('')
+      : '<span class="coverage-filter-placeholder">选择一级类目后显示二级类目</span>';
+  }
+  document.querySelectorAll('.coverage-radius-chip').forEach(b => b.classList.toggle('active', Number(b.dataset.radius) === singleCoverageKm));
+  document.querySelectorAll('.coverage-owner-chip').forEach(b => b.classList.toggle('active', b.dataset.owner === coverageOwnership));
+  const condition = document.getElementById('coverageFilterCondition');
+  if (condition) condition.textContent = getCoverageFilterSummaryLabel();
+}
+function refreshCoverageFilterResults() {
+  saveCoverageFilterState();
+  renderCoverageTaxonomyFilters();
+  const panel = document.getElementById('coveragePanel');
+  if (panel && panel.classList.contains('combo-mode') && activeComboResultTab) renderComboCoveragePage(activeComboResultTab);
+  else {
+    renderMarkers();
+    renderCoverageClinicPage();
+  }
+  updateCoverageUi();
+}
+function setCoveragePrimaryCategory(category) {
+  coveragePrimaryCategory = LEAD_CATEGORY_TAXONOMY[category] ? category : '全部';
+  coverageSecondaryCategory = '全部';
+  refreshCoverageFilterResults();
+}
+function setCoverageSecondaryCategory(category) {
+  const options = LEAD_CATEGORY_TAXONOMY[coveragePrimaryCategory] || [];
+  coverageSecondaryCategory = options.includes(category) ? category : '全部';
+  refreshCoverageFilterResults();
+}
+function setCoverageOwnership(owner) {
+  coverageOwnership = ['all','unclaimed','claimed'].includes(owner) ? owner : 'all';
+  refreshCoverageFilterResults();
+}
+function clearCoverageFilters() {
+  singleCoverageKm = COVERAGE_KM;
+  coveragePrimaryCategory = '全部';
+  coverageSecondaryCategory = '全部';
+  coverageOwnership = 'all';
+  renderMalls();
+  refreshCoverageFilterResults();
+}
+function toggleCoverageFilters() {
+  const panel = document.getElementById('coverageFilterPanel');
+  if (!panel) return;
+  panel.classList.toggle('collapsed');
+  const button = document.getElementById('coverageFilterToggle');
+  if (button) button.textContent = panel.classList.contains('collapsed') ? '筛选⌄' : '收起⌃';
 }
 function setCoverageRadius(km) {
   const next = Number(km);
   if (![1, 4].includes(next) || next === singleCoverageKm) return;
   singleCoverageKm = next;
-  document.querySelectorAll('.coverage-radius-chip').forEach(b => b.classList.toggle('active', Number(b.dataset.radius) === singleCoverageKm));
+  saveCoverageFilterState();
   renderMalls();
   renderMarkers();
   renderCoverageClinicPage();
+  renderCoverageTaxonomyFilters();
   updateCoverageUi();
 }
 function clinicBadges(p) {
@@ -1861,15 +1949,17 @@ function renderCoverageClinicPage() {
   const box = document.getElementById('coverageClinicList');
   if (!selected || !box) return;
   const allHits = getMallClinics(selected, singleCoverageKm);
-  const hits = allHits.filter(passCoverageFilter).sort((a,b) => {
+  const hits = allHits.filter(passSingleCoverageFilter).sort((a,b) => {
     const da = a._distanceKm !== undefined ? a._distanceKm : distanceKm(selected.lat, selected.lng, a.lat, a.lng);
     const db = b._distanceKm !== undefined ? b._distanceKm : distanceKm(selected.lat, selected.lng, b.lat, b.lng);
     return getCoverageSortRank(a) - getCoverageSortRank(b) || da - db;
   });
   const warmCount = hits.filter(p => getCoverageSortRank(p) < 3).length;
-  const claimedCount = allHits.filter(p => !isUnclaimedOwnerId(getOwnerId(p))).length;
+  const claimedCount = hits.filter(p => !isUnclaimedOwnerId(getOwnerId(p))).length;
+  const unclaimedCount = hits.length - claimedCount;
   title.textContent = `${selected.name} · ${singleCoverageKm}公里诊所/机构`;
-  summary.textContent = `当前 ${hits.length}/${allHits.length} 家｜已认领 ${claimedCount} 家｜已沟通/意向/合作 ${warmCount} 家置顶`;
+  summary.textContent = `${getCoverageFilterSummaryLabel()}，共 ${hits.length} 家｜未认领 ${unclaimedCount}｜已认领 ${claimedCount}｜已沟通/意向/合作 ${warmCount} 家置顶`;
+  renderCoverageTaxonomyFilters();
   box.innerHTML = hits.length ? hits.map((p,i) => {
     const d = p._distanceKm !== undefined ? p._distanceKm : distanceKm(selected.lat, selected.lng, p.lat, p.lng);
     const rowClass = getCoverageListClass(p);
@@ -2234,7 +2324,7 @@ async function exportComboCsv() {
 function getCurrentCoverageRows() {
   const selected = getCoverageTargetById(selectedMallId);
   if (!selected) return [];
-  return getMallClinics(selected, singleCoverageKm).filter(passCoverageFilter).map((p,i) => clinicExportRow(p, {
+  return getMallClinics(selected, singleCoverageKm).filter(passSingleCoverageFilter).map((p,i) => clinicExportRow(p, {
     distance_km: (p._distanceKm !== undefined ? p._distanceKm : distanceKm(selected.lat, selected.lng, p.lat, p.lng)).toFixed(3),
     coverage_center: selected.name,
     coverage_mode: `single_${singleCoverageKm}km`
@@ -2254,7 +2344,7 @@ function exportCurrentCoverageErrorTemplate() {
 async function copyCurrentCoverageSummary() {
   const rows = getCurrentCoverageRows();
   if (!rows.length) { toast('当前没有诊所'); return; }
-  const text = `${rows[0].coverage_center} ${singleCoverageKm}公里内诊所/机构：${rows.length}家\n` + rows.slice(0,20).map(r => `${r.rank}. ${r.clinic} ${r.distance_km}km｜${r.address}`).join('\n');
+  const text = `${rows[0].coverage_center}｜${getCoverageFilterSummaryLabel()}｜诊所/机构：${rows.length}家\n` + rows.slice(0,20).map(r => `${r.rank}. ${r.clinic} ${r.distance_km}km｜${r.address}`).join('\n');
   await navigator.clipboard.writeText(text);
   toast('已复制摘要');
 }
