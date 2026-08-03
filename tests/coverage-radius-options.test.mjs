@@ -13,6 +13,7 @@ test('single coverage panel exposes 1km and 4km radius options', () => {
 });
 
 test('single coverage rendering and export use selected radius without changing combo default', () => {
+  assert.match(app, /mergeCoverageRenderPool\(renderPool, getBaseMallClinics\(selectedMall, singleCoverageKm\)\)/);
   assert.match(app, /getMallClinics\(selected, singleCoverageKm\)/);
   assert.match(app, /radius:singleCoverageKm\*1000/);
   assert.match(app, /coverage_mode: `single_\$\{singleCoverageKm\}km`/);

@@ -428,7 +428,7 @@ function renderMarkers() {
   const selectedMall = getCoverageTargetById(selectedMallId);
   let renderPool = getFilteredPlaces().filter(p => !isPointEntry(p));
   if (selectedMall && baseClinics.length) {
-    renderPool = mergeCoverageRenderPool(renderPool, getBaseMallClinics(selectedMall));
+    renderPool = mergeCoverageRenderPool(renderPool, getBaseMallClinics(selectedMall, singleCoverageKm));
   }
   const coordGroups = new Map();
   const coordinatePlan = getRuntimeSafety().coordinateGroupPlan(renderPool);
