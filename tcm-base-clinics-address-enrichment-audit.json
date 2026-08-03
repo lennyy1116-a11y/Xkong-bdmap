@@ -1,0 +1,1398 @@
+{
+  "status": "LOCAL_ADDRESS_ENRICHMENT_PREVIEW_NOT_PUBLISHED",
+  "inputCount": 13590,
+  "targetCount": 164,
+  "changedCount": 73,
+  "unresolvedCount": 91,
+  "changes": [
+    {
+      "id": "TCM001918",
+      "name": "梁㦤文中医",
+      "before": "香港大学中医诊所暨教研中心(湾仔区)",
+      "after": "2樓, 社区日间医疗中心282號 Queen's Rd E, Wan Chai, 香港",
+      "distanceMeters": 0.0,
+      "placeId": "ChIJJ3BqwloABDQRK7Q9UoFqKRI",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "TCM002252",
+      "name": "东区尤德夫人那打素医院 - 物理治疗",
+      "before": "Pamela Youde Nethersole Eastern Hospital Multi-centre Block C, Lok Man Rd, Sai Wan Shan",
+      "after": "香港西灣山樂民道3號東區尤德夫人那打素醫院綜合大樓C座",
+      "distanceMeters": 14.2,
+      "placeId": "ChIJQZQNK4cBBDQRcswiMAq4NZc",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "TCM002288",
+      "name": "Beauty Manor",
+      "before": "Righteous Centre, Nathan Rd, Mong Kok",
+      "after": "香港旺角彌敦道585號富時中心9/F 901室",
+      "distanceMeters": 7.7,
+      "placeId": "ChIJ9RBFI8cABDQR7pu9GeK65OA",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "TCM002726",
+      "name": "The Hong Kong Buddhist Association-The University of Hong Kong Clinical Centre for Teaching and Research in Chinese Medicine",
+      "before": "Lo Fu Ngam, Heng Lam St, 十号香港佛教医院C座",
+      "after": "香港竹園杏林街10號",
+      "distanceMeters": 89.4,
+      "placeId": "ChIJk0HmpikHBDQRPv-1r6I14as",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "TCM003068",
+      "name": "小草工作室 -泰式抓龙筋 - 泰式抓凤筋-Thai massage",
+      "before": "荃湾荃运工业中心第二期",
+      "after": "香港荃灣沙咀道53號",
+      "distanceMeters": 71.7,
+      "placeId": "ChIJp_4wO9H5AzQRgUz1I1oLOXw",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "TCM003277",
+      "name": "康健推拿养生馆",
+      "before": "Kai Hei Land Building, Castle Peak Road-Castle Peak Bay, Tuen Mun",
+      "after": "香港屯門青山公路-青山灣段385號嘉喜利大廈",
+      "distanceMeters": 14.2,
+      "placeId": "ChIJ6UyH0RX7AzQR3pqxiN4QNbY",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "TCM003381",
+      "name": "C+ Beauty 元朗美容院 教育路分店",
+      "before": "元朗, Man Shing Building, Kau Yuk Rd, Yuen Long",
+      "after": "Man Shing Building, 132 Kau Yuk Rd, Yuen Long, 香港",
+      "distanceMeters": 3.8,
+      "placeId": "ChIJwRA0XHX6AzQRuGxVlRyxzfo",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "TCM003528",
+      "name": "环宇物理治疗中心 (大埔)",
+      "before": "Tai Po, 二楼HK 新界 大埔超级城E区",
+      "after": "香港大埔寶湖里3號",
+      "distanceMeters": 38.8,
+      "placeId": "ChIJJ50gQkcIBDQRWFYq5Q6moQw",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "TCM003555",
+      "name": "Faces Beauty Center",
+      "before": "Tai Po Plaza, Tai Po",
+      "after": "香港大埔安泰路1號Plaza Yee Shing Court",
+      "distanceMeters": 1.3,
+      "placeId": "ChIJE6t3zEcIBDQRkNUH-YsXl5s",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "TCM003687",
+      "name": "Sha Tin Sports Association",
+      "before": "Lek Yuen Estate Sau Chuen House, Lek Yuen St, Sha Tin",
+      "after": "香港沙田瀝源街6號瀝源邨壽全樓",
+      "distanceMeters": 37.3,
+      "placeId": "ChIJCz6pPU0GBDQR3qJ1gXfBtsM",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "TCM004001",
+      "name": "国际华人心理咨询师协会",
+      "before": "Golden Name Commercial Building, Portland St, Prince Edward",
+      "after": "香港太子砵蘭街400號鴻曙商業大廈",
+      "distanceMeters": 0.8,
+      "placeId": "ChIJJQM_4MkABDQRkHrYPM4YorI",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK00196",
+      "name": "西医钟子超",
+      "before": "Kam Fung Building, Aberdeen Main Rd, Aberdeen",
+      "after": "Kam Fung Building, 171 Aberdeen Main Rd, Aberdeen, 香港",
+      "distanceMeters": 0.0,
+      "placeId": "ChIJtSD9NQMABDQR4kWhow2nBf8",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK00226",
+      "name": "陈绍兴骨伤治脊中心",
+      "before": "湾仔谭臣道威利商业大厦层A",
+      "after": "香港灣仔譚臣道8號威利商業大廈",
+      "distanceMeters": 0.5,
+      "placeId": "ChIJTeOR5lwABDQRwCAiREK0rO8",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK00280",
+      "name": "OlylifeHK 生命之光",
+      "before": "香港仔南宁街香港仔中心港荣阁",
+      "after": "香港香港仔南寧街15號香港仔中心港榮閣",
+      "distanceMeters": 0.0,
+      "placeId": "ChIJW65jbwMABDQR_MFnosqez1o",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK00282",
+      "name": "东华三院赛马会健辉之家",
+      "before": "香港仔惠福道四号赛马会复康中心B座",
+      "after": "香港香港仔惠福道4號",
+      "distanceMeters": 52.0,
+      "placeId": "ChIJlVCK4R4ABDQRtCCW_FlHlmc",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK00432",
+      "name": "优越医疗中心",
+      "before": "将军澳调景岭都会駅商场",
+      "after": "香港將軍澳景嶺路8號",
+      "distanceMeters": 81.3,
+      "placeId": "ChIJQZ1odu8DBDQReR0vjb2g5bA",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK00526",
+      "name": "屯门眼科护理中心",
+      "before": "屯门屯喜路屯门栢丽广场",
+      "after": "香港屯門屯喜路2號屯門栢麗廣場",
+      "distanceMeters": 7.1,
+      "placeId": "ChIJD-gdiz37AzQRCQly_1kmKHY",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK00591",
+      "name": "香港医药援助会 - 彩云邨牙科诊所",
+      "before": "牛池湾清水湾道彩云(一)邨长波楼",
+      "after": "香港牛池灣清水灣道45號彩雲(一)邨長波樓",
+      "distanceMeters": 1.0,
+      "placeId": "ChIJKe74MMgGBDQRzNImRnjT3bU",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK00623",
+      "name": "瞳心护眼（马鞍山）视光中心",
+      "before": "马鞍山西沙路马鞍山广场",
+      "after": "香港馬鞍山西沙路608號馬鞍山廣場",
+      "distanceMeters": 0.0,
+      "placeId": "ChIJxdqKDbEIBDQRckGbU7-QaSc",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK00694",
+      "name": "宏康医学诊断中心 - 中环砵典乍街",
+      "before": "Che San Building, Pottinger St, Central",
+      "after": "8/F, Che San Building, 10 Pottinger St, Central, 香港",
+      "distanceMeters": 15.4,
+      "placeId": "ChIJRSjlVWMABDQRMkhC_FEmX2M",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK01028",
+      "name": "同人中医馆（骨伤科）",
+      "before": "湾仔谭臣道威利商业大厦层A",
+      "after": "香港灣仔譚臣道8號威利商業大廈",
+      "distanceMeters": 0.5,
+      "placeId": "ChIJTeOR5lwABDQRwCAiREK0rO8",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK01088",
+      "name": "湛佐兰医生医务所",
+      "before": "铜锣湾告士打道世界贸易中心",
+      "after": "香港銅鑼灣告士打道280號世界貿易中心",
+      "distanceMeters": 23.6,
+      "placeId": "ChIJLbpzYFYABDQRqr5Lx6Ba77U",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK01507",
+      "name": "骨科诊所 - Orthopedics",
+      "before": "尖沙咀弥敦道 美丽华广场A座, A座",
+      "after": "香港尖沙咀金巴利道3號",
+      "distanceMeters": 48.4,
+      "placeId": "ChIJl7-SO-wABDQRQ8QCms-azRc",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK01639",
+      "name": "香港工人健康中心",
+      "before": "尖沙咀漆咸道南百利商业中心",
+      "after": "香港尖沙咀漆咸道南87-105號百利商業中心",
+      "distanceMeters": 8.6,
+      "placeId": "ChIJdz822-4ABDQRFoWBkuwjZy4",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK01653",
+      "name": "高怡医务中心",
+      "before": "Bright Growth Medical Center, Nathan Rd, Yau Ma Tei",
+      "after": "Bright Growth Medical Center, 335 Nathan Rd, Jordan, 香港",
+      "distanceMeters": 7.0,
+      "placeId": "ChIJI-v5WuoABDQRcrd1PTfVWkA",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK01703",
+      "name": "嘉宾商业大厦1211室",
+      "before": "油麻地弥敦道嘉宾商业大厦",
+      "after": "香港油麻地彌敦道301-309號號",
+      "distanceMeters": 10.0,
+      "placeId": "ChIJ3cn_rusABDQROj-aDUleuhY",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK01796",
+      "name": "优声超声波",
+      "before": "佐敦弥敦道嘉宾商业大厦",
+      "after": "香港油麻地彌敦道301-309號號",
+      "distanceMeters": 0.0,
+      "placeId": "ChIJ3cn_rusABDQROj-aDUleuhY",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK01885",
+      "name": "泳康中医诊所",
+      "before": "中环干诺道中亚洲大厦",
+      "after": "香港中環干諾道中33號亞洲大廈",
+      "distanceMeters": 0.0,
+      "placeId": "ChIJd8KVXGMABDQRzD_bc_ZW8T8",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK01998",
+      "name": "蓝沐美容养生 Oriental Garden Massage and Spa",
+      "before": "湾仔轩尼诗道新基大楼",
+      "after": "香港灣仔軒尼詩道38-46號新基大樓",
+      "distanceMeters": 0.0,
+      "placeId": "ChIJ5aw6HV0ABDQRBhAw8vTooqg",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK02278",
+      "name": "恩霖堂中医诊所",
+      "before": "土瓜湾靠背垄道富裕阁D",
+      "after": "香港土瓜灣靠背壟道121號富裕閣",
+      "distanceMeters": 0.0,
+      "placeId": "ChIJkZ5GW9cABDQREAqvSWSUhz0",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK02679",
+      "name": "康健推拿养生馆",
+      "before": "屯门青山公路-青山湾段嘉喜利大厦",
+      "after": "香港屯門青山公路-青山灣段385號嘉喜利大廈",
+      "distanceMeters": 14.2,
+      "placeId": "ChIJ6UyH0RX7AzQR3pqxiN4QNbY",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK02863",
+      "name": "香港复康会复康巴士服务",
+      "before": "晒草湾香港复康会蓝田综合中心",
+      "after": "香港藍田復康徑7號HKSR Lam Tin Complex1/F",
+      "distanceMeters": 0.0,
+      "placeId": "ChIJB9KkU1oBBDQRyMkv-OSTc1M",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK02864",
+      "name": "香港复康会社区复康网络新界太平中心",
+      "before": "上水保平路太平邨A座平治楼",
+      "after": "香港上水保平路8號太平邨A座平治樓",
+      "distanceMeters": 5.7,
+      "placeId": "ChIJp_0Bnxb2AzQRugIgbyixbmM",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK03191",
+      "name": "正品中医诊所(马鞍山)",
+      "before": "马鞍山恒康街耀安商场",
+      "after": "香港馬鞍山恆康街2號",
+      "distanceMeters": 20.0,
+      "placeId": "ChIJzcP--OYJBDQRypIk2vfHZXw",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK03198",
+      "name": "环宇物理治疗中心 (大埔)",
+      "before": "大埔二楼HK 新界 大埔超级城E区",
+      "after": "香港大埔寶湖里3號",
+      "distanceMeters": 38.8,
+      "placeId": "ChIJJ50gQkcIBDQRWFYq5Q6moQw",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK03338",
+      "name": "蒸身皇后",
+      "before": "屯门恒富街屯门中央广场",
+      "after": "香港屯門海榮路22號",
+      "distanceMeters": 56.9,
+      "placeId": "ChIJxZ32LUH7AzQR5ZhPRns-0pU",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK03777",
+      "name": "香港物理医学复康中心",
+      "before": "尖沙咀亚士厘道顺丰大厦",
+      "after": "香港尖沙咀亞士厘道11A號順豐大廈",
+      "distanceMeters": 0.0,
+      "placeId": "ChIJy79AifIABDQRZAICL0SMzk0",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK03816",
+      "name": "头缘养生之道",
+      "before": "旺角弥敦道飞达商业中心",
+      "after": "香港旺角彌敦道611-615號飛達商業中心",
+      "distanceMeters": 0.0,
+      "placeId": "ChIJDRw_wssBBDQRVTN3jxVj9Xs",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK03821",
+      "name": "张齐运中医针灸诊疗院",
+      "before": "太子太子道西长荣大厦",
+      "after": "香港旺角太子道西141號長榮大廈",
+      "distanceMeters": 2.6,
+      "placeId": "ChIJv1XS0MkABDQRiD5e4rP6Rlw",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK03938",
+      "name": "好爽盲人穴位推拿",
+      "before": "深水埗 Yen Chow St, 西九龙中心",
+      "after": "香港深水埗 Yen Chow St, 37K號西九龍中心",
+      "distanceMeters": 0.0,
+      "placeId": "ChIJw4LLE7MABDQR4MMha8oMpPc",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK03955",
+      "name": "St.beauty and health club",
+      "before": "长沙湾 Castle Peak Rd, 香港工业中心A座",
+      "after": "香港長沙灣 Castle Peak Rd, 489-491號香港工業中心A座",
+      "distanceMeters": 62.8,
+      "placeId": "ChIJtx52AVUHBDQRVE8I141mrVU",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK03994",
+      "name": "Ear Relief 台式采耳小店",
+      "before": "荔枝角长沙湾道香港纱厂工业大厦第五期",
+      "after": "香港荔枝角長沙灣道760號香港紗廠工業大廈第五期",
+      "distanceMeters": 0.0,
+      "placeId": "ChIJ__8_7VMHBDQRy42wEzVBuqM",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK04114",
+      "name": "D12 physiotherapy (CWB) center",
+      "before": "铜锣湾骆克道恒景大厦",
+      "after": "香港銅鑼灣駱克道485號恒景大廈",
+      "distanceMeters": 0.0,
+      "placeId": "ChIJVVXp5VYABDQRQmft_u8kiZU",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK04126",
+      "name": "郑远元专业修脚房",
+      "before": "湾仔轩尼诗道 Siu On Mansion, 地舖绍安大厦",
+      "after": "Third Floor, Siu On Mansion, 183-185 Hennessy Rd, Wan Chai, 香港",
+      "distanceMeters": 3.3,
+      "placeId": "ChIJCbqCg1sABDQR2GLe0MKWaZM",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK04336",
+      "name": "溢益足底穴位保健中心",
+      "before": "荃湾青山公路 - 荃湾段庆兴大楼",
+      "after": "香港荃灣青山公路 - 荃灣段223-227號慶興大樓",
+      "distanceMeters": 0.0,
+      "placeId": "ChIJWdudgu34AzQRUlEvkRavwN0",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK04570",
+      "name": "救世军宝林长者之家",
+      "before": "将军澳九龙将军澳宝林邨宝勤楼四楼",
+      "after": "香港將軍澳寶琳北路18號寶林邨6座寶勤樓",
+      "distanceMeters": 15.1,
+      "placeId": "ChIJEUytb5kFBDQRIBQHLaXCgoU",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK05513",
+      "name": "Beauty Aura Spa",
+      "before": "Hillwood Court, Hillwood Rd, Tsim Sha Tsui",
+      "after": "Hillwood Court, 22-26 Hillwood Rd, Tsim Sha Tsui, 香港",
+      "distanceMeters": 0.0,
+      "placeId": "ChIJO1MzAewABDQRiKzlcQTzJE4",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK05683",
+      "name": "Aura Grove Beauty 曦林美学",
+      "before": "长沙湾 Tung Chau W St, 新光工业大厦",
+      "after": "香港長沙灣 Tung Chau W St, 1059號新光工業大廈",
+      "distanceMeters": 0.0,
+      "placeId": "ChIJ-RlPplUHBDQRGMn1bhIQNgk",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK05691",
+      "name": "EC Beauty Studio",
+      "before": "长沙湾 Castle Peak Rd, 香港工业中心A座",
+      "after": "香港長沙灣 Castle Peak Rd, 489-491號香港工業中心A座",
+      "distanceMeters": 64.7,
+      "placeId": "ChIJtx52AVUHBDQRVE8I141mrVU",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK05712",
+      "name": "Selflove.Beauty.HK",
+      "before": "荔枝角 Castle Peak Rd, 香港工业中心A座",
+      "after": "香港長沙灣 Castle Peak Rd, 489-491號香港工業中心A座",
+      "distanceMeters": 0.0,
+      "placeId": "ChIJtx52AVUHBDQRVE8I141mrVU",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK05955",
+      "name": "御园药业（翠屏店）诊所",
+      "before": "观塘翠屏道翠屏北邨翠桉楼",
+      "after": "香港觀塘翠屏道19號翠屏北邨翠桉樓",
+      "distanceMeters": 0.0,
+      "placeId": "ChIJAePevVEBBDQR8LNzxNqeYvA",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK05985",
+      "name": "耳.诗 采耳工作室",
+      "before": "观塘巧明街迅达工业大厦",
+      "after": "香港觀塘巧明街114號迅達工業大廈",
+      "distanceMeters": 0.0,
+      "placeId": "ChIJfXjjgUUBBDQR4FwfBgopK9E",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK05989",
+      "name": "麦籽生活美学 Mai:k Life Beaute",
+      "before": "观塘鸿图道金凯工业大厦",
+      "after": "香港觀塘鴻圖道58號金凱工業大廈",
+      "distanceMeters": 0.0,
+      "placeId": "ChIJWahPxkUBBDQRHHDOdufWZfY",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK06030",
+      "name": "THIA Wellness",
+      "before": "Cathay Pacific - The Pier, First Class Lounge, Lantau Island, Sky Plaza Road, Chek Lap Kok",
+      "after": "香港赤鱲角 Sky Plaza Rd, 1號香港國際機場一號客運大樓Near Gate 63, Departures Level (L6",
+      "distanceMeters": 43.8,
+      "placeId": "ChIJTRJjUSjjAzQRb1tel8sfBx4",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK06087",
+      "name": "黄大仙下邨",
+      "before": "竹园正德街黄大仙中心",
+      "after": "香港竹園正德街103號黃大仙中心",
+      "distanceMeters": 0.0,
+      "placeId": "ChIJTZp4_9gGBDQR0OJFlEhcuhE",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK08662",
+      "name": "健齿牙医医务所有限公司",
+      "before": "中环德辅道中环球大厦",
+      "after": "香港中環德輔道中19號環球大廈",
+      "distanceMeters": 8.4,
+      "placeId": "ChIJe-cpJhIBBDQRajEgwIZzEYQ",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK08699",
+      "name": "康雅医疗中心 HongMed Medical Centre 陈英豪医生",
+      "before": "Nice Building, Hau Wong Rd, Kowloon City",
+      "after": "香港九龍城侯王道6-10號標緻大廈第3號舖",
+      "distanceMeters": 9.5,
+      "placeId": "ChIJVQc2K9UABDQR47MhKB54MRE",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK08888",
+      "name": "黎辉涛眼科医生_旺角",
+      "before": "旺角弥敦道旺角中心第一座",
+      "after": "香港旺角彌敦道688號旺角中心第一座",
+      "distanceMeters": 27.1,
+      "placeId": "ChIJ9zIy2ccABDQRuo5kcLwjPE8",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK09098",
+      "name": "医汇身体检查中心",
+      "before": "旺角旺角雅兰中心一期九楼",
+      "after": "香港旺角彌敦道625 & 639號",
+      "distanceMeters": 29.2,
+      "placeId": "ChIJm_pAoscABDQREKlnvWMoghg",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK09277",
+      "name": "社会福利署北大埔综合服务中心",
+      "before": "太和邨汀角路大埔政府合署",
+      "after": "香港大埔汀角路1號大埔政府合署",
+      "distanceMeters": 0.0,
+      "placeId": "ChIJvy7EGDkIBDQRjJc1Nnw9FAQ",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK09280",
+      "name": "大埔社区中心民政事务总署",
+      "before": "大埔乡事会街大埔社区中心",
+      "after": "香港大埔鄉事會街2號大埔社區中心",
+      "distanceMeters": 11.1,
+      "placeId": "ChIJMRNPDD8IBDQR_mmDtdbqwmQ",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK09422",
+      "name": "康健医疗及牙科服务有限公司",
+      "before": "沙田源顺围康健科技中心资讯工业中心",
+      "after": "香港沙田源順圍10號康健科技中心",
+      "distanceMeters": 8.2,
+      "placeId": "ChIJv3RolEQGBDQRRCN7AkfFGj4",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK09450",
+      "name": "香港百乐医务化验室",
+      "before": "沙田沙田乡事会路新城市中央广场",
+      "after": "香港沙田沙田鄉事會路138號",
+      "distanceMeters": 0.0,
+      "placeId": "ChIJ3WV1ZrIHBDQRD76FSpLPso8",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK09549",
+      "name": "激光医疗中心（旺角）",
+      "before": "旺角弥敦道旺角中心第一座",
+      "after": "香港旺角彌敦道688號旺角中心第一座",
+      "distanceMeters": 11.5,
+      "placeId": "ChIJ9zIy2ccABDQRuo5kcLwjPE8",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK09726",
+      "name": "花园护老中心有限公司",
+      "before": "深水埗元州街绍恒大厦",
+      "after": "香港長沙灣元州街477-483號紹恆大廈",
+      "distanceMeters": 9.7,
+      "placeId": "ChIJIZHwiFEHBDQRz0Khc9HnWJg",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK09731",
+      "name": "牙科医生叶国强",
+      "before": "Hong Lee Building, Castle Peak Rd, Cheung Sha Wan",
+      "after": "Hong Lee Building, 444-450 Castle Peak Rd, Cheung Sha Wan, 香港",
+      "distanceMeters": 25.8,
+      "placeId": "ChIJFUSrm1EHBDQRxN9WavpluKM",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK09742",
+      "name": "泛亚医疗中心有限公司",
+      "before": "旺角弥敦道银高国际大厦",
+      "after": "香港旺角彌敦道707號",
+      "distanceMeters": 17.3,
+      "placeId": "ChIJ5dfHcwMBBDQRFLlwA9mkn-E",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK09797",
+      "name": "仁济医院香港佛光协会展能中心及宿舍(II)",
+      "before": "荃湾仁济街仁济医院服务大楼三楼",
+      "after": "香港荃灣仁濟街7-11號",
+      "distanceMeters": 66.2,
+      "placeId": "ChIJGQU8KO34AzQRh8HbTGH4bcg",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK09873",
+      "name": "仁济医院香港半岛狮子会安老院",
+      "before": "青衣新界青衣长康邨康顺楼三字楼A、C翼及四字楼A、B、C翼",
+      "after": "香港青衣青康路12號長康邨康順樓",
+      "distanceMeters": 11.5,
+      "placeId": "ChIJu2NT5db4AzQRlD4A9vOFhWE",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK09941",
+      "name": "精亮专业视光中心",
+      "before": "Kwai chung plaza, Kwai Chung",
+      "after": "香港葵涌葵富路7至11號",
+      "distanceMeters": 66.3,
+      "placeId": "ChIJPehqtr34AzQR1OpdrdG_QCc",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK10007",
+      "name": "卓健医疗 (马鞍山-马鞍山广场)",
+      "before": "马鞍山西沙路马鞍山广场",
+      "after": "香港馬鞍山西沙路608號馬鞍山廣場",
+      "distanceMeters": 0.0,
+      "placeId": "ChIJxdqKDbEIBDQRckGbU7-QaSc",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK10008",
+      "name": "仁汇中医诊所",
+      "before": "将军澳贸业路新都城中心三期商场",
+      "after": "香港新都城貿業路8號新都城中心三期商場",
+      "distanceMeters": 0.0,
+      "placeId": "ChIJM7mp4gsEBDQRPtXwNg_uki0",
+      "locationType": "ROOFTOP"
+    },
+    {
+      "id": "HK10023",
+      "name": "紫云间日间中心",
+      "before": "慈云山云华街慈乐邨乐欢楼",
+      "after": "香港慈雲山雲華街10號慈樂邨樂歡樓",
+      "distanceMeters": 11.8,
+      "placeId": "ChIJA5K0Bt0GBDQRljVpBZPhDuQ",
+      "locationType": "ROOFTOP"
+    }
+  ],
+  "unresolved": [
+    {
+      "id": "TCM000297",
+      "name": "卓明牙科医务中心 (富宁花园)",
+      "address": "将军澳富宁花园商场一号",
+      "status": "OK",
+      "nearestDistanceMeters": 0.0,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "TCM000335",
+      "name": "仁爱堂牙科诊所",
+      "address": "屯门启民径十八号仁爱堂中心五楼",
+      "status": "OK",
+      "nearestDistanceMeters": 0.0,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "TCM000371",
+      "name": "李锦铨及彭兆基诊所 (葵芳)",
+      "address": "葵芳新都会广场第二座四十一楼四一一一室",
+      "status": "OK",
+      "nearestDistanceMeters": 0.0,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "TCM001927",
+      "name": "Tang Siu Kin Chinese Medicine Centre for Training and Research",
+      "address": "Ambulatory Care Centre, Wan Chai",
+      "status": "OK",
+      "nearestDistanceMeters": 288.2,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "TCM002264",
+      "name": "瑜心舍 (旺角店)",
+      "address": "Allied Plaza, Nathan Rd, Mong Kok",
+      "status": "OK",
+      "nearestDistanceMeters": 23.4,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "TCM002557",
+      "name": "Foot Massage Centre",
+      "address": "Sham Shui Po, Yen Chow St, dragon center",
+      "status": "OK",
+      "nearestDistanceMeters": 4.9,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "TCM002631",
+      "name": "国灸推拿按摩馆 Traditional Chinese Healthcare",
+      "address": "Cheung Lee Building, Tai Nan St, Sham Shui Po",
+      "status": "OK",
+      "nearestDistanceMeters": 0.0,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "TCM002767",
+      "name": "Inner Spatial - Yoga Studio 瑜伽室",
+      "address": "Startex Industrial Building, Tai Yau St, San Po Kong",
+      "status": "OK",
+      "nearestDistanceMeters": 134.6,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "TCM002946",
+      "name": "健足堂",
+      "address": "Kwun Tong, Hoi Yuen Rd, Fook Cheong Building, M号舖",
+      "status": "OK",
+      "nearestDistanceMeters": 6.1,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "TCM002953",
+      "name": "盈启中医丨荃湾中医",
+      "address": "Tsuen Wan, 商场",
+      "status": "OK",
+      "nearestDistanceMeters": 558.9,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "TCM003014",
+      "name": "香港朗玥瑜伽普拉提中心",
+      "address": "Nan Fung Centre, Castle Peak Rd - Tsuen Wan, Tsuen Wan",
+      "status": "OK",
+      "nearestDistanceMeters": 0.0,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "TCM003016",
+      "name": "Moonnoon Studio 瑜伽馆",
+      "address": "Roxy Industrial Centre, Tai Lin Pai Rd, Kwai Chung",
+      "status": "OK",
+      "nearestDistanceMeters": 0.0,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "TCM003142",
+      "name": "Unikyo beauty",
+      "address": "Millennium Trade Centre, Kwai Cheong Rd, Kwai Chung",
+      "status": "OK",
+      "nearestDistanceMeters": 0.0,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "TCM003227",
+      "name": "Mori yoga",
+      "address": "Hang Wai Industrial Centre, Tuen Mun",
+      "status": "OK",
+      "nearestDistanceMeters": 40.1,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "TCM003296",
+      "name": "关师傅消除痛症中心 (屯门店)",
+      "address": "Tuen Mun Industrial Centre, San Ping Circuit, Tuen Mun",
+      "status": "OK",
+      "nearestDistanceMeters": 0.0,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "TCM003361",
+      "name": "Soul Yogis 心灵瑜伽",
+      "address": "Keader Centre, 元朗安乐 Yuen Long",
+      "status": "OK",
+      "nearestDistanceMeters": 0.0,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "TCM003364",
+      "name": "Shine Yoga",
+      "address": "Keader Centre, Yuen Long",
+      "status": "OK",
+      "nearestDistanceMeters": 0.0,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "TCM003412",
+      "name": "Luen Bong Fitness Center",
+      "address": "On Ting Building, Yuen Long",
+      "status": "OK",
+      "nearestDistanceMeters": 55.7,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "TCM003424",
+      "name": "Matthana Thai massage",
+      "address": "Leung Choy Building Block B, Ping Fai Path, Yuen Long",
+      "status": "OK",
+      "nearestDistanceMeters": 19.2,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "TCM003425",
+      "name": "My Friend 2 Thai Massage",
+      "address": "Hing Fook Building Phase I, Ping Wui St, Yuen Long",
+      "status": "OK",
+      "nearestDistanceMeters": 27.2,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "TCM003711",
+      "name": "曾树容跌打 真善中医馆",
+      "address": "Lek Yuen Estate Fu Yu House, Lek Yuen St, Sha Tin",
+      "status": "OK",
+      "nearestDistanceMeters": 17.8,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "TCM003995",
+      "name": "名字说说",
+      "address": "Yau Ma Tei, Nathan Rd, 酒店一楼逸东",
+      "status": "OK",
+      "nearestDistanceMeters": 0.0,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "TCM004153",
+      "name": "黎辉涛眼科医生_旺角",
+      "address": "Argyle Centre Phase I, Nathan Rd, Mong Kok",
+      "status": "OK",
+      "nearestDistanceMeters": 27.1,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "TCM004182",
+      "name": "好爽盲人穴位推拿",
+      "address": "Dragon Centre, Yen Chow St, Sham Shui Po",
+      "status": "OK",
+      "nearestDistanceMeters": 0.0,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "TCM004185",
+      "name": "头缘养生之道",
+      "address": "Fee Tat Commercial Centre, Nathan Rd, Mong Kok",
+      "status": "OK",
+      "nearestDistanceMeters": 0.0,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "TCM004240",
+      "name": "泰和气功社",
+      "address": "Siu Nin Building, Tsat Tsz Mui Rd, North Point",
+      "status": "OK",
+      "nearestDistanceMeters": 1.0,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "TCM004272",
+      "name": "爱莎纤体美容中心",
+      "address": "Siu Yip House, Fa Yuen St, Mong Kok",
+      "status": "OK",
+      "nearestDistanceMeters": 154.8,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "TCM004324",
+      "name": "Brown Brows-半永久化妆 | 飘眉 纹眉 雾眉",
+      "address": "Carnarvon Plaza, Carnarvon Rd, Tsim Sha Tsui",
+      "status": "OK",
+      "nearestDistanceMeters": 0.0,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "TCM004338",
+      "name": "SPA TE | SPA THE ETERNAL 激光脱毛美肌中心",
+      "address": "Argyle Centre Phase I, Nathan Rd, Mong Kok",
+      "status": "OK",
+      "nearestDistanceMeters": 0.0,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "TCM004516",
+      "name": "馨禾堂",
+      "address": "European Asian Bank Building, Nathan Rd, Prince Edward",
+      "status": "OK",
+      "nearestDistanceMeters": 7.0,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK00044",
+      "name": "安柏中医痛症治疗中心",
+      "address": "上水龙龙琛路龙丰花园C座",
+      "status": "OK",
+      "nearestDistanceMeters": 12.5,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK00069",
+      "name": "屯门眼科中心(肾脏透析治疗中心) - 内科",
+      "address": "Eye Centre, Tuen Mun",
+      "status": "OK",
+      "nearestDistanceMeters": 663.8,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK00494",
+      "name": "关师傅消除痛症中心",
+      "address": "屯门新平街屯门工业中心",
+      "status": "OK",
+      "nearestDistanceMeters": 32.1,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK00646",
+      "name": "香港心理衞生会隆亨中心",
+      "address": "Lok Sam House, Tai Wai",
+      "status": "OK",
+      "nearestDistanceMeters": 997.1,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK00934",
+      "name": "Leading My Health",
+      "address": "上环林士街广发行大厦一号六楼",
+      "status": "OK",
+      "nearestDistanceMeters": 7.8,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK01021",
+      "name": "邓肇坚中医中心",
+      "address": "Ambulatory Care Centre, Wan Chai",
+      "status": "OK",
+      "nearestDistanceMeters": 288.2,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK01157",
+      "name": "伍士铨牙科医务所",
+      "address": "铜锣湾记利佐治街金堡中心",
+      "status": "OK",
+      "nearestDistanceMeters": 11.3,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK01273",
+      "name": "时代Ｘ光化验中心",
+      "address": "北角华懋交易广场ＩＩ期",
+      "status": "OK",
+      "nearestDistanceMeters": 507.2,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK01333",
+      "name": "梁天明博士顾问有限公司",
+      "address": "鲗鱼涌海湾街华懋交易广场",
+      "status": "OK",
+      "nearestDistanceMeters": 3.3,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK01335",
+      "name": "You Medical Beauty (鲗鱼涌)",
+      "address": "鲗鱼涌康山道康兰居二号九楼",
+      "status": "OK",
+      "nearestDistanceMeters": 82.4,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK01341",
+      "name": "卓华诊所",
+      "address": "柴湾柴湾道 兴华广场, 兴华(一)邨美华楼",
+      "status": "OK",
+      "nearestDistanceMeters": 583.9,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK01349",
+      "name": "2019冠状病毒疫苗接种-指定私家诊所（柴湾·美华楼）",
+      "address": "柴湾兴华广场兴华(一)邨美华楼西医王秉亮",
+      "status": "OK",
+      "nearestDistanceMeters": 596.9,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK01369",
+      "name": "阿波罗牙科器材邮贸公司",
+      "address": "柴湾吉胜街康民工业中心",
+      "status": "OK",
+      "nearestDistanceMeters": 13.9,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK01440",
+      "name": "一心中医诊所",
+      "address": "鸭脷洲鸭脷洲桥道鸭脷洲邨利满楼",
+      "status": "OK",
+      "nearestDistanceMeters": 0.0,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK01489",
+      "name": "行健医务中心",
+      "address": "Hing Lee Commercial Building, Shanghai St, Yau Ma Tei",
+      "status": "OK",
+      "nearestDistanceMeters": 1353.8,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK01668",
+      "name": "如欣物理治疗中心",
+      "address": "油麻地白加士街柏嘉商业中心",
+      "status": "OK",
+      "nearestDistanceMeters": 3.7,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK02365",
+      "name": "惟晔医舍中医诊所",
+      "address": "深水埗中国联合银行九龙分行大厦",
+      "status": "OK",
+      "nearestDistanceMeters": 4.2,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK02484",
+      "name": "艾Love You - 艾草保健产品专门店",
+      "address": "长沙湾元州街昌发工厂大厦",
+      "status": "OK",
+      "nearestDistanceMeters": 8.1,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK02874",
+      "name": "匡智会匡智地区支援中心 (新界北区)",
+      "address": "上水清晓路祥龙围邨服务设施大楼二楼",
+      "status": "OK",
+      "nearestDistanceMeters": 4.7,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK03001",
+      "name": "EU Yan Sang (HK) Ltd",
+      "address": "柴湾安业街新艺工业大厦",
+      "status": "OK",
+      "nearestDistanceMeters": 16.2,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK03141",
+      "name": "张柏和中医医务所",
+      "address": "Tai Po Commercial Centre, Kwong Fuk Rd, Tai Po",
+      "status": "OK",
+      "nearestDistanceMeters": 0.0,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK03144",
+      "name": "曾树容跌打 真善中医馆",
+      "address": "沙田沥源街沥源邨富裕楼",
+      "status": "OK",
+      "nearestDistanceMeters": 17.8,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK03166",
+      "name": "心满意足 养生馆",
+      "address": "大埔广福道宝 基 楼",
+      "status": "OK",
+      "nearestDistanceMeters": 8.8,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK03207",
+      "name": "曾树榕跌打整脊治疗",
+      "address": "沙田沥源街沥源邨富裕楼",
+      "status": "OK",
+      "nearestDistanceMeters": 16.3,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK03637",
+      "name": "东华三院王泽森长者地区中心",
+      "address": "沙田Siu Lek Yuen Rd沙角邨绿鹭楼",
+      "status": "OK",
+      "nearestDistanceMeters": 19.2,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK03743",
+      "name": "神采养生馆",
+      "address": "旺角旺角花园街兆业大厦",
+      "status": "OK",
+      "nearestDistanceMeters": 0.0,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK03937",
+      "name": "乐脚点沐足中心",
+      "address": "深水埗 Yen Chow St, dragon center",
+      "status": "OK",
+      "nearestDistanceMeters": 4.9,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK04189",
+      "name": "永义货仓",
+      "address": "柴湾角青山公路 - 荃湾段东南工业大厦",
+      "status": "OK",
+      "nearestDistanceMeters": 15.9,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK04430",
+      "name": "南葵涌社会服务处",
+      "address": "葵涌丽祖路荔景邨风景楼",
+      "status": "OK",
+      "nearestDistanceMeters": 0.0,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK04723",
+      "name": "健足堂",
+      "address": "观塘开源道福昌大厦M号舖",
+      "status": "OK",
+      "nearestDistanceMeters": 11.6,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK05167",
+      "name": "Hu SPA",
+      "address": "鲗鱼涌康山道二号康兰居九楼",
+      "status": "OK",
+      "nearestDistanceMeters": 2.4,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK05331",
+      "name": "Forever 18 Skincare Center",
+      "address": "尖沙咀加拿分道加拿芬广场",
+      "status": "OK",
+      "nearestDistanceMeters": 0.0,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK05371",
+      "name": "Kyna Beauty House",
+      "address": "大埔广福道大埔商业中心",
+      "status": "OK",
+      "nearestDistanceMeters": 0.0,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK05464",
+      "name": "Salmate Waxing Studio 屯门蜜蜡修眉店",
+      "address": "屯门建泰街恒威工业中心",
+      "status": "OK",
+      "nearestDistanceMeters": 73.4,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK05574",
+      "name": "诗琳美容",
+      "address": "沙田白鹤汀街新城市商业大厦",
+      "status": "OK",
+      "nearestDistanceMeters": 0.0,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK05686",
+      "name": "tag skin beauty",
+      "address": "荔枝角长顺街华盛工业大厦",
+      "status": "OK",
+      "nearestDistanceMeters": 0.0,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK05897",
+      "name": "maysum个人化妆班",
+      "address": "葵涌葵芳福业大厦（葵芳地铁一出",
+      "status": "OK",
+      "nearestDistanceMeters": 10.3,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK06068",
+      "name": "wellbeing healthcare medical centre",
+      "address": "黄大仙银凤街 Fung Wong Chuen Building, 号 地 下 b 舖",
+      "status": "OK",
+      "nearestDistanceMeters": 0.0,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK08228",
+      "name": "屯门医院_物理治疗",
+      "address": "屯门青松观路廿三号特别座",
+      "status": "OK",
+      "nearestDistanceMeters": 66.2,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK08542",
+      "name": "辅助生育技术中心 IVFHK",
+      "address": "沙田银城街威尔斯亲王医院特别大楼",
+      "status": "OK",
+      "nearestDistanceMeters": 0.0,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK08830",
+      "name": "晴朗医疗中心",
+      "address": "启德晴朗商场（A区）",
+      "status": "OK",
+      "nearestDistanceMeters": 0.0,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK08901",
+      "name": "盈健综合医务中心",
+      "address": "Wing on Cheong Building Wing Lok Street Central HK, To Kwa Wan",
+      "status": "OK",
+      "nearestDistanceMeters": 362.1,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK09005",
+      "name": "保良局天恩护老院 暨耆昌长者日间护理中心",
+      "address": "天水围天恩邨服务设施大楼三楼及四楼",
+      "status": "OK",
+      "nearestDistanceMeters": 0.3,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK09015",
+      "name": "博爱医院陈平纪念长者邻舍中心",
+      "address": "天水围天坛街天华邨服务设施大楼三字楼",
+      "status": "OK",
+      "nearestDistanceMeters": 10.8,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK09030",
+      "name": "香港耆康老人福利会任白慈善基金老人日间护理中心",
+      "address": "筲箕湾耀兴道耀东邨耀安楼",
+      "status": "OK",
+      "nearestDistanceMeters": 5.5,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK09220",
+      "name": "倪梦熊妇产科专科医生",
+      "address": "铜锣湾记利佐治街金堡中心",
+      "status": "OK",
+      "nearestDistanceMeters": 11.3,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK09323",
+      "name": "屯门工业中心",
+      "address": "屯门新平街屯门工业中心",
+      "status": "OK",
+      "nearestDistanceMeters": 0.0,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK09341",
+      "name": "一号牙科",
+      "address": "筲箕湾南安街二号楼一号室",
+      "status": "OK",
+      "nearestDistanceMeters": 173.9,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK09375",
+      "name": "东华三院邹莲女士长者日间护理中心",
+      "address": "大围沙田头路新田围邨盛围楼",
+      "status": "OK",
+      "nearestDistanceMeters": 24.6,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK09496",
+      "name": "东华三院方润华长者邻舍中心",
+      "address": "大围香粉寮街美田邨美全楼",
+      "status": "OK",
+      "nearestDistanceMeters": 2.2,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK09695",
+      "name": "基督教怀智服务处元州综合职业康复服务中心",
+      "address": "深水埗元州街元州邨元康楼一楼",
+      "status": "OK",
+      "nearestDistanceMeters": 125.3,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK09867",
+      "name": "明爱社会服务中心",
+      "address": "荃湾城门道荃湾明爱服务中心",
+      "status": "OK",
+      "nearestDistanceMeters": 4.2,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK09868",
+      "name": "仁济医院严徐玉珊卓智中心",
+      "address": "荃湾海坝街福来邨永康楼",
+      "status": "OK",
+      "nearestDistanceMeters": 0.0,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK09869",
+      "name": "明爱荃湾社区中心",
+      "address": "二楼, Caritas Social Centre Tsuen Wan, 九号 Shing Mun Rd, Tsuen Wan",
+      "status": "OK",
+      "nearestDistanceMeters": 17.7,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK09903",
+      "name": "盈爱无障牙科中心",
+      "address": "Cho Yiu Centre, Cho Yiu Chuen Kai King Lau, Lai Cho Rd, Kwai Chung",
+      "status": "OK",
+      "nearestDistanceMeters": 0.0,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK09904",
+      "name": "安健协会牙科诊所",
+      "address": "长安邨安清楼, Tsing Yi",
+      "status": "OK",
+      "nearestDistanceMeters": 12.4,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK09906",
+      "name": "安健协会牙科诊所",
+      "address": "长安邨安清楼, Tsing Yi",
+      "status": "OK",
+      "nearestDistanceMeters": 9.9,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK09929",
+      "name": "南葵涌社会服务处风景中心",
+      "address": "葵涌丽祖路荔景邨风景楼",
+      "status": "OK",
+      "nearestDistanceMeters": 54.5,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK09977",
+      "name": "光爱葵芳长者服务中心",
+      "address": "葵芳兴芳路葵芳邨葵明楼",
+      "status": "OK",
+      "nearestDistanceMeters": 0.0,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK09985",
+      "name": "易光牙科诊所",
+      "address": "将军澳唐德街将军澳中心",
+      "status": "OK",
+      "nearestDistanceMeters": 109.1,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    },
+    {
+      "id": "HK10094",
+      "name": "保良局顾卞裘莉长者日间护理中心",
+      "address": "牛头角牛头角下邨贵月楼",
+      "status": "OK",
+      "nearestDistanceMeters": 0.0,
+      "reason": "No <=100m geocode with street_number and stronger structure; floor/unit not invented"
+    }
+  ],
+  "outputSha256": "f232ca0123fadd15f7bca625bf85215bcfde6aadc3c1cf4927506ba7df2b1cc5",
+  "rule": "Geocoding <=100m + street_number + stronger structure; never infer floor/unit"
+}

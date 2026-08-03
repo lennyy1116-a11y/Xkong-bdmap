@@ -1,0 +1,26 @@
+{
+  "status": "PASS",
+  "sourcePhase1Count": 13840,
+  "finalCount": 13375,
+  "removedPhase2": 250,
+  "removedPhase3": 215,
+  "addressChanged": 73,
+  "addressUnresolvedButNonempty": 91,
+  "manualReviewRemaining": 1551,
+  "taxonomyCodes": 76,
+  "protectedProperNameCharCounts": {
+    "邨": 445,
+    "么": 20,
+    "著": 4,
+    "廸": 4,
+    "𪨶": 27,
+    "𫚭": 3,
+    "𠇹": 1
+  },
+  "pollutionMatches": {
+    "vet_auto": 0,
+    "public_core": 0,
+    "building_only": 0
+  },
+  "finalSha256": "582f8bd52c448f6e83e0b15436713f1cc1f384828b9972150c4d4c730885d099"
+}

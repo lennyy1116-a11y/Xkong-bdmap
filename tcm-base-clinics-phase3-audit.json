@@ -1,0 +1,26 @@
+{
+  "status": "LOCAL_PHASE3_PREVIEW_NOT_PUBLISHED",
+  "inputCount": 13590,
+  "keptCount": 13375,
+  "removedCount": 215,
+  "removalRuleCounts": {
+    "P3-REMOVE-PUBLIC-GOV": 96,
+    "P3-REMOVE-PURE-RETAIL": 37,
+    "P3-REMOVE-PURE-ASSOCIATION": 13,
+    "P3-REMOVE-PERSON-SAME-ADDRESS": 7,
+    "P3-REMOVE-BUILDING": 6,
+    "P3-REMOVE-PURE-EDUCATION": 11,
+    "P3-REMOVE-ORDINARY-FNB": 45
+  },
+  "textChangedRecords": 1773,
+  "textChangedFields": 1793,
+  "textFieldCounts": {
+    "address": 1704,
+    "name": 89
+  },
+  "manualReviewRemaining": 1551,
+  "outputSha256": "582f8bd52c448f6e83e0b15436713f1cc1f384828b9972150c4d4c730885d099",
+  "removedSha256": "aacd5624d2934b1e79c1190c8319827bbbebacf53403d4e708f11b500a87028d",
+  "diffSha256": "27613f7a1cf0e16e340341d84dd1798d3fb15e43965272c258939349f5188881",
+  "safety": "仅删除高置信非目标；仅转换限定的人类可见字段；ID、URL、电话、坐标、类目代码、规则和状态字段保持不变"
+}
