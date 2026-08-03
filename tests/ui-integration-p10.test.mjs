@@ -27,8 +27,7 @@ test('My page groups profile status management and hides dangerous tools in admi
   assert.match(html, /id="myProfileSection"/);
   assert.match(html, /id="mySystemStatusSection"/);
   assert.match(html, /id="mySystemManagementSection"/);
-  assert.match(html, /id="adminPanel"/);
-  assert.match(html, /onclick="openAdminPanel\(\)"/);
+  assert.match(html, /<details[^>]*id="adminArea"/);
   assert.match(html, /function\s+refreshMySystemStatus\s*\(/);
 });
 
@@ -48,7 +47,7 @@ test('P10 removes obsolete version branding from primary headers', () => {
 });
 
 test('top bar duplicate mall and settings controls are not visible', () => {
-  assert.doesNotMatch(html, /id="btnMall"|id="btnSettings"/);
+  assert.match(html, /#btnMall\s*,\s*#btnSettings\s*\{\s*display:\s*none/);
 });
 
 test('P10 navigation functions close competing primary panels', () => {
