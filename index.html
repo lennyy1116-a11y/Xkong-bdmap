@@ -667,16 +667,20 @@ body.home-mode .batch-import-note { margin-top:6px; color:var(--text2); font-siz
 .app-nav { position:fixed; left:0; right:0; bottom:0; z-index:2900; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:0; background:rgba(15,20,35,.96); border-top:1px solid rgba(255,255,255,.12); padding:6px 6px max(6px, env(safe-area-inset-bottom)); backdrop-filter:blur(12px); box-shadow:0 -4px 18px rgba(0,0,0,.34); }
 .app-nav button { border:0; background:transparent; color:var(--text2); border-radius:10px; padding:9px 4px; font-size:13px; font-weight:900; }
 .app-nav button.active { background:var(--primary); color:#fff; }
-.lead-priority-strip { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin:10px 0; }
-.lead-priority-card { border:1px solid rgba(74,144,217,.35); background:rgba(74,144,217,.10); border-radius:12px; padding:10px; }
-.lead-priority-card strong { display:block; font-size:13px; margin-bottom:4px; }
-.lead-priority-card span { color:var(--text2); font-size:12px; line-height:1.4; }
+.lead-priority-strip { display:block; margin:12px 0 10px; }
+.lead-priority-card { --claim-accent:#4a90d9; width:100%; display:flex; align-items:center; justify-content:space-between; gap:14px; border:1px solid rgba(74,144,217,.42); background:linear-gradient(135deg,rgba(74,144,217,.18),rgba(22,33,62,.92)); color:var(--text); border-radius:14px; padding:13px 14px; text-align:left; box-shadow:0 8px 22px rgba(4,12,30,.18); }
+.lead-priority-card strong { font-size:14px; }
+.lead-priority-card span { color:#b9d7f5; font-size:12px; line-height:1.4; text-align:right; }
+.lead-priority-card:active { transform:translateY(1px); border-color:var(--claim-accent); }
 .lead-filter-panel { border:1px solid rgba(255,255,255,.10); border-radius:12px; margin:8px 0; overflow:hidden; }
 .lead-filter-head { display:flex; align-items:center; gap:8px; padding:9px 10px; background:rgba(255,255,255,.04); }
 .lead-filter-condition { flex:1; min-width:0; color:var(--text2); font-size:12px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .lead-filter-clear,.lead-filter-toggle { border:0; border-radius:8px; padding:6px 8px; background:var(--bg); color:var(--text); font-weight:800; }
 .lead-filter-panel.collapsed .lead-filter-body { display:none; }
-.identity-notice { margin:8px 0; padding:9px 10px; border-radius:10px; background:rgba(241,196,15,.10); color:#f7d774; font-size:12px; line-height:1.45; }
+.identity-notice { margin:8px 0; padding:10px 12px; border:1px solid rgba(74,144,217,.28); border-radius:11px; background:rgba(74,144,217,.09); color:#b9d7f5; font-size:12px; line-height:1.45; }
+.identity-notice strong { color:#fff; margin:0 5px; }
+.identity-notice span { display:inline-flex; margin-left:6px; padding:2px 7px; border-radius:999px; background:rgba(74,144,217,.20); color:#cfe6ff; font-weight:800; }
+.identity-notice.ready { background:rgba(74,144,217,.12); border-color:rgba(74,144,217,.38); }
 .coverage-workspace-btn { position:fixed; right:16px; top:max(62px, calc(env(safe-area-inset-top) + 62px)); z-index:1300; border:1px solid rgba(255,255,255,.16); border-radius:999px; background:var(--card); color:var(--text); padding:8px 11px; font-size:12px; font-weight:900; box-shadow:0 4px 14px rgba(0,0,0,.3); }
 .app-dialog { position:fixed; inset:0; z-index:7000; display:none; align-items:center; justify-content:center; padding:18px; background:rgba(0,0,0,.62); }
 .app-dialog.active { display:flex; }
@@ -760,10 +764,9 @@ body.home-mode .map-filter-bar { display:none !important; }
       <h1>BD工作台</h1>
     </div>
     <div class="lead-priority-strip">
-      <button class="lead-priority-card" id="leadTodayActions" onclick="openDashboardFromHome()"><strong>今日行动</strong><span id="leadTodayActionsSummary">查看待推进任务</span></button>
-      <button class="lead-priority-card" id="leadMyClaimedSummary" onclick="setLeadFilter('mine')"><strong>我的认领</strong><span id="leadMyClaimedCount">尚未设置身份</span></button>
+      <button class="lead-priority-card" id="leadMyClaimedSummary" onclick="openMyClaims()"><strong>我的认领</strong><span id="leadMyClaimedCount">去设置姓名和角色 →</span></button>
     </div>
-    <div class="identity-notice" id="identityNotice">可匿名浏览；认领线索前需要先在“我的”设置姓名。当前身份：匿名访客。</div>
+    <div class="identity-notice" id="identityNotice">尚未设置认领身份，点击“我的认领”完成姓名和角色设置。</div>
     <div class="lead-search-row"><input id="leadSearchInput" placeholder="搜索店铺、地址、电话或正式类目" oninput="leadSearchTerm=this.value.trim().toLowerCase(); renderLeadHomeList();"></div>
     <div id="leadFilterPanel" class="lead-filter-panel collapsed">
       <div class="lead-filter-head"><div class="lead-filter-condition" id="leadFilterCondition">全部线索｜全部类目</div><button class="lead-filter-clear" onclick="clearLeadFilters()">清除</button><button class="lead-filter-toggle" onclick="toggleLeadFilters()">筛选⌄</button></div>
@@ -1066,6 +1069,16 @@ body.home-mode .map-filter-bar { display:none !important; }
       <div class="form-group">
         <label>用户名称</label>
         <input type="text" id="usernameInput" placeholder="你的名字">
+      </div>
+      <div class="form-group">
+        <label>角色</label>
+        <select id="userRoleInput">
+          <option value="BD拓展">BD拓展</option>
+          <option value="机构运营">机构运营</option>
+          <option value="销售跟进">销售跟进</option>
+          <option value="市场支持">市场支持</option>
+          <option value="管理人员">管理人员</option>
+        </select>
       </div>
       <div class="form-group">
         <label>头像</label>
@@ -1649,6 +1662,7 @@ const APIKEY_KEY = 'bd_map_google_key';
 const DEFAULT_GOOGLE_MAPS_KEY = 'AIzaSyAQ4mpeoPh6KU1BZC2bfN6FzM_gMW3GsZM';
 const USERNAME_KEY = 'bd_map_username';
 const USER_AVATAR_KEY = 'bd_map_user_avatar';
+const USER_ROLE_KEY = 'bd_map_user_role';
 const AVATAR_POOL = ['🦅','🏃','🌿','🧭','🐯','🦊','🐼','🐧','🐶','🐱','🐰','🦁','🐺','🐻','🐨','🐵','🦉','🦋','🐉','🔥','⭐','🌙','☀️','⚡','🌊','🍀','🌿','🌸','🌻','🍄','💊','🏥','🩺','🧬','🧪','📍','🗺️','🎯','🚀','💼','📊','🧩','💎','👑','🎧','🎮','🍵','☕','🥐','🍜'];
 let places = [];
 let deletedPlaces = [];
@@ -1666,6 +1680,7 @@ let selectedDistrict = 'current';
 let _pagination = null;
 let currentUsername = localStorage.getItem(USERNAME_KEY) || '';
 let currentAvatar = localStorage.getItem(USER_AVATAR_KEY) || '👤';
+let currentRole = localStorage.getItem(USER_ROLE_KEY) || 'BD拓展';
 let coverageCache = new Map();
 let coverageCacheVersion = 0;
 let lastInstitutionStatus = '已交流';
@@ -2865,8 +2880,14 @@ function showMapHome() {
   document.body.classList.remove('home-mode');
   setTimeout(() => { if (map) map.invalidateSize(); }, 80);
 }
-function openDashboardFromHome() {
-  openDashboardFromMy();
+function openMyClaims() {
+  if (!String(currentUsername || '').trim()) {
+    openMyFromNav();
+    setTimeout(() => document.getElementById('usernameInput')?.focus(), 120);
+    toast('请先设置姓名和角色，再查看我的认领');
+    return;
+  }
+  setLeadFilter('mine');
 }
 function openDashboardFromMy() {
   closePrimaryPanels();
@@ -3053,6 +3074,16 @@ function renderLeadHomeList() {
   if (exportRow) exportRow.classList.toggle('active', leadFilter === 'error');
   const mineExportRow = document.getElementById('leadMineExportRow');
   if (mineExportRow) mineExportRow.classList.toggle('active', leadFilter === 'mine');
+  const mineCount = allRows.filter(p => p._leadMine).length;
+  const mineCountEl = document.getElementById('leadMyClaimedCount');
+  if (mineCountEl) mineCountEl.textContent = currentUsername ? `${currentRole} · ${mineCount} 条线索` : '去设置姓名和角色 →';
+  const identityNotice = document.getElementById('identityNotice');
+  if (identityNotice) {
+    identityNotice.classList.toggle('ready', Boolean(currentUsername));
+    identityNotice.innerHTML = currentUsername
+      ? `当前身份：<strong>${esc(currentUsername)}</strong><span>${esc(currentRole)}</span>`
+      : '尚未设置认领身份，点击“我的认领”完成姓名和角色设置。';
+  }
   const filterNames = { all:'全部', unclaimed:'未认领', claimed:'已认领', mine:'我的认领', error:'报错', phone:'有联系方式' };
   summary.textContent = `当前 ${rows.length} 条 · 已认领 ${claimed} · 有联系方式 ${phone}`;
   body.innerHTML = rows.length ? rows.slice(0,180).map(leadCardHtml).join('') : '<div class="lead-empty">没有符合条件的线索</div>';
@@ -4513,6 +4544,8 @@ function openSettings() {
   lockAdminArea();
   document.getElementById('apiKeyInput').value = localStorage.getItem(APIKEY_KEY) || '';
   document.getElementById('usernameInput').value = currentUsername || '';
+  const roleInput = document.getElementById('userRoleInput');
+  if (roleInput) roleInput.value = currentRole || 'BD拓展';
   renderAvatarGrid();
   document.getElementById('settingsPanel').classList.add('active');
   refreshMySystemStatus();
@@ -4528,7 +4561,7 @@ function refreshMySystemStatus() {
   const network = document.getElementById('myStatusNetwork');
   const counts = document.getElementById('myStatusCounts');
   const syncSource = document.getElementById('syncStatus');
-  if (user) user.textContent = `${currentAvatar || '👤'} ${currentUsername || '未设置'}`;
+  if (user) user.textContent = `${currentAvatar || '👤'} ${currentUsername || '未设置'} · ${currentRole || '未设置角色'}`;
   if (sync) sync.textContent = syncSource ? syncSource.textContent : '等待同步状态';
   if (network) network.textContent = navigator.onLine ? '在线' : '离线';
   if (counts) counts.textContent = `机构/点位 ${places.length} · 回收站 ${deletedPlaces.length} · 基础池 ${baseClinics.length} · 商场 ${malls.length}`;
@@ -4584,13 +4617,17 @@ function saveUsername() {
   const name = document.getElementById('usernameInput').value.trim();
   if (name) {
     currentUsername = name;
+    currentRole = document.getElementById('userRoleInput').value || 'BD拓展';
     localStorage.setItem(USERNAME_KEY, name);
     localStorage.setItem(USER_AVATAR_KEY, currentAvatar);
+    localStorage.setItem(USER_ROLE_KEY, currentRole);
     updateCurrentUserBadge();
     renderOwnerFilters();
     renderMarkers();
     renderList();
-    toast('✅ 用户资料已保存: ' + currentAvatar + ' ' + name);
+    scheduleLeadHomeRender();
+    refreshMySystemStatus();
+    toast('用户资料已保存：' + name + ' · ' + currentRole);
   } else {
     toast('请输入名称');
   }
