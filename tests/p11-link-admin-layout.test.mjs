@@ -59,7 +59,7 @@ test('lead page separates ownership, primary category and secondary category con
   assert.match(html, /class="lead-filter-section ownership"[\s\S]*data-filter="unclaimed"[\s\S]*data-filter="claimed"/);
   assert.match(html, /class="lead-filter-section categories"[\s\S]*id="leadCategoryRow"/);
   assert.match(html, /class="lead-filter-section secondary"[\s\S]*id="leadSecondaryRow"/);
-  for (const category of ['医疗','推拿按摩','健康养生','餐饮','美容美体','待分类']) {
+  for (const category of ['医疗诊疗','中医与传统医学','康复与辅助医疗','护理养老与社区照护','心理与身心健康','营养健康与药品零售','运动健身','健康餐饮','美容美体与休闲养生']) {
     assert.match(html, new RegExp(`data-category="${category}"`));
   }
   assert.match(app, /let leadSecondaryCategory = '全部'/);
@@ -69,15 +69,18 @@ test('lead page separates ownership, primary category and secondary category con
 
 test('lead categorization uses explicit fields and keywords without forcing unknown records into medical', async () => {
   const taxonomySource = app.match(/const LEAD_CATEGORY_TAXONOMY = \{[\s\S]*?\n\};/)?.[0];
+  const codeMapSource = app.match(/const LEAD_CATEGORY_CODE_TO_NAME = \{[\s\S]*?\n\};/)?.[0];
   const functionSource = app.match(/function getLeadCategory\(row\) \{[\s\S]*?\n\}/)?.[0];
-  assert.ok(taxonomySource && functionSource);
+  assert.ok(taxonomySource && codeMapSource && functionSource);
   const { runInNewContext } = await import('node:vm');
-  const classify = runInNewContext(`${taxonomySource}; ${functionSource}; getLeadCategory`);
-  assert.deepEqual({ ...classify({ name:'康健物理治療中心', type:'养生馆' }) }, { primary:'医疗', secondary:'康复护理' });
-  assert.deepEqual({ ...classify({ name:'泰舒服按摩足療', type:'自定义' }) }, { primary:'推拿按摩', secondary:'按摩足疗' });
-  assert.deepEqual({ ...classify({ name:'Shape健身中心', type:'自定义' }) }, { primary:'健康养生', secondary:'健身房' });
-  assert.deepEqual({ ...classify({ name:'Glow美甲美睫', type:'美容院' }) }, { primary:'美容美体', secondary:'美甲' });
-  assert.deepEqual({ ...classify({ name:'无法判断机构', type:'自定义' }) }, { primary:'待分类', secondary:'待分类' });
+  const classify = runInNewContext(`${taxonomySource}; ${codeMapSource}; ${functionSource}; getLeadCategory`);
+  assert.deepEqual({ ...classify({ name:'康健物理治療中心', type:'养生馆' }) }, { primary:'康复与辅助医疗', secondary:'物理治疗中心' });
+  assert.deepEqual({ ...classify({ name:'泰舒服按摩足療', type:'自定义' }) }, { primary:'美容美体与休闲养生', secondary:'按摩／足疗中心' });
+  assert.deepEqual({ ...classify({ name:'Shape健身中心', type:'自定义' }) }, { primary:'运动健身', secondary:'健身房／健身中心' });
+  assert.deepEqual({ ...classify({ name:'Glow美甲美睫', type:'美容院' }) }, { primary:'美容美体与休闲养生', secondary:'美甲店' });
+  assert.deepEqual({ ...classify({ name:'无法判断机构', type:'自定义' }) }, { primary:'待复核', secondary:'待复核' });
+  assert.deepEqual({ ...classify({ primary_l1_code:'TCM', primary_l2_name:'中医综合诊所' }) }, { primary:'中医与传统医学', secondary:'中医综合诊所' });
+  assert.deepEqual({ ...classify({ primaryCategory:'医疗诊疗', secondaryCategory:'牙科／口腔诊所', manualReviewStatus:'required' }) }, { primary:'医疗诊疗', secondary:'牙科／口腔诊所' });
 });
 
 test('lead cards expose business categories but not collection-source brands', () => {
@@ -93,13 +96,20 @@ test('institution form has primary and secondary category selectors', () => {
   assert.match(html, /id="institutionCategoryRow"/);
   assert.match(html, /id="institutionSecondaryRow"/);
   assert.match(html, /onchange="handlePrimaryCategoryChange\(\)"/);
-  assert.match(html, /value="医疗".*>医疗</);
-  assert.match(html, /value="推拿按摩".*>推拿按摩</);
-  assert.match(html, /value="健康养生".*>健康养生</);
-  assert.match(html, /value="餐饮".*>餐饮</);
-  assert.match(html, /value="美容美体".*>美容美体</);
+  assert.match(html, /value="医疗诊疗".*>MED 医疗诊疗</);
+  assert.match(html, /value="中医与传统医学".*>TCM 中医与传统医学</);
+  assert.match(html, /value="康复与辅助医疗".*>AHP 康复与辅助医疗</);
+  assert.match(html, /value="护理养老与社区照护".*>CARE 护理养老与社区照护</);
+  assert.match(html, /value="心理与身心健康".*>MHW 心理与身心健康</);
+  assert.match(html, /value="营养健康与药品零售".*>NUT 营养健康与药品零售</);
+  assert.match(html, /value="运动健身".*>FIT 运动健身</);
+  assert.match(html, /value="健康餐饮".*>FNB 健康餐饮</);
+  assert.match(html, /value="美容美体与休闲养生".*>BEA 美容美体与休闲养生</);
+
   assert.match(app, /function handlePrimaryCategoryChange\(\)/);
   assert.match(app, /LEAD_CATEGORY_TAXONOMY\[primary\]/);
+  assert.match(app, /function getTaxonomyFields\(primary, secondary\)/);
+  assert.match(app, /Object\.assign\(data, getTaxonomyFields\(data\.primaryCategory, data\.secondaryCategory\)\)/);
 });
 
 test('all base pools remain unclaimed until a real user claims a lead', () => {
