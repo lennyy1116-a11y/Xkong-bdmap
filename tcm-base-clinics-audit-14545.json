@@ -1,0 +1,12 @@
+{
+  "rows": 14545,
+  "unique_ids": 14545,
+  "districts": 18,
+  "address_review": 720,
+  "all_coordinates": true,
+  "all_required_text": true,
+  "sha256": "0fec86c0a252c3dcb51a99c8f89513ca63e24afd76e2419fcc7fdf0ad8f82b52",
+  "bytes": 10945350,
+  "canonical_sha256": "0fec86c0a252c3dcb51a99c8f89513ca63e24afd76e2419fcc7fdf0ad8f82b52",
+  "backup": "/Users/pro/.hermes/backups/tcm-base-clinics-before-14545-20260803-121401.json"
+}
