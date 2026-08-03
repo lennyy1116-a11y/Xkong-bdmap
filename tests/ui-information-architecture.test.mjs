@@ -22,6 +22,13 @@ test('workbench prioritizes my claims before search and removes the today action
   assert.match(html, /onclick="clearLeadFilters\(\)"/);
 });
 
+test('my claims can return directly to the unclaimed public pool', () => {
+  assert.match(html, /function openMyClaims\(\)[\s\S]*leadFilter === 'mine'[\s\S]*setLeadFilter\('unclaimed'\)/);
+  assert.match(html, /function clearLeadFilters\(\)[\s\S]*setLeadFilter\('unclaimed'\)/);
+  assert.match(html, /mineTitle\.textContent = leadFilter === 'mine' \? '返回公海' : '我的认领'/);
+  assert.match(html, /mineCountEl\.textContent = leadFilter === 'mine'/);
+});
+
 test('my profile supports role setup and refreshes claim identity after saving', () => {
   assert.match(html, /id="userRoleInput"/);
   assert.match(html, /<option value="BD拓展">BD拓展<\/option>/);
