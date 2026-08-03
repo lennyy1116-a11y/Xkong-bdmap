@@ -672,6 +672,8 @@ body.home-mode .batch-import-note { margin-top:6px; color:var(--text2); font-siz
 .lead-priority-card strong { font-size:14px; }
 .lead-priority-card span { color:#b9d7f5; font-size:12px; line-height:1.4; text-align:right; }
 .lead-priority-card:active { transform:translateY(1px); border-color:var(--claim-accent); }
+.lead-priority-card.active { border-color:#5ba4e8; background:linear-gradient(135deg,rgba(74,144,217,.26),rgba(22,33,62,.96)); }
+.lead-priority-card.active strong::before { content:'← '; color:#9dcfff; }
 .lead-filter-panel { border:1px solid rgba(255,255,255,.10); border-radius:12px; margin:8px 0; overflow:hidden; }
 .lead-filter-head { display:flex; align-items:center; gap:8px; padding:9px 10px; background:rgba(255,255,255,.04); }
 .lead-filter-condition { flex:1; min-width:0; color:var(--text2); font-size:12px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
@@ -2881,6 +2883,11 @@ function showMapHome() {
   setTimeout(() => { if (map) map.invalidateSize(); }, 80);
 }
 function openMyClaims() {
+  if (leadFilter === 'mine') {
+    setLeadFilter('unclaimed');
+    toast('已返回公海池');
+    return;
+  }
   if (!String(currentUsername || '').trim()) {
     openMyFromNav();
     setTimeout(() => document.getElementById('usernameInput')?.focus(), 120);
@@ -2888,6 +2895,16 @@ function openMyClaims() {
     return;
   }
   setLeadFilter('mine');
+}
+function clearLeadFilters() {
+  leadSearchTerm = '';
+  leadCategory = '全部';
+  leadSecondaryCategory = '全部';
+  const searchInput = document.getElementById('leadSearchInput');
+  if (searchInput) searchInput.value = '';
+  document.querySelectorAll('.lead-filter-chip[data-category]').forEach(b => b.classList.toggle('active', b.dataset.category === '全部'));
+  renderLeadSecondaryFilters();
+  setLeadFilter('unclaimed');
 }
 function openDashboardFromMy() {
   closePrimaryPanels();
@@ -3075,8 +3092,14 @@ function renderLeadHomeList() {
   const mineExportRow = document.getElementById('leadMineExportRow');
   if (mineExportRow) mineExportRow.classList.toggle('active', leadFilter === 'mine');
   const mineCount = allRows.filter(p => p._leadMine).length;
+  const mineCard = document.getElementById('leadMyClaimedSummary');
+  const mineTitle = mineCard ? mineCard.querySelector('strong') : null;
   const mineCountEl = document.getElementById('leadMyClaimedCount');
-  if (mineCountEl) mineCountEl.textContent = currentUsername ? `${currentRole} · ${mineCount} 条线索` : '去设置姓名和角色 →';
+  if (mineCard) mineCard.classList.toggle('active', leadFilter === 'mine');
+  if (mineTitle) mineTitle.textContent = leadFilter === 'mine' ? '返回公海' : '我的认领';
+  if (mineCountEl) mineCountEl.textContent = leadFilter === 'mine'
+    ? '查看全部未认领线索 →'
+    : (currentUsername ? `${currentRole} · ${mineCount} 条线索` : '去设置姓名和角色 →');
   const identityNotice = document.getElementById('identityNotice');
   if (identityNotice) {
     identityNotice.classList.toggle('ready', Boolean(currentUsername));

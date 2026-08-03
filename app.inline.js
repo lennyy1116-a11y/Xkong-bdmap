@@ -1240,6 +1240,11 @@ function showMapHome() {
   setTimeout(() => { if (map) map.invalidateSize(); }, 80);
 }
 function openMyClaims() {
+  if (leadFilter === 'mine') {
+    setLeadFilter('unclaimed');
+    toast('已返回公海池');
+    return;
+  }
   if (!String(currentUsername || '').trim()) {
     openMyFromNav();
     setTimeout(() => document.getElementById('usernameInput')?.focus(), 120);
@@ -1247,6 +1252,16 @@ function openMyClaims() {
     return;
   }
   setLeadFilter('mine');
+}
+function clearLeadFilters() {
+  leadSearchTerm = '';
+  leadCategory = '全部';
+  leadSecondaryCategory = '全部';
+  const searchInput = document.getElementById('leadSearchInput');
+  if (searchInput) searchInput.value = '';
+  document.querySelectorAll('.lead-filter-chip[data-category]').forEach(b => b.classList.toggle('active', b.dataset.category === '全部'));
+  renderLeadSecondaryFilters();
+  setLeadFilter('unclaimed');
 }
 function openDashboardFromMy() {
   closePrimaryPanels();
@@ -1434,8 +1449,14 @@ function renderLeadHomeList() {
   const mineExportRow = document.getElementById('leadMineExportRow');
   if (mineExportRow) mineExportRow.classList.toggle('active', leadFilter === 'mine');
   const mineCount = allRows.filter(p => p._leadMine).length;
+  const mineCard = document.getElementById('leadMyClaimedSummary');
+  const mineTitle = mineCard ? mineCard.querySelector('strong') : null;
   const mineCountEl = document.getElementById('leadMyClaimedCount');
-  if (mineCountEl) mineCountEl.textContent = currentUsername ? `${currentRole} · ${mineCount} 条线索` : '去设置姓名和角色 →';
+  if (mineCard) mineCard.classList.toggle('active', leadFilter === 'mine');
+  if (mineTitle) mineTitle.textContent = leadFilter === 'mine' ? '返回公海' : '我的认领';
+  if (mineCountEl) mineCountEl.textContent = leadFilter === 'mine'
+    ? '查看全部未认领线索 →'
+    : (currentUsername ? `${currentRole} · ${mineCount} 条线索` : '去设置姓名和角色 →');
   const identityNotice = document.getElementById('identityNotice');
   if (identityNotice) {
     identityNotice.classList.toggle('ready', Boolean(currentUsername));
