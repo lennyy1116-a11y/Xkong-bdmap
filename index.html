@@ -70,9 +70,9 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
   background: var(--card); border-radius: 16px 16px 0 0;
   max-height: 88vh; overflow-y: auto;
   transform: translateY(100%); transition: transform 0.3s ease;
-  padding: 20px 16px; padding-bottom: max(calc(20px + env(safe-area-inset-bottom)), 20px);
+  padding: 20px 16px; padding-bottom: max(calc(20px + env(safe-area-inset-bottom)), 20px); pointer-events:none;
 }
-.sheet.active { transform: translateY(0); }
+.sheet.active { transform: translateY(0); pointer-events:auto; }
 .sheet-handle { width: 40px; height: 4px; background: #555; border-radius: 2px; margin: 0 auto 16px; }
 .sheet h2 { font-size: 18px; margin-bottom: 16px; }
 
@@ -137,9 +137,9 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .list-panel {
   position: fixed; inset: 0; z-index: 2000; background: var(--bg);
   transform: translateX(100%); transition: transform 0.3s ease;
-  display: flex; flex-direction: column;
+  display: flex; flex-direction: column; pointer-events:none;
 }
-.list-panel.active { transform: translateX(0); }
+.list-panel.active { transform: translateX(0); pointer-events:auto; }
 .list-header {
   padding: 12px 16px; padding-top: max(12px, env(safe-area-inset-top));
   background: var(--card); display: flex; align-items: center; gap: 10px;
@@ -181,9 +181,9 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
   background: var(--card); border-radius: 16px 16px 0 0;
   max-height: 45vh; transform: translateY(100%); transition: transform 0.3s ease;
   display: flex; flex-direction: column;
-  box-shadow: 0 -4px 20px rgba(0,0,0,0.5);
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.5); pointer-events:none;
 }
-.search-panel.active { transform: translateY(0); }
+.search-panel.active { transform: translateY(0); pointer-events:auto; }
 .search-panel.expanded { max-height: 75vh; }
 .search-header {
   padding: 12px 16px;
@@ -226,9 +226,9 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .settings-panel {
   position: fixed; inset: 0; z-index: 2000; background: var(--bg);
   transform: translateX(100%); transition: transform 0.3s ease;
-  display: flex; flex-direction: column;
+  display: flex; flex-direction: column; pointer-events:none;
 }
-.settings-panel.active { transform: translateX(0); }
+.settings-panel.active { transform: translateX(0); pointer-events:auto; }
 .settings-header {
   padding: 12px 16px; padding-top: max(12px, env(safe-area-inset-top));
   background: var(--card); display: flex; align-items: center; gap: 10px;
@@ -317,9 +317,9 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .mall-panel {
   position: fixed; inset: 0; z-index: 2000; background: var(--bg);
   transform: translateX(100%); transition: transform 0.3s ease;
-  display:flex; flex-direction:column;
+  display:flex; flex-direction:column; pointer-events:none;
 }
-.mall-panel.active { transform: translateX(0); }
+.mall-panel.active { transform: translateX(0); pointer-events:auto; }
 .mall-body { flex:1; overflow-y:auto; padding:10px 12px; }
 .mall-form-card, .bulk-card { background:var(--card); border-radius:12px; padding:12px; margin-bottom:10px; }
 .mall-item { background:var(--card); border-radius:12px; padding:12px; margin-bottom:8px; cursor:pointer; border:1px solid transparent; }
@@ -420,8 +420,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .priority-badge.mid { background:#f1c40f; color:#2b2300; }
 .priority-badge.low { background:#7f8c8d; color:#fff; }
 .priority-reason { margin-top:5px; padding:6px 8px; border-radius:8px; background:rgba(255,159,26,.10); color:#ffd49a; font-size:12px; line-height:1.4; }
-.dashboard-panel { position:fixed; inset:0; z-index:1700; background:var(--bg); transform:translateX(100%); transition:.25s ease; display:flex; flex-direction:column; }
-.dashboard-panel.active { transform:translateX(0); }
+.dashboard-panel { position:fixed; inset:0; z-index:1700; background:var(--bg); transform:translateX(100%); transition:.25s ease; display:flex; flex-direction:column; pointer-events:none; }
+.dashboard-panel.active { transform:translateX(0); pointer-events:auto; }
 .dashboard-body { flex:1; overflow-y:auto; padding:10px 12px max(18px, env(safe-area-inset-bottom)); }
 .dash-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
 .dash-card { background:var(--card); border:1px solid rgba(255,255,255,.06); border-radius:14px; padding:12px; }
@@ -599,7 +599,7 @@ body.home-mode .top-bar { display:none !important; }
 body.home-mode .online-bar { display:none !important; }
 .lead-home { position:fixed; inset:0; z-index:2600; background:var(--bg); display:none; flex-direction:column; }
 body.home-mode .lead-home { display:flex; }
-.lead-home-header { padding: max(12px, env(safe-area-inset-top)) 12px 8px; background:var(--card); border-bottom:1px solid #333; }
+.lead-home-header { padding: max(12px, env(safe-area-inset-top)) 12px 8px; background:var(--card); border-bottom:1px solid #333; max-height:58dvh; overflow-y:auto; flex-shrink:0; }
 .lead-home-top { display:flex; align-items:center; gap:8px; }
 .lead-home-top h1 { flex:1; font-size:18px; margin:0; }
 .lead-tab-btn { border:1px solid #444; background:var(--bg); color:var(--text); border-radius:999px; padding:7px 11px; font-size:12px; font-weight:900; }
@@ -686,8 +686,8 @@ body.home-mode .batch-import-note { margin-top:6px; color:var(--text2); font-siz
 .app-dialog-input { width:100%; margin-top:12px; padding:11px 12px; border:1px solid #444; border-radius:9px; background:var(--bg); color:var(--text); }
 .app-dialog-actions { display:flex; gap:8px; margin-top:16px; }
 .app-dialog-actions button { flex:1; border:0; border-radius:9px; padding:10px; font-weight:900; }
-.admin-panel { position:fixed; inset:0; z-index:3100; background:var(--bg); transform:translateX(100%); transition:transform .3s ease; display:flex; flex-direction:column; }
-.admin-panel.active { transform:translateX(0); }
+.admin-panel { position:fixed; inset:0; z-index:3100; background:var(--bg); transform:translateX(100%); transition:transform .3s ease; display:flex; flex-direction:column; pointer-events:none; }
+.admin-panel.active { transform:translateX(0); pointer-events:auto; }
 .admin-body { flex:1; overflow:auto; padding:12px 14px max(96px, calc(96px + env(safe-area-inset-bottom))); }
 .resource-tabs { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; padding:9px 12px; background:var(--card); border-bottom:1px solid #333; }
 .resource-tabs button { border:1px solid #444; background:var(--bg); color:var(--text2); border-radius:10px; padding:8px; font-weight:900; }
@@ -708,6 +708,11 @@ body.home-mode .app-nav { display:grid !important; }
 
 .map-filter-bar { position:fixed; left:10px; right:10px; top:max(54px, calc(env(safe-area-inset-top) + 54px)); z-index:1200; display:flex; gap:6px; overflow-x:auto; padding:6px; background:rgba(15,20,35,.78); border:1px solid rgba(255,255,255,.1); border-radius:14px; backdrop-filter:blur(10px); box-shadow:0 4px 16px rgba(0,0,0,.25); }
 body.home-mode .map-filter-bar { display:none !important; }
+@media (max-width:600px) {
+  .lead-home-header { max-height:48dvh; }
+  .identity-notice { display:none; }
+  .lead-priority-card { padding:8px; }
+}
 .map-filter-chip { flex-shrink:0; border:1px solid #444; background:var(--card); color:var(--text2); border-radius:999px; padding:6px 10px; font-size:12px; font-weight:900; display:inline-flex; align-items:center; gap:4px; }
 .map-filter-chip.active { background:var(--orange); border-color:var(--orange); color:#fff; }
 .map-owner-select { flex:0 0 auto; max-width:180px; padding:6px 30px 6px 10px; border:1px solid #444; border-radius:999px; background:var(--card); color:var(--text); font-size:12px; font-weight:800; }
@@ -4120,6 +4125,7 @@ function getMallClinics(mall, radiusKm = COVERAGE_KM) {
   return result;
 }
 async function loadBaseClinics() {
+  const summary = document.getElementById('leadHomeSummary');
   try {
     const res = await fetch('./tcm-base-clinics.json', { cache: 'no-store' });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -4129,6 +4135,7 @@ async function loadBaseClinics() {
   } catch(e) {
     console.error('Base clinic pool file failed', e);
     baseClinics = [];
+    if (summary) summary.textContent = '基础机构池加载失败，请刷新重试';
     toast(`基础诊所池文件加载失败：${e && e.message ? e.message : '未知错误'}`);
     return;
   }
@@ -4136,10 +4143,11 @@ async function loadBaseClinics() {
     clearCoverageCache();
     renderMarkers();
     renderMallList();
-    scheduleLeadHomeRender();
+    renderLeadHomeList();
     updateStats();
   } catch(e) {
     console.error('Base clinic pool render failed', e);
+    if (summary && summary.textContent === '加载中...') summary.textContent = `基础机构池已加载 ${baseClinics.length} 条，列表渲染失败`;
     toast(`基础诊所池已加载，但地图渲染失败：${e && e.message ? e.message : '未知错误'}`);
   }
 }
@@ -5565,10 +5573,16 @@ document.getElementById('btnAdd').onclick = () => {
 };
 
 document.getElementById('btnGps').onclick = () => locateMe(false);
-document.getElementById('btnMall').onclick = openMallPanel;
-document.getElementById('btnSettings').onclick = openSettings;
-document.getElementById('btnSearch').onclick = openSearch;
-document.getElementById('sheetOverlay').onclick = closeSheet;
+const optionalEventBindings = [
+  ['btnMall', 'onclick', openMallPanel],
+  ['btnSettings', 'onclick', openSettings],
+  ['btnSearch', 'onclick', openSearch],
+  ['sheetOverlay', 'onclick', closeSheet]
+];
+optionalEventBindings.forEach(([id, eventName, handler]) => {
+  const element = document.getElementById(id);
+  if (element) element[eventName] = handler;
+});
 
 // Status chips
 document.querySelectorAll('.status-chip').forEach(chip => {

@@ -2497,6 +2497,7 @@ function getMallClinics(mall, radiusKm = COVERAGE_KM) {
   return result;
 }
 async function loadBaseClinics() {
+  const summary = document.getElementById('leadHomeSummary');
   try {
     const res = await fetch('./tcm-base-clinics.json', { cache: 'no-store' });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -2506,6 +2507,7 @@ async function loadBaseClinics() {
   } catch(e) {
     console.error('Base clinic pool file failed', e);
     baseClinics = [];
+    if (summary) summary.textContent = '基础机构池加载失败，请刷新重试';
     toast(`基础诊所池文件加载失败：${e && e.message ? e.message : '未知错误'}`);
     return;
   }
@@ -2513,10 +2515,11 @@ async function loadBaseClinics() {
     clearCoverageCache();
     renderMarkers();
     renderMallList();
-    scheduleLeadHomeRender();
+    renderLeadHomeList();
     updateStats();
   } catch(e) {
     console.error('Base clinic pool render failed', e);
+    if (summary && summary.textContent === '加载中...') summary.textContent = `基础机构池已加载 ${baseClinics.length} 条，列表渲染失败`;
     toast(`基础诊所池已加载，但地图渲染失败：${e && e.message ? e.message : '未知错误'}`);
   }
 }
@@ -3942,10 +3945,16 @@ document.getElementById('btnAdd').onclick = () => {
 };
 
 document.getElementById('btnGps').onclick = () => locateMe(false);
-document.getElementById('btnMall').onclick = openMallPanel;
-document.getElementById('btnSettings').onclick = openSettings;
-document.getElementById('btnSearch').onclick = openSearch;
-document.getElementById('sheetOverlay').onclick = closeSheet;
+const optionalEventBindings = [
+  ['btnMall', 'onclick', openMallPanel],
+  ['btnSettings', 'onclick', openSettings],
+  ['btnSearch', 'onclick', openSearch],
+  ['sheetOverlay', 'onclick', closeSheet]
+];
+optionalEventBindings.forEach(([id, eventName, handler]) => {
+  const element = document.getElementById(id);
+  if (element) element[eventName] = handler;
+});
 
 // Status chips
 document.querySelectorAll('.status-chip').forEach(chip => {
