@@ -85,14 +85,14 @@ test('index.html 接入安全删除模块、回收站、备份、软删除与审
   assert.match(html, /persistSoftDelete\(record, reason, action = 'soft-delete'\)/);
   assert.match(html, /auditLogs/);
   assert.doesNotMatch(html, /placesCollection\.doc\(id\)\.delete\(\)/);
-  assert.match(html, /id="adminPanel"/);
+  assert.match(html, /v3\.7\.0-hardening-p9/);
 });
 
 test('新版首页提供可见的资源中心入口，用户可由管理员区域进入回收站', () => {
   const root = path.resolve(import.meta.dirname, '..');
   const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-  assert.match(html, /<button[^>]+data-tab="resources"[^>]+onclick="navigateTo\('resources'\)"[^>]*>资源库<\/button>/);
-  assert.match(html, /id="adminPanel"[\s\S]*onclick="openRecycleBin\(\)"/);
+  assert.match(html, /<button[^>]+data-tab="resources"[^>]+onclick="openResourceCenter\(\)"[^>]*>资源<\/button>/);
+  assert.match(html, /<details id="adminArea"[^>]*>[\s\S]*onclick="openRecycleBin\(\)"/);
 });
 
 test('app.inline.js 与 index.html 内联脚本完全同步', () => {
