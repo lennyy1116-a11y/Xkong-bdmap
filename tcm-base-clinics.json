@@ -990,36 +990,6 @@
     "classificationReviewReason": ""
   },
   {
-    "id": "AHP01000034",
-    "name": "铭忻医健物理治疗",
-    "address": "尖沙咀么地道1-3号德拓大厦15楼全层",
-    "district": "九龙/油尖旺区",
-    "source": "现有清洗终版",
-    "lat": 22.2971146,
-    "lng": 114.1730729,
-    "needs_address_review": false,
-    "businessCategory": "医疗服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "",
-    "sourceUrl": "",
-    "authenticityScore": 3.9,
-    "addressCompleteness": "B_楼层明确",
-    "verificationStatus": "EXISTING_CLEAN_BASE",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "AHP",
-    "primary_l1_name": "康复与辅助医疗",
-    "primary_l2_code": "AHP-01",
-    "primary_l2_name": "物理治疗中心",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [],
-    "classificationRuleId": "P1-TCM-PHYSIO",
-    "classificationConfidence": "PHASE1_VERIFIED",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified",
-    "classificationReviewReason": ""
-  },
-  {
     "id": "AHP01000035",
     "name": "CPR Physio 物理治疗 (朗豪坊)",
     "address": "旺角朗豪坊办公大楼 1012室",
@@ -2550,36 +2520,6 @@
     "classificationReviewReason": ""
   },
   {
-    "id": "AHP01000086",
-    "name": "The Physio Work",
-    "address": "香港中环士丹利街50号信诚广场17楼A室",
-    "district": "香港岛/中西区",
-    "source": "现有清洗终版",
-    "lat": 22.2827684,
-    "lng": 114.1550465,
-    "needs_address_review": false,
-    "businessCategory": "医疗服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "",
-    "sourceUrl": "",
-    "authenticityScore": 3.9,
-    "addressCompleteness": "A_楼层室号完整",
-    "verificationStatus": "EXISTING_CLEAN_BASE",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "AHP",
-    "primary_l1_name": "康复与辅助医疗",
-    "primary_l2_code": "AHP-01",
-    "primary_l2_name": "物理治疗中心",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [],
-    "classificationRuleId": "P1-TCM-PHYSIO",
-    "classificationConfidence": "PHASE1_VERIFIED",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified",
-    "classificationReviewReason": ""
-  },
-  {
     "id": "AHP01000087",
     "name": "中区物理治疗及运动创伤诊所",
     "address": "中环毕打街1号中建大厦1418室",
@@ -3195,36 +3135,6 @@
     "sourceUrl": "",
     "authenticityScore": 3.9,
     "addressCompleteness": "B_楼层明确",
-    "verificationStatus": "EXISTING_CLEAN_BASE",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "AHP",
-    "primary_l1_name": "康复与辅助医疗",
-    "primary_l2_code": "AHP-01",
-    "primary_l2_name": "物理治疗中心",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [],
-    "classificationRuleId": "P1-TCM-PHYSIO",
-    "classificationConfidence": "PHASE1_VERIFIED",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified",
-    "classificationReviewReason": ""
-  },
-  {
-    "id": "AHP01000109",
-    "name": "晋景物理治疗中心 FW Physiotherapy Clinic",
-    "address": "香港北角电气道180号百家利中心25楼02室",
-    "district": "香港岛/东区",
-    "source": "现有清洗终版",
-    "lat": 22.2879396,
-    "lng": 114.1925284,
-    "needs_address_review": false,
-    "businessCategory": "医疗服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "",
-    "sourceUrl": "",
-    "authenticityScore": 3.9,
-    "addressCompleteness": "A_楼层室号完整",
     "verificationStatus": "EXISTING_CLEAN_BASE",
     "taxonomyVersion": "2026-07-30",
     "primary_l1_code": "AHP",
@@ -12000,7 +11910,10 @@
     "classificationConfidence": "PHASE1_VERIFIED",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified",
-    "classificationReviewReason": ""
+    "classificationReviewReason": "",
+    "legacyInstitutionIds": [
+      "AHP01000034"
+    ]
   },
   {
     "id": "AHP01000418",
@@ -15697,7 +15610,10 @@
     "classificationConfidence": "PHASE1_VERIFIED",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified",
-    "classificationReviewReason": ""
+    "classificationReviewReason": "",
+    "legacyInstitutionIds": [
+      "AHP01000109"
+    ]
   },
   {
     "id": "AHP01000540",
@@ -18955,7 +18871,10 @@
     "classificationConfidence": "PHASE1_VERIFIED",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified",
-    "classificationReviewReason": ""
+    "classificationReviewReason": "",
+    "legacyInstitutionIds": [
+      "AHP01000086"
+    ]
   },
   {
     "id": "AHP01000648",
@@ -25687,7 +25606,10 @@
     "classificationConfidence": "LOW_REVIEWED",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified_final_reviewed",
-    "classificationReviewReason": ""
+    "classificationReviewReason": "",
+    "legacyInstitutionIds": [
+      "TCM01000248"
+    ]
   },
   {
     "id": "AHP08000077",
@@ -34649,36 +34571,6 @@
     "classificationReviewReason": ""
   },
   {
-    "id": "BEA01000121",
-    "name": "Ingrid Millet Paris 英格蜜儿",
-    "address": "Kwai Chung, Hing Fong Rd, Unit 903",
-    "district": "新界/葵青区",
-    "source": "现有清洗终版",
-    "lat": 22.357444,
-    "lng": 114.1263314,
-    "needs_address_review": false,
-    "businessCategory": "健康服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "",
-    "sourceUrl": "",
-    "authenticityScore": 3.6,
-    "addressCompleteness": "B_铺号室号明确",
-    "verificationStatus": "EXISTING_CLEAN_BASE",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "BEA",
-    "primary_l1_name": "美容美体与休闲养生",
-    "primary_l2_code": "BEA-01",
-    "primary_l2_name": "生活美容／美体中心",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [],
-    "classificationRuleId": "MIG-BEA01",
-    "classificationConfidence": "RULE_CANDIDATE",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified",
-    "classificationReviewReason": ""
-  },
-  {
     "id": "BEA01000122",
     "name": "New Beauty (屯门栢丽广场21楼)",
     "address": "屯门屯喜路2号栢丽广场21楼1室",
@@ -36809,36 +36701,6 @@
     "classificationReviewReason": ""
   },
   {
-    "id": "BEA01000198",
-    "name": "About Time Aesthetics 美好时光医疗",
-    "address": "Tsim Sha Tsui, Canton Rd, 33号, Tower 1, China Hong Kong City, Suite 901BHK 九龙 尖沙咀广东道 33号 中港城1座901B",
-    "district": "九龙/油尖旺区",
-    "source": "现有清洗终版",
-    "lat": 22.3000755,
-    "lng": 114.167116,
-    "needs_address_review": false,
-    "businessCategory": "医疗服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "",
-    "sourceUrl": "",
-    "authenticityScore": 3.9,
-    "addressCompleteness": "B_铺号室号明确",
-    "verificationStatus": "EXISTING_CLEAN_BASE",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "BEA",
-    "primary_l1_name": "美容美体与休闲养生",
-    "primary_l2_code": "BEA-01",
-    "primary_l2_name": "生活美容／美体中心",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [],
-    "classificationRuleId": "FINAL-REVIEW-20260804",
-    "classificationConfidence": "MEDIUM",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified_final_reviewed",
-    "classificationReviewReason": ""
-  },
-  {
     "id": "BEA01000199",
     "name": "BEAUTY QUEEN Hong Kong",
     "address": "Shop 331, 3/F, NEW TOWN MALL, 65 Argyle St, Mong Kok",
@@ -36884,36 +36746,6 @@
     "sourceUrl": "",
     "authenticityScore": 3.6,
     "addressCompleteness": "C_门牌建筑明确",
-    "verificationStatus": "EXISTING_CLEAN_BASE",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "BEA",
-    "primary_l1_name": "美容美体与休闲养生",
-    "primary_l2_code": "BEA-01",
-    "primary_l2_name": "生活美容／美体中心",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [],
-    "classificationRuleId": "FINAL-REVIEW-20260804",
-    "classificationConfidence": "MEDIUM",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified_final_reviewed",
-    "classificationReviewReason": ""
-  },
-  {
-    "id": "BEA01000201",
-    "name": "香港医美诊所 Hong Kong Beauty Clinic",
-    "address": "佐敦弥敦道238号238中心1105室",
-    "district": "九龙/油尖旺区",
-    "source": "现有清洗终版",
-    "lat": 22.3048218,
-    "lng": 114.1719424,
-    "needs_address_review": false,
-    "businessCategory": "医疗服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "",
-    "sourceUrl": "",
-    "authenticityScore": 3.9,
-    "addressCompleteness": "B_铺号室号明确",
     "verificationStatus": "EXISTING_CLEAN_BASE",
     "taxonomyVersion": "2026-07-30",
     "primary_l1_code": "BEA",
@@ -53665,7 +53497,10 @@
     "classificationConfidence": "RULE_CANDIDATE",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified",
-    "classificationReviewReason": ""
+    "classificationReviewReason": "",
+    "legacyInstitutionIds": [
+      "BEA01000121"
+    ]
   },
   {
     "id": "BEA01000761",
@@ -68761,38 +68596,6 @@
     "classificationReviewReason": "泰式按摩降为服务标签"
   },
   {
-    "id": "BEA04000010",
-    "name": "多谢 Thai Massage (九龙城店)",
-    "address": "九龙城衙前围道29 A号2楼 (宋皇台站B3出口)",
-    "district": "九龙/九龙城区",
-    "source": "现有清洗终版",
-    "lat": 22.3288324,
-    "lng": 114.1895244,
-    "needs_address_review": false,
-    "businessCategory": "健康服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "",
-    "sourceUrl": "",
-    "authenticityScore": 3.9,
-    "addressCompleteness": "B_楼层明确",
-    "verificationStatus": "EXISTING_CLEAN_BASE",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "BEA",
-    "primary_l1_name": "美容美体与休闲养生",
-    "primary_l2_code": "BEA-04",
-    "primary_l2_name": "按摩／足疗中心",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [
-      "BEA-008"
-    ],
-    "classificationRuleId": "MIG-THAI-BEA04",
-    "classificationConfidence": "DIRECT",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified",
-    "classificationReviewReason": "泰式按摩降为服务标签"
-  },
-  {
     "id": "BEA04000011",
     "name": "花花泰",
     "address": "九龙城城南道42号一楼",
@@ -73307,7 +73110,10 @@
     "classificationConfidence": "DIRECT",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified",
-    "classificationReviewReason": ""
+    "classificationReviewReason": "",
+    "legacyInstitutionIds": [
+      "TCM01000179"
+    ]
   },
   {
     "id": "BEA04000167",
@@ -86267,6 +86073,7 @@
     "classificationStatus": "classified",
     "classificationReviewReason": "",
     "legacyInstitutionIds": [
+      "BEA04000010",
       "BEA04000256"
     ]
   },
@@ -92961,7 +92768,10 @@
     "classificationConfidence": "DIRECT",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified",
-    "classificationReviewReason": ""
+    "classificationReviewReason": "",
+    "legacyInstitutionIds": [
+      "TCM01001035"
+    ]
   },
   {
     "id": "BEA04000875",
@@ -98430,7 +98240,10 @@
     "classificationConfidence": "RULE_CANDIDATE",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified",
-    "classificationReviewReason": ""
+    "classificationReviewReason": "",
+    "legacyInstitutionIds": [
+      "TCM01000231"
+    ]
   },
   {
     "id": "BEA04001054",
@@ -136520,36 +136333,6 @@
     "classificationReviewReason": ""
   },
   {
-    "id": "MED01000287",
-    "name": "灵实秀茂坪诊所",
-    "address": "九龙秀茂坪邨秀茂坪商场314室",
-    "district": "九龙/观塘区",
-    "source": "现有清洗终版",
-    "lat": 22.3177336,
-    "lng": 114.2338979,
-    "needs_address_review": false,
-    "businessCategory": "医疗服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "",
-    "sourceUrl": "",
-    "authenticityScore": 3.9,
-    "addressCompleteness": "B_铺号室号明确",
-    "verificationStatus": "EXISTING_CLEAN_BASE",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "MED",
-    "primary_l1_name": "医疗诊疗",
-    "primary_l2_code": "MED-01",
-    "primary_l2_name": "综合／家庭医生诊所",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [],
-    "classificationRuleId": "P2-OLD-TCM-BESTFIT",
-    "classificationConfidence": "BEST_FIT_NAME_SOURCE",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified",
-    "classificationReviewReason": ""
-  },
-  {
     "id": "MED01000288",
     "name": "尖沙咀医疗中心 (6楼)",
     "address": "九龙尖沙咀漆咸道57-59号金马伦中心6楼",
@@ -137337,36 +137120,6 @@
     "source": "现有清洗终版",
     "lat": 22.283793,
     "lng": 114.154483,
-    "needs_address_review": false,
-    "businessCategory": "医疗服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "",
-    "sourceUrl": "",
-    "authenticityScore": 3.9,
-    "addressCompleteness": "B_楼层明确",
-    "verificationStatus": "EXISTING_CLEAN_BASE",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "MED",
-    "primary_l1_name": "医疗诊疗",
-    "primary_l2_code": "MED-01",
-    "primary_l2_name": "综合／家庭医生诊所",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [],
-    "classificationRuleId": "MIG-MED01",
-    "classificationConfidence": "DIRECT",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified",
-    "classificationReviewReason": ""
-  },
-  {
-    "id": "MED01000317",
-    "name": "中环医疗",
-    "address": "香港中环花园道3号冠君大厦3楼",
-    "district": "香港岛/中西区",
-    "source": "现有清洗终版",
-    "lat": 22.2784355,
-    "lng": 114.160606,
     "needs_address_review": false,
     "businessCategory": "医疗服务",
     "organizationCategory": "其他",
@@ -166609,36 +166362,6 @@
     "classificationReviewReason": ""
   },
   {
-    "id": "MED01001294",
-    "name": "HONG KONG ENDOSCOPY CENTRE",
-    "address": "ROOM 1725A, 17/F, GRAND PLAZA, OFFICE TOWER 1, 625 & 639 NATHAN ROAD, YAU TSIM MONG DISTRICT, KOWLOON",
-    "district": "九龙/油尖旺区",
-    "source": "香港私营医疗机构规管办公室ORPHF",
-    "lat": 22.3181205,
-    "lng": 114.169364,
-    "needs_address_review": false,
-    "businessCategory": "医疗服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "23522180",
-    "sourceUrl": "https://www.directory.orphf.gov.hk/Directory/Home/RedirectPHFDetail?PHFNo=RFAwMDAyNDU=",
-    "authenticityScore": 5.0,
-    "addressCompleteness": "A_楼层室号完整",
-    "verificationStatus": "ORPHF_LICENSED_GOOGLE_GEOCODED",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "MED",
-    "primary_l1_name": "医疗诊疗",
-    "primary_l2_code": "MED-01",
-    "primary_l2_name": "综合／家庭医生诊所",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [],
-    "classificationRuleId": "MIG-MED01",
-    "classificationConfidence": "DIRECT",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified",
-    "classificationReviewReason": ""
-  },
-  {
     "id": "MED01001295",
     "name": "HONG KONG GASTROINTESTINAL ENDOSCOPY CENTRE",
     "address": "18/F, GRAND CENTRE, 8 HUMPHREYS AVENUE, TSIM SHA TSUI, KOWLOON",
@@ -168046,7 +167769,10 @@
     "classificationConfidence": "DIRECT",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified",
-    "classificationReviewReason": ""
+    "classificationReviewReason": "",
+    "legacyInstitutionIds": [
+      "BEA01000198"
+    ]
   },
   {
     "id": "MED01001342",
@@ -169336,7 +169062,10 @@
     "classificationConfidence": "DIRECT",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified",
-    "classificationReviewReason": ""
+    "classificationReviewReason": "",
+    "legacyInstitutionIds": [
+      "BEA01000201"
+    ]
   },
   {
     "id": "MED01001385",
@@ -170222,36 +169951,6 @@
     "organizationLevel": "未定级",
     "phone": "37410339",
     "sourceUrl": "https://www.directory.orphf.gov.hk/Directory/Home/RedirectPHFDetail?PHFNo=Q0wwMDAxNzA=",
-    "authenticityScore": 5.0,
-    "addressCompleteness": "A_楼层室号完整",
-    "verificationStatus": "ORPHF_LICENSED_GOOGLE_GEOCODED",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "MED",
-    "primary_l1_name": "医疗诊疗",
-    "primary_l2_code": "MED-01",
-    "primary_l2_name": "综合／家庭医生诊所",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [],
-    "classificationRuleId": "MIG-MED01",
-    "classificationConfidence": "DIRECT",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified",
-    "classificationReviewReason": ""
-  },
-  {
-    "id": "MED01001415",
-    "name": "NEW TOWN MEDICAL CENTRE(KAM WAH)",
-    "address": "SHOP 102A, G/F, K-POINT, KAM WAH GARDEN, 1 TUEN LUNG STREET, TUEN MUN DISTRICT, NEW TERRITORIES",
-    "district": "新界/屯门区",
-    "source": "香港私营医疗机构规管办公室ORPHF",
-    "lat": 22.3939383,
-    "lng": 113.9754752,
-    "needs_address_review": false,
-    "businessCategory": "医疗服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "24559811",
-    "sourceUrl": "https://www.directory.orphf.gov.hk/Directory/Home/RedirectPHFDetail?PHFNo=Q0wwMDAyNDE=",
     "authenticityScore": 5.0,
     "addressCompleteness": "A_楼层室号完整",
     "verificationStatus": "ORPHF_LICENSED_GOOGLE_GEOCODED",
@@ -195721,7 +195420,10 @@
     "classificationConfidence": "DIRECT",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified",
-    "classificationReviewReason": ""
+    "classificationReviewReason": "",
+    "legacyInstitutionIds": [
+      "MED02000058"
+    ]
   },
   {
     "id": "MED01002264",
@@ -196171,7 +195873,10 @@
     "classificationConfidence": "DIRECT",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified",
-    "classificationReviewReason": ""
+    "classificationReviewReason": "",
+    "legacyInstitutionIds": [
+      "MED02000061"
+    ]
   },
   {
     "id": "MED01002279",
@@ -205420,7 +205125,10 @@
     "classificationConfidence": "DIRECT",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified",
-    "classificationReviewReason": ""
+    "classificationReviewReason": "",
+    "legacyInstitutionIds": [
+      "MED01001415"
+    ]
   },
   {
     "id": "MED01002589",
@@ -208003,36 +207711,6 @@
     "classificationReviewReason": ""
   },
   {
-    "id": "MED01002676",
-    "name": "卓智医学扫描诊断中心",
-    "address": "中环皇后大道中122号尚至医疗大楼 Virtus Medical Tower2楼",
-    "district": "香港岛/中西区",
-    "source": "Google Places第五阶段补抓",
-    "lat": 22.2837971,
-    "lng": 114.1544905,
-    "needs_address_review": false,
-    "businessCategory": "医疗服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "25254723",
-    "sourceUrl": "https://maps.google.com/?cid=1899981303266303009",
-    "authenticityScore": 4.0,
-    "addressCompleteness": "B_楼层明确",
-    "verificationStatus": "GOOGLE_OPERATIONAL_INSTITUTION_AUDITED",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "MED",
-    "primary_l1_name": "医疗诊疗",
-    "primary_l2_code": "MED-01",
-    "primary_l2_name": "综合／家庭医生诊所",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [],
-    "classificationRuleId": "MIG-MED01",
-    "classificationConfidence": "DIRECT",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified",
-    "classificationReviewReason": ""
-  },
-  {
     "id": "MED01002677",
     "name": "Matilda Medical Centre (Central)",
     "address": "3/F, 39 Queen's Road Central, Central",
@@ -208360,7 +208038,10 @@
     "classificationConfidence": "DIRECT",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified",
-    "classificationReviewReason": ""
+    "classificationReviewReason": "",
+    "legacyInstitutionIds": [
+      "MED01002676"
+    ]
   },
   {
     "id": "MED01002688",
@@ -228772,7 +228453,10 @@
     "classificationConfidence": "DIRECT",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified",
-    "classificationReviewReason": ""
+    "classificationReviewReason": "",
+    "legacyInstitutionIds": [
+      "MED01000287"
+    ]
   },
   {
     "id": "MED01003373",
@@ -231333,36 +231017,6 @@
     "classificationReviewReason": ""
   },
   {
-    "id": "MED02000007",
-    "name": "健汇专科中心 (将军澳)",
-    "address": "新界将军澳唐德街9号将军澳中心商场B01b铺",
-    "district": "新界/西贡区",
-    "source": "现有清洗终版",
-    "lat": 22.3073017,
-    "lng": 114.2570326,
-    "needs_address_review": false,
-    "businessCategory": "医疗服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "",
-    "sourceUrl": "",
-    "authenticityScore": 3.6,
-    "addressCompleteness": "B_铺号室号明确",
-    "verificationStatus": "EXISTING_CLEAN_BASE",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "MED",
-    "primary_l1_name": "医疗诊疗",
-    "primary_l2_code": "MED-02",
-    "primary_l2_name": "专科诊所",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [],
-    "classificationRuleId": "P1-TCM-SPECIALIST",
-    "classificationConfidence": "PHASE1_VERIFIED",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified",
-    "classificationReviewReason": ""
-  },
-  {
     "id": "MED02000009",
     "name": "新都专科医疗中心 (屯门)",
     "address": "新界屯门屯利街新都商场二楼214-215 220-225室",
@@ -231730,36 +231384,6 @@
     "source": "现有清洗终版",
     "lat": 22.3181205,
     "lng": 114.169364,
-    "needs_address_review": false,
-    "businessCategory": "医疗服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "",
-    "sourceUrl": "",
-    "authenticityScore": 3.6,
-    "addressCompleteness": "A_楼层室号完整",
-    "verificationStatus": "EXISTING_CLEAN_BASE",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "MED",
-    "primary_l1_name": "医疗诊疗",
-    "primary_l2_code": "MED-02",
-    "primary_l2_name": "专科诊所",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [],
-    "classificationRuleId": "P1-TCM-SPECIALIST",
-    "classificationConfidence": "PHASE1_VERIFIED",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified",
-    "classificationReviewReason": ""
-  },
-  {
-    "id": "MED02000022",
-    "name": "德萃皮肤专科中心",
-    "address": "九龙旺角弥敦道700号7楼705-706室",
-    "district": "九龙/油尖旺区",
-    "source": "现有清洗终版",
-    "lat": 22.3206,
-    "lng": 114.1694808,
     "needs_address_review": false,
     "businessCategory": "医疗服务",
     "organizationCategory": "其他",
@@ -232833,36 +232457,6 @@
     "classificationReviewReason": ""
   },
   {
-    "id": "MED02000058",
-    "name": "爱恩医疗 Love & Gift Medical Center刘柱略呼吸系统专科医生",
-    "address": "Mong Kok, Nathan Rd, 639号雅兰中心一期 11楼1123室",
-    "district": "九龙/油尖旺区",
-    "source": "现有清洗终版",
-    "lat": 22.3181152,
-    "lng": 114.169367,
-    "needs_address_review": false,
-    "businessCategory": "医疗服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "",
-    "sourceUrl": "",
-    "authenticityScore": 3.9,
-    "addressCompleteness": "A_楼层室号完整",
-    "verificationStatus": "EXISTING_CLEAN_BASE",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "MED",
-    "primary_l1_name": "医疗诊疗",
-    "primary_l2_code": "MED-02",
-    "primary_l2_name": "专科诊所",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [],
-    "classificationRuleId": "P2-SPECIALIST-BESTFIT",
-    "classificationConfidence": "BEST_FIT_NAME_SOURCE",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified",
-    "classificationReviewReason": ""
-  },
-  {
     "id": "MED02000059",
     "name": "香港痔疮专科",
     "address": "弥敦道677号恒生旺角大厦6楼601室 (旺角站C1出口), Mong Kok",
@@ -232917,36 +232511,6 @@
     "secondary_l2_codes": [],
     "service_tag_ids": [],
     "classificationRuleId": "P2-SPECIALIST-BESTFIT",
-    "classificationConfidence": "BEST_FIT_NAME_SOURCE",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified",
-    "classificationReviewReason": ""
-  },
-  {
-    "id": "MED02000061",
-    "name": "MD Surgery微创外科中心",
-    "address": "Mong Kok, Argyle St, 8号朗豪坊办公大楼45楼4506室",
-    "district": "九龙/油尖旺区",
-    "source": "现有清洗终版",
-    "lat": 22.3178464,
-    "lng": 114.1686943,
-    "needs_address_review": false,
-    "businessCategory": "医疗服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "",
-    "sourceUrl": "",
-    "authenticityScore": 3.6,
-    "addressCompleteness": "A_楼层室号完整",
-    "verificationStatus": "EXISTING_CLEAN_BASE",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "MED",
-    "primary_l1_name": "医疗诊疗",
-    "primary_l2_code": "MED-02",
-    "primary_l2_name": "专科诊所",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [],
-    "classificationRuleId": "P2-AESTHETIC-BESTFIT",
     "classificationConfidence": "BEST_FIT_NAME_SOURCE",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified",
@@ -238119,7 +237683,10 @@
     "classificationConfidence": "BEST_FIT_NAME_SOURCE",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified",
-    "classificationReviewReason": ""
+    "classificationReviewReason": "",
+    "legacyInstitutionIds": [
+      "MED02000007"
+    ]
   },
   {
     "id": "MED02000234",
@@ -240196,36 +239763,6 @@
     "classificationReviewReason": ""
   },
   {
-    "id": "MED04000003",
-    "name": "香港专科日间医疗中心 The Specialists Day Procedure Centre",
-    "address": "Mong Kok, Nathan Rd, 639号雅兰中心5-6楼全层&雅兰中心一期20楼全层",
-    "district": "九龙/油尖旺区",
-    "source": "现有清洗终版",
-    "lat": 22.3181152,
-    "lng": 114.169367,
-    "needs_address_review": false,
-    "businessCategory": "医疗服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "",
-    "sourceUrl": "",
-    "authenticityScore": 3.9,
-    "addressCompleteness": "B_楼层明确",
-    "verificationStatus": "EXISTING_CLEAN_BASE",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "MED",
-    "primary_l1_name": "医疗诊疗",
-    "primary_l2_code": "MED-04",
-    "primary_l2_name": "日间医疗中心／日间手术中心",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [],
-    "classificationRuleId": "P2-DIRECT-DESCRIPTIVE",
-    "classificationConfidence": "BEST_FIT_NAME_SOURCE",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified",
-    "classificationReviewReason": ""
-  },
-  {
     "id": "MED04000004",
     "name": "仁辉内视镜及日间医疗中心 HKMED | 医思专汇 EC Specialists Premium",
     "address": "12/F, Office Tower, Langham Place, 8 Argyle St, Mong Kok",
@@ -241003,7 +240540,10 @@
     "classificationConfidence": "PHASE1_VERIFIED",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified",
-    "classificationReviewReason": ""
+    "classificationReviewReason": "",
+    "legacyInstitutionIds": [
+      "MED04000003"
+    ]
   },
   {
     "id": "MED04000030",
@@ -241093,7 +240633,10 @@
     "classificationConfidence": "BEST_FIT_NAME_SOURCE",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified",
-    "classificationReviewReason": ""
+    "classificationReviewReason": "",
+    "legacyInstitutionIds": [
+      "MED01000317"
+    ]
   },
   {
     "id": "MED04000033",
@@ -241183,7 +240726,10 @@
     "classificationConfidence": "BEST_FIT_NAME_SOURCE",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified",
-    "classificationReviewReason": ""
+    "classificationReviewReason": "",
+    "legacyInstitutionIds": [
+      "MED01001294"
+    ]
   },
   {
     "id": "MED04000036",
@@ -253645,36 +253191,6 @@
     "classificationReviewReason": ""
   },
   {
-    "id": "MED08000286",
-    "name": "伍正乔牙科医生",
-    "address": "香港铜锣湾记利佐治街1号金百利中心1605室",
-    "district": "香港岛/湾仔区",
-    "source": "现有清洗终版",
-    "lat": 22.2803892,
-    "lng": 114.1850451,
-    "needs_address_review": false,
-    "businessCategory": "医疗服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "",
-    "sourceUrl": "",
-    "authenticityScore": 3.9,
-    "addressCompleteness": "B_铺号室号明确",
-    "verificationStatus": "EXISTING_CLEAN_BASE",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "MED",
-    "primary_l1_name": "医疗诊疗",
-    "primary_l2_code": "MED-08",
-    "primary_l2_name": "牙科／口腔诊所",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [],
-    "classificationRuleId": "MIG-MED08",
-    "classificationConfidence": "DIRECT",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified",
-    "classificationReviewReason": ""
-  },
-  {
     "id": "MED08000287",
     "name": "康霖牙科中心 (将军澳)",
     "address": "将军澳新都城一期2楼230号铺",
@@ -254970,36 +254486,6 @@
     "classificationReviewReason": ""
   },
   {
-    "id": "MED08000331",
-    "name": "智慧牙科中心",
-    "address": "北角渣华道112-114号建邦大厦地5号铺",
-    "district": "香港岛/东区",
-    "source": "现有清洗终版",
-    "lat": 22.2920978,
-    "lng": 114.1999708,
-    "needs_address_review": false,
-    "businessCategory": "医疗服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "",
-    "sourceUrl": "",
-    "authenticityScore": 3.9,
-    "addressCompleteness": "B_铺号室号明确",
-    "verificationStatus": "EXISTING_CLEAN_BASE",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "MED",
-    "primary_l1_name": "医疗诊疗",
-    "primary_l2_code": "MED-08",
-    "primary_l2_name": "牙科／口腔诊所",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [],
-    "classificationRuleId": "MIG-MED08",
-    "classificationConfidence": "DIRECT",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified",
-    "classificationReviewReason": ""
-  },
-  {
     "id": "MED08000332",
     "name": "正勋牙科中心 (铜锣湾)",
     "address": "铜锣湾轩尼诗道438-444号金鹅商业大厦3号地铺 (湾仔消防局对面)",
@@ -255360,36 +254846,6 @@
     "classificationReviewReason": ""
   },
   {
-    "id": "MED08000344",
-    "name": "海湾牙科愉景湾 (愉景广场)",
-    "address": "大屿山愉景湾道1号愉景广场1楼109B铺",
-    "district": "新界/离岛区",
-    "source": "现有清洗终版",
-    "lat": 22.2958676,
-    "lng": 114.01658,
-    "needs_address_review": false,
-    "businessCategory": "医疗服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "",
-    "sourceUrl": "",
-    "authenticityScore": 3.9,
-    "addressCompleteness": "A_楼层室号完整",
-    "verificationStatus": "EXISTING_CLEAN_BASE",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "MED",
-    "primary_l1_name": "医疗诊疗",
-    "primary_l2_code": "MED-08",
-    "primary_l2_name": "牙科／口腔诊所",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [],
-    "classificationRuleId": "MIG-MED08",
-    "classificationConfidence": "DIRECT",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified",
-    "classificationReviewReason": ""
-  },
-  {
     "id": "MED08000345",
     "name": "黄凯欣牙科医务所",
     "address": "香港中环皇后大道中56号丰乐行18楼全层",
@@ -255645,36 +255101,6 @@
     "sourceUrl": "",
     "authenticityScore": 3.9,
     "addressCompleteness": "A_楼层室号完整",
-    "verificationStatus": "EXISTING_CLEAN_BASE",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "MED",
-    "primary_l1_name": "医疗诊疗",
-    "primary_l2_code": "MED-08",
-    "primary_l2_name": "牙科／口腔诊所",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [],
-    "classificationRuleId": "MIG-MED08",
-    "classificationConfidence": "DIRECT",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified",
-    "classificationReviewReason": ""
-  },
-  {
-    "id": "MED08000354",
-    "name": "家悦牙科中心",
-    "address": "葵涌兴芳路177号葵芳广场一楼135号铺",
-    "district": "新界/葵青区",
-    "source": "现有清洗终版",
-    "lat": 22.3579121,
-    "lng": 114.1297226,
-    "needs_address_review": false,
-    "businessCategory": "医疗服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "",
-    "sourceUrl": "",
-    "authenticityScore": 3.9,
-    "addressCompleteness": "C_门牌建筑明确",
     "verificationStatus": "EXISTING_CLEAN_BASE",
     "taxonomyVersion": "2026-07-30",
     "primary_l1_code": "MED",
@@ -277189,36 +276615,6 @@
     "classificationReviewReason": ""
   },
   {
-    "id": "MED08001072",
-    "name": "HEUNG'S DENTAL CIRCLE",
-    "address": "17/F, PUNFET BUILDING, 701 NATHAN ROAD, YAU TSIM MONG DISTRICT, KOWLOON",
-    "district": "九龙/油尖旺区",
-    "source": "香港私营医疗机构规管办公室ORPHF",
-    "lat": 22.3200866,
-    "lng": 114.1689457,
-    "needs_address_review": false,
-    "businessCategory": "医疗服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "27898233",
-    "sourceUrl": "https://www.directory.orphf.gov.hk/Directory/Home/RedirectPHFDetail?PHFNo=Q0UwMDA4NzE=",
-    "authenticityScore": 5.0,
-    "addressCompleteness": "B_楼层明确",
-    "verificationStatus": "ORPHF_LICENSED_GOOGLE_GEOCODED",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "MED",
-    "primary_l1_name": "医疗诊疗",
-    "primary_l2_code": "MED-08",
-    "primary_l2_name": "牙科／口腔诊所",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [],
-    "classificationRuleId": "MIG-MED08",
-    "classificationConfidence": "DIRECT",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified",
-    "classificationReviewReason": ""
-  },
-  {
     "id": "MED08001073",
     "name": "HO MAN TIN DENTAL CENTER LTD",
     "address": "SHOP 231, 2/F, HOMANTIN PLAZA, HO MAN TIN ESTATE, 80 FAT KWONG STREET, KOWLOON CITY DISTRICT, KOWLOON",
@@ -277442,36 +276838,6 @@
     "organizationLevel": "未定级",
     "phone": "29640368",
     "sourceUrl": "https://www.directory.orphf.gov.hk/Directory/Home/RedirectPHFDetail?PHFNo=Q0UwMDAwMDk=",
-    "authenticityScore": 5.0,
-    "addressCompleteness": "A_楼层室号完整",
-    "verificationStatus": "ORPHF_LICENSED_GOOGLE_GEOCODED",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "MED",
-    "primary_l1_name": "医疗诊疗",
-    "primary_l2_code": "MED-08",
-    "primary_l2_name": "牙科／口腔诊所",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [],
-    "classificationRuleId": "MIG-MED08",
-    "classificationConfidence": "DIRECT",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified",
-    "classificationReviewReason": ""
-  },
-  {
-    "id": "MED08001081",
-    "name": "HUMAN CARE DENTAL CENTRE",
-    "address": "SHOP D, G/F, SUN KAI MANSION, 40 HENNESSY ROAD, WAN CHAI DISTRICT, HONG KONG",
-    "district": "香港岛/湾仔区",
-    "source": "香港私营医疗机构规管办公室ORPHF",
-    "lat": 22.2774549,
-    "lng": 114.1705725,
-    "needs_address_review": false,
-    "businessCategory": "医疗服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "28113830",
-    "sourceUrl": "https://www.directory.orphf.gov.hk/Directory/Home/RedirectPHFDetail?PHFNo=Q0UwMDA5MjU=",
     "authenticityScore": 5.0,
     "addressCompleteness": "A_楼层室号完整",
     "verificationStatus": "ORPHF_LICENSED_GOOGLE_GEOCODED",
@@ -283946,7 +283312,10 @@
     "classificationConfidence": "DIRECT",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified",
-    "classificationReviewReason": ""
+    "classificationReviewReason": "",
+    "legacyInstitutionIds": [
+      "MED08000286"
+    ]
   },
   {
     "id": "MED08001300",
@@ -284156,7 +283525,10 @@
     "classificationConfidence": "DIRECT",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified",
-    "classificationReviewReason": ""
+    "classificationReviewReason": "",
+    "legacyInstitutionIds": [
+      "MED08000331"
+    ]
   },
   {
     "id": "MED08001307",
@@ -285116,7 +284488,10 @@
     "classificationConfidence": "DIRECT",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified",
-    "classificationReviewReason": ""
+    "classificationReviewReason": "",
+    "legacyInstitutionIds": [
+      "MED08001081"
+    ]
   },
   {
     "id": "MED08001339",
@@ -286079,7 +285454,10 @@
     "classificationConfidence": "DIRECT",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified",
-    "classificationReviewReason": ""
+    "classificationReviewReason": "",
+    "legacyInstitutionIds": [
+      "MED08001072"
+    ]
   },
   {
     "id": "MED08001371",
@@ -288610,7 +287988,10 @@
     "classificationConfidence": "DIRECT",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified",
-    "classificationReviewReason": ""
+    "classificationReviewReason": "",
+    "legacyInstitutionIds": [
+      "MED08000354"
+    ]
   },
   {
     "id": "MED08001458",
@@ -289840,7 +289221,10 @@
     "classificationConfidence": "DIRECT",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified",
-    "classificationReviewReason": ""
+    "classificationReviewReason": "",
+    "legacyInstitutionIds": [
+      "MED08000344"
+    ]
   },
   {
     "id": "MED08001501",
@@ -291797,36 +291181,6 @@
     "classificationReviewReason": ""
   },
   {
-    "id": "MED09000054",
-    "name": "香港微创眼科中心",
-    "address": "香港中环皇后大道中18号新世界大厦1期504室",
-    "district": "香港岛/中西区",
-    "source": "现有清洗终版",
-    "lat": 22.2806547,
-    "lng": 114.1570799,
-    "needs_address_review": false,
-    "businessCategory": "医疗服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "",
-    "sourceUrl": "",
-    "authenticityScore": 3.9,
-    "addressCompleteness": "B_铺号室号明确",
-    "verificationStatus": "EXISTING_CLEAN_BASE",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "MED",
-    "primary_l1_name": "医疗诊疗",
-    "primary_l2_code": "MED-09",
-    "primary_l2_name": "眼科医疗中心",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [],
-    "classificationRuleId": "P1-EYE-MEDICAL",
-    "classificationConfidence": "PHASE1_VERIFIED",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified",
-    "classificationReviewReason": ""
-  },
-  {
     "id": "MED09000055",
     "name": "香港诺贝尔眼科中心",
     "address": "九龙旺角弥敦道700号9楼901室",
@@ -291902,66 +291256,6 @@
     "sourceUrl": "",
     "authenticityScore": 3.9,
     "addressCompleteness": "A_楼层室号完整",
-    "verificationStatus": "EXISTING_CLEAN_BASE",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "MED",
-    "primary_l1_name": "医疗诊疗",
-    "primary_l2_code": "MED-09",
-    "primary_l2_name": "眼科医疗中心",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [],
-    "classificationRuleId": "P1-EYE-MEDICAL",
-    "classificationConfidence": "PHASE1_VERIFIED",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified",
-    "classificationReviewReason": ""
-  },
-  {
-    "id": "MED09000058",
-    "name": "楷和眼科中心",
-    "address": "香港中环皇后大道中9号26楼2601-04 & 06-08室",
-    "district": "香港岛/中西区",
-    "source": "现有清洗终版",
-    "lat": 22.2802839,
-    "lng": 114.1581573,
-    "needs_address_review": false,
-    "businessCategory": "医疗服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "",
-    "sourceUrl": "",
-    "authenticityScore": 3.9,
-    "addressCompleteness": "A_楼层室号完整",
-    "verificationStatus": "EXISTING_CLEAN_BASE",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "MED",
-    "primary_l1_name": "医疗诊疗",
-    "primary_l2_code": "MED-09",
-    "primary_l2_name": "眼科医疗中心",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [],
-    "classificationRuleId": "P1-EYE-MEDICAL",
-    "classificationConfidence": "PHASE1_VERIFIED",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified",
-    "classificationReviewReason": ""
-  },
-  {
-    "id": "MED09000059",
-    "name": "香港建视眼科中心",
-    "address": "香港皇后大道中33号万邦行1205室",
-    "district": "香港岛/中西区",
-    "source": "现有清洗终版",
-    "lat": 22.2824039,
-    "lng": 114.1566772,
-    "needs_address_review": false,
-    "businessCategory": "医疗服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "",
-    "sourceUrl": "",
-    "authenticityScore": 3.9,
-    "addressCompleteness": "B_铺号室号明确",
     "verificationStatus": "EXISTING_CLEAN_BASE",
     "taxonomyVersion": "2026-07-30",
     "primary_l1_code": "MED",
@@ -293417,36 +292711,6 @@
     "classificationReviewReason": ""
   },
   {
-    "id": "MED09000110",
-    "name": "黎辉涛眼科医生_旺角",
-    "address": "Argyle Centre Phase I, Nathan Rd, Mong Kok",
-    "district": "九龙/油尖旺区",
-    "source": "现有清洗终版",
-    "lat": 22.3199477,
-    "lng": 114.1694838,
-    "needs_address_review": false,
-    "businessCategory": "医疗服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "",
-    "sourceUrl": "",
-    "authenticityScore": 3.9,
-    "addressCompleteness": "C_建筑位置明确",
-    "verificationStatus": "EXISTING_CLEAN_BASE",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "MED",
-    "primary_l1_name": "医疗诊疗",
-    "primary_l2_code": "MED-09",
-    "primary_l2_name": "眼科医疗中心",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [],
-    "classificationRuleId": "P1-EYE-MEDICAL",
-    "classificationConfidence": "PHASE1_VERIFIED",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified",
-    "classificationReviewReason": ""
-  },
-  {
     "id": "MED09000111",
     "name": "Dr. Kwan Wing Kwong",
     "address": "Rm 813A, Phase 1, Argyle Centre688 Nathan Rd, Mong Kok",
@@ -293472,36 +292736,6 @@
     "service_tag_ids": [],
     "classificationRuleId": "P2-PERSON-WEB-KEEP",
     "classificationConfidence": "BEST_FIT_NAME_SOURCE",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified",
-    "classificationReviewReason": ""
-  },
-  {
-    "id": "MED09000112",
-    "name": "DR GLAM Eye Centre 凝‧亮眼科中心",
-    "address": "旺角亚皆老街8号朗豪坊办公大楼26楼01-03及05-06室",
-    "district": "九龙/油尖旺区",
-    "source": "现有清洗终版",
-    "lat": 22.3181051,
-    "lng": 114.1685751,
-    "needs_address_review": false,
-    "businessCategory": "医疗服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "",
-    "sourceUrl": "",
-    "authenticityScore": 3.9,
-    "addressCompleteness": "A_楼层室号完整",
-    "verificationStatus": "EXISTING_CLEAN_BASE",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "MED",
-    "primary_l1_name": "医疗诊疗",
-    "primary_l2_code": "MED-09",
-    "primary_l2_name": "眼科医疗中心",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [],
-    "classificationRuleId": "P1-EYE-MEDICAL",
-    "classificationConfidence": "PHASE1_VERIFIED",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified",
     "classificationReviewReason": ""
@@ -293834,7 +293068,10 @@
     "classificationConfidence": "PHASE1_VERIFIED",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified",
-    "classificationReviewReason": ""
+    "classificationReviewReason": "",
+    "legacyInstitutionIds": [
+      "MED09000059"
+    ]
   },
   {
     "id": "MED09000124",
@@ -294464,7 +293701,10 @@
     "classificationConfidence": "PHASE1_VERIFIED",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified",
-    "classificationReviewReason": ""
+    "classificationReviewReason": "",
+    "legacyInstitutionIds": [
+      "MED09000058"
+    ]
   },
   {
     "id": "MED09000145",
@@ -295817,7 +295057,10 @@
     "classificationConfidence": "BEST_FIT_NAME_SOURCE",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified",
-    "classificationReviewReason": ""
+    "classificationReviewReason": "",
+    "legacyInstitutionIds": [
+      "MED09000112"
+    ]
   },
   {
     "id": "MED09000190",
@@ -297260,7 +296503,10 @@
     "classificationConfidence": "PHASE1_VERIFIED",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified",
-    "classificationReviewReason": ""
+    "classificationReviewReason": "",
+    "legacyInstitutionIds": [
+      "MED09000054"
+    ]
   },
   {
     "id": "MED09000238",
@@ -297775,7 +297021,10 @@
     "classificationConfidence": "PHASE1_VERIFIED",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified",
-    "classificationReviewReason": ""
+    "classificationReviewReason": "",
+    "legacyInstitutionIds": [
+      "MED09000110"
+    ]
   },
   {
     "id": "MED09000255",
@@ -300361,7 +299610,10 @@
     "classificationConfidence": "HIGH",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified_final_reviewed",
-    "classificationReviewReason": ""
+    "classificationReviewReason": "",
+    "legacyInstitutionIds": [
+      "MED02000022"
+    ]
   },
   {
     "id": "MED11000042",
@@ -303937,7 +303189,10 @@
     "classificationConfidence": "BEST_FIT_NAME_SOURCE",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified",
-    "classificationReviewReason": ""
+    "classificationReviewReason": "",
+    "legacyInstitutionIds": [
+      "TCM01000167"
+    ]
   },
   {
     "id": "MED13000010",
@@ -312586,39 +311841,6 @@
     "classificationReviewReason": ""
   },
   {
-    "id": "TCM01000020",
-    "name": "健雅堂中医诊所",
-    "address": "香港筲箕湾筲箕湾东大街177号东豪大厦地下4号铺",
-    "district": "香港岛/东区",
-    "source": "现有清洗终版",
-    "lat": 22.277308,
-    "lng": 114.230079,
-    "needs_address_review": false,
-    "businessCategory": "医疗服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "",
-    "sourceUrl": "",
-    "authenticityScore": 3.9,
-    "addressCompleteness": "B_楼层明确",
-    "verificationStatus": "EXISTING_CLEAN_BASE",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "TCM",
-    "primary_l1_name": "中医与传统医学",
-    "primary_l2_code": "TCM-01",
-    "primary_l2_name": "中医综合诊所",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [],
-    "classificationRuleId": "P1-TCM-EXPLICIT",
-    "classificationConfidence": "PHASE1_VERIFIED",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified",
-    "classificationReviewReason": "",
-    "legacyInstitutionIds": [
-      "TCM01000292"
-    ]
-  },
-  {
     "id": "TCM01000028",
     "name": "欧子谦跌打医馆",
     "address": "新界沙田德厚街3号禾𪨶邨厚和楼地下10号B铺",
@@ -314119,36 +313341,6 @@
     "classificationReviewReason": ""
   },
   {
-    "id": "TCM01000167",
-    "name": "希愈生殖医学中心",
-    "address": "香港中环德辅道中22号华懋中心一期10楼",
-    "district": "香港岛/中西区",
-    "source": "现有清洗终版",
-    "lat": 22.2823371,
-    "lng": 114.157403,
-    "needs_address_review": false,
-    "businessCategory": "医疗服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "",
-    "sourceUrl": "",
-    "authenticityScore": 3.6,
-    "addressCompleteness": "B_楼层明确",
-    "verificationStatus": "EXISTING_CLEAN_BASE",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "TCM",
-    "primary_l1_name": "中医与传统医学",
-    "primary_l2_code": "TCM-01",
-    "primary_l2_name": "中医综合诊所",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [],
-    "classificationRuleId": "FINAL-REVIEW-20260804",
-    "classificationConfidence": "LOW_REVIEWED",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified_final_reviewed",
-    "classificationReviewReason": ""
-  },
-  {
     "id": "TCM01000168",
     "name": "山舍养生 (九龙城店)",
     "address": "九龙城狮子石道89号地下",
@@ -314464,36 +313656,6 @@
     "sourceUrl": "",
     "authenticityScore": 3.6,
     "addressCompleteness": "B_楼层明确",
-    "verificationStatus": "EXISTING_CLEAN_BASE",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "TCM",
-    "primary_l1_name": "中医与传统医学",
-    "primary_l2_code": "TCM-01",
-    "primary_l2_name": "中医综合诊所",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [],
-    "classificationRuleId": "FINAL-REVIEW-20260804",
-    "classificationConfidence": "LOW_REVIEWED",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified_final_reviewed",
-    "classificationReviewReason": ""
-  },
-  {
-    "id": "TCM01000179",
-    "name": "足临门",
-    "address": "尖沙咀汉口道19号汉宜大厦1楼B室",
-    "district": "九龙/油尖旺区",
-    "source": "现有清洗终版",
-    "lat": 22.2968032,
-    "lng": 114.1709561,
-    "needs_address_review": false,
-    "businessCategory": "医疗服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "",
-    "sourceUrl": "",
-    "authenticityScore": 3.6,
-    "addressCompleteness": "A_楼层室号完整",
     "verificationStatus": "EXISTING_CLEAN_BASE",
     "taxonomyVersion": "2026-07-30",
     "primary_l1_code": "TCM",
@@ -315979,36 +315141,6 @@
     "classificationReviewReason": ""
   },
   {
-    "id": "TCM01000231",
-    "name": "泰丰足",
-    "address": "湾仔庄士敦道151-155号东方大厦3楼A室",
-    "district": "香港岛/湾仔区",
-    "source": "现有清洗终版",
-    "lat": 22.2768241,
-    "lng": 114.1740973,
-    "needs_address_review": false,
-    "businessCategory": "医疗服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "",
-    "sourceUrl": "",
-    "authenticityScore": 3.6,
-    "addressCompleteness": "A_楼层室号完整",
-    "verificationStatus": "EXISTING_CLEAN_BASE",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "TCM",
-    "primary_l1_name": "中医与传统医学",
-    "primary_l2_code": "TCM-01",
-    "primary_l2_name": "中医综合诊所",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [],
-    "classificationRuleId": "FINAL-REVIEW-20260804",
-    "classificationConfidence": "LOW_REVIEWED",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified_final_reviewed",
-    "classificationReviewReason": ""
-  },
-  {
     "id": "TCM01000232",
     "name": "湾仔VIP养生会",
     "address": "湾仔谭臣道119号 嘉易大厦 1楼B室（大友广场后面，大友停车P场斜对面，明宝石餐厅对面） 湾仔地铁站A3出口，左转再右转，内街",
@@ -316444,36 +315576,6 @@
     "sourceUrl": "",
     "authenticityScore": 3.6,
     "addressCompleteness": "B_楼层明确",
-    "verificationStatus": "EXISTING_CLEAN_BASE",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "TCM",
-    "primary_l1_name": "中医与传统医学",
-    "primary_l2_code": "TCM-01",
-    "primary_l2_name": "中医综合诊所",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [],
-    "classificationRuleId": "FINAL-REVIEW-20260804",
-    "classificationConfidence": "LOW_REVIEWED",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified_final_reviewed",
-    "classificationReviewReason": ""
-  },
-  {
-    "id": "TCM01000248",
-    "name": "恩泉复康治疗中心 Bethesda Rehabilitation Services",
-    "address": "尖沙咀加连威老道2-6号 爱宾商业大厦9楼904室",
-    "district": "九龙/油尖旺区",
-    "source": "现有清洗终版",
-    "lat": 22.299381,
-    "lng": 114.172676,
-    "needs_address_review": false,
-    "businessCategory": "医疗服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "",
-    "sourceUrl": "",
-    "authenticityScore": 3.9,
-    "addressCompleteness": "A_楼层室号完整",
     "verificationStatus": "EXISTING_CLEAN_BASE",
     "taxonomyVersion": "2026-07-30",
     "primary_l1_code": "TCM",
@@ -318300,41 +317402,6 @@
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified",
     "classificationReviewReason": ""
-  },
-  {
-    "id": "TCM01000310",
-    "name": "现代中医骨伤科诊所",
-    "address": "新界天水围天湖路1号嘉湖新北江商场地下A128-A129号铺",
-    "district": "新界/元朗区",
-    "source": "现有清洗终版",
-    "lat": 22.4522537,
-    "lng": 114.0004029,
-    "needs_address_review": false,
-    "businessCategory": "医疗服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "",
-    "sourceUrl": "https://www.finddoc.com/",
-    "authenticityScore": 4.3,
-    "addressCompleteness": "A_楼层室号完整",
-    "verificationStatus": "EXISTING_CLEAN_BASE",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "TCM",
-    "primary_l1_name": "中医与传统医学",
-    "primary_l2_code": "TCM-01",
-    "primary_l2_name": "中医综合诊所",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [],
-    "classificationRuleId": "P1-TCM-EXPLICIT",
-    "classificationConfidence": "PHASE1_VERIFIED",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified",
-    "classificationReviewReason": "",
-    "legacyInstitutionIds": [
-      "TCM01000025"
-    ],
-    "dedupeMergedAt": "2026-08-04T07:06:42.984161Z",
-    "dedupeReason": "strict_same_institution_evidence"
   },
   {
     "id": "TCM01000311",
@@ -324492,36 +323559,6 @@
     "classificationReviewReason": ""
   },
   {
-    "id": "TCM01000504",
-    "name": "健仁堂中医诊所",
-    "address": "香港上环永乐街121-125号永达商业大厦7B",
-    "district": "香港岛/中西区",
-    "source": "现有清洗终版",
-    "lat": 22.286213,
-    "lng": 114.1510753,
-    "needs_address_review": false,
-    "businessCategory": "医疗服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "",
-    "sourceUrl": "https://www.finddoc.com/",
-    "authenticityScore": 4.3,
-    "addressCompleteness": "C_门牌建筑明确",
-    "verificationStatus": "EXISTING_CLEAN_BASE",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "TCM",
-    "primary_l1_name": "中医与传统医学",
-    "primary_l2_code": "TCM-01",
-    "primary_l2_name": "中医综合诊所",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [],
-    "classificationRuleId": "P1-TCM-EXPLICIT",
-    "classificationConfidence": "PHASE1_VERIFIED",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified",
-    "classificationReviewReason": ""
-  },
-  {
     "id": "TCM01000505",
     "name": "伤痛针疗中心",
     "address": "九龙旺角弥敦道688号旺角中心十楼1022室",
@@ -324770,41 +323807,6 @@
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified",
     "classificationReviewReason": ""
-  },
-  {
-    "id": "TCM01000513",
-    "name": "和顺堂中医诊所 (Mikiki)",
-    "address": "新蒲岗太子道东638号Mikiki商场1楼127号铺",
-    "district": "九龙/黄大仙区",
-    "source": "现有清洗终版",
-    "lat": 22.3336857,
-    "lng": 114.1971604,
-    "needs_address_review": false,
-    "businessCategory": "医疗服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "",
-    "sourceUrl": "https://www.finddoc.com/",
-    "authenticityScore": 4.3,
-    "addressCompleteness": "A_楼层室号完整",
-    "verificationStatus": "EXISTING_CLEAN_BASE",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "TCM",
-    "primary_l1_name": "中医与传统医学",
-    "primary_l2_code": "TCM-01",
-    "primary_l2_name": "中医综合诊所",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [],
-    "classificationRuleId": "P1-TCM-EXPLICIT",
-    "classificationConfidence": "PHASE1_VERIFIED",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified",
-    "classificationReviewReason": "",
-    "legacyInstitutionIds": [
-      "TCM01000130"
-    ],
-    "dedupeMergedAt": "2026-08-04T07:06:42.984280Z",
-    "dedupeReason": "strict_same_institution_evidence"
   },
   {
     "id": "TCM01000514",
@@ -325597,41 +324599,6 @@
     "classificationReviewReason": ""
   },
   {
-    "id": "TCM01000540",
-    "name": "康河中医诊所 (九龙湾)",
-    "address": "九龙湾德福广场二期5楼525号铺",
-    "district": "九龙/观塘区",
-    "source": "现有清洗终版",
-    "lat": 22.3210853,
-    "lng": 114.2132694,
-    "needs_address_review": false,
-    "businessCategory": "医疗服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "",
-    "sourceUrl": "https://www.finddoc.com/",
-    "authenticityScore": 4.3,
-    "addressCompleteness": "A_楼层室号完整",
-    "verificationStatus": "EXISTING_CLEAN_BASE",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "TCM",
-    "primary_l1_name": "中医与传统医学",
-    "primary_l2_code": "TCM-01",
-    "primary_l2_name": "中医综合诊所",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [],
-    "classificationRuleId": "P1-TCM-EXPLICIT",
-    "classificationConfidence": "PHASE1_VERIFIED",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified",
-    "classificationReviewReason": "",
-    "legacyInstitutionIds": [
-      "TCM01000134"
-    ],
-    "dedupeMergedAt": "2026-08-04T07:06:42.984285Z",
-    "dedupeReason": "strict_same_institution_evidence"
-  },
-  {
     "id": "TCM01000541",
     "name": "匡萃中医诊所",
     "address": "九龙观塘开源道63号福昌大厦6楼613室",
@@ -326072,36 +325039,6 @@
     "sourceUrl": "https://www.finddoc.com/",
     "authenticityScore": 4.3,
     "addressCompleteness": "B_楼层明确",
-    "verificationStatus": "EXISTING_CLEAN_BASE",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "TCM",
-    "primary_l1_name": "中医与传统医学",
-    "primary_l2_code": "TCM-01",
-    "primary_l2_name": "中医综合诊所",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [],
-    "classificationRuleId": "P1-TCM-EXPLICIT",
-    "classificationConfidence": "PHASE1_VERIFIED",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified",
-    "classificationReviewReason": ""
-  },
-  {
-    "id": "TCM01000557",
-    "name": "满月堂中医诊所",
-    "address": "铜锣湾轩尼诗道467-473号建德丰商业大厦7楼702-703室",
-    "district": "香港岛/湾仔区",
-    "source": "现有清洗终版",
-    "lat": 22.279902,
-    "lng": 114.182199,
-    "needs_address_review": false,
-    "businessCategory": "医疗服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "",
-    "sourceUrl": "https://www.finddoc.com/",
-    "authenticityScore": 4.3,
-    "addressCompleteness": "A_楼层室号完整",
     "verificationStatus": "EXISTING_CLEAN_BASE",
     "taxonomyVersion": "2026-07-30",
     "primary_l1_code": "TCM",
@@ -339699,36 +338636,6 @@
     "classificationReviewReason": ""
   },
   {
-    "id": "TCM01001035",
-    "name": "正品中医诊所(马鞍山)",
-    "address": "Yiu On Shopping Centre, Hang Hong St, Ma On Shan",
-    "district": "新界/沙田区",
-    "source": "现有清洗终版",
-    "lat": 22.4203383,
-    "lng": 114.2304043,
-    "needs_address_review": false,
-    "businessCategory": "医疗服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "",
-    "sourceUrl": "",
-    "authenticityScore": 3.9,
-    "addressCompleteness": "B_铺号室号明确",
-    "verificationStatus": "EXISTING_CLEAN_BASE",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "TCM",
-    "primary_l1_name": "中医与传统医学",
-    "primary_l2_code": "TCM-01",
-    "primary_l2_name": "中医综合诊所",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [],
-    "classificationRuleId": "P1-TCM-EXPLICIT",
-    "classificationConfidence": "PHASE1_VERIFIED",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified",
-    "classificationReviewReason": ""
-  },
-  {
     "id": "TCM01001036",
     "name": "Leung yuk ying",
     "address": "Fanling, San Wan Rd, 33号, Fanling Center, 1楼213D号",
@@ -343730,7 +342637,10 @@
     "classificationConfidence": "PHASE1_VERIFIED",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified",
-    "classificationReviewReason": ""
+    "classificationReviewReason": "",
+    "legacyInstitutionIds": [
+      "TCM01000504"
+    ]
   },
   {
     "id": "TCM01001177",
@@ -347819,7 +346729,10 @@
     "classificationConfidence": "PHASE1_VERIFIED",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified",
-    "classificationReviewReason": ""
+    "classificationReviewReason": "",
+    "legacyInstitutionIds": [
+      "TCM01000557"
+    ]
   },
   {
     "id": "TCM01001314",
@@ -349510,7 +348423,11 @@
     "classificationConfidence": "PHASE1_VERIFIED",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified",
-    "classificationReviewReason": ""
+    "classificationReviewReason": "",
+    "legacyInstitutionIds": [
+      "TCM01000134",
+      "TCM01000540"
+    ]
   },
   {
     "id": "TCM01001371",
@@ -354798,7 +353715,11 @@
     "classificationConfidence": "PHASE1_VERIFIED",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified",
-    "classificationReviewReason": ""
+    "classificationReviewReason": "",
+    "legacyInstitutionIds": [
+      "TCM01000025",
+      "TCM01000310"
+    ]
   },
   {
     "id": "TCM01001546",
@@ -360312,7 +359233,10 @@
     "classificationConfidence": "PHASE1_VERIFIED",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified",
-    "classificationReviewReason": ""
+    "classificationReviewReason": "",
+    "legacyInstitutionIds": [
+      "TCM02000027"
+    ]
   },
   {
     "id": "TCM01001729",
@@ -363168,7 +362092,11 @@
     "classificationConfidence": "PHASE1_VERIFIED",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified",
-    "classificationReviewReason": ""
+    "classificationReviewReason": "",
+    "legacyInstitutionIds": [
+      "TCM01000020",
+      "TCM01000292"
+    ]
   },
   {
     "id": "TCM01001824",
@@ -378407,7 +377335,11 @@
     "classificationConfidence": "PHASE1_VERIFIED",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified",
-    "classificationReviewReason": ""
+    "classificationReviewReason": "",
+    "legacyInstitutionIds": [
+      "TCM01000130",
+      "TCM01000513"
+    ]
   },
   {
     "id": "TCM01002331",
@@ -380700,36 +379632,6 @@
     "sourceUrl": "",
     "authenticityScore": 3.6,
     "addressCompleteness": "B_楼层明确",
-    "verificationStatus": "EXISTING_CLEAN_BASE",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "TCM",
-    "primary_l1_name": "中医与传统医学",
-    "primary_l2_code": "TCM-02",
-    "primary_l2_name": "中医骨伤／正骨诊所",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [],
-    "classificationRuleId": "P1-BONE-TCM",
-    "classificationConfidence": "PHASE1_VERIFIED",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified",
-    "classificationReviewReason": ""
-  },
-  {
-    "id": "TCM02000027",
-    "name": "曾树容跌打 真善中医馆",
-    "address": "Lek Yuen Estate Fu Yu House, Lek Yuen St, Sha Tin",
-    "district": "新界/沙田区",
-    "source": "现有清洗终版",
-    "lat": 22.3844075,
-    "lng": 114.1911264,
-    "needs_address_review": false,
-    "businessCategory": "健康服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "",
-    "sourceUrl": "",
-    "authenticityScore": 3.6,
-    "addressCompleteness": "C_建筑位置明确",
     "verificationStatus": "EXISTING_CLEAN_BASE",
     "taxonomyVersion": "2026-07-30",
     "primary_l1_code": "TCM",
@@ -385095,36 +383997,6 @@
     "sourceUrl": "",
     "authenticityScore": 3.9,
     "addressCompleteness": "B_楼层明确",
-    "verificationStatus": "EXISTING_CLEAN_BASE",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "TCM",
-    "primary_l1_name": "中医与传统医学",
-    "primary_l2_code": "TCM-06",
-    "primary_l2_name": "传统疗法／养生馆",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [],
-    "classificationRuleId": "FINAL-REVIEW-20260804",
-    "classificationConfidence": "LOW_REVIEWED",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified_final_reviewed",
-    "classificationReviewReason": ""
-  },
-  {
-    "id": "TCM06000098",
-    "name": "头缘养生之道",
-    "address": "Fee Tat Commercial Centre, Nathan Rd, Mong Kok",
-    "district": "九龙/油尖旺区",
-    "source": "现有清洗终版",
-    "lat": 22.3171484,
-    "lng": 114.1695273,
-    "needs_address_review": false,
-    "businessCategory": "健康服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "",
-    "sourceUrl": "",
-    "authenticityScore": 3.9,
-    "addressCompleteness": "C_建筑位置明确",
     "verificationStatus": "EXISTING_CLEAN_BASE",
     "taxonomyVersion": "2026-07-30",
     "primary_l1_code": "TCM",
@@ -391092,7 +389964,10 @@
     "classificationConfidence": "LOW_REVIEWED",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified_final_reviewed",
-    "classificationReviewReason": ""
+    "classificationReviewReason": "",
+    "legacyInstitutionIds": [
+      "TCM06000098"
+    ]
   },
   {
     "id": "TCM06000296",
