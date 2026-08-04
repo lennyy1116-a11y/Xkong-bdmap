@@ -5162,7 +5162,7 @@
   {
     "id": "AHP01000206",
     "name": "孙嘉慧物理治疗（观塘）",
-    "address": "UNIT 4, 19/F, ONE PACIFIC CENTRE (1 亚太中心1904室 414, 414号 Kwun Tong Rd, Kwun Tong",
+    "address": "香港观塘观塘道414号一亚太中心19楼1904室",
     "district": "九龙/观塘区",
     "source": "现有清洗终版",
     "lat": 22.3127037,
@@ -6665,7 +6665,7 @@
   {
     "id": "AHP01000282",
     "name": "香港痛症骨伤物理治疗中心(粉岭)",
-    "address": "粉岭新运路中心)商场地下111铺",
+    "address": "粉岭新运路33号粉岭中心商场地下111铺",
     "district": "新界/北区",
     "source": "现有清洗终版",
     "lat": 22.4910725,
@@ -7355,7 +7355,7 @@
   {
     "id": "AHP01000305",
     "name": "康柏治疗中心(将军澳物理治疗)",
-    "address": "将军澳景岭路2号都会駅商场2楼铺(调景岭站B出口",
+    "address": "将军澳景岭路2号都会駅商场2楼L2-002铺",
     "district": "新界/西贡区",
     "source": "现有清洗终版",
     "lat": 22.3039051,
@@ -8405,7 +8405,7 @@
   {
     "id": "AHP01000340",
     "name": "Primo Physiotherapy",
-    "address": "中环HK 香港岛 中环 德辅道中84-86号 章记大厦 7楼 5室 （大厦入口在租庇利街，中环街市对面",
+    "address": "香港中环德辅道中84-86号章记大厦7楼5室",
     "district": "香港岛/中西区",
     "source": "现有清洗终版",
     "lat": 22.2844833,
@@ -8915,7 +8915,7 @@
   {
     "id": "AHP01000357",
     "name": "Keen Health Physiotherapy Centre (Sheung Wan)",
-    "address": "上环皇后大道中270-276号中央大厦 (Central Mansion13D",
+    "address": "上环皇后大道中270-276号中央大厦13D室",
     "district": "香港岛/中西区",
     "source": "现有清洗终版",
     "lat": 22.2844324,
@@ -9815,7 +9815,7 @@
   {
     "id": "AHP01000387",
     "name": "鲗鱼涌太古坊脊医及物理治疗中心 Quarry Bay FWD Tower Chiropractic & Physiotherapy Centre Operated by NYMG​",
-    "address": "鲗鱼涌英皇道979号太古坊富卫中心 20楼 (前称: 德宏大厦 (鲗鱼涌A出口",
+    "address": "鲗鱼涌英皇道979号太古坊富卫中心20楼",
     "district": "香港岛/东区",
     "source": "现有清洗终版",
     "lat": 22.28652,
@@ -12874,7 +12874,7 @@
   {
     "id": "AHP01000488",
     "name": "知心物理治疗中心 Concentric Physiotherapy Centre",
-    "address": "油麻地弥敦道363号恒成大厦5楼505室(北海街入口",
+    "address": "油麻地弥敦道363号恒成大厦5楼505室",
     "district": "九龙/油尖旺区",
     "source": "现有清洗终版",
     "lat": 22.3078076,
@@ -14778,7 +14778,7 @@
   {
     "id": "AHP01000549",
     "name": "Rejoices Alive Physiotherapy & Pilates 晴心汇物理治疗及普拉提",
-    "address": "荔枝角荔枝角道838号励丰中心长义街入口）15/F ,1507室",
+    "address": "荔枝角荔枝角道838号励丰中心15楼1507室",
     "district": "九龙/深水埗区",
     "source": "现有清洗终版",
     "lat": 22.3357181,
@@ -16137,7 +16137,7 @@
   {
     "id": "AHP01000593",
     "name": "越峰物理治疗及运动复康中心 Climax Physiotherapy and Sports Rehabilitation Centre Limited",
-    "address": "1804, The Twins, Tower II (SNDO 双子汇2期, 三道, Kai Tak",
+    "address": "香港启德沐翠街12号双子汇2期18楼1804号铺",
     "district": "九龙/九龙城区",
     "source": "现有清洗终版",
     "lat": 22.3318747,
@@ -16587,7 +16587,7 @@
   {
     "id": "AHP01000608",
     "name": "朗屏脊医及物理治疗中心 Long Ping Chiropractic & Physiotherapy Centre Operated by NYMG​",
-    "address": "元朗元朗安宁路38号朗屏世宙地下13号铺 (朗屏站E出口",
+    "address": "元朗安宁路38号朗屏世宙地下13号铺",
     "district": "新界/元朗区",
     "source": "Google Places第五阶段补抓",
     "lat": 22.446587,
@@ -16653,7 +16653,7 @@
   {
     "id": "AHP01000610",
     "name": "屯门脊医及物理治疗中心 Tuen Mun Chiropractic & Physiotherapy Centre Operated by NYMG​",
-    "address": "屯门河傍街148号美基楼地下A号铺 (屯门站F2出口",
+    "address": "屯门河傍街148号美基楼地下A号铺",
     "district": "新界/屯门区",
     "source": "Google Places第五阶段补抓",
     "lat": 22.3978275,
@@ -16842,7 +16842,7 @@
   {
     "id": "AHP01000616",
     "name": "上水脊医及物理治疗中心 Sheung Shui Chiropractic & Physiotherapy Centre Operated by NYMG​",
-    "address": "上水龙琛路48号汇 3楼 313-314号铺 (上水站A4出口",
+    "address": "上水龙琛路48号汇3楼313-314号铺",
     "district": "新界/北区",
     "source": "Google Places第五阶段补抓",
     "lat": 22.5031388,
@@ -16872,7 +16872,7 @@
   {
     "id": "AHP01000617",
     "name": "上水脊医及物理治疗中心 Sheung Shui Chiropractic & Physiotherapy Centre Operated by NYMG​",
-    "address": "上水龙琛路39号上水广场8楼 802室 (上水站A4出口",
+    "address": "上水龙琛路39号上水广场8楼802室",
     "district": "新界/北区",
     "source": "Google Places第五阶段补抓",
     "lat": 22.5025628,
@@ -17025,7 +17025,7 @@
   {
     "id": "AHP01000622",
     "name": "青衣脊医及物理治疗中心 Tsing Yi Chiropractic & Physiotherapy Centre Operated by NYMG​",
-    "address": "青衣出口HK 新界 青衣 青衣邨青衣商场1楼9号 (青衣站C",
+    "address": "青衣青衣邨青衣商场1楼9号铺",
     "district": "新界/葵青区",
     "source": "Google Places第五阶段补抓",
     "lat": 22.3546115,
@@ -17055,7 +17055,7 @@
   {
     "id": "AHP01000623",
     "name": "沙田脊医及物理治疗中心 Shatin Chiropractic & Physiotherapy Centre Operated by NYMG​",
-    "address": "沙田出口HK 新界 沙田 车站围1号连城广场6楼609-615室 (沙田站A2",
+    "address": "沙田车站围1号连城广场6楼609-615室",
     "district": "新界/沙田区",
     "source": "Google Places第五阶段补抓",
     "lat": 22.3823064,
@@ -17088,7 +17088,7 @@
   {
     "id": "AHP01000624",
     "name": "石门脊医及物理治疗中心 Shek Mun Chiropractic & Physiotherapy Centre Operated by NYMG​",
-    "address": "沙田石门安群街3号京瑞广场一期1楼185号 (石门站C出口",
+    "address": "沙田石门安群街3号京瑞广场一期1楼185号铺",
     "district": "新界/沙田区",
     "source": "Google Places第五阶段补抓",
     "lat": 22.3884602,
@@ -17244,7 +17244,7 @@
   {
     "id": "AHP01000629",
     "name": "观塘(APM)脊医及物理治疗中心 Kwun Tong (APM) Chiropractic & Physiotherapy Centre Operated by NYMG​",
-    "address": "观塘观塘道418号东亚银行中心25楼3B-6室 (观塘站A2出口",
+    "address": "观塘观塘道418号东亚银行中心25楼3B-6室",
     "district": "九龙/观塘区",
     "source": "Google Places第五阶段补抓",
     "lat": 22.312401,
@@ -18789,7 +18789,7 @@
   {
     "id": "AHP04000015",
     "name": "Dr. Victor Heung (Registered Chiropractor)",
-    "address": "Room 1722, 17/F (MTR Mongkok Station D2 Exit, Argyle Centre Phase I, 688 Nathan Rd, Mong Kok",
+    "address": "Room 1722, 17/F, Argyle Centre Phase I, 688 Nathan Road, Mong Kok",
     "district": "九龙/油尖旺区",
     "source": "现有清洗终版",
     "lat": 22.3198008,
@@ -19479,7 +19479,7 @@
   {
     "id": "AHP04000040",
     "name": "United Chiropractic Center (Central) 联合脊医中心 (中环)",
-    "address": "Winning House (Central 10-13 Cochrane Street, 3rd Floor, Unit 304C 致发大厦, 3楼, 304C室, Cochrane St, Central",
+    "address": "Unit 304C, 3/F, Winning House, 10-16 Cochrane Street, Central",
     "district": "香港岛/中西区",
     "source": "现有清洗终版",
     "lat": 22.2831647,
@@ -19989,7 +19989,7 @@
   {
     "id": "AHP04000057",
     "name": "适康家庭脊医中心 Spine First Family Chiropractic Centre",
-    "address": "红磡德民街34号黄埔新邨 34D, 号地下D铺 (黄埔地铁站B出口) Ground Floor (Whampoa MTR Exit B",
+    "address": "红磡德民街34号黄埔新邨地下D铺",
     "district": "九龙/九龙城区",
     "source": "现有清洗终版",
     "lat": 22.3057947,
@@ -25823,7 +25823,7 @@
   {
     "id": "AHP08000131",
     "name": "聚脚2.0",
-    "address": "元朗教育路68号, Siu Fung Building, 1A铺阁楼(肥姐蚝饼楼上",
+    "address": "元朗教育路68号兆丰楼1A铺阁楼",
     "district": "新界/元朗区",
     "source": "现有清洗终版",
     "lat": 22.4431249,
@@ -33016,7 +33016,7 @@
   {
     "id": "BEA01000157",
     "name": "You Beauty (大埔店)",
-    "address": "Tai Po, On Tai Rd, 1号大埔广场2楼5M, 5L (马会楼上",
+    "address": "大埔安泰路1号大埔广场2楼5L及5M铺",
     "district": "新界/大埔区",
     "source": "现有清洗终版",
     "lat": 22.452909,
@@ -34410,7 +34410,7 @@
   {
     "id": "BEA01000220",
     "name": "JC BEAUTY 单次收费美容中心(元朗1店)元朗美容院 FACIAL",
-    "address": "元朗安乐路129号, Keader Centre, 4楼F室(世宙旁",
+    "address": "元朗安乐路129号基达中心4楼F室",
     "district": "新界/元朗区",
     "source": "现有清洗终版",
     "lat": 22.4472344,
@@ -38286,7 +38286,7 @@
   {
     "id": "BEA01000348",
     "name": "倩怡美容中心香港元朗店",
-    "address": "元朗青山公路－元朗段211-223号喜利商场｜正门口入右手边第三间（需提前预约地下12号地铺",
+    "address": "元朗青山公路－元朗段211-223号喜利商场地下12号铺",
     "district": "新界/元朗区",
     "source": "现有清洗终版",
     "lat": 22.4448158,
@@ -44730,7 +44730,7 @@
   {
     "id": "BEA01000563",
     "name": "琥珀美容 Amber Grand (沙田石门)",
-    "address": "沙田石门安群街1号京瑞广场2期10楼M及N室 (石门港铁站",
+    "address": "沙田石门安群街1号京瑞广场2期10楼M及N室",
     "district": "新界/沙田区",
     "source": "现有清洗终版",
     "lat": 22.389027,
@@ -45555,7 +45555,7 @@
   {
     "id": "BEA01000590",
     "name": "采浓轩美容中心",
-    "address": "沙田HK 新界 沙田 沙田希尔顿中心, 商场3楼, 40号铺 Shop 40, Floor 3, Hilton Plaza (Shopping Centre",
+    "address": "沙田希尔顿中心商场3楼40号铺",
     "district": "新界/沙田区",
     "source": "现有清洗终版",
     "lat": 22.3792332,
@@ -49709,7 +49709,7 @@
   {
     "id": "BEA01000729",
     "name": "医疗保健组 (奥利佳(香港)有限公司经营)",
-    "address": "葵涌大连排道202-210号伟伦中心一期11楼(AREA A",
+    "address": "葵涌大连排道202-210号伟伦中心一期11楼A区",
     "district": "新界/葵青区",
     "source": "现有清洗终版",
     "lat": 22.357466,
@@ -50501,7 +50501,7 @@
   {
     "id": "BEA01000755",
     "name": "Beautiland 悦盛",
-    "address": "Rm 09,11/F, Block A Profit Industrial Building, 1 Kwai Fung Crescent, Kwai Fong 葵芳葵丰街1-15号盈业大厦A座11楼9室(近葵, C出口, 芳地铁站, Kwai Chung",
+    "address": "葵芳葵丰街1-15号盈业大厦A座11楼9室",
     "district": "新界/葵青区",
     "source": "现有清洗终版",
     "lat": 22.3550692,
@@ -50531,7 +50531,7 @@
   {
     "id": "BEA01000756",
     "name": "maysum个人化妆班",
-    "address": "葵涌葵芳福业大厦（葵芳地铁一出",
+    "address": "葵涌葵芳福业大厦",
     "district": "新界/葵青区",
     "source": "现有清洗终版",
     "lat": 22.3554755,
@@ -60894,7 +60894,7 @@
   {
     "id": "BEA03000171",
     "name": "You Beauty (大埔广场)",
-    "address": "大埔安泰路1号大埔广场2楼5M, 5L (马会楼上",
+    "address": "大埔安泰路1号大埔广场2楼5L及5M铺",
     "district": "新界/大埔区",
     "source": "现有清洗终版",
     "lat": 22.452909,
@@ -64874,7 +64874,7 @@
   {
     "id": "BEA03000303",
     "name": "THIA Wellness",
-    "address": "香港赤𫚭角 Sky Plaza Rd, 1号香港国际机场一号客运大楼Near Gate 63, Departures Level (L6",
+    "address": "香港国际机场一号客运大楼离港层L6近63号登机闸口",
     "district": "新界/离岛区",
     "source": "现有清洗终版",
     "lat": 22.3139976,
@@ -66520,7 +66520,7 @@
   {
     "id": "BEA04000043",
     "name": "Genius Massage",
-    "address": "沙田乡事会路138号新城市中央广场第一座20楼2002室 (沙田站B出口步行5分钟）",
+    "address": "沙田乡事会路138号新城市中央广场第一座20楼2002室",
     "district": "新界/沙田区",
     "source": "现有清洗终版",
     "lat": 22.3852778,
@@ -67318,7 +67318,7 @@
   {
     "id": "BEA04000072",
     "name": "Footaholic",
-    "address": "Wan Chai, Wan Chai Rd, 99-93号联泰大厦2楼205室 Room205,2/F, 93-99 Wan Chai Road (Luen Tai Building",
+    "address": "湾仔湾仔道93-99号联泰大厦2楼205室",
     "district": "香港岛/湾仔区",
     "source": "现有清洗终版",
     "lat": 22.2766143,
@@ -68174,7 +68174,7 @@
   {
     "id": "BEA04000109",
     "name": "Central Medical International Group",
-    "address": "Room 9-13, 18/F, China Insurance Group Building, 73 Connaught Road Central & 139-141 Des Voeux Road Central, Central, Hong Kong (MTR Central Station Exit A, Exit C, or MTR Hong Kong Station, Central",
+    "address": "Room 9-13, 18/F, China Insurance Group Building, 73 Connaught Road Central and 139-141 Des Voeux Road Central, Central, Hong Kong",
     "district": "香港岛/中西区",
     "source": "现有清洗终版",
     "lat": 22.2855901,
@@ -68606,7 +68606,7 @@
   {
     "id": "BEA04000130",
     "name": "Thai Sublime",
-    "address": "FlatB 1/F 25 Johnston Road.Wanchai Entrance on Fenwick St,Opposite the church ) 号, 1楼B室 入口, Cheung Hong Mansion, Fenwick St, Wan Chai",
+    "address": "Flat B, 1/F, Cheung Hong Mansion, 25-33 Johnston Road, Wan Chai (entrance on Fenwick Street)",
     "district": "香港岛/湾仔区",
     "source": "现有清洗终版",
     "lat": 22.2771504,
@@ -69492,7 +69492,7 @@
   {
     "id": "BEA04000171",
     "name": "泰寐 Thai Mei Spa Massage",
-    "address": "旺角弥敦道761号蓝马之城10B室 (地铁太子C1出口转左行1分钟 Flat B, Floor 10, Prince Edward The Lamma City, (Prince Edward, Station Exit C1 turn left, Mong Kok",
+    "address": "旺角弥敦道761号蓝马之城10楼B室",
     "district": "九龙/油尖旺区",
     "source": "现有清洗终版",
     "lat": 22.3246538,
@@ -69620,7 +69620,7 @@
   {
     "id": "BEA04000175",
     "name": "Thai massage ThaiHeart Massage",
-    "address": "477A Hong Lok House ,M/F Nathan Road Yau Ma Tei,KLN 地址 :, 阁楼 (C出口, 向右, Hong Lok House, 477A号 Nathan Rd, Yau Ma Tei",
+    "address": "油麻地弥敦道477A号康乐大楼阁楼",
     "district": "九龙/油尖旺区",
     "source": "现有清洗终版",
     "lat": 22.3110831,
@@ -71585,7 +71585,7 @@
   {
     "id": "BEA04000294",
     "name": "足之健养生保健",
-    "address": "Mong Kok, 太子柏树街14号南苑大厦k1 地铺(太子地铁C2或D出口",
+    "address": "旺角太子柏树街14号南苑大厦K1地铺",
     "district": "九龙/油尖旺区",
     "source": "现有清洗终版",
     "lat": 22.3247729,
@@ -76825,7 +76825,7 @@
   {
     "id": "BEA04000549",
     "name": "Lucky Moon Massage 满足福养生堂",
-    "address": "1/F, 46 Bonham Strand (East, Sheung Wan",
+    "address": "1/F, 46 Bonham Strand East, Sheung Wan",
     "district": "香港岛/中西区",
     "source": "现有清洗终版",
     "lat": 22.285806,
@@ -77385,7 +77385,7 @@
   {
     "id": "BEA04000567",
     "name": "足宝宝 - 湾仔按摩 Footaholic Wanchai Massage",
-    "address": "湾仔湾仔道99-93号联泰大厦2楼205室 Room205,2/F, 93-99 Wan Chai Road (Luen Tai Building",
+    "address": "湾仔湾仔道93-99号联泰大厦2楼205室（Room 205, 2/F, Luen Tai Building, 93-99 Wan Chai Road）",
     "district": "香港岛/湾仔区",
     "source": "现有清洗终版",
     "lat": 22.2766143,
@@ -83967,7 +83967,7 @@
   {
     "id": "BEA04000782",
     "name": "遇沐足 · 养生馆",
-    "address": "铜锣湾天后琉璃街13-17号，南景楼3楼A-B室，请按3B（地铁站A1 出口",
+    "address": "铜锣湾天后琉璃街13-17号南景楼3楼A-B室",
     "district": "香港岛/湾仔区",
     "source": "现有清洗终版",
     "lat": 22.2844222,
@@ -84087,7 +84087,7 @@
   {
     "id": "BEA04000786",
     "name": "粉岭雪‧天使 \"Yuki & Angel Beauty Centre\"",
-    "address": "粉岭和丰街28号囍逸商场1楼105A-105B铺 (金明苑酒家对面",
+    "address": "新界粉岭和丰街28号囍逸商场1楼105A-105B铺",
     "district": "新界/北区",
     "source": "现有清洗终版",
     "lat": 22.498806,
@@ -84613,7 +84613,7 @@
   {
     "id": "BEA04000803",
     "name": "足之健养生保健",
-    "address": "旺角太子柏树街14号南苑大厦k1 地铺(太子地铁C2或D出口",
+    "address": "旺角太子柏树街14号南苑大厦K1地铺",
     "district": "九龙/油尖旺区",
     "source": "现有清洗终版",
     "lat": 22.3247729,
@@ -85387,7 +85387,7 @@
   {
     "id": "BEA04000828",
     "name": "铜锣湾按摩 - 満足 Moon Zone 薫蒸 •按摩 • 足疗",
-    "address": "铜锣湾骆克道537号HK 香港岛 (Sogo地铁站D1出口对面",
+    "address": "铜锣湾骆克道537号",
     "district": "香港岛/湾仔区",
     "source": "现有清洗终版",
     "lat": 22.2808096,
@@ -88556,7 +88556,7 @@
   {
     "id": "BEA04000933",
     "name": "何兆万骨科中心",
-    "address": "牛头角牛头角道160号瑞其楼阁楼(近欣荣护老院九龙湾港铁站A出口沿官塘道向官塘方向直行约10分钟",
+    "address": "牛头角牛头角道160号瑞其楼阁楼",
     "district": "九龙/观塘区",
     "source": "现有清洗终版",
     "lat": 22.3189852,
@@ -90219,7 +90219,7 @@
   {
     "id": "BEA04000987",
     "name": "中华理疗",
-    "address": "尖沙咀海防道53-55号Hai Phong Mansion2nd FloorRoom 203 (Exit lift turn Right 尖沙咀海防道53号海防大厦2楼203室（出电梯右转",
+    "address": "尖沙咀海防道53-55号海防大厦2楼203室",
     "district": "九龙/油尖旺区",
     "source": "现有清洗终版",
     "lat": 22.2979479,
@@ -95346,7 +95346,7 @@
   {
     "id": "BEA04001155",
     "name": "裕足堂(按摩)",
-    "address": "将军澳坑口) 常宁路 10号 安宁花园 1座 地下 11号地铺",
+    "address": "将军澳坑口常宁路10号安宁花园1座地下11号铺",
     "district": "新界/西贡区",
     "source": "现有清洗终版",
     "lat": 22.3154719,
@@ -96517,7 +96517,7 @@
   {
     "id": "BEA04001194",
     "name": "陆氏美容养生堂",
-    "address": "观塘康宁道15-17号4楼E室近康宁道马会）地铁站A1 出口",
+    "address": "观塘康宁道15-17号4楼E室",
     "district": "九龙/观塘区",
     "source": "现有清洗终版",
     "lat": 22.3143277,
@@ -101980,7 +101980,7 @@
   {
     "id": "BEA10000025",
     "name": "艺情轩 ▶美容纤体保健中心",
-    "address": "11楼▶️（全层, 388号 Portland St, Prince Edward",
+    "address": "11楼全层，太子砵兰街388号",
     "district": "九龙/油尖旺区",
     "source": "现有清洗终版",
     "lat": 22.3244768,
@@ -103548,7 +103548,7 @@
   {
     "id": "CARE03000014",
     "name": "明爱沙田长者中心",
-    "address": "沙田, 大围, 大围美田路一号大围社会服务大楼1楼（停车场层",
+    "address": "沙田大围美田路1号大围社会服务大楼1楼（停车场层）",
     "district": "新界/沙田区",
     "source": "现有清洗终版",
     "lat": 22.3712566,
@@ -106166,7 +106166,7 @@
   {
     "id": "CARE05000029",
     "name": "香港明爱景康居",
-    "address": "葵涌荔枝岭路31号明爱赛马会荔景社会服务中心新界葵涌荔枝岭路31号明爱赛马会荔景社会服务中心地下及1字楼(部份)G/F and 1/F(Part",
+    "address": "葵涌荔枝岭路31号明爱赛马会荔景社会服务中心地下及1楼（部分）",
     "district": "新界/葵青区",
     "source": "现有清洗终版",
     "lat": 22.3456817,
@@ -113426,7 +113426,7 @@
   {
     "id": "FIT01000192",
     "name": "perFIT OXYGYM 微高氧健身会所 - 沙田店",
-    "address": "Sha Tin, 连城广场南大堂站3楼(南翼",
+    "address": "沙田连城广场南翼3楼",
     "district": "新界/沙田区",
     "source": "现有清洗终版",
     "lat": 22.3819185,
@@ -115442,7 +115442,7 @@
   {
     "id": "FIT03000016",
     "name": "Yogis Limited",
-    "address": "Wan Chai, Lockhart Rd, 7/F号276-278号 安隆商业大厦 （7B Yogis Limited7A Yogis Pilates",
+    "address": "湾仔骆克道276-278号安隆商业大厦7楼（7A Yogis Pilates；7B Yogis Limited）",
     "district": "香港岛/湾仔区",
     "source": "现有清洗终版",
     "lat": 22.2784234,
@@ -117554,7 +117554,7 @@
   {
     "id": "FIT03000082",
     "name": "24/7 Fitness Wong Tai Sin",
-    "address": "Chuk Un, Lung Cheung Rd, 120号, Hsin Kuang Centre Block 1, M2 Square, 四楼 (前4/F, 120 Lung Cheung Road, M2 Square",
+    "address": "4/F, M2 Square, Hsin Kuang Centre Block 1, 120 Lung Cheung Road, Wong Tai Sin",
     "district": "九龙/黄大仙区",
     "source": "现有清洗终版",
     "lat": 22.341961,
@@ -118418,7 +118418,7 @@
   {
     "id": "FIT03000109",
     "name": "Breeze逆风工作室",
-    "address": "Tsuen Wan, Shiu Wo St, 34号二楼(1/F",
+    "address": "荃湾兆和街34号1楼",
     "district": "新界/荃湾区",
     "source": "现有清洗终版",
     "lat": 22.3718266,
@@ -121702,7 +121702,7 @@
   {
     "id": "FNB02000010",
     "name": "沁心园凉茶馆",
-    "address": "Mong Kok, Shantung St, 32C号新填地街398-400号地下A铺 (主要部份",
+    "address": "旺角山东街32C号／新填地街398-400号地下A铺（主要部分）",
     "district": "九龙/油尖旺区",
     "source": "现有清洗终版",
     "lat": 22.3171286,
@@ -139343,7 +139343,7 @@
   {
     "id": "MED01000602",
     "name": "Tseung Kwan O Families Clinic",
-    "address": "2/F, Government Offices (North Tower, 30 Tong Yin St, Tseung Kwan O",
+    "address": "2/F, Tseung Kwan O Government Offices (North Tower), 30 Tong Yin Street, Tseung Kwan O, Sai Kung",
     "district": "新界/西贡区",
     "source": "现有清洗终版",
     "lat": 22.3049537,
@@ -139433,7 +139433,7 @@
   {
     "id": "MED01000605",
     "name": "魏师傅综合理疗",
-    "address": "将军澳毓雅里慧安园商场地下A106号铺(港铁宝琳站",
+    "address": "将军澳毓雅里慧安园商场地下A106号铺",
     "district": "新界/西贡区",
     "source": "现有清洗终版",
     "lat": 22.3242581,
@@ -145076,7 +145076,7 @@
   {
     "id": "MED01000794",
     "name": "健康工房 HealthWorks（上环·无限极广场）",
-    "address": "上环德辅道中199号无限极广场HK 香港岛地下G11号铺 (港铁站E出口",
+    "address": "上环德辅道中199号无限极广场地下G11号铺",
     "district": "香港岛/中西区",
     "source": "现有清洗终版",
     "lat": 22.2864399,
@@ -146276,7 +146276,7 @@
   {
     "id": "MED01000834",
     "name": "港浚医疗中心 - 杨协和医生",
-    "address": "铜锣湾轩尼诗道393号东区商业大厦 (Eastern Commercial Center 9楼906室",
+    "address": "铜锣湾轩尼诗道397号东区商业大厦9楼906室（Room 906, 9/F, Eastern Commercial Centre）",
     "district": "香港岛/湾仔区",
     "source": "现有清洗终版",
     "lat": 22.2792741,
@@ -146756,7 +146756,7 @@
   {
     "id": "MED01000850",
     "name": "毅力医护健康集团 (铜锣湾)",
-    "address": "Rm 1903, 19/F, Centre (Old Wing, 555 Hennessy Rd, Causeway Bay",
+    "address": "Room 1903, 19/F, East Point Centre (Old Wing), 555 Hennessy Road, Causeway Bay",
     "district": "香港岛/湾仔区",
     "source": "现有清洗终版",
     "lat": 22.2804936,
@@ -149518,7 +149518,7 @@
   {
     "id": "MED01000943",
     "name": "Health+ Club (北角店)",
-    "address": "北角北角道10号北角亚太广场20楼(全层",
+    "address": "北角北角道10号北角亚太商业中心20楼全层",
     "district": "香港岛/东区",
     "source": "现有清洗终版",
     "lat": 22.291427,
@@ -157084,7 +157084,7 @@
   {
     "id": "MED01001195",
     "name": "荃湾全科医务中心",
-    "address": "荃湾路德围荃兴径10-18号富荣大厦地铺8号 荃湾全科医务中心 (Tsuen Wan Integrated Medical Centre",
+    "address": "荃湾路德围荃兴径10-18号富荣大厦地下8号铺",
     "district": "新界/荃湾区",
     "source": "现有清洗终版",
     "lat": 22.3725054,
@@ -157447,7 +157447,7 @@
   {
     "id": "MED01001207",
     "name": "卓健医疗 (观塘创纪之城五期apm)",
-    "address": "观塘观塘道418号创纪之城五期APM)东亚银行中心25楼2502-03A室",
+    "address": "观塘观塘道418号创纪之城五期APM东亚银行中心25楼2502-03A室",
     "district": "九龙/观塘区",
     "source": "现有清洗终版",
     "lat": 22.3124018,
@@ -200380,7 +200380,7 @@
   {
     "id": "MED01002642",
     "name": "德善健发–香港仔（香港仔中心屈臣氏）",
-    "address": "香港仔南宁街2号香港仔中心广场, 6C铺, A（屈臣氏内, Aberdeen Centre Hoi Chu Court, Aberdeen",
+    "address": "香港仔南宁街2号香港仔中心广场海珠阁地下6C铺（屈臣氏内）",
     "district": "香港岛/南区",
     "source": "Google Places第五阶段补抓",
     "lat": 22.2484103,
@@ -206821,7 +206821,7 @@
   {
     "id": "MED01002859",
     "name": "乐善堂李贤义伉俪医疗中心",
-    "address": "太子弥敦道750号始创中心12楼1211至1215室(B单位",
+    "address": "九龙太子弥敦道750号始创中心12楼1211至1215室（B单位）",
     "district": "九龙/油尖旺区",
     "source": "Google Places第五阶段补抓",
     "lat": 22.3224872,
@@ -209464,7 +209464,7 @@
   {
     "id": "MED01002949",
     "name": "香港青少年服务处欣安长者日间护理中心",
-    "address": "马鞍山恒智街3号欣安邨欣安商场第2期) 3楼",
+    "address": "马鞍山恒智街3号欣安邨欣安商场第2期3楼",
     "district": "新界/沙田区",
     "source": "Google Places第五阶段补抓",
     "lat": 22.4130002,
@@ -212587,7 +212587,7 @@
   {
     "id": "MED01003055",
     "name": "Beau Medical Hong Kong Limited 靓靓堂医学美容有限公司",
-    "address": "铜锣湾Flat 01, 18/F United Success Commercial Centre, 506-508 Jaffe Road, Causeway Bay 18楼1801室,地铁D1出口,铜锣湾谢斐道506-508号联成商业中心(总统戏院旁",
+    "address": "铜锣湾谢斐道506-508号联成商业中心18楼1801室",
     "district": "香港岛/湾仔区",
     "source": "Google Places第五阶段补抓",
     "lat": 22.2809434,
@@ -217957,7 +217957,7 @@
   {
     "id": "MED01003238",
     "name": "赵镇强医生 - 卓尔医务(湾仔)",
-    "address": "谭臣道114号 广亚大厦4楼 (近轩尼诗官小, 大业大厦对面, Wan Chai",
+    "address": "湾仔谭臣道114号广亚大厦4楼",
     "district": "香港岛/湾仔区",
     "source": "Google Places第五阶段补抓",
     "lat": 22.277428,
@@ -223698,7 +223698,7 @@
   {
     "id": "MED01003429",
     "name": "视光师验眼中心(钻石山店) The Optometry (OPT) Centre (Diamond Hill)",
-    "address": "大磡HK 九龙 钻石山 龙蟠街3号荷里活广场1楼120铺 （钻石山站A1出口-龙蟠苑方向",
+    "address": "九龙钻石山龙蟠街3号荷里活广场1楼120号铺",
     "district": "九龙/黄大仙区",
     "source": "Google Places第五阶段补抓",
     "lat": 22.3405073,
@@ -224330,7 +224330,7 @@
   {
     "id": "MED01003450",
     "name": "盈健医务中心（葵芳站）",
-    "address": "葵芳港铁站17号舖 （D出口",
+    "address": "葵芳港铁站17号铺",
     "district": "新界/葵青区",
     "source": "零API扩容第一批（历史缓存/公开网页复核）",
     "lat": 22.357229,
@@ -224603,7 +224603,7 @@
   {
     "id": "MED02000010",
     "name": "汇晋专科",
-    "address": "香港中环德辅道中28号盘谷银行大厦7楼（昭隆街入口)",
+    "address": "香港中环德辅道中28号盘谷银行大厦7楼（昭隆街入口）",
     "district": "香港岛/中西区",
     "source": "现有清洗终版",
     "lat": 22.2828805,
@@ -236603,7 +236603,7 @@
   {
     "id": "MED06000007",
     "name": "信心X光医学化验中心 （Dynamic X-Ray & Medical Laboratory Ltd.)",
-    "address": "3/F (3字楼 Winner Mansion (永如大厦 691-697, 691-697号 Nathan Rd, Mong Kok",
+    "address": "旺角弥敦道691-697号永如大厦3楼",
     "district": "九龙/油尖旺区",
     "source": "Google Places第五阶段补抓",
     "lat": 22.3199287,
@@ -249061,7 +249061,7 @@
   {
     "id": "MED08000381",
     "name": "香港苗齿协会牙科诊所-沙田Hong Kong Young Dentist Federation Dental Clinic-Shatin（思杰集团）",
-    "address": "沙田乙明邨街3号 明信楼地下45号铺 （沙田围, 站C出口, Sha Tin",
+    "address": "沙田乙明邨街3号明信楼地下45号铺",
     "district": "新界/沙田区",
     "source": "现有清洗终版",
     "lat": 22.3764367,
@@ -249241,7 +249241,7 @@
   {
     "id": "MED08000387",
     "name": "香港苗齿协会旺角牙科诊所 Hong Kong Young Dentist Federation Mongkok Clinic（思杰集团CJ Group）",
-    "address": "Unit 703-4, 7/F, Office Tower One, Grand Plaza,639 Nathan Road, Mong Kok 旺角弥敦道639号 雅兰中心一期 7楼 703﹣4室 (港铁旺角站 E1 出口, Mong Kok",
+    "address": "旺角弥敦道639号雅兰中心一期7楼703-704室",
     "district": "九龙/油尖旺区",
     "source": "现有清洗终版",
     "lat": 22.317957,
@@ -253957,7 +253957,7 @@
   {
     "id": "MED08000544",
     "name": "陈大伟牙医 Chan Tai Wai Dentist",
-    "address": "北角英皇道471号地铁站B出口G/F471 King's Road, North Point (MTR Exit B",
+    "address": "北角英皇道471号地下",
     "district": "香港岛/东区",
     "source": "现有清洗终版",
     "lat": 22.2916224,
@@ -275226,7 +275226,7 @@
   {
     "id": "MED08001258",
     "name": "Yc Dental Centre 欣澄牙科中心 (元朗牙医诊所/种牙/植牙/牙痛/急症/紧急牙科服务)",
-    "address": "牡丹街34号 合益广场地下A60 (7-11旁, Yuen Long",
+    "address": "元朗牡丹街34号合益广场地下A60号铺",
     "district": "新界/元朗区",
     "source": "Google Places第五阶段补抓",
     "lat": 22.4429802,
@@ -280410,7 +280410,7 @@
   {
     "id": "MED08001431",
     "name": "恒健牙科医务所",
-    "address": "荃湾青山公路 - 荃湾段388号8咪半)1楼116号铺",
+    "address": "荃湾青山公路荃湾段388号8咪半1楼116号铺",
     "district": "新界/荃湾区",
     "source": "Google Places第五阶段补抓",
     "lat": 22.3753458,
@@ -282524,7 +282524,7 @@
   {
     "id": "MED08001505",
     "name": "启德牙医 | SOL DENTAL CLINIC 启玥牙科中心",
-    "address": "沐翠街晴朗商场B区地下B006号铺 (启德站 A 出口, Shop B006, G/F, Station Exit A, Ching Long Shopping Centre, Muk Chui St, Kai Tak",
+    "address": "启德沐翠街晴朗商场B区地下B006号铺",
     "district": "九龙/九龙城区",
     "source": "Google Places第五阶段补抓",
     "lat": 22.3310045,
@@ -290399,7 +290399,7 @@
   {
     "id": "MED09000267",
     "name": "许键文眼科专科中心",
-    "address": "尖沙咀堪富利士道8号格兰中心13楼1306室（尖沙咀地铁站A2出口",
+    "address": "尖沙咀堪富利士道8号格兰中心13楼1306室",
     "district": "九龙/油尖旺区",
     "source": "Google Places第五阶段补抓",
     "lat": 22.2985564,
@@ -295771,7 +295771,7 @@
   {
     "id": "MED12000079",
     "name": "Perfect Health 痛症专家 （观塘创纪之城5期(APM) 17楼）",
-    "address": "观塘创纪之城5期APM) 17楼1714室",
+    "address": "观塘创纪之城5期APM 17楼1714室",
     "district": "九龙/观塘区",
     "source": "Google Places第五阶段补抓",
     "lat": 22.3122855,
@@ -296407,7 +296407,7 @@
   {
     "id": "MED14000008",
     "name": "2019冠状病毒疫苗接种-指定私家诊所",
-    "address": "元朗阜财街2号8号铺新都综合医务中心(元朗",
+    "address": "元朗阜财街2号宏丰大厦地下8号铺（新都综合医务中心）",
     "district": "新界/元朗区",
     "source": "Google Places第五阶段补抓",
     "lat": 22.443991,
@@ -302892,7 +302892,7 @@
   {
     "id": "MHW06000003",
     "name": "香港晨曦会有限公司",
-    "address": "竹园大成街3号黄大仙下邨龙泽楼下邨(一区地下111-115室",
+    "address": "黄大仙竹园大成街3号黄大仙下邨龙泽楼一区地下111-115室",
     "district": "九龙/黄大仙区",
     "source": "现有清洗终版",
     "lat": 22.33833,
@@ -321235,7 +321235,7 @@
   {
     "id": "TCM01000724",
     "name": "InLife 中医痛症理疗专家 (旺角店) — 中医针灸推拿复位",
-    "address": "Mong Kok, Dundas St, 56号, 9楼, 901-908室 (油麻地A2出口",
+    "address": "旺角登打士街56号家乐坊9楼901-908室",
     "district": "九龙/油尖旺区",
     "source": "现有清洗终版",
     "lat": 22.3150898,
@@ -329086,7 +329086,7 @@
   {
     "id": "TCM01001119",
     "name": "张胜跌打医馆",
-    "address": "1C地铺 (近新建街街头, San Fung Building, 33号 San Fung Ave, Sheung Shui",
+    "address": "上水新丰路33号新丰大厦地下1C号铺",
     "district": "新界/北区",
     "source": "现有清洗终版",
     "lat": 22.5055698,
@@ -334582,7 +334582,7 @@
   {
     "id": "TCM01001302",
     "name": "普门堂中医养生馆 Pumen Tong Chinese Clinic & Wellness Centre",
-    "address": "站 B1 出口，普光斋旁） G/F, New Lucky House, 13-15 Jordan Road (MTR Jordan Station Exit B1, next to Po Kwong Vegetarian, 地下 港铁, New Lucky House, 13-15号 Jordan Rd, Jordan",
+    "address": "佐敦佐敦道13-15号新利大厦地下（港铁佐敦站B1出口，普光斋旁）",
     "district": "九龙/油尖旺区",
     "source": "现有清洗终版",
     "lat": 22.305674,
@@ -334804,7 +334804,7 @@
   {
     "id": "TCM01001310",
     "name": "Dr. herb 草本美子",
-    "address": "尖沙咀广东道30号新港中心2座11楼 1112室（尖沙咀 MTR A1出口",
+    "address": "尖沙咀广东道30号新港中心2座11楼1112室",
     "district": "九龙/油尖旺区",
     "source": "现有清洗终版",
     "lat": 22.2967805,
@@ -340143,7 +340143,7 @@
   {
     "id": "TCM01001485",
     "name": "云南陶林跌打医馆",
-    "address": "旺角亚皆老街109—111号皆旺商业大厦电梯按7字（7楼703室敬请预约.（可以whatsApp手提电话68216866",
+    "address": "旺角亚皆老街109-111号皆旺商业大厦7楼703室",
     "district": "九龙/油尖旺区",
     "source": "现有清洗终版",
     "lat": 22.3246513,
@@ -342259,7 +342259,7 @@
   {
     "id": "TCM01001554",
     "name": "曾怀（注册中医）骨伤科综合治疗中心",
-    "address": "元朗西菁街 23 号 K Plus (富达广场, 地下11号铺 Yuen Long",
+    "address": "元朗西菁街23号K Plus富达广场地下11号铺",
     "district": "新界/元朗区",
     "source": "现有清洗终版",
     "lat": 22.4416952,
@@ -344077,7 +344077,7 @@
   {
     "id": "TCM01001614",
     "name": "仁昌堂中医诊疗所",
-    "address": "油麻地窝打老道40号宝翠大厦40号地下4至5号铺（油麻地地铁站D出口左转即到",
+    "address": "油麻地窝打老道40号宝翠大厦地下4-5号铺",
     "district": "九龙/油尖旺区",
     "source": "现有清洗终版",
     "lat": 22.3129136,
@@ -350425,7 +350425,7 @@
   {
     "id": "TCM01001822",
     "name": "医道中医分科及急症门诊（西湾河） MediSino Chinese Medicine Emergency Polyclinic (Sai Wan Ho)",
-    "address": "西湾河太安街25 号鲤景湾 D 期安明阁地下 GD28 号铺（西湾河站 A 出口，中原地产后面",
+    "address": "西湾河太安街25号鲤景湾D期安明阁地下GD28号铺",
     "district": "香港岛/东区",
     "source": "现有清洗终版",
     "lat": 22.2833811,
@@ -352476,7 +352476,7 @@
   {
     "id": "TCM01001890",
     "name": "智雄跌打医馆",
-    "address": "G/F, 10A First Street, Tai Wai Village(东华三院冼次云小学对面, Tai Wai",
+    "address": "大围村第一街10A号地下（东华三院冼次云小学对面）",
     "district": "新界/沙田区",
     "source": "现有清洗终版",
     "lat": 22.3754529,
@@ -353234,7 +353234,7 @@
   {
     "id": "TCM01001915",
     "name": "心宜中医诊所（马鞍山）",
-    "address": "马鞍山欣安商场二期）1楼113号铺",
+    "address": "马鞍山欣安商场二期1楼113号铺",
     "district": "新界/沙田区",
     "source": "现有清洗终版",
     "lat": 22.4139671,
@@ -355367,7 +355367,7 @@
   {
     "id": "TCM01001985",
     "name": "医道中医分科及急症门诊（美孚） MediSino Chinese Medicine Emergency Polyclinic (Mei Foo)",
-    "address": "荔枝角美孚新邨四期商场地下 162 号铺 Shop 162, G/F, Stage 4 Shopping Centre, Mei Foo Sun Chuen, Kowloon （美孚站 A 出口，大家乐对面 Mei Foo Station Exit A",
+    "address": "美孚新邨四期商场地下162号铺（港铁美孚站A出口，大家乐对面）",
     "district": "九龙/深水埗区",
     "source": "现有清洗终版",
     "lat": 22.3356302,
@@ -359177,7 +359177,7 @@
   {
     "id": "TCM01002111",
     "name": "医道中医急症门诊及肠胃科中心（荃湾） MediSino Chinese Medicine Emergency Polyclinic & Gastroenterology Centre (Tsuen Wan)",
-    "address": "荃湾圆墩围59 - 61 号大苑楼地下 B2 铺（荃湾西站 A 出口，荃湾广场及荃湾大会堂对面",
+    "address": "荃湾圆墩围59-61号大苑楼地下B2号铺（荃湾西站A出口，荃湾广场及荃湾大会堂对面）",
     "district": "新界/荃湾区",
     "source": "现有清洗终版",
     "lat": 22.3710485,
@@ -359333,7 +359333,7 @@
   {
     "id": "TCM01002116",
     "name": "飞马跌打推拿医馆",
-    "address": "荃湾青山公路 - 荃湾段 Tsuen Wan Garden Fortune Court, 23号荃湾花园商场上层61号铺（ 保龄球会侧",
+    "address": "荃湾青山公路荃湾段23号荃湾花园富贵阁商场上层61号铺（保龄球会侧）",
     "district": "新界/荃湾区",
     "source": "现有清洗终版",
     "lat": 22.3700063,
@@ -363707,7 +363707,7 @@
   {
     "id": "TCM01002261",
     "name": "德承堂中医诊所（安达邨）",
-    "address": "秀茂坪安达邨商场北翼地下G01铺(近爱达楼",
+    "address": "秀茂坪安达邨商场北翼地下G01号铺（近爱达楼）",
     "district": "九龙/观塘区",
     "source": "现有清洗终版",
     "lat": 22.3219083,
@@ -376315,7 +376315,7 @@
   {
     "id": "TCM06000257",
     "name": "元道养生馆",
-    "address": "湾仔谢斐道123号香海大厦2楼D室 （南记楼上",
+    "address": "湾仔谢斐道123号香海大厦2楼D室（南记楼上）",
     "district": "香港岛/湾仔区",
     "source": "现有清洗终版",
     "lat": 22.2787666,
@@ -377088,7 +377088,7 @@
   {
     "id": "TCM06000282",
     "name": "心怡坊",
-    "address": "沙田石门京瑞广场二期地下G26铺 (石门站 C出口",
+    "address": "沙田石门安群街1号京瑞广场二期地下G26号铺（石门站C出口）",
     "district": "新界/沙田区",
     "source": "现有清洗终版",
     "lat": 22.3881071,
@@ -378987,7 +378987,7 @@
   {
     "id": "TCM06000344",
     "name": "头耳静",
-    "address": "观塘观塘道观塘工业中心四期12楼E2室（观塘地铁站 D4出口",
+    "address": "观塘观塘道436-446号观塘工业中心四期12楼E2室（观塘站D4出口）",
     "district": "九龙/观塘区",
     "source": "现有清洗终版",
     "lat": 22.3113644,
