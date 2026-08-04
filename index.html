@@ -5553,7 +5553,8 @@ function makeImportEditableRecord(match, row) {
   const existing = places.find(x => x.id === match.id || x.id === 'place_' + match.id || x.sourceBaseId === match.id || clinicMatchKey(x) === clinicMatchKey(match));
   const now = new Date().toISOString();
   if (existing) return { ...existing };
-  return { ...match, id: match.isBaseClinic ? 'place_' + match.id : (match.id || 'place_' + Date.now().toString(36)), isBaseClinic:false, sourceBaseId: match.id, createdAt:now };
+  if (match.isBaseClinic) return makeCanonicalOperationalRecord(match, { createdAt:now });
+  return { ...match, id:match.id, isBaseClinic:false, createdAt:now };
 }
 async function handleBatchErrorImport(event) {
   const file = event.target.files && event.target.files[0];

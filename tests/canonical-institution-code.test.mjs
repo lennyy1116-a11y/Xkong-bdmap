@@ -99,6 +99,12 @@ test('普通外部JSON导入仍不信任外部id', () => {
   assert.doesNotMatch(source, /record\.id\s*=\s*text\(incoming\.id\)/);
 });
 
+test('Excel报错回传为基础机构建立运营记录时仍沿用canonical id', () => {
+  const fn = body(app(), 'makeImportEditableRecord', 'handleBatchErrorImport');
+  assert.match(fn, /makeCanonicalOperationalRecord\(match/);
+  assert.doesNotMatch(fn, /id:\s*match\.isBaseClinic\s*\?\s*['"]place_['"]\s*\+/);
+});
+
 
 test('app.inline.js与index.html内嵌脚本精确同步', () => {
   const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
