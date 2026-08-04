@@ -1657,6 +1657,7 @@ const placesCollection = db.collection('places');
 const mallMetaCollection = db.collection('mallMeta');
 const appConfigCollection = db.collection('appConfig');
 const auditLogsCollection = db.collection('auditLogs');
+const institutionCodeCountersCollection = db.collection('institutionCodeCounters');
 
 // ============ APP STATE ============
 const STORAGE_KEY = 'bd_map_places';
@@ -1776,6 +1777,32 @@ function isInstitutionEntry(p) {
   if (p.importSource === 'batch_shop_import') return true;
   if (p.name && (p.address || p.phone || p.contact || p.primary_l1_code)) return true;
   return false;
+}
+const CANONICAL_INSTITUTION_ID_RE = /^[A-Z]+\d{8}$/;
+function normalizeCanonicalInstitutionId(value) {
+  const raw = String(value || '').trim();
+  if (CANONICAL_INSTITUTION_ID_RE.test(raw)) return raw;
+  if (raw.startsWith('place_')) {
+    const unwrapped = raw.slice(6);
+    if (CANONICAL_INSTITUTION_ID_RE.test(unwrapped)) return unwrapped;
+  }
+  return '';
+}
+function canonicalClinicId(record) {
+  if (!record) return '';
+  return normalizeCanonicalInstitutionId(record.id)
+    || normalizeCanonicalInstitutionId(record.sourceBaseId)
+    || String(record.id || '').trim();
+}
+function makeCanonicalOperationalRecord(base, extra = {}) {
+  const id = canonicalClinicId(base);
+  if (!id) throw new Error('基础机构缺少永久唯一代码');
+  const record = { ...base, ...extra, id, isBaseClinic:false };
+  delete record.sourceBaseId;
+  return record;
+}
+function snapshotRecord(doc) {
+  return { ...(doc && typeof doc.data === 'function' ? doc.data() : {}), id:String(doc && doc.id || '') };
 }
 async function saveCustomTypeToCloud(type) {
   const val = String(type || '').trim();
@@ -1928,7 +1955,7 @@ function init() {
   placesCollection.onSnapshot(snapshot => {
     const allRecords = [];
     snapshot.forEach(doc => {
-      allRecords.push({ id: doc.id, ...doc.data() });
+      allRecords.push(snapshotRecord(doc));
     });
     places = allRecords.filter(p => !p.deletedAt);
     deletedPlaces = allRecords.filter(p => !!p.deletedAt);
@@ -2453,7 +2480,7 @@ async function savePlace() {
     document.getElementById('fType').value = selectedType;
   }
   const data = {
-    id: editId || genId(),
+    id: editId || '',
     name,
     entryKind,
     lastInstitutionStatus: entryKind === 'point' ? (lastInstitutionStatus || selectedInstitutionStatus || '已交流') : selectedInstitutionStatus,
@@ -2480,6 +2507,7 @@ async function savePlace() {
     if (!primary || !secondary) { feedback('err','请选择完整的一级和二级类目'); toast('请选择完整类目'); return; }
     Object.assign(data, getTaxonomyFields(primary, secondary));
   }
+  data.id = editId || (entryKind === 'point' ? genId() : await allocateCanonicalInstitutionId(data));
   const existIdx = places.findIndex(p => p.id === data.id);
   if (existIdx >= 0) {
     data.createdAt = places[existIdx].createdAt || new Date().toISOString();
@@ -2509,7 +2537,7 @@ async function savePlace() {
       try {
         const latest = await placesCollection.doc(editId).get();
         if (latest.exists) {
-          const latestData = { id: latest.id, ...latest.data() };
+          const latestData = snapshotRecord(latest);
           const latestIdx = places.findIndex(p => p.id === editId);
           if (latestData.deletedAt) {
             if (latestIdx >= 0) places.splice(latestIdx, 1);
@@ -3026,7 +3054,7 @@ function getLeadRows(force) {
   baseClinics.forEach(b => upsertLeadRow(mergeBaseClinicOwner(b)));
   const out = [], seen = new Set();
   byKey.forEach(row => {
-    const key = clinicMatchKey(row) || row.id;
+    const key = canonicalClinicId(row) || row.id;
     if (seen.has(key)) return;
     seen.add(key); out.push(enrichLeadRow(row));
   });
@@ -3200,12 +3228,12 @@ async function claimLead(id) {
   const ownerId = getOwnerId(p);
   if (ownerId === getCurrentOwnerId()) { editClaimedLead(id); return; }
   if (!isUnclaimedOwnerId(ownerId) && ownerId !== getCurrentOwnerId()) { toast('已被别人认领'); return; }
-  const existing = places.find(x => x.id === id || x.id === 'place_' + id || clinicMatchKey(x) === clinicMatchKey(p));
+  const existing = places.find(x => x.id === id || x.id === ['place_', id].join('') || clinicMatchKey(x) === clinicMatchKey(p));
   const now = new Date().toISOString();
-  const recordId = existing ? existing.id : (p.isBaseClinic ? 'place_' + p.id : (p.id || 'place_' + Date.now().toString(36)));
+  const recordId = existing ? existing.id : canonicalClinicId(p);
   try {
     const saved = await runRevisionedMutation(recordId, existing ? (Number(existing.revision) || 0) : null, current => {
-      const data = current ? { ...current } : { ...p, id:recordId, isBaseClinic:false, sourceBaseId:p.id, createdAt:now };
+      const data = current ? { ...current } : makeCanonicalOperationalRecord(p, { createdAt:now });
       const currentOwner = getOwnerId(data);
       if (!isUnclaimedOwnerId(currentOwner) && currentOwner !== getCurrentOwnerId()) throw new Error('已被别人认领');
       data.ownerId = getCurrentOwnerId(); data.ownerName = currentUsername || '匿名'; data.ownerAvatar = currentAvatar;
@@ -3223,12 +3251,12 @@ async function reportLeadError(id) {
   const type = await showAppPrompt('提交报错', '报错类型：地址错误 / 电话错误 / 重复店铺 / 已停业 / 类型错误 / 其他', '地址错误');
   if (!type) return;
   const note = await showAppPrompt('补充说明', '补充说明（可空）', '') || '';
-  const existing = places.find(x => x.id === id || x.id === 'place_' + id || clinicMatchKey(x) === clinicMatchKey(p));
+  const existing = places.find(x => x.id === id || x.id === ['place_', id].join('') || clinicMatchKey(x) === clinicMatchKey(p));
   const now = new Date().toISOString();
-  const recordId = existing ? existing.id : (p.isBaseClinic ? 'place_' + p.id : (p.id || 'place_' + Date.now().toString(36)));
+  const recordId = existing ? existing.id : canonicalClinicId(p);
   try {
     const saved = await runRevisionedMutation(recordId, existing ? (Number(existing.revision) || 0) : null, current => {
-      const data = current ? { ...current } : { ...p, id:recordId, isBaseClinic:false, sourceBaseId:p.id, createdAt:now };
+      const data = current ? { ...current } : makeCanonicalOperationalRecord(p, { createdAt:now });
       data.errorReports = [...(data.errorReports||[]), { type, note, by:currentUsername || '匿名', byAvatar:currentAvatar, at:now }];
       data.dataQualityStatus = '待核实'; data.dataQualityIssueType = type;
       data.updatedAt = now; data.updatedBy = currentUsername || '匿名'; data.updatedByAvatar = currentAvatar;
@@ -3242,7 +3270,7 @@ async function reportLeadError(id) {
 
 async function resolveLeadError(id) {
   const p = findLeadRecord(id); if (!p) return toast('找不到线索');
-  const existing = places.find(x => x.id === id || x.id === 'place_' + id || clinicMatchKey(x) === clinicMatchKey(p));
+  const existing = places.find(x => x.id === id || x.id === ['place_', id].join('') || clinicMatchKey(x) === clinicMatchKey(p));
   if (!existing) return toast('这条线索还没有运营记录，无法修正');
   const note = await showAppPrompt('修正报错', '修正说明（可空）', '已核实/已修正') || '';
   const now = new Date().toISOString();
@@ -3950,7 +3978,7 @@ function applyErrorActionValidation(ws, headers, maxRow) {
 }
 function clinicExportRow(p, extra={}) {
   return {
-    clinic_id: p.id || '',
+    clinic_id: canonicalClinicId(p),
     source_base_id: p.sourceBaseId || (p.isBaseClinic ? p.id : '') || '',
     name: p.name || '',
     address: p.address || '',
@@ -4078,6 +4106,12 @@ function clinicIdentityKeys(p) {
     if (String(p.id).startsWith('place_')) keys.add(String(p.id).slice(6));
     else keys.add('place_' + String(p.id));
   }
+  if (p.sourceBaseId) {
+    keys.add(String(p.sourceBaseId));
+    if (String(p.sourceBaseId).startsWith('place_')) keys.add(String(p.sourceBaseId).slice(6));
+  }
+  const canonical = canonicalClinicId(p);
+  if (canonical) keys.add(canonical);
   // 不再用「名称+地址」做地图/线索去重 key。医生同楼不同室（302/309）或同地址多医生，
   // 很容易被误判成同一家，导致其中一个 marker 消失。除非是基础池和已晋升记录的直接 id 对应，否则保留多条。
   return keys;
@@ -4163,7 +4197,7 @@ function computeMallClinics(mall, radiusKm = COVERAGE_KM) {
   const unique = [];
   const outSeen = new Set();
   byKey.forEach(row => {
-    const key = clinicMatchKey(row) || row.id;
+    const key = canonicalClinicId(row) || row.id;
     if (outSeen.has(key)) return;
     outSeen.add(key);
     unique.push(row);
@@ -4209,14 +4243,11 @@ async function promoteBaseClinic(id) {
   const p = baseClinics.find(x => x.id === id);
   if (!p) return;
   const now = new Date().toISOString();
-  const data = {
-    ...p,
-    id: 'place_' + p.id,
+  const data = makeCanonicalOperationalRecord(p, {
     status: '已交流',
     ownerId: getCurrentOwnerId(),
     ownerName: currentUsername || '匿名',
     ownerAvatar: currentAvatar,
-    isBaseClinic: false,
     createdAt: now,
     createdBy: currentUsername || '匿名',
     createdByAvatar: currentAvatar,
@@ -4225,7 +4256,7 @@ async function promoteBaseClinic(id) {
     updatedByName: currentUsername || '匿名',
     updatedByAvatar: currentAvatar,
     visits: [{ date: now.slice(0,16).replace('T',' '), by: currentUsername || '匿名', note: '从官方基础诊所池加入跟进，已标记为已交流' }]
-  };
+  });
   if (places.some(x => x.id === data.id)) return toast('该诊所已在机构池，请直接编辑');
   try {
     const saved = await saveToFirestore(data, null);
@@ -4935,17 +4966,45 @@ function getRuntimeSafety() {
   if (!window.BDMapRuntimeSafety) throw new Error('运行安全模块尚未载入，请刷新后重试');
   return window.BDMapRuntimeSafety;
 }
+function compactInstitutionCodePrefix(primaryL2Code) {
+  const prefix = String(primaryL2Code || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+  if (!/^[A-Z]+\d{2}$/.test(prefix)) throw new Error('机构二级类目代码无效');
+  return prefix;
+}
+function maxBaseInstitutionSerial(prefix) {
+  let max = 0;
+  for (const clinic of baseClinics) {
+    if (compactInstitutionCodePrefix(clinic.primary_l2_code) !== prefix) continue;
+    const id = normalizeCanonicalInstitutionId(clinic.id);
+    if (!id || !id.startsWith(prefix)) continue;
+    max = Math.max(max, Number(id.slice(prefix.length)) || 0);
+  }
+  return max;
+}
+async function allocateCanonicalInstitutionId(data) {
+  const prefix = compactInstitutionCodePrefix(data && data.primary_l2_code);
+  const counterRef = db.collection('institutionCodeCounters').doc(prefix);
+  const baseMax = maxBaseInstitutionSerial(prefix);
+  return db.runTransaction(async transaction => {
+    const snapshot = await transaction.get(counterRef);
+    const counterValue = snapshot.exists ? Number(snapshot.data().value) || 0 : 0;
+    const next = Math.max(baseMax, counterValue) + 1;
+    transaction.set(counterRef, { value:next, primary_l2_code:data.primary_l2_code, updatedAt:new Date().toISOString() }, { merge:true });
+    return prefix + String(next).padStart(6,'0');
+  });
+}
 function runRevisionedMutation(id, expectedRevision, mutate, options = {}) {
   if (!id) return Promise.reject(new Error('缺少记录ID'));
-  const docRef = placesCollection.doc(id);
+  const canonicalId = String(id);
+  const docRef = placesCollection.doc(canonicalId);
   const auditRef = options.action ? auditLogsCollection.doc() : null;
   return db.runTransaction(async transaction => {
     const snapshot = await transaction.get(docRef);
-    const current = snapshot.exists ? { id:snapshot.id, ...snapshot.data() } : null;
+    const current = snapshot.exists ? snapshotRecord(snapshot) : null;
     getRuntimeSafety().assertExpectedRevision(current, expectedRevision);
     const proposed = await mutate(current ? { ...current } : null);
     if (!proposed) throw new Error('写入内容为空');
-    const cleanData = cleanForFirestore({ ...proposed, id });
+    const cleanData = cleanForFirestore({ ...proposed, id:canonicalId });
     const revisioned = getRuntimeSafety().prepareRevisionedWrite(cleanData, current);
     const writeData = { ...revisioned };
     for (const field of (options.deleteFields || [])) writeData[field] = firebase.firestore.FieldValue.delete();
@@ -4953,7 +5012,7 @@ function runRevisionedMutation(id, expectedRevision, mutate, options = {}) {
     if (auditRef) {
       transaction.set(auditRef, {
         action: options.action,
-        recordId: id,
+        recordId: canonicalId,
         recordName: revisioned.name || (current && current.name) || '',
         actor: getDeleteActor(),
         at: new Date().toISOString(),
@@ -4968,6 +5027,7 @@ function runRevisionedMutation(id, expectedRevision, mutate, options = {}) {
 function saveToFirestore(data, expectedRevision) {
   document.getElementById('syncStatus').textContent = '☁️ 正在同步...';
   const cleanData = cleanForFirestore(data);
+  cleanData.id = String(cleanData.id);
   if (!cleanData.createdAt) cleanData.createdAt = new Date().toISOString();
   if (!cleanData.updatedAt) cleanData.updatedAt = new Date().toISOString();
   return runRevisionedMutation(cleanData.id, expectedRevision, current => ({ ...(current || {}), ...cleanData }))
