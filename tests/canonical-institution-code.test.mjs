@@ -21,9 +21,9 @@ function body(source, name, nextName) {
   return source.slice(start, end < 0 ? source.length : end);
 }
 
-test('正式底池有13337条永久唯一机构代码，格式为L1+L2+六位流水', () => {
+test('正式底池有13217条永久唯一机构代码，格式为L1+L2+六位流水', () => {
   const rows = pool();
-  assert.equal(rows.length, 13337);
+  assert.equal(rows.length, 13217);
   assert.equal(new Set(rows.map(x => x.id)).size, rows.length);
   for (const row of rows) {
     assert.match(row.id, /^[A-Z]+\d{2}\d{6}$/);
@@ -158,8 +158,8 @@ test('认领和报错路径也使用canonical原子迁移', () => {
 
 test('报错回传提供强ID但未命中时失败关闭且弱匹配必须唯一', () => {
   const finder = body(app(), 'findClinicForImport', 'makeImportEditableRecord');
-  assert.match(finder, /if \(id\)[\s\S]*return hit \|\| null/);
-  assert.match(finder, /if \(baseId\)[\s\S]*return hit \|\| null/);
+  assert.match(finder, /if \(id\) return resolveStrongClinicId\(id, name, address\)/);
+  assert.match(finder, /if \(baseId\) return resolveStrongClinicId\(baseId, name, address\)/);
   assert.match(finder, /matches\.length === 1 \? matches\[0\] : null/);
 });
 
