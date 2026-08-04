@@ -2322,7 +2322,7 @@ async function copyComboSummary() {
   await navigator.clipboard.writeText(text); toast('组合摘要已复制');
 }
 
-const CLINIC_EXPORT_HEADERS = ['clinic_id','source_base_id','name','address','primary_l1_code','primary_l1_name','primary_l2_code','primary_l2_name','contact','phone','lat','lng','owner_id','owner_name','status','distance_km','coverage_center','coverage_mode','data_quality_status','error_type','error_note','error_upload_action'];
+const CLINIC_EXPORT_HEADERS = ['clinic_id','name','address','primary_l1_code','primary_l1_name','primary_l2_code','primary_l2_name','contact','phone','lat','lng','owner_id','owner_name','status','distance_km','coverage_center','coverage_mode','data_quality_status','error_type','error_note','error_upload_action'];
 const ERROR_UPLOAD_ACTIONS = ['','地址错误','电话错误','重复店铺','已停业','类型错误','其他','已修正'];
 function csvEscape(v) { return '"' + String(v === undefined || v === null ? '' : v).replace(/"/g,'""') + '"'; }
 function downloadCsv(filename, headers, rows) {
@@ -2366,7 +2366,6 @@ function applyErrorActionValidation(ws, headers, maxRow) {
 function clinicExportRow(p, extra={}) {
   return {
     clinic_id: canonicalClinicId(p),
-    source_base_id: p.sourceBaseId || (p.isBaseClinic ? p.id : '') || '',
     name: p.name || '',
     address: p.address || '',
     primary_l1_code: p.primary_l1_code || '',
@@ -2388,6 +2387,10 @@ function clinicExportRow(p, extra={}) {
     error_note: '',
     error_upload_action: ''
   };
+}
+function assertCanonicalClinicExportRows(rows) {
+  const invalid = (rows || []).filter(row => !CANONICAL_INSTITUTION_ID_RE.test(String(row && row.clinic_id || '').trim()));
+  if (invalid.length) throw new Error(`发现${invalid.length}条机构缺少永久统一识别码`);
 }
 async function exportErrorUploadTemplate(rows, filename) {
   const out = rows.map(r => ({...r, error_upload_action:'', error_type:'', error_note:''}));
@@ -2427,6 +2430,13 @@ function getCurrentCoverageRows() {
 async function exportCurrentCoverageCsv() {
   const rows = getCurrentCoverageRows();
   if (!rows.length) { toast('当前没有可导出的诊所'); return; }
+  try {
+    assertCanonicalClinicExportRows(rows);
+  } catch (e) {
+    console.error(e);
+    toast('发现旧版或空白clinic_id，请刷新页面后重新导出');
+    return;
+  }
   await downloadXlsx(`${rows[0].coverage_center}_${singleCoverageKm}km诊所机构清单_统一字段.xlsx`, CLINIC_EXPORT_HEADERS, rows, { sheetName:`${singleCoverageKm}km诊所机构`, errorValidation:true });
   toast('已按统一字段导出Excel，error_upload_action已加下拉');
 }
@@ -2499,6 +2509,10 @@ function clinicIdentityKeys(p) {
   }
   const canonical = canonicalClinicId(p);
   if (canonical) keys.add(canonical);
+  (Array.isArray(p.legacyInstitutionIds) ? p.legacyInstitutionIds : []).forEach(id => {
+    const legacy = String(id || '').trim();
+    if (legacy) keys.add(legacy);
+  });
   // 不再用「名称+地址」做地图/线索去重 key。医生同楼不同室（302/309）或同地址多医生，
   // 很容易被误判成同一家，导致其中一个 marker 消失。除非是基础池和已晋升记录的直接 id 对应，否则保留多条。
   return keys;
@@ -2604,7 +2618,9 @@ async function loadBaseClinics() {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const loaded = await res.json();
     if (!Array.isArray(loaded)) throw new Error('JSON根节点不是数组');
-    baseClinics = loaded;
+    const canonicalRows = loaded.filter(row => normalizeCanonicalInstitutionId(row && row.id));
+    if (canonicalRows.length !== loaded.length) throw new Error(`基础机构池识别码版本不一致：${loaded.length - canonicalRows.length}条不是永久统一识别码`);
+    baseClinics = canonicalRows.map(row => ({ ...row, isBaseClinic:true }));
   } catch(e) {
     console.error('Base clinic pool file failed', e);
     baseClinics = [];
@@ -3976,19 +3992,25 @@ function rowObjectFromWorksheet(ws, rowNumber) {
   });
   return obj;
 }
+function resolveStrongClinicId(strongId, name, address) {
+  const id = String(strongId || '').trim();
+  if (!id) return null;
+  const candidates = [...places, ...baseClinics];
+  const direct = candidates.filter(p => p.id === id || p.id === 'place_' + id || p.sourceBaseId === id || (Array.isArray(p.legacyInstitutionIds) && p.legacyInstitutionIds.includes(id)));
+  const migrated = candidates.filter(p => p.previousCanonicalId === id);
+  if (!migrated.length) return direct.length === 1 ? direct[0] : null;
+  const key = clinicMatchKey({ name, address });
+  if (!name && !address) return null;
+  const matches = [...migrated, ...direct].filter(p => clinicMatchKey(p) === key);
+  return matches.length === 1 ? matches[0] : null;
+}
 function findClinicForImport(row) {
   const id = String(row.clinic_id || '').trim();
   const baseId = String(row.source_base_id || '').trim();
   const name = String(row.name || '').trim();
   const address = String(row.address || '').trim();
-  if (id) {
-    const hit = places.find(p => p.id === id || p.id === 'place_' + id) || baseClinics.find(p => p.id === id);
-    return hit || null;
-  }
-  if (baseId) {
-    const hit = places.find(p => p.sourceBaseId === baseId || p.id === 'place_' + baseId) || baseClinics.find(p => p.id === baseId);
-    return hit || null;
-  }
+  if (id) return resolveStrongClinicId(id, name, address);
+  if (baseId) return resolveStrongClinicId(baseId, name, address);
   if (name || address) {
     const key = clinicMatchKey({ name, address });
     const matches = [...places, ...baseClinics].filter(p => clinicMatchKey(p) === key);
