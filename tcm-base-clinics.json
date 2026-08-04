@@ -33224,36 +33224,6 @@
     "classificationReviewReason": ""
   },
   {
-    "id": "BEA01000168",
-    "name": "天悦 RelaxStation HK",
-    "address": "大埔乡事会坊43号",
-    "district": "新界/大埔区",
-    "source": "现有清洗终版",
-    "lat": 22.4465994,
-    "lng": 114.1668566,
-    "needs_address_review": false,
-    "businessCategory": "健康服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "",
-    "sourceUrl": "",
-    "authenticityScore": 3.6,
-    "addressCompleteness": "C_门牌建筑明确",
-    "verificationStatus": "EXISTING_CLEAN_BASE",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "BEA",
-    "primary_l1_name": "美容美体与休闲养生",
-    "primary_l2_code": "BEA-01",
-    "primary_l2_name": "生活美容／美体中心",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [],
-    "classificationRuleId": "MIG-BEA01",
-    "classificationConfidence": "RULE_CANDIDATE",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified",
-    "classificationReviewReason": ""
-  },
-  {
     "id": "BEA01000169",
     "name": "FaceMORE肌肤重生中心 -沙田旗舰店",
     "address": "沙田白鹤汀街10-18号New Town Tower5楼501-502室",
@@ -74379,36 +74349,6 @@
     "source": "现有清洗终版",
     "lat": 22.4520482,
     "lng": 114.1645073,
-    "needs_address_review": false,
-    "businessCategory": "健康服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "",
-    "sourceUrl": "",
-    "authenticityScore": 3.9,
-    "addressCompleteness": "C_门牌建筑明确",
-    "verificationStatus": "EXISTING_CLEAN_BASE",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "BEA",
-    "primary_l1_name": "美容美体与休闲养生",
-    "primary_l2_code": "BEA-04",
-    "primary_l2_name": "按摩／足疗中心",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [],
-    "classificationRuleId": "MIG-BEA04",
-    "classificationConfidence": "DIRECT",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified",
-    "classificationReviewReason": ""
-  },
-  {
-    "id": "BEA04000445",
-    "name": "雯雯养生馆",
-    "address": "大埔同茂坊6号",
-    "district": "新界/大埔区",
-    "source": "现有清洗终版",
-    "lat": 22.4491552,
-    "lng": 114.1675882,
     "needs_address_review": false,
     "businessCategory": "健康服务",
     "organizationCategory": "其他",
@@ -198446,36 +198386,6 @@
     "classificationReviewReason": ""
   },
   {
-    "id": "MED01002574",
-    "name": "北区中医治疗中心 - 港健中医药集团属下诊所",
-    "address": "上水新成路129号",
-    "district": "新界/北区",
-    "source": "Google Places第五阶段补抓",
-    "lat": 22.5041498,
-    "lng": 114.1299643,
-    "needs_address_review": false,
-    "businessCategory": "医疗服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "26798022",
-    "sourceUrl": "https://www.hcmhk.com/",
-    "authenticityScore": 4.0,
-    "addressCompleteness": "C_门牌建筑明确",
-    "verificationStatus": "GOOGLE_OPERATIONAL_INSTITUTION_AUDITED",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "MED",
-    "primary_l1_name": "医疗诊疗",
-    "primary_l2_code": "MED-01",
-    "primary_l2_name": "综合／家庭医生诊所",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [],
-    "classificationRuleId": "MIG-MED01",
-    "classificationConfidence": "DIRECT",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified",
-    "classificationReviewReason": ""
-  },
-  {
     "id": "MED01002575",
     "name": "那打素中医药临床研究服务中心",
     "address": "大埔全安路11号雅丽氏何妙龄那打素医院行政中心",
@@ -305250,36 +305160,6 @@
     "classificationReviewReason": ""
   },
   {
-    "id": "TCM01000135",
-    "name": "钟意中医医务所",
-    "address": "香港中环士丹利街24-26号陆羽大厦602室",
-    "district": "香港岛/中西区",
-    "source": "现有清洗终版",
-    "lat": 22.282202,
-    "lng": 114.155517,
-    "needs_address_review": false,
-    "businessCategory": "医疗服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "",
-    "sourceUrl": "",
-    "authenticityScore": 3.9,
-    "addressCompleteness": "B_铺号室号明确",
-    "verificationStatus": "EXISTING_CLEAN_BASE",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "TCM",
-    "primary_l1_name": "中医与传统医学",
-    "primary_l2_code": "TCM-01",
-    "primary_l2_name": "中医综合诊所",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [],
-    "classificationRuleId": "P1-TCM-EXPLICIT",
-    "classificationConfidence": "PHASE1_VERIFIED",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified",
-    "classificationReviewReason": ""
-  },
-  {
     "id": "TCM01000136",
     "name": "草本生活",
     "address": "香港西营盘干诺道西188号香港商业中心33楼3310室",
@@ -317219,7 +317099,10 @@
     "classificationConfidence": "PHASE1_VERIFIED",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified",
-    "classificationReviewReason": ""
+    "classificationReviewReason": "",
+    "legacyInstitutionIds": [
+      "TCM01000135"
+    ]
   },
   {
     "id": "TCM01000543",
@@ -317957,36 +317840,6 @@
     "source": "现有清洗终版",
     "lat": 22.3224373,
     "lng": 114.2568234,
-    "needs_address_review": false,
-    "businessCategory": "医疗服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "",
-    "sourceUrl": "https://www.finddoc.com/",
-    "authenticityScore": 4.3,
-    "addressCompleteness": "B_楼层明确",
-    "verificationStatus": "EXISTING_CLEAN_BASE",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "TCM",
-    "primary_l1_name": "中医与传统医学",
-    "primary_l2_code": "TCM-01",
-    "primary_l2_name": "中医综合诊所",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [],
-    "classificationRuleId": "P1-TCM-EXPLICIT",
-    "classificationConfidence": "PHASE1_VERIFIED",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified",
-    "classificationReviewReason": ""
-  },
-  {
-    "id": "TCM01000572",
-    "name": "正品中医诊所（东涌）",
-    "address": "东涌健东路1号映湾荟地下2A",
-    "district": "新界/离岛区",
-    "source": "现有清洗终版",
-    "lat": 22.2922883,
-    "lng": 113.948814,
     "needs_address_review": false,
     "businessCategory": "医疗服务",
     "organizationCategory": "其他",
@@ -324205,8 +324058,8 @@
     "businessCategory": "医疗服务",
     "organizationCategory": "其他",
     "organizationLevel": "未定级",
-    "phone": "",
-    "sourceUrl": "",
+    "phone": "26798022",
+    "sourceUrl": "https://www.hcmhk.com/",
     "authenticityScore": 3.9,
     "addressCompleteness": "C_门牌建筑明确",
     "verificationStatus": "EXISTING_CLEAN_BASE",
@@ -324215,13 +324068,18 @@
     "primary_l1_name": "中医与传统医学",
     "primary_l2_code": "TCM-01",
     "primary_l2_name": "中医综合诊所",
-    "secondary_l2_codes": [],
+    "secondary_l2_codes": [
+      "MED-01"
+    ],
     "service_tag_ids": [],
     "classificationRuleId": "P1-TCM-EXPLICIT",
     "classificationConfidence": "PHASE1_VERIFIED",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified",
-    "classificationReviewReason": ""
+    "classificationReviewReason": "",
+    "legacyInstitutionIds": [
+      "MED01002574"
+    ]
   },
   {
     "id": "TCM01000892",
@@ -365574,7 +365432,8 @@
     "classificationStatus": "classified",
     "classificationReviewReason": "",
     "legacyInstitutionIds": [
-      "TCM01001038"
+      "TCM01001038",
+      "TCM01000572"
     ]
   },
   {
@@ -375855,13 +375714,18 @@
     "primary_l1_name": "中医与传统医学",
     "primary_l2_code": "TCM-06",
     "primary_l2_name": "传统疗法／养生馆",
-    "secondary_l2_codes": [],
+    "secondary_l2_codes": [
+      "BEA-04"
+    ],
     "service_tag_ids": [],
     "classificationRuleId": "P1-WELLNESS-EXPLICIT",
     "classificationConfidence": "PHASE1_VERIFIED",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified",
-    "classificationReviewReason": ""
+    "classificationReviewReason": "",
+    "legacyInstitutionIds": [
+      "BEA04000445"
+    ]
   },
   {
     "id": "TCM06000238",
@@ -376623,13 +376487,18 @@
     "primary_l1_name": "中医与传统医学",
     "primary_l2_code": "TCM-06",
     "primary_l2_name": "传统疗法／养生馆",
-    "secondary_l2_codes": [],
+    "secondary_l2_codes": [
+      "BEA-01"
+    ],
     "service_tag_ids": [],
     "classificationRuleId": "FINAL-REVIEW-20260804",
     "classificationConfidence": "LOW_REVIEWED",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified_final_reviewed",
-    "classificationReviewReason": ""
+    "classificationReviewReason": "",
+    "legacyInstitutionIds": [
+      "BEA01000168"
+    ]
   },
   {
     "id": "TCM06000263",

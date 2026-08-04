@@ -16,7 +16,7 @@ const categorySource = app.match(/function getLeadCategory\(row\) \{[\s\S]*?\n\}
 const ctx = runInNewContext(`${taxonomySource};${codeMapSource};${nameToCodeSource};${secondaryMapSource};${hasValidSource};${categorySource}; ({LEAD_CATEGORY_TAXONOMY, LEAD_SECONDARY_NAME_TO_CODE, getLeadCategory, hasValidTaxonomy})`);
 
 test('production pool uses only canonical 9x76 taxonomy and contains no legacy category fields', () => {
-  assert.equal(pool.length, 12521);
+  assert.equal(pool.length, 12516);
   assert.equal(Object.keys(ctx.LEAD_CATEGORY_TAXONOMY).length, 9);
   assert.equal(Object.values(ctx.LEAD_CATEGORY_TAXONOMY).flat().length, 76);
   for (const [code, name] of [

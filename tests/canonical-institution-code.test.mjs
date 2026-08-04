@@ -21,13 +21,30 @@ function body(source, name, nextName) {
   return source.slice(start, end < 0 ? source.length : end);
 }
 
-test('正式底池有12521条永久唯一机构代码，格式为L1+L2+六位流水', () => {
+test('正式底池有12516条永久唯一机构代码，格式为L1+L2+六位流水', () => {
   const rows = pool();
-  assert.equal(rows.length, 12521);
+  assert.equal(rows.length, 12516);
   assert.equal(new Set(rows.map(x => x.id)).size, rows.length);
   for (const row of rows) {
     assert.match(row.id, /^[A-Z]+\d{2}\d{6}$/);
     assert.ok(row.id.startsWith(String(row.primary_l2_code).replace(/[^A-Z0-9]/g, '')));
+  }
+});
+
+test('已确认的5组重复旧码已归并并映射到指定保留机构', () => {
+  const rows = pool();
+  const byId = new Map(rows.map(row => [row.id, row]));
+  const confirmed = [
+    ['TCM06000262','BEA01000168'],
+    ['TCM06000237','BEA04000445'],
+    ['TCM01000891','MED01002574'],
+    ['TCM01000542','TCM01000135'],
+    ['TCM01002317','TCM01000572']
+  ];
+  for (const [keeperId, removedId] of confirmed) {
+    assert.ok(byId.has(keeperId), keeperId);
+    assert.equal(byId.has(removedId), false, removedId);
+    assert.ok(byId.get(keeperId).legacyInstitutionIds.includes(removedId), `${removedId} → ${keeperId}`);
   }
 });
 
