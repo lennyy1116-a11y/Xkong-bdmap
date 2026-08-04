@@ -4637,6 +4637,20 @@ function closeSettings() {
   lockAdminArea();
   document.getElementById('settingsPanel').classList.remove('active');
 }
+function openAdminPanel() {
+  closePrimaryPanels();
+  lockAdminArea();
+  document.body.classList.remove('home-mode');
+  document.getElementById('adminPanel').classList.add('active');
+  setTimeout(() => document.getElementById('adminPasswordInput')?.focus(), 100);
+}
+function closeAdminPanel() {
+  lockAdminArea();
+  document.getElementById('adminPanel').classList.remove('active');
+  setAppTab('my');
+  document.getElementById('settingsPanel').classList.add('active');
+  refreshMySystemStatus();
+}
 function refreshMySystemStatus() {
   const user = document.getElementById('myStatusUser');
   const sync = document.getElementById('myStatusSync');
