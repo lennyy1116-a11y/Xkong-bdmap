@@ -13,12 +13,24 @@ const secondaryMapSource = app.match(/const LEAD_SECONDARY_NAME_TO_CODE = Object
 const hasValidSource = app.match(/function hasValidTaxonomy\(row\) \{[\s\S]*?\n\}/)?.[0];
 const categorySource = app.match(/function getLeadCategory\(row\) \{[\s\S]*?\n\}/)?.[0];
 
-const ctx = runInNewContext(`${taxonomySource};${codeMapSource};${nameToCodeSource};${secondaryMapSource};${hasValidSource};${categorySource}; ({LEAD_CATEGORY_TAXONOMY, getLeadCategory, hasValidTaxonomy})`);
+const ctx = runInNewContext(`${taxonomySource};${codeMapSource};${nameToCodeSource};${secondaryMapSource};${hasValidSource};${categorySource}; ({LEAD_CATEGORY_TAXONOMY, LEAD_SECONDARY_NAME_TO_CODE, getLeadCategory, hasValidTaxonomy})`);
 
-test('production pool uses only canonical 9x56 taxonomy and contains no legacy category fields', () => {
+test('production pool uses only canonical 9x76 taxonomy and contains no legacy category fields', () => {
   assert.equal(pool.length, 12521);
   assert.equal(Object.keys(ctx.LEAD_CATEGORY_TAXONOMY).length, 9);
-  assert.equal(Object.values(ctx.LEAD_CATEGORY_TAXONOMY).flat().length, 56);
+  assert.equal(Object.values(ctx.LEAD_CATEGORY_TAXONOMY).flat().length, 76);
+  for (const [code, name] of [
+    ['TCM-03','中医针灸专科地点'], ['TCM-04','中医流动／外展服务'], ['TCM-05','中药房／中药材零售'],
+    ['AHP-07','义肢矫形／辅助器具中心'], ['CARE-01','上门护理／家居护理'], ['CARE-06','暂托／喘息服务'],
+    ['CARE-09','产后／母婴护理中心'], ['FIT-02','私人教练工作室'], ['FIT-04','普拉提馆'],
+    ['FIT-05','舞蹈／团体健身工作室'], ['FIT-06','拳击／武术训练馆'], ['FIT-07','游泳／水中运动中心'],
+    ['FIT-08','体育会／综合运动中心'], ['NUT-03','药房／药店'], ['NUT-05','医疗设备／康复用品店'],
+    ['NUT-06','有机／健康食品零售'], ['FNB-04','素食／纯素餐厅'], ['FNB-05','低糖／低碳／控卡餐饮'],
+    ['FNB-06','健康烘焙／健康甜品'], ['FNB-07','营养餐制作／配送']
+  ]) {
+    assert.equal(ctx.LEAD_SECONDARY_NAME_TO_CODE[name], code, `${code} ${name}`);
+    assert.ok(Object.values(ctx.LEAD_CATEGORY_TAXONOMY).flat().includes(name), name);
+  }
   for (const row of pool) {
     assert.equal(ctx.hasValidTaxonomy(row), true, row.id);
     for (const key of ['type','primaryCategory','secondaryCategory','legacyPrimaryCategory','legacySecondaryCategory']) {
