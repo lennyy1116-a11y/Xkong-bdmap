@@ -21,9 +21,9 @@ function body(source, name, nextName) {
   return source.slice(start, end < 0 ? source.length : end);
 }
 
-test('正式底池有13020条永久唯一机构代码，格式为L1+L2+六位流水', () => {
+test('正式底池有13014条永久唯一机构代码，格式为L1+L2+六位流水', () => {
   const rows = pool();
-  assert.equal(rows.length, 13020);
+  assert.equal(rows.length, 13014);
   assert.equal(new Set(rows.map(x => x.id)).size, rows.length);
   for (const row of rows) {
     assert.match(row.id, /^[A-Z]+\d{2}\d{6}$/);

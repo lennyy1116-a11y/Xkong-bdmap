@@ -35489,36 +35489,6 @@
     "classificationReviewReason": ""
   },
   {
-    "id": "BEA01000152",
-    "name": "000",
-    "address": "4号 Tak Shing St, Jordan",
-    "district": "九龙/油尖旺区",
-    "source": "现有清洗终版",
-    "lat": 22.304179,
-    "lng": 114.1730497,
-    "needs_address_review": false,
-    "businessCategory": "健康服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "",
-    "sourceUrl": "",
-    "authenticityScore": 3.6,
-    "addressCompleteness": "C_门牌建筑明确",
-    "verificationStatus": "EXISTING_CLEAN_BASE",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "BEA",
-    "primary_l1_name": "美容美体与休闲养生",
-    "primary_l2_code": "BEA-01",
-    "primary_l2_name": "生活美容／美体中心",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [],
-    "classificationRuleId": "MIG-BEA01",
-    "classificationConfidence": "RULE_CANDIDATE",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified",
-    "classificationReviewReason": ""
-  },
-  {
     "id": "BEA01000153",
     "name": "姿彩美容养生",
     "address": "北角英皇道250号北角城中心25C, 号铺, 姿彩美容养生, North Point",
@@ -44501,7 +44471,10 @@
     "classificationConfidence": "RULE_CANDIDATE",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified",
-    "classificationReviewReason": ""
+    "classificationReviewReason": "",
+    "legacyInstitutionIds": [
+      "BEA01000152"
+    ]
   },
   {
     "id": "BEA01000453",
@@ -75577,38 +75550,6 @@
     "classificationReviewReason": ""
   },
   {
-    "id": "BEA04000256",
-    "name": "多谢 Thai Massage (九龙城店-2)",
-    "address": "2/F Room A, 29号 Nga Tsin Wai Rd, Kowloon City",
-    "district": "九龙/九龙城区",
-    "source": "现有清洗终版",
-    "lat": 22.3288383,
-    "lng": 114.1894567,
-    "needs_address_review": false,
-    "businessCategory": "健康服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "",
-    "sourceUrl": "",
-    "authenticityScore": 3.9,
-    "addressCompleteness": "A_楼层室号完整",
-    "verificationStatus": "EXISTING_CLEAN_BASE",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "BEA",
-    "primary_l1_name": "美容美体与休闲养生",
-    "primary_l2_code": "BEA-04",
-    "primary_l2_name": "按摩／足疗中心",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [
-      "BEA-008"
-    ],
-    "classificationRuleId": "MIG-BEA04",
-    "classificationConfidence": "DIRECT",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified",
-    "classificationReviewReason": ""
-  },
-  {
     "id": "BEA04000258",
     "name": "辉哥靓足一世",
     "address": "Kowloon City, Fuk Lo Tsun Rd, 80号号地下",
@@ -86324,7 +86265,10 @@
     "classificationConfidence": "DIRECT",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified",
-    "classificationReviewReason": ""
+    "classificationReviewReason": "",
+    "legacyInstitutionIds": [
+      "BEA04000256"
+    ]
   },
   {
     "id": "BEA04000652",
@@ -279162,7 +279106,11 @@
     "classificationConfidence": "DIRECT",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified",
-    "classificationReviewReason": ""
+    "classificationReviewReason": "",
+    "legacyInstitutionIds": [
+      "MED08001226"
+    ],
+    "website": "https://ppdentalhk.com/"
   },
   {
     "id": "MED08001136",
@@ -281826,36 +281774,6 @@
     "sourceUrl": "https://www.humansahealth.com/",
     "authenticityScore": 4.0,
     "addressCompleteness": "A_楼层室号完整",
-    "verificationStatus": "GOOGLE_OPERATIONAL_INSTITUTION_AUDITED",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "MED",
-    "primary_l1_name": "医疗诊疗",
-    "primary_l2_code": "MED-08",
-    "primary_l2_name": "牙科／口腔诊所",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [],
-    "classificationRuleId": "MIG-MED08",
-    "classificationConfidence": "DIRECT",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified",
-    "classificationReviewReason": ""
-  },
-  {
-    "id": "MED08001226",
-    "name": "PP Dental 潘雄威牙科医生",
-    "address": "中环皇后大道中70号, 1209",
-    "district": "香港岛/中西区",
-    "source": "Google Places第五阶段补抓",
-    "lat": 22.2826315,
-    "lng": 114.1555936,
-    "needs_address_review": false,
-    "businessCategory": "医疗服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "23883636",
-    "sourceUrl": "https://ppdentalhk.com/",
-    "authenticityScore": 4.0,
-    "addressCompleteness": "C_门牌建筑明确",
     "verificationStatus": "GOOGLE_OPERATIONAL_INSTITUTION_AUDITED",
     "taxonomyVersion": "2026-07-30",
     "primary_l1_code": "MED",
@@ -288267,36 +288185,6 @@
     "classificationReviewReason": ""
   },
   {
-    "id": "MED08001442",
-    "name": "尹锦添 牙科医生",
-    "address": "Shop 22, Upper G/F, B18-19, Tsuen Wan Centre Shopping Arcade, Phase II, Tsuen King Circuit, Tsuen Wan",
-    "district": "新界/荃湾区",
-    "source": "Google Places第五阶段补抓",
-    "lat": 22.3787215,
-    "lng": 114.107294,
-    "needs_address_review": false,
-    "businessCategory": "医疗服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "24165208",
-    "sourceUrl": "https://maps.google.com/?cid=2946807962948128332",
-    "authenticityScore": 4.0,
-    "addressCompleteness": "A_楼层室号完整",
-    "verificationStatus": "GOOGLE_OPERATIONAL_INSTITUTION_AUDITED",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "MED",
-    "primary_l1_name": "医疗诊疗",
-    "primary_l2_code": "MED-08",
-    "primary_l2_name": "牙科／口腔诊所",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [],
-    "classificationRuleId": "MIG-MED08",
-    "classificationConfidence": "DIRECT",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified",
-    "classificationReviewReason": ""
-  },
-  {
     "id": "MED08001443",
     "name": "齐仁牙科中心 Excelsior Dental Centre",
     "address": "荃湾大河道No.99号10/F",
@@ -288534,7 +288422,10 @@
     "classificationConfidence": "DIRECT",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified",
-    "classificationReviewReason": ""
+    "classificationReviewReason": "",
+    "legacyInstitutionIds": [
+      "MED08001442"
+    ]
   },
   {
     "id": "MED08001451",
@@ -312722,7 +312613,10 @@
     "classificationConfidence": "PHASE1_VERIFIED",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified",
-    "classificationReviewReason": ""
+    "classificationReviewReason": "",
+    "legacyInstitutionIds": [
+      "TCM01000292"
+    ]
   },
   {
     "id": "TCM01000028",
@@ -317855,36 +317749,6 @@
     "source": "现有清洗终版",
     "lat": 22.277245,
     "lng": 114.173929,
-    "needs_address_review": false,
-    "businessCategory": "医疗服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "",
-    "sourceUrl": "https://www.finddoc.com/",
-    "authenticityScore": 4.3,
-    "addressCompleteness": "A_楼层室号完整",
-    "verificationStatus": "EXISTING_CLEAN_BASE",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "TCM",
-    "primary_l1_name": "中医与传统医学",
-    "primary_l2_code": "TCM-01",
-    "primary_l2_name": "中医综合诊所",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [],
-    "classificationRuleId": "P1-TCM-EXPLICIT",
-    "classificationConfidence": "PHASE1_VERIFIED",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified",
-    "classificationReviewReason": ""
-  },
-  {
-    "id": "TCM01000292",
-    "name": "健雅堂中医诊所",
-    "address": "香港筲箕湾筲箕湾东大街177号东豪大厦地下4号铺",
-    "district": "香港岛/东区",
-    "source": "现有清洗终版",
-    "lat": 22.277308,
-    "lng": 114.230079,
     "needs_address_review": false,
     "businessCategory": "医疗服务",
     "organizationCategory": "其他",
@@ -326041,36 +325905,6 @@
     ],
     "dedupeMergedAt": "2026-08-04T07:06:42.984287Z",
     "dedupeReason": "strict_same_institution_evidence"
-  },
-  {
-    "id": "TCM01000550",
-    "name": "十信中医",
-    "address": "上环文咸东街50号宝恒商业中心18楼1806室",
-    "district": "香港岛/中西区",
-    "source": "现有清洗终版",
-    "lat": 22.285767,
-    "lng": 114.1512853,
-    "needs_address_review": false,
-    "businessCategory": "医疗服务",
-    "organizationCategory": "其他",
-    "organizationLevel": "未定级",
-    "phone": "",
-    "sourceUrl": "https://www.finddoc.com/",
-    "authenticityScore": 4.0,
-    "addressCompleteness": "A_楼层室号完整",
-    "verificationStatus": "EXISTING_CLEAN_BASE",
-    "taxonomyVersion": "2026-07-30",
-    "primary_l1_code": "TCM",
-    "primary_l1_name": "中医与传统医学",
-    "primary_l2_code": "TCM-01",
-    "primary_l2_name": "中医综合诊所",
-    "secondary_l2_codes": [],
-    "service_tag_ids": [],
-    "classificationRuleId": "P1-TCM-EXPLICIT",
-    "classificationConfidence": "PHASE1_VERIFIED",
-    "manualReviewStatus": "not_required",
-    "classificationStatus": "classified",
-    "classificationReviewReason": ""
   },
   {
     "id": "TCM01000551",
@@ -343713,7 +343547,10 @@
     "classificationConfidence": "PHASE1_VERIFIED",
     "manualReviewStatus": "not_required",
     "classificationStatus": "classified",
-    "classificationReviewReason": ""
+    "classificationReviewReason": "",
+    "legacyInstitutionIds": [
+      "TCM01000550"
+    ]
   },
   {
     "id": "TCM01001171",
