@@ -887,13 +887,10 @@ async function savePlace() {
     if (btn) { btn.classList.add('loading'); btn.disabled = true; btn.textContent = '保存中...'; }
     feedback('info','正在保存到云端，请稍候...');
     const targetChanged = !!(editId && data.id !== editId);
-    const savedData = await saveToFirestore(data, editId && !targetChanged ? editBaseRevision : null);
-    const savedIdx = places.findIndex(p => p.id === savedData.id);
-    if (savedIdx >= 0) places[savedIdx] = savedData; else places.push(savedData);
-    if (targetChanged) {
-      const legacyIdx = places.findIndex(p => p.id === editId);
-      if (legacyIdx >= 0) places.splice(legacyIdx, 1);
-    }
+    const savedData = targetChanged
+      ? await runCanonicalInstitutionMutation(data.id, oldPlace, editBaseRevision, () => data)
+      : await saveToFirestore(data, editId ? editBaseRevision : null);
+    replaceLocalCanonicalRecord(savedData, targetChanged ? editId : '');
     editBaseRevision = savedData.revision;
     savePlaces();
     renderMarkers(); scheduleLeadHomeRender(); updateStats();
@@ -1623,7 +1620,7 @@ async function claimLead(id) {
   const recordId = canonicalClinicId(p) || canonicalClinicId(existing);
   const expectedRevision = existing && existing.id === recordId ? (Number(existing.revision) || 0) : null;
   try {
-    const saved = await runRevisionedMutation(recordId, expectedRevision, current => {
+    const saved = await runCanonicalInstitutionMutation(recordId, existing, existing ? (Number(existing.revision) || 0) : null, current => {
       const data = current ? { ...current } : canonicalWriteSeed(p, existing, { createdAt:now });
       const currentOwner = getOwnerId(data);
       if (!isUnclaimedOwnerId(currentOwner) && currentOwner !== getCurrentOwnerId()) throw new Error('已被别人认领');
@@ -1632,8 +1629,7 @@ async function claimLead(id) {
       data.updatedAt = now; data.updatedBy = currentUsername || '匿名'; data.updatedByAvatar = currentAvatar;
       return data;
     });
-    const idx = places.findIndex(x => x.id === saved.id);
-    if (idx >= 0) places[idx] = saved; else places.push(saved);
+    replaceLocalCanonicalRecord(saved, existing && existing.id);
     clearCoverageCache(); savePlaces(); scheduleLeadHomeRender(); renderMarkers(); updateStats(); toast('👤 已认领');
   } catch(e) { console.error(e); toast('⚠️ 认领失败：' + (e.message || '请刷新重试')); }
 }
@@ -1647,15 +1643,14 @@ async function reportLeadError(id) {
   const recordId = canonicalClinicId(p) || canonicalClinicId(existing);
   const expectedRevision = existing && existing.id === recordId ? (Number(existing.revision) || 0) : null;
   try {
-    const saved = await runRevisionedMutation(recordId, expectedRevision, current => {
+    const saved = await runCanonicalInstitutionMutation(recordId, existing, existing ? (Number(existing.revision) || 0) : null, current => {
       const data = current ? { ...current } : canonicalWriteSeed(p, existing, { createdAt:now });
       data.errorReports = [...(data.errorReports||[]), { type, note, by:currentUsername || '匿名', byAvatar:currentAvatar, at:now }];
       data.dataQualityStatus = '待核实'; data.dataQualityIssueType = type;
       data.updatedAt = now; data.updatedBy = currentUsername || '匿名'; data.updatedByAvatar = currentAvatar;
       return data;
     });
-    const idx = places.findIndex(x => x.id === saved.id);
-    if (idx >= 0) places[idx] = saved; else places.push(saved);
+    replaceLocalCanonicalRecord(saved, existing && existing.id);
     clearCoverageCache(); savePlaces(); scheduleLeadHomeRender(); renderMarkers(); updateStats(); toast('⚠️ 已提交报错');
   } catch(e) { console.error(e); toast('⚠️ 报错提交失败：' + (e.message || '请刷新重试')); }
 }
@@ -1669,15 +1664,14 @@ async function resolveLeadError(id) {
   const note = await showAppPrompt('修正报错', '修正说明（可空）', '已核实/已修正') || '';
   const now = new Date().toISOString();
   try {
-    const saved = await runRevisionedMutation(recordId, expectedRevision, current => {
+    const saved = await runCanonicalInstitutionMutation(recordId, existing, existing ? (Number(existing.revision) || 0) : null, current => {
       const data = current ? { ...current } : canonicalWriteSeed(p, existing, { createdAt:existing.createdAt || now });
       data.resolvedReports = [...(data.resolvedReports||[]), { type:data.dataQualityIssueType || data.dataQualityStatus || '报错', note, by:currentUsername || '匿名', byAvatar:currentAvatar, at:now }];
       data.dataQualityStatus = ''; data.dataQualityIssueType = ''; data.resolvedAt = now; data.resolvedBy = currentUsername || '匿名'; data.resolveNote = note;
       data.updatedAt = now; data.updatedBy = currentUsername || '匿名'; data.updatedByAvatar = currentAvatar;
       return data;
     });
-    const idx = places.findIndex(x => x.id === saved.id);
-    if (idx >= 0) places[idx] = saved; else places.push(saved);
+    replaceLocalCanonicalRecord(saved, existing && existing.id);
     clearCoverageCache(); savePlaces(); scheduleLeadHomeRender(); renderMarkers(); updateStats(); toast('✅ 已标记修正');
   } catch(e) { console.error(e); toast('⚠️ 修正失败：' + (e.message || '请刷新重试')); }
 }
@@ -3435,6 +3429,36 @@ function runRevisionedMutation(id, expectedRevision, mutate, options = {}) {
     return revisioned;
   });
 }
+function runCanonicalInstitutionMutation(id, existing, expectedRevision, mutate) {
+  const canonicalId = String(id || '');
+  const legacyId = existing && existing.id !== canonicalId ? String(existing.id || '') : '';
+  if (!legacyId) return runRevisionedMutation(canonicalId, expectedRevision, mutate);
+  const canonicalRef = placesCollection.doc(canonicalId);
+  const legacyRef = placesCollection.doc(legacyId);
+  return db.runTransaction(async transaction => {
+    const [canonicalSnapshot, legacySnapshot] = await Promise.all([
+      transaction.get(canonicalRef), transaction.get(legacyRef)
+    ]);
+    if (canonicalSnapshot.exists) throw Object.assign(new Error('永久机构代码目标已存在，请刷新后重试'), { code:'revision-conflict' });
+    const legacyCurrent = legacySnapshot.exists ? snapshotRecord(legacySnapshot) : null;
+    getRuntimeSafety().assertExpectedRevision(legacyCurrent, expectedRevision);
+    const proposed = await mutate(legacyCurrent ? { ...legacyCurrent } : null);
+    if (!proposed) throw new Error('写入内容为空');
+    const cleanData = cleanForFirestore({ ...proposed, id:canonicalId, legacyDocumentId:legacyId });
+    const revisioned = getRuntimeSafety().prepareRevisionedWrite(cleanData, legacyCurrent);
+    transaction.set(canonicalRef, revisioned);
+    transaction.delete(legacyRef);
+    return revisioned;
+  });
+}
+function replaceLocalCanonicalRecord(saved, legacyId) {
+  const savedIdx = places.findIndex(p => p.id === saved.id);
+  if (savedIdx >= 0) places[savedIdx] = saved; else places.push(saved);
+  if (legacyId && legacyId !== saved.id) {
+    const legacyIdx = places.findIndex(p => p.id === legacyId);
+    if (legacyIdx >= 0) places.splice(legacyIdx, 1);
+  }
+}
 function saveToFirestore(data, expectedRevision) {
   document.getElementById('syncStatus').textContent = '☁️ 正在同步...';
   const cleanData = cleanForFirestore(data);
@@ -3945,15 +3969,16 @@ function findClinicForImport(row) {
   const address = String(row.address || '').trim();
   if (id) {
     const hit = places.find(p => p.id === id || p.id === 'place_' + id) || baseClinics.find(p => p.id === id);
-    if (hit) return hit;
+    return hit || null;
   }
   if (baseId) {
     const hit = places.find(p => p.sourceBaseId === baseId || p.id === 'place_' + baseId) || baseClinics.find(p => p.id === baseId);
-    if (hit) return hit;
+    return hit || null;
   }
   if (name || address) {
     const key = clinicMatchKey({ name, address });
-    return places.find(p => clinicMatchKey(p) === key) || baseClinics.find(p => clinicMatchKey(p) === key) || null;
+    const matches = [...places, ...baseClinics].filter(p => clinicMatchKey(p) === key);
+    return matches.length === 1 ? matches[0] : null;
   }
   return null;
 }

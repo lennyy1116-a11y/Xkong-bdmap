@@ -60,9 +60,9 @@ test('删除恢复与运营写入均通过事务并携带expected revision', () 
   const app = appText();
   assert.match(functionBody(app, 'persistSoftDelete', 'deletePlace'), /runRevisionedMutation/);
   assert.match(functionBody(app, 'restoreDeletedPlace', 'renderList'), /runRevisionedMutation/);
-  assert.match(functionBody(app, 'claimLead', 'reportLeadError'), /runRevisionedMutation/);
-  assert.match(functionBody(app, 'reportLeadError', 'resolveLeadError'), /runRevisionedMutation/);
-  assert.match(functionBody(app, 'resolveLeadError', 'locateLeadOnMap'), /runRevisionedMutation/);
+  assert.match(functionBody(app, 'claimLead', 'reportLeadError'), /runCanonicalInstitutionMutation/);
+  assert.match(functionBody(app, 'reportLeadError', 'resolveLeadError'), /runCanonicalInstitutionMutation/);
+  assert.match(functionBody(app, 'resolveLeadError', 'locateLeadOnMap'), /runCanonicalInstitutionMutation/);
 });
 
 test('JSON和Excel新增导入都使用create-only revision事务', () => {
@@ -93,9 +93,9 @@ test('基础诊所晋升必须先云端事务成功再更新本地，且新增�
   assert.doesNotMatch(fn, /places\[existIdx\]\s*=|places\.push\(data\)/, '不得在云端成功前乐观覆盖本地');
 });
 
-test('主表单保存以事务返回记录更新或追加本地状态', () => {
+test('主表单保存以事务返回记录更新本地状态并清理legacy副记录', () => {
   const fn = functionBody(appText(), 'savePlace', 'getDataSafety');
-  assert.match(fn, /if \(savedIdx >= 0\) places\[savedIdx\] = savedData; else places\.push\(savedData\)/);
+  assert.match(fn, /replaceLocalCanonicalRecord\(savedData, targetChanged \? editId : ''\)/);
   assert.doesNotMatch(fn, /places\[savedIdx\] = data/);
 });
 

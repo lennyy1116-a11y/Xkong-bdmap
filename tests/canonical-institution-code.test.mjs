@@ -136,11 +136,31 @@ test('已有记录禁止在点位和机构之间转换', () => {
   assert.match(save, /isPointEntry\(oldPlace\)\s*!==\s*\(entryKind === 'point'\)/);
 });
 
-test('编辑legacy place机构迁移到canonical doc时不沿用旧revision并替换本地副记录', () => {
+test('编辑legacy place机构通过原子事务迁移到canonical doc并替换本地副记录', () => {
   const save = body(app(), 'savePlace', 'getDataSafety');
   assert.match(save, /const targetChanged = !!\(editId && data\.id !== editId\)/);
-  assert.match(save, /saveToFirestore\(data, editId && !targetChanged \? editBaseRevision : null\)/);
-  assert.match(save, /if \(targetChanged\).*places\.splice\(legacyIdx, 1\)/s);
+  assert.match(save, /runCanonicalInstitutionMutation\(data\.id, oldPlace, editBaseRevision/);
+  assert.match(save, /replaceLocalCanonicalRecord\(savedData, targetChanged \? editId : ''\)/);
+  const migration = body(app(), 'runCanonicalInstitutionMutation', 'replaceLocalCanonicalRecord');
+  assert.match(migration, /assertExpectedRevision\(legacyCurrent, expectedRevision\)/);
+  assert.match(migration, /transaction\.set\(canonicalRef, revisioned\)/);
+  assert.match(migration, /transaction\.delete\(legacyRef\)/);
+});
+
+test('认领和报错路径也使用canonical原子迁移', () => {
+  const source = app();
+  for (const [name,next] of [['claimLead','reportLeadError'],['reportLeadError','resolveLeadError'],['resolveLeadError','locateLeadOnMap']]) {
+    const fn = body(source, name, next);
+    assert.match(fn, /runCanonicalInstitutionMutation/);
+    assert.match(fn, /replaceLocalCanonicalRecord/);
+  }
+});
+
+test('报错回传提供强ID但未命中时失败关闭且弱匹配必须唯一', () => {
+  const finder = body(app(), 'findClinicForImport', 'makeImportEditableRecord');
+  assert.match(finder, /if \(id\)[\s\S]*return hit \|\| null/);
+  assert.match(finder, /if \(baseId\)[\s\S]*return hit \|\| null/);
+  assert.match(finder, /matches\.length === 1 \? matches\[0\] : null/);
 });
 
 test('canonical identity存在时不以名称地址误配另一机构，legacy写入迁移到canonical doc', () => {
