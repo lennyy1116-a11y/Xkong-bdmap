@@ -29,6 +29,10 @@ export function reviewImportRow(raw = {}, existing = [], options = {}) {
   row.name = text(row.name);
   row.address = text(row.address);
   if (!row.name) row.messages.push('缺店铺名称');
+  const isInstitution = row.entryKind !== 'point';
+  if (isInstitution && !(text(row.primary_l1_code) && text(row.primary_l1_name) && text(row.primary_l2_code) && text(row.primary_l2_name))) {
+    row.messages.push('机构缺少完整canonical taxonomy，必须进入类目复核');
+  }
   const incomingId = text(row.id);
   if (incomingId) {
     const idMatch = existing.find(record => text(record && record.id) === incomingId);
@@ -39,7 +43,7 @@ export function reviewImportRow(raw = {}, existing = [], options = {}) {
   if (!validCoord) row.messages.push('坐标待核，未写入地图');
   row.duplicateMatches = potentialDuplicates(row, existing);
   if (row.duplicateMatches.length) row.messages.push('疑似重复，默认拦截');
-  row.importable = !!row.name && validCoord && row.duplicateMatches.length === 0 && !row.messages.some(message => message.includes('记录ID'));
+  row.importable = !!row.name && validCoord && row.duplicateMatches.length === 0 && !row.messages.some(message => message.includes('记录ID') || message.includes('canonical taxonomy'));
   row.reviewStatus = row.importable ? 'ready' : 'blocked';
   return row;
 }

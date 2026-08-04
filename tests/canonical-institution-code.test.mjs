@@ -101,10 +101,62 @@ test('普通外部JSON导入仍不信任外部id', () => {
 
 test('Excel报错回传为基础机构建立运营记录时仍沿用canonical id', () => {
   const fn = body(app(), 'makeImportEditableRecord', 'handleBatchErrorImport');
-  assert.match(fn, /makeCanonicalOperationalRecord\(match/);
+  assert.match(fn, /canonicalClinicId\(match\)/);
+  assert.match(fn, /canonicalWriteSeed\(match, existing/);
   assert.doesNotMatch(fn, /id:\s*match\.isBaseClinic\s*\?\s*['"]place_['"]\s*\+/);
 });
 
+test('随机机构ID不能冒充canonical clinic_id，点位仍可使用原始ID', () => {
+  assert.equal(canonicalClinicId({ id:'random-institution', entryKind:'institution', name:'机构' }), '');
+  assert.equal(canonicalClinicId({ id:'random-point', entryKind:'point', type:'商场' }), 'random-point');
+  const exportFn = body(app(), 'clinicExportRow', 'exportComboCoverageXlsx');
+  assert.match(exportFn, /clinic_id:\s*canonicalClinicId\(p\)/);
+});
+
+test('allocator兼容stale counter并事务内检查places冲突', () => {
+  const alloc = body(app(), 'allocateCanonicalInstitutionId', 'savePlace');
+  assert.match(alloc, /institutionCodeCountersCollection\.doc\(prefix\)/);
+  assert.match(alloc, /transaction\.get\(placesQuery\)/);
+  assert.match(alloc, /transaction\.get\(candidateRef\)/);
+  assert.match(alloc, /for\s*\(let attempts\s*=\s*0;\s*attempts\s*<\s*1000/);
+});
+
+test('批量店铺和普通JSON新增机构均使用canonical allocator，点位才使用genId', () => {
+  const source = app();
+  const batch = body(source, 'confirmBatchShopImport', 'exportBatchShopReviewXlsx');
+  assert.match(batch, /await allocateCanonicalInstitutionId\(data\)/);
+  assert.doesNotMatch(batch, /makeBatchShopId/);
+  const jsonImport = body(source, 'importData', 'syncImportedToFirestore');
+  assert.match(jsonImport, /entryKind === 'point'\s*\?\s*genId\(\)\s*:\s*await allocateCanonicalInstitutionId\(row\)/);
+});
+
+test('已有记录禁止在点位和机构之间转换', () => {
+  const save = body(app(), 'savePlace', 'getDataSafety');
+  assert.match(save, /禁止将已有点位与机构互相转换/);
+  assert.match(save, /isPointEntry\(oldPlace\)\s*!==\s*\(entryKind === 'point'\)/);
+});
+
+test('canonical identity存在时不以名称地址误配另一机构，legacy写入迁移到canonical doc', () => {
+  const source = app();
+  const finder = body(source, 'findOperationalPlaceForRecord', 'getEditableLeadPlace');
+  assert.match(finder, /if \(canonicalId\)/);
+  assert.match(finder, /return null/);
+  assert.ok(finder.indexOf('if (canonicalId)') < finder.indexOf('clinicMatchKey'));
+  for (const [name,next] of [['claimLead','reportLeadError'],['reportLeadError','resolveLeadError'],['resolveLeadError','locateLeadOnMap']]) {
+    const fn = body(source, name, next);
+    assert.match(fn, /canonicalClinicId\(p\)/);
+    assert.doesNotMatch(fn, /runRevisionedMutation\(existing\.id/);
+  }
+  const importEditable = body(source, 'makeImportEditableRecord', 'handleBatchErrorImport');
+  assert.match(importEditable, /canonicalClinicId\(match\)/);
+  assert.doesNotMatch(importEditable, /id:match\.id/);
+});
+
+test('base promoted lookup有canonical identity时不使用名称地址fallback', () => {
+  const fn = body(app(), 'getPromotedPlaceForBaseClinic', 'mergeBaseClinicOwner');
+  assert.match(fn, /findOperationalPlaceForRecord\(base\)/);
+  assert.doesNotMatch(fn, /clinicMatchKey/);
+});
 
 test('app.inline.js与index.html内嵌脚本精确同步', () => {
   const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');

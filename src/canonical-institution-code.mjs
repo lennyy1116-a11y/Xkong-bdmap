@@ -12,9 +12,10 @@ export function normalizeCanonicalInstitutionId(value) {
 
 export function canonicalClinicId(record) {
   if (!record) return '';
-  return normalizeCanonicalInstitutionId(record.id)
-    || normalizeCanonicalInstitutionId(record.sourceBaseId)
-    || String(record.id || '').trim();
+  const canonical = normalizeCanonicalInstitutionId(record.id)
+    || normalizeCanonicalInstitutionId(record.sourceBaseId);
+  if (canonical) return canonical;
+  return record.entryKind === 'institution' ? '' : String(record.id || '').trim();
 }
 
 export function canonicalIdentityKeys(record) {
