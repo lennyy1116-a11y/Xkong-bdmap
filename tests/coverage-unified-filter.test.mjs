@@ -17,7 +17,7 @@ test('single coverage uses one collapsible filter panel for distance, taxonomy a
   assert.match(panel, /onclick="clearCoverageFilters\(\)"/);
 });
 
-test('coverage taxonomy controls are generated from canonical 9 by 56 taxonomy', () => {
+test('coverage taxonomy controls are generated from canonical 9 by 76 taxonomy', () => {
   assert.match(app, /function renderCoverageTaxonomyFilters\(\)/);
   assert.match(app, /Object\.keys\(LEAD_CATEGORY_TAXONOMY\)/);
   assert.match(app, /LEAD_CATEGORY_TAXONOMY\[coveragePrimaryCategory\]/);
