@@ -31,10 +31,19 @@ test('预审默认拦截缺名称、疑似重复及坐标待核记录', () => {
   assert.equal(pending.coordStatus, 'pending');
 });
 
+test('普通JSON机构缺完整canonical taxonomy时拦截，点位不受影响', () => {
+  const institution = reviewImportRow({ name:'新机构', entryKind:'institution', lat:22.31, lng:114.22 }, []);
+  assert.equal(institution.importable, false);
+  assert.ok(institution.messages.some(message => message.includes('canonical taxonomy')));
+  const point = reviewImportRow({ name:'新点位', entryKind:'point', type:'商场', lat:22.31, lng:114.22 }, []);
+  assert.equal(point.importable, true);
+});
+
 test('同一导入文件内部重复也会被拦截并给出汇总', () => {
+  const taxonomy = { entryKind:'institution', primary_l1_code:'MED', primary_l1_name:'医疗', primary_l2_code:'MED-01', primary_l2_name:'综合诊所' };
   const result = reviewImportRows([
-    { name:'新店', address:'旺角弥敦道1号', phone:'23334444', lat:22.319, lng:114.17 },
-    { name:'新店', address:'旺角弥敦道1号', phone:'23334444', lat:22.319, lng:114.17 }
+    { ...taxonomy, name:'新店', address:'旺角弥敦道1号', phone:'23334444', lat:22.319, lng:114.17 },
+    { ...taxonomy, name:'新店', address:'旺角弥敦道1号', phone:'23334444', lat:22.319, lng:114.17 }
   ], []);
   assert.equal(result.summary.total, 2);
   assert.equal(result.summary.ready, 1);
