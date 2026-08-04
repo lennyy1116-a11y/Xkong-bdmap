@@ -136,6 +136,13 @@ test('已有记录禁止在点位和机构之间转换', () => {
   assert.match(save, /isPointEntry\(oldPlace\)\s*!==\s*\(entryKind === 'point'\)/);
 });
 
+test('编辑legacy place机构迁移到canonical doc时不沿用旧revision并替换本地副记录', () => {
+  const save = body(app(), 'savePlace', 'getDataSafety');
+  assert.match(save, /const targetChanged = !!\(editId && data\.id !== editId\)/);
+  assert.match(save, /saveToFirestore\(data, editId && !targetChanged \? editBaseRevision : null\)/);
+  assert.match(save, /if \(targetChanged\).*places\.splice\(legacyIdx, 1\)/s);
+});
+
 test('canonical identity存在时不以名称地址误配另一机构，legacy写入迁移到canonical doc', () => {
   const source = app();
   const finder = body(source, 'findOperationalPlaceForRecord', 'getEditableLeadPlace');

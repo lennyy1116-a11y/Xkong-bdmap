@@ -886,10 +886,14 @@ async function savePlace() {
   try {
     if (btn) { btn.classList.add('loading'); btn.disabled = true; btn.textContent = '保存中...'; }
     feedback('info','正在保存到云端，请稍候...');
-    const expectedRevision = oldPlace && oldPlace.id === data.id ? editBaseRevision : null;
-    const savedData = await saveToFirestore(data, expectedRevision);
+    const targetChanged = !!(editId && data.id !== editId);
+    const savedData = await saveToFirestore(data, editId && !targetChanged ? editBaseRevision : null);
     const savedIdx = places.findIndex(p => p.id === savedData.id);
     if (savedIdx >= 0) places[savedIdx] = savedData; else places.push(savedData);
+    if (targetChanged) {
+      const legacyIdx = places.findIndex(p => p.id === editId);
+      if (legacyIdx >= 0) places.splice(legacyIdx, 1);
+    }
     editBaseRevision = savedData.revision;
     savePlaces();
     renderMarkers(); scheduleLeadHomeRender(); updateStats();
