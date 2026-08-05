@@ -35,6 +35,7 @@ let currentFilter = '全部';
 let ownerFilter = '全部';
 let mallPanelSource = 'map';
 let tapMode = false;
+let tapModeTimer = null;
 let sheetPickMode = false;
 let selectedDistrict = 'current';
 let _pagination = null;
@@ -273,7 +274,7 @@ function init() {
       return;
     }
     if (tapMode) {
-      tapMode = false;
+      cancelPendingMapAdd();
       document.getElementById('editLat').value = e.latlng.lat;
       document.getElementById('editLng').value = e.latlng.lng;
       reverseGeocode(e.latlng.lat, e.latlng.lng);
@@ -525,6 +526,7 @@ function reverseGeocode(lat, lng) {
 
 let sheetAddressRelocateTimer = null;
 let lastRelocatedAddress = '';
+let sheetAddressRelocateRequest = 0;
 function scheduleSheetAddressRelocate() {
   clearTimeout(sheetAddressRelocateTimer);
   sheetAddressRelocateTimer = setTimeout(() => geocodeAddressForSheet(false), 900);
@@ -536,6 +538,8 @@ async function geocodeAddressForSheet(forceToast) {
   if (!raw || raw.length < 3) return;
   if (!forceToast && raw === lastRelocatedAddress) return;
   const query = /香港|Hong Kong|HK/i.test(raw) ? raw : raw + ' 香港';
+  const requestId = ++sheetAddressRelocateRequest;
+  const isCurrentRequest = () => requestId === sheetAddressRelocateRequest && addrEl.value.trim() === raw;
   try {
     if (forceToast) toast('📍 正在按地址定位...');
     const key = getGoogleMapsKey();
@@ -555,7 +559,7 @@ async function geocodeAddressForSheet(forceToast) {
       const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&accept-language=zh&q=${encodeURIComponent(query)}`);
       const rows = await res.json();
       if (!rows || !rows.length) {
-        if (forceToast) toast('❌ 地址定位失败，请手动选点');
+        if (forceToast && isCurrentRequest()) toast('❌ 地址定位失败，请手动选点');
         return;
       }
       lat = parseFloat(rows[0].lat);
@@ -563,7 +567,7 @@ async function geocodeAddressForSheet(forceToast) {
       formatted = rows[0].display_name;
     }
     lat = parseFloat(lat); lng = parseFloat(lng);
-    if (isNaN(lat) || isNaN(lng)) return;
+    if (isNaN(lat) || isNaN(lng) || !isCurrentRequest()) return;
     document.getElementById('editLat').value = lat;
     document.getElementById('editLng').value = lng;
     lastRelocatedAddress = raw;
@@ -571,7 +575,7 @@ async function geocodeAddressForSheet(forceToast) {
     if (forceToast) toast('✅ 已按地址定位，可保存或再修正');
   } catch (err) {
     console.error('Address geocode failed:', err);
-    if (forceToast) toast('❌ 地址定位失败，请手动选点');
+    if (forceToast && isCurrentRequest()) toast('❌ 地址定位失败，请手动选点');
   }
 }
 
@@ -1031,6 +1035,8 @@ function updateRecycleBinCount() {
 }
 function openRecycleBin() {
   renderRecycleBin();
+  const adminPanel = document.getElementById('adminPanel');
+  if (adminPanel) adminPanel.classList.remove('active');
   document.getElementById('recycleBinPanel').classList.add('active');
 }
 function closeRecycleBin() {
@@ -1237,6 +1243,7 @@ function setAppTab(tab) {
 }
 function navigateTo(tab) {
   if (!PRIMARY_APP_TABS.includes(tab)) return;
+  cancelPendingMapAdd();
   if (tab === 'leads') showLeadHome();
   else if (tab === 'map') showMapHome();
   else if (tab === 'resources') openResourceCenter();
@@ -1254,6 +1261,7 @@ function openCoverageWorkspace() {
   toast('从商场或点位加入2-5个覆盖中心进行组合分析');
 }
 function closePrimaryPanels() {
+  cancelPendingMapAdd();
   ['listPanel','mallPanel','dashboardPanel','settingsPanel','adminPanel','recycleBinPanel'].forEach(id => {
     const panel = document.getElementById(id);
     if (panel) panel.classList.remove('active');
@@ -1735,7 +1743,7 @@ async function loadMallMetaFromCloud() {
     if (snap.empty) return;
     const meta = {};
     snap.forEach(doc => meta[doc.id] = doc.data());
-    malls = malls.map(m => meta[m.id] ? { ...m, ...meta[m.id], id: m.id, lat: m.lat, lng: m.lng, address: m.address, name: m.name, no: m.no, developer: m.developer, area: m.area } : m);
+    malls = malls.map(m => meta[m.id] ? { ...m, ...meta[m.id], id: m.id, no: m.no, developer: m.developer, area: m.area } : m);
     localStorage.setItem(MALLS_KEY, JSON.stringify(malls));
     renderMalls(); renderMallList();
   } catch(e) {
@@ -1817,6 +1825,10 @@ function editMall(id) {
 
 async function saveMallMetaToCloud(m) {
   const meta = cleanForFirestore({
+    name: m.name || '',
+    lat: m.lat,
+    lng: m.lng,
+    address: m.address || '',
     traffic: m.traffic || '',
     trafficNote: m.trafficNote || '',
     coopStatus: m.coopStatus || '待评估',
@@ -3183,15 +3195,10 @@ async function syncImportedToFirestore(items) {
 }
 
 async function clearAllData() {
-  if (!await showAppConfirm('清除所有数据', '此操作不可撤销，确定继续？')) return;
-  const confirmation = await showAppPrompt('再次确认', '请输入 CLEAR 确认清除所有数据', '');
-  if (confirmation !== 'CLEAR') return toast('已取消');
-  places = [];
-  savePlaces();
-  renderOwnerFilters();
-  renderMarkers();
-  updateStats();
-  toast('🗑 数据已清除');
+  if (!await showAppConfirm('重置本地缓存', '将清除当前浏览器缓存并重新从云端加载，不会删除云端数据。确定继续？')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  toast('🔄 本地缓存已重置，正在重新加载云端数据');
+  setTimeout(() => window.location.reload(), 250);
 }
 
 
@@ -4152,13 +4159,19 @@ function showLoading() { document.getElementById('loading').classList.add('show'
 function hideLoading() { document.getElementById('loading').classList.remove('show'); }
 
 // ============ EVENT BINDINGS ============
+function cancelPendingMapAdd() {
+  tapMode = false;
+  if (tapModeTimer) clearTimeout(tapModeTimer);
+  tapModeTimer = null;
+}
 document.getElementById('btnAdd').onclick = () => {
+  cancelPendingMapAdd();
   toast('📍 点击地图选择位置，或直接使用当前位置');
   tapMode = true;
   // Also open sheet with current position after a short delay if no tap
-  setTimeout(() => {
+  tapModeTimer = setTimeout(() => {
     if (tapMode) {
-      tapMode = false;
+      cancelPendingMapAdd();
       openAddSheet();
     }
   }, 5000);
