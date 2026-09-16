@@ -852,6 +852,11 @@ body.home-mode .map-filter-bar { display:none !important; }
   <button class="map-filter-chip" data-kind="status" data-value="已合作" onclick="setMapStatusFilter('已合作')">🔵 已合作</button>
   <select id="mapOwnerSelect" class="map-owner-select" aria-label="按负责人筛选" onchange="setMapOwnerFilter(this.value)"><option value="全部">👥 全部人员</option></select>
 </div>
+<style>
+/* Darken only raster basemap tiles; keep labels contrasted and overlays unchanged. */
+#map .leaflet-tile-pane { filter: grayscale(1) invert(1) brightness(.82) contrast(1.15); }
+#map { background: #20242a; }
+</style>
 <div id="map"></div>
 <button class="coverage-workspace-btn" id="btnCoverageWorkspace" onclick="openCoverageWorkspace()">覆盖工作区</button>
 
