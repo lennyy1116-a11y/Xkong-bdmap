@@ -825,6 +825,7 @@ function removeVisit(idx) {
 // ============ SAVE / DELETE ============
 async function savePlace() {
   const btn = document.getElementById('btnSavePlace');
+  if (btn && btn.disabled) return;
   const fb = document.getElementById('saveFeedback');
   function feedback(type, msg) {
     if (!fb) return;
@@ -882,6 +883,9 @@ async function savePlace() {
     if (!primary || !secondary) { feedback('err','请选择完整的一级和二级类目'); toast('请选择完整类目'); return; }
     Object.assign(data, getTaxonomyFields(primary, secondary));
   }
+  try {
+    if (btn) { btn.classList.add('loading'); btn.disabled = true; btn.textContent = '保存中...'; }
+    feedback('info','正在分配机构代码并保存到云端，请稍候...');
   data.id = oldPlace
     ? (entryKind === 'institution' ? (canonicalClinicId(oldPlace) || editId) : editId)
     : (entryKind === 'point' ? genId() : await allocateCanonicalInstitutionId(data));
@@ -895,9 +899,6 @@ async function savePlace() {
     data.createdBy = currentUsername || '匿名';
     data.createdByAvatar = currentAvatar;
   }
-  try {
-    if (btn) { btn.classList.add('loading'); btn.disabled = true; btn.textContent = '保存中...'; }
-    feedback('info','正在保存到云端，请稍候...');
     const targetChanged = !!(editId && data.id !== editId);
     const savedData = targetChanged
       ? await runCanonicalInstitutionMutation(data.id, oldPlace, editBaseRevision, () => data)
@@ -3609,17 +3610,17 @@ async function allocateCanonicalInstitutionId(data) {
   const counterRef = institutionCodeCountersCollection.doc(prefix);
   const baseMax = maxBaseInstitutionSerial(prefix);
   const placesQuery = placesCollection.where('id', '>=', prefix).where('id', '<', prefix + '\uf8ff');
+  // Web SDK transactions accept DocumentReference, not Query. Seed outside;
+  // the transactional counter and candidate checks remain the uniqueness guard.
+  const placesSnapshot = await placesQuery.get();
+  let placesMax = 0;
+  placesSnapshot.forEach(doc => {
+    const id = normalizeCanonicalInstitutionId(doc.id);
+    if (id && id.startsWith(prefix)) placesMax = Math.max(placesMax, Number(id.slice(prefix.length)) || 0);
+  });
   return db.runTransaction(async transaction => {
-    const [counterSnapshot, placesSnapshot] = await Promise.all([
-      transaction.get(counterRef),
-      transaction.get(placesQuery)
-    ]);
+    const counterSnapshot = await transaction.get(counterRef);
     const counterValue = counterSnapshot.exists ? Number(counterSnapshot.data().value) || 0 : 0;
-    let placesMax = 0;
-    placesSnapshot.forEach(doc => {
-      const id = normalizeCanonicalInstitutionId(doc.id);
-      if (id && id.startsWith(prefix)) placesMax = Math.max(placesMax, Number(id.slice(prefix.length)) || 0);
-    });
     let next = Math.max(baseMax, placesMax, counterValue) + 1;
     let allocatedId = '';
     for (let attempts = 0; attempts < 1000; attempts++, next++) {

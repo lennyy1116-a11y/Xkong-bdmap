@@ -133,7 +133,8 @@ test('随机机构ID不能冒充canonical clinic_id，点位仍可使用原始ID
 test('allocator兼容stale counter并事务内检查places冲突', () => {
   const alloc = body(app(), 'allocateCanonicalInstitutionId', 'savePlace');
   assert.match(alloc, /institutionCodeCountersCollection\.doc\(prefix\)/);
-  assert.match(alloc, /transaction\.get\(placesQuery\)/);
+  assert.match(alloc, /await placesQuery\.get\(\)/);
+  assert.doesNotMatch(alloc, /transaction\.get\(placesQuery\)/);
   assert.match(alloc, /transaction\.get\(candidateRef\)/);
   assert.match(alloc, /for\s*\(let attempts\s*=\s*0;\s*attempts\s*<\s*1000/);
 });
