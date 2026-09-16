@@ -845,6 +845,7 @@ body.home-mode .map-filter-bar { display:none !important; }
 
 <!-- Map -->
 <div class="map-filter-bar" id="mapFilterBar">
+  <button class="map-filter-chip" id="btnToggleAllPoints" onclick="toggleAllPointsVisibility()" aria-pressed="false" title="隐藏或显示全部商场及自建点位，不删除资料">隐藏点位</button>
   <button class="map-filter-chip active" data-kind="status" data-value="全部" onclick="setMapStatusFilter('全部')">全部状态</button>
   <button class="map-filter-chip" data-kind="status" data-value="已交流" onclick="setMapStatusFilter('已交流')">🟡 已交流</button>
   <button class="map-filter-chip" data-kind="status" data-value="有意向" onclick="setMapStatusFilter('有意向')">🟢 有意向</button>
@@ -3507,8 +3508,26 @@ function setMallStatusFilter(status) {
   document.querySelectorAll('.mall-status-filter').forEach(b => b.classList.toggle('active', b.dataset.status === status));
   renderMallList();
 }
+let allPointsHidden = (() => { try { return localStorage.getItem('bdmap_all_points_hidden') === '1'; } catch { return false; } })();
+function syncPointLayerVisibility() {
+  if (map && mallLayer) {
+    if (allPointsHidden) map.removeLayer(mallLayer);
+    else map.addLayer(mallLayer);
+  }
+  const button = document.getElementById('btnToggleAllPoints');
+  if (button) {
+    button.textContent = allPointsHidden ? '显示点位' : '隐藏点位';
+    button.setAttribute('aria-pressed', String(allPointsHidden));
+  }
+}
+function toggleAllPointsVisibility() {
+  allPointsHidden = !allPointsHidden;
+  try { localStorage.setItem('bdmap_all_points_hidden', allPointsHidden ? '1' : '0'); } catch {}
+  syncPointLayerVisibility();
+}
 function renderMalls() {
   if (!mallLayer || !coverageLayer) return;
+  syncPointLayerVisibility();
   mallLayer.clearLayers(); coverageLayer.clearLayers();
   malls.forEach(m => {
     const marker = L.marker([m.lat,m.lng], { icon: L.divIcon({ className:'', html:'<div class="mall-marker">🏬</div>', iconSize:[34,34], iconAnchor:[17,17] }) });

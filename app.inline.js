@@ -1855,8 +1855,26 @@ function setMallStatusFilter(status) {
   document.querySelectorAll('.mall-status-filter').forEach(b => b.classList.toggle('active', b.dataset.status === status));
   renderMallList();
 }
+let allPointsHidden = (() => { try { return localStorage.getItem('bdmap_all_points_hidden') === '1'; } catch { return false; } })();
+function syncPointLayerVisibility() {
+  if (map && mallLayer) {
+    if (allPointsHidden) map.removeLayer(mallLayer);
+    else map.addLayer(mallLayer);
+  }
+  const button = document.getElementById('btnToggleAllPoints');
+  if (button) {
+    button.textContent = allPointsHidden ? '显示点位' : '隐藏点位';
+    button.setAttribute('aria-pressed', String(allPointsHidden));
+  }
+}
+function toggleAllPointsVisibility() {
+  allPointsHidden = !allPointsHidden;
+  try { localStorage.setItem('bdmap_all_points_hidden', allPointsHidden ? '1' : '0'); } catch {}
+  syncPointLayerVisibility();
+}
 function renderMalls() {
   if (!mallLayer || !coverageLayer) return;
+  syncPointLayerVisibility();
   mallLayer.clearLayers(); coverageLayer.clearLayers();
   malls.forEach(m => {
     const marker = L.marker([m.lat,m.lng], { icon: L.divIcon({ className:'', html:'<div class="mall-marker">🏬</div>', iconSize:[34,34], iconAnchor:[17,17] }) });
